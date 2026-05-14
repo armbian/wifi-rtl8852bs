@@ -82,6 +82,14 @@
   PPPoE |type|   SID   |           AC MAC            |
 -----------------------------------------------------------------*/
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0)
+/* In Linux 7.1+, pppoe_RTW_PPPOE_TAG_DATA(tag) is only in userspace */
+/* For kernel code, tag data starts after tag_type (2 bytes) + tag_len (2 bytes) */
+#define RTW_PPPOE_TAG_DATA(tag)	((unsigned char *)((__u8 *)(tag) + 4))
+#else
+#define RTW_PPPOE_TAG_DATA(tag)	((tag)->tag_data)
+#endif
+
 
 /* Find a tag in pppoe frame and return the pointer */
 static __inline__ unsigned char *__nat25_find_pppoe_tag(struct pppoe_hdr *ph, unsigned short type)
@@ -89,7 +97,13 @@ static __inline__ unsigned char *__nat25_find_pppoe_tag(struct pppoe_hdr *ph, un
 	unsigned char *cur_ptr, *start_ptr;
 	unsigned short tagLen, tagType;
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0)
+	/* In Linux 7.1+, pppoe_hdr->tag is only in userspace */
+	/* Tags come immediately after the header in kernel space */
+	start_ptr = cur_ptr = (unsigned char *)(ph + 1);
+#else
 	start_ptr = cur_ptr = (unsigned char *)ph->tag;
+#endif
 	while ((cur_ptr - start_ptr) < ntohs(ph->length)) {
 		/* prevent un-alignment access */
 		tagType = (unsigned short)((cur_ptr[0] << 8) + cur_ptr[1]);
@@ -115,9 +129,16 @@ static __inline__ int __nat25_add_pppoe_tag(struct sk_buff *skb, struct pppoe_ta
 
 	skb_put(skb, data_len);
 	/* have a room for new tag */
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0)
+	/* In Linux 7.1+, pppoe_hdr->tag is only in userspace */
+	/* Tags come immediately after the header in kernel space */
+	_rtw_memmove(((unsigned char *)(ph + 1) + data_len), (unsigned char *)(ph + 1), ntohs(ph->length));
+	_rtw_memcpy((unsigned char *)(ph + 1), tag, data_len);
+#else
 	_rtw_memmove(((unsigned char *)ph->tag + data_len), (unsigned char *)ph->tag, ntohs(ph->length));
-	ph->length = htons(ntohs(ph->length) + data_len);
 	_rtw_memcpy((unsigned char *)ph->tag, tag, data_len);
+#endif
+	ph->length = htons(ntohs(ph->length) + data_len);
 	return data_len;
 }
 
@@ -1143,8 +1164,8 @@ int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method)
 								return -1;
 							}
 
-							_rtw_memcpy(tag->tag_data + MAGIC_CODE_LEN + RTL_RELAY_TAG_LEN,
-							       pOldTag->tag_data, old_tag_len);
+							_rtw_memcpy(RTW_PPPOE_TAG_DATA(tag) + MAGIC_CODE_LEN + RTL_RELAY_TAG_LEN,
+							       RTW_PPPOE_TAG_DATA(pOldTag), old_tag_len);
 
 							if (skb_pull_and_merge(skb, (unsigned char *)pOldTag, TAG_HDR_LEN + old_tag_len) < 0) {
 								DEBUG_ERR("call skb_pull_and_merge() failed in PADI/R packet!\n");
@@ -1157,9 +1178,9 @@ int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method)
 						tag->tag_len = htons(MAGIC_CODE_LEN + RTL_RELAY_TAG_LEN + old_tag_len);
 
 						/* insert the magic_code+client mac in relay tag */
-						pMagic = (unsigned short *)tag->tag_data;
+						pMagic = (unsigned short *)RTW_PPPOE_TAG_DATA(tag);
 						*pMagic = htons(MAGIC_CODE);
-						_rtw_memcpy(tag->tag_data + MAGIC_CODE_LEN, skb->data + ETH_ALEN, ETH_ALEN);
+						_rtw_memcpy(RTW_PPPOE_TAG_DATA(tag) + MAGIC_CODE_LEN, skb->data + ETH_ALEN, ETH_ALEN);
 
 						/* Add relay tag */
 						if (__nat25_add_pppoe_tag(skb, tag) < 0)
@@ -1220,14 +1241,14 @@ int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method)
 						return -1;
 					}
 
-					pMagic = (unsigned short *)tag->tag_data;
+					pMagic = (unsigned short *)RTW_PPPOE_TAG_DATA(tag);
 					if (ntohs(*pMagic) != MAGIC_CODE) {
 						DEBUG_ERR("Can't find MAGIC_CODE in %s packet!\n",
 							(ph->code == PADO_CODE ? "PADO" : "PADS"));
 						return -1;
 					}
 
-					_rtw_memcpy(skb->data, tag->tag_data + MAGIC_CODE_LEN, ETH_ALEN);
+					_rtw_memcpy(skb->data, RTW_PPPOE_TAG_DATA(tag) + MAGIC_CODE_LEN, ETH_ALEN);
 
 					if (tagLen > MAGIC_CODE_LEN + RTL_RELAY_TAG_LEN)
 						offset = TAG_HDR_LEN;
