@@ -99,9 +99,9 @@
 #define RTW_CFG80211_GET_NETDEV(wdev)	((wdev)->netdev)
 #else
 #define RTW_CFG80211_DEV_PARAM_TYPE	struct net_device *
-#define RTW_CFG80211_DEV_PARAM_NAME	ndev
-#define RTW_CFG80211_GET_ADAPTER(ndev)	((_adapter *)rtw_netdev_priv(ndev))
-#define RTW_CFG80211_GET_NETDEV(ndev)	(ndev)
+#define RTW_CFG80211_DEV_PARAM_NAME	_wdev_param
+#define RTW_CFG80211_GET_ADAPTER(_wdev_param)	((_adapter *)rtw_netdev_priv(_wdev_param))
+#define RTW_CFG80211_GET_NETDEV(_wdev_param)	(_wdev_param)
 #endif
 
 /*
