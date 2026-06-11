@@ -13,6 +13,7 @@
  *
  *****************************************************************************/
 #include "hal_headers.h"
+#include "hal_api.h"
 
 static void _hal_bus_cap_pre_decision(struct rtw_phl_com_t *phl_com,
 					 	void *hal)

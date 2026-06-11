@@ -15,6 +15,7 @@
 #define _RTW_RECV_C_
 
 #include <drv_types.h>
+#include "rtw_recv.h"
 
 static void rtw_signal_stat_timer_hdl(void *ctx);
 

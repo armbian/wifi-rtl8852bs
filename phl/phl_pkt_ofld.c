@@ -13,6 +13,7 @@
  *
  *****************************************************************************/
 #include "phl_headers.h"
+#include "phl_api_drv.h"
 
 #define HAL_PKT_OFLD_ADD(_pkt, _id, _pkt_buf, _len) \
 	rtw_hal_pkt_ofld((_pkt)->phl_info->hal, _id, PKT_OFLD_ADD, _pkt_buf, _len)

@@ -17,6 +17,7 @@
 #include "hal_btc.h"
 #include "halbtc_fw.h"
 #include "halbtc_action.h"
+#include "halbtc_def.h"
 
 #ifdef CONFIG_BTCOEX
 

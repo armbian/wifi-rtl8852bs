@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _HAL_CHAN_C_
 #include "hal_headers.h"
+#include "hal_api.h"
 
 enum rtw_hal_status rtw_hal_set_ch_bw(void *hal, u8 band_idx,
 		struct rtw_chan_def *chdef, enum rfk_tri_type rt_type, bool rd_enabled, bool frc_switch)

@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _HAL_DFS_C_
 #include "hal_headers.h"
+#include "hal_api.h"
 
 #ifdef CONFIG_PHL_DFS
 

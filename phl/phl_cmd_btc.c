@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _PHL_CMD_BTC_C_
 #include "phl_headers.h"
+#include "phl_api_drv.h"
 
 #ifdef CONFIG_BTCOEX
 #ifdef CONFIG_PHL_CMD_BTC

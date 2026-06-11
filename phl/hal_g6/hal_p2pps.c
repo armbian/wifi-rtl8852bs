@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _HAL_P2PPS_C_
 #include "hal_headers.h"
+#include "hal_api.h"
 
 #ifdef CONFIG_PHL_P2PPS
 #define TSF32_TOG_EARLY_T 2000 /*2ms*/

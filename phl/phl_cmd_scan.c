@@ -18,6 +18,7 @@
 #include "phl_headers.h"
 #include "phl_scan.h"
 #include "phl_scanofld.h"
+#include "phl_api_drv.h"
 
 #define param_to_phlcom(_param)        (_param->wifi_role->phl_com)
 #define wrole_to_phl(_wrole)           ((struct phl_info_t *)(_wrole->phl_com->phl_priv))

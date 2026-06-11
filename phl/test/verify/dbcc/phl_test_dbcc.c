@@ -17,6 +17,7 @@
 #include "../phl_test_verify_def.h"
 #include "../phl_test_verify_api.h"
 #include "phl_test_dbcc_def.h"
+#include "phl_test_dbcc_api.h"
 
 #ifdef CONFIG_PHL_TEST_VERIFY
 static u8 dbcc_get_class_from_buf(struct verify_context *ctx)

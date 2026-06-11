@@ -15,6 +15,7 @@
 
 #include "../pwr.h"
 #include "../pwr_seq_func.h"
+#include "pwr_seq_func_8852b.h"
 
 #if MAC_AX_8852B_SUPPORT
 

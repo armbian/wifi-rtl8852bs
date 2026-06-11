@@ -19,6 +19,7 @@
 
 //kevin-cmd
 #include "phy/bb/halbb_hw_cfg_ex.h"
+#include "hal_api.h"
 
 void rtw_hal_bb_bb_reset_cmn(struct hal_info_t *hal_info, bool en, enum phl_phy_idx phy_idx)
 {

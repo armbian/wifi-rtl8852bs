@@ -14,6 +14,7 @@
  *****************************************************************************/
 
 #include "hal_headers.h"
+#include "hal_api.h"
 
 /**
  * rtw_hal_bf_dbg_dump_entry

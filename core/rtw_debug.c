@@ -34,6 +34,7 @@ const char *rtw_log_level_str[] = {
 #endif /* CONFIG_DEBUG_RTL871X */
 
 #include <rtw_version.h>
+#include "rtw_debug.h"
 
 #ifdef CONFIG_TDLS
 	#define TDLS_DBG_INFO_SPACE_BTWN_ITEM_AND_VALUE	41

@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _HAL_EXT_TX_PWR_LMT_C_
 #include "hal_headers.h"
+#include "hal_api.h"
 
 enum rtw_hal_status
 rtw_hal_set_power_limit(void *hal, u8 band_idx)

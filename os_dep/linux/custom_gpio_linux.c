@@ -19,6 +19,7 @@
 /* gspi func & GPIO define */
 #include <mach/gpio.h>/* 0915 */
 #include <mach/board.h>
+#include "custom_gpio.h"
 
 #if !(defined ANDROID_2X)
 

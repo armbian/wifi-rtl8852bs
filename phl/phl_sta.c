@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _PHL_STA_C_
 #include "phl_headers.h"
+#include "phl_api.h"
 
 /*********** macid ctrl section ***********/
 enum rtw_phl_status

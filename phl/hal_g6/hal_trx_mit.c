@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _HAL_TRX_MIT_C_
 #include "hal_headers.h"
+#include "hal_api.h"
 
 static void
 _hal_trx_mit_timer_convert(u32 timer, u8 *mul_ptr,

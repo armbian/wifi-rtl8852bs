@@ -16,6 +16,7 @@
 
 #include <drv_types.h>
 #include <rtw_mp.h>
+#include "rtw_ioctl.h"
 
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 27))

@@ -14,6 +14,7 @@
  *****************************************************************************/
 #include "phl_headers.h"
 #include "phl_scan.h"
+#include "phl_scanofld.h"
 
 #ifdef CONFIG_PHL_SCANOFLD
 
