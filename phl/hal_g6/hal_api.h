@@ -993,7 +993,7 @@ void rtw_hal_final_cap_decision(struct rtw_phl_com_t *phl_com, void *hal);
 /* Power Save APIs */
 enum rtw_hal_status
 rtw_hal_ps_pwr_lvl_cfg(struct rtw_phl_com_t *phl_com, void *hal,
-			u32 req_pwr_lvl);
+			u8 req_pwr_lvl);
 enum rtw_hal_status
 rtw_hal_ps_lps_cfg(void *hal, struct rtw_hal_lps_info *lps_info);
 enum rtw_hal_status
