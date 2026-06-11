@@ -15,6 +15,7 @@
 #ifndef _HAL_COM_I_C_
 #define _HAL_COM_I_C_
 #include "hal_headers.h"
+#include "hal_api.h"
 
 #define HAL_MAC_TX_LIFETIME_UNIT_US_SHT 8 /* 256 us */
 

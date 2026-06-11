@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _HAL_PS_C_
 #include "hal_headers.h"
+#include "hal_api.h"
 #ifdef CONFIG_POWER_SAVE
 #define case_pwr_state(src) \
 	case PS_PWR_STATE_##src: return #src
