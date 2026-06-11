@@ -85,7 +85,7 @@ rtw_hal_com_set_power_offset(void *hal, u8 band, s8 ofst_mode, s8 ofst_bw)
 	return RTW_HAL_STATUS_SUCCESS;
 }
 
-enum rtw_hal_status rtw_hal_com_set_gt3(void *hal, u8 en, u8 timeout)
+enum rtw_hal_status rtw_hal_com_set_gt3(void *hal, u8 en, u32 timeout)
 {
 	struct hal_info_t *hal_info = (struct hal_info_t *)hal;
 
