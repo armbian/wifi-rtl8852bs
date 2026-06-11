@@ -15,6 +15,7 @@
 #define _HAL_API_EFUSE_C_
 #include "hal_headers.h"
 #include "efuse/hal_efuse_export.h"
+#include "hal_api.h"
 
 /*WIFI Efuse*/
 enum rtw_hal_status

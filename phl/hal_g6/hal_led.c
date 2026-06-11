@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _HAL_LED_C_
 #include "hal_headers.h"
+#include "hal_api.h"
 
 #define HAL_LED_GET_CTRL_MODE(m)                                               \
 	((m) == RTW_LED_CTRL_SW_PP_MODE                                        \

@@ -15,6 +15,7 @@
 #define _HAL_TEST_MP_EFUSE_C_
 #include "../../hal_headers.h"
 #include "../../../test/mp/phl_test_mp_def.h"
+#include "hal_test_mp_api.h"
 
 #ifdef CONFIG_HAL_TEST_MP
 

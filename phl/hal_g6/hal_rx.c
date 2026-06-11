@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _HAL_RX_C_
 #include "hal_headers.h"
+#include "hal_api.h"
 
 void rtw_hal_cfg_rxhci(void *hal, u8 en)
 {

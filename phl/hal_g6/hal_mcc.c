@@ -15,6 +15,7 @@
 #define _HAL_MCC_C_
 #include "hal_headers.h"
 #include "hal_mcc.h"
+#include "hal_api.h"
 
 #ifdef CONFIG_MCC_SUPPORT
 #define _mcc_fill_slot_bt_coex(_dbg_hal_i, _en) ((struct rtw_phl_mcc_dbg_hal_info *)_dbg_hal_i)->btc_in_group = _en;

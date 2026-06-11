@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _HAL_STA_C_
 #include "hal_headers.h"
+#include "hal_api.h"
 
 static void
 _hal_sta_rssi_init(struct rtw_phl_stainfo_t *sta)

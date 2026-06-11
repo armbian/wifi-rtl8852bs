@@ -35,6 +35,7 @@
 #endif
 #if MAC_AX_SDIO_SUPPORT
 #include "_sdio_8852b.h"
+#include "mac_priv_8852b.h"
 #endif
 
 #if MAC_AX_8852B_SUPPORT

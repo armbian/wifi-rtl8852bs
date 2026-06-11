@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _HAL_SER_C_
 #include "hal_headers.h"
+#include "hal_api.h"
 
 enum rtw_hal_status rtw_hal_ser_ctrl(void *hal, enum rtw_hal_ser_rsn rsn, bool en)
 {

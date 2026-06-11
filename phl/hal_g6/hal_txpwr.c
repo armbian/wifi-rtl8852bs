@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _HAL_TXPWR_C_
 #include "hal_headers.h"
+#include "hal_api.h"
 
 int rtw_hal_get_pw_lmt_regu_type_from_str(void *hal, const char *str)
 {

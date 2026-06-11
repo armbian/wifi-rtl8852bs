@@ -16,6 +16,7 @@
 #include "../../hal_headers.h"
 #include "../../../test/mp/phl_test_mp_def.h"
 #include "../../../test/mp/phl_test_mp_watchdog.h"
+#include "hal_test_mp_api.h"
 
 #ifdef CONFIG_HAL_TEST_MP
 

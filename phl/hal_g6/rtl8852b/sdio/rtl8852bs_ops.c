@@ -15,6 +15,7 @@
 #define _RTL8852BS_OPS_C_
 #include "../rtl8852b_hal.h"
 #include "rtl8852bs.h"
+#include "../../hal_sdio.h"
 
 void hal_set_ops_8852bs(struct rtw_phl_com_t *phl_com,
 					struct hal_info_t *hal)

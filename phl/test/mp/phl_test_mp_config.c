@@ -16,6 +16,7 @@
 #include "../../phl_headers.h"
 #include "phl_test_mp_def.h"
 #include "../../hal_g6/test/mp/hal_test_mp_api.h"
+#include "phl_test_mp_api.h"
 
 #ifdef CONFIG_PHL_TEST_MP
 static enum rtw_phl_status phl_mp_config_start_dut(

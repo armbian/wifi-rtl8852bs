@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _PHL_API_DRV_C_
 #include "phl_headers.h"
+#include "phl_api_drv.h"
 
 void *rtw_phl_get_txbd_buf(struct rtw_phl_com_t *phl_com)
 {

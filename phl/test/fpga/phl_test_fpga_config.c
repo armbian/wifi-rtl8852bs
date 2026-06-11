@@ -16,6 +16,7 @@
 #include "../../phl_headers.h"
 #include "phl_test_fpga_def.h"
 #include "../../hal_g6/test/fpga/hal_test_fpga_api.h"
+#include "phl_test_fpga_api.h"
 
 #ifdef CONFIG_PHL_TEST_FPGA
 

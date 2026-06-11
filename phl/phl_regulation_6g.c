@@ -16,6 +16,7 @@
 #include "phl_chnlplan.h"
 #include "phl_chnlplan_6g.h"
 #include "phl_country.h"
+#include "phl_regulation_6g.h"
 
 extern const struct chdef_6ghz chdef6g[MAX_CHDEF_6GHZ];
 extern const struct regulatory_domain_mapping_6g rdmap6[MAX_RD_MAP_NUM_6GHZ];

@@ -16,6 +16,8 @@
 #define _PHL_CMD_SER_C_
 #include "phl_headers.h"
 #include "phl_api.h"
+#include "phl_api_drv.h"
+#include "phl_ser_fsm.h"
 
 #define CMD_SER_L0 0x00000001
 #define CMD_SER_L1 0x00000002

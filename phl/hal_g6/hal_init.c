@@ -21,6 +21,7 @@
 #include "hal_usb.h"
 #elif defined(CONFIG_SDIO_HCI)
 #include "hal_sdio.h"
+#include "hal_api.h"
 #endif
 
 

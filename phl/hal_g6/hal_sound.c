@@ -15,6 +15,7 @@
 #define _HAL_SOUND_C_
 
 #include "hal_headers.h"
+#include "hal_api.h"
 
 #ifdef CONFIG_PHL_CMD_BF
 struct csi_rpt_na {

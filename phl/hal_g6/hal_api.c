@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _HAL_API_C_
 #include "hal_headers.h"
+#include "hal_api.h"
 
 enum rtw_hal_status rtw_hal_get_tsf(void *hal, enum phl_band_idx band,
 					u8 port, u32 *tsf_h, u32 *tsf_l)

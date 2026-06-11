@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _HAL_FW_C_
 #include "hal_headers.h"
+#include "hal_api.h"
 
 static void _hal_send_fwdl_hub_msg(struct rtw_phl_com_t *phl_com, u8 dl_ok)
 {

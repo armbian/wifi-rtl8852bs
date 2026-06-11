@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _HAL_SCANOFLD_C_
 #include "hal_headers.h"
+#include "hal_scanofld.h"
 
 #ifdef CONFIG_PHL_SCANOFLD
 void

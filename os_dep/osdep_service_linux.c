@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _OSDEP_SERVICE_LINUX_C_
 #include <drv_types.h>
+#include "osdep_intf.h"
 
 #ifdef DBG_MEMORY_LEAK
 ATOMIC_T _malloc_cnt = ATOMIC_INIT(0);

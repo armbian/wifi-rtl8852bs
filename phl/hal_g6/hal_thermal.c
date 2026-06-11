@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _HAL_THERMAL_C_
 #include "hal_headers.h"
+#include "hal_api.h"
 
 #ifdef CONFIG_PHL_THERMAL_PROTECT
 

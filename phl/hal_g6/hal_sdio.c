@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _HAL_SDIO_C_
 #include "hal_headers.h"
+#include "hal_sdio.h"
 
 #ifdef CONFIG_SDIO_HCI
 static u8 hal_sdio_f0_read8(struct rtw_hal_com_t *hal, u32 addr)

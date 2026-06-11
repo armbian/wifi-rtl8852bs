@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _HAL_TX_C_
 #include "hal_headers.h"
+#include "hal_api.h"
 /**
  * this function will be used in read / write pointer mechanism and
  * return the number of available read pointer

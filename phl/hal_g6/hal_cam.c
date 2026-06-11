@@ -14,6 +14,7 @@
  *****************************************************************************/
 #define _HAL_CAM_C_
 #include "hal_headers.h"
+#include "hal_api.h"
 
 /**
  * This function calls halmac api to configure security cam

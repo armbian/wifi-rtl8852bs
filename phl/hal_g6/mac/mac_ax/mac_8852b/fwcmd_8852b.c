@@ -15,6 +15,7 @@
 
 #include "../../type.h"
 #include "../mac_priv.h"
+#include "fwcmd_8852b.h"
 #if MAC_AX_8852B_SUPPORT
 
 static struct mac_ax_h2creg_offset h2creg_offset = {

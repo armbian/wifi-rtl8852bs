@@ -15,6 +15,7 @@
 #define _RTW_CMD_C_
 
 #include <drv_types.h>
+#include "rtw_cmd.h"
 
 #ifndef DBG_CMD_EXECUTE
 	#define DBG_CMD_EXECUTE 0
