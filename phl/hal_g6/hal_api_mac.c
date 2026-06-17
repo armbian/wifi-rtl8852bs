@@ -827,6 +827,7 @@ static u8 hal_mac_sdio_cmd52_cia_r8(void *h, u32 addr)
 }
 #endif /*CONFIG_SDIO_HCI*/
 
+#if defined(CONFIG_USB_HCI) || defined(CONFIG_PCI_HCI)
 static u8 hal_mac_reg_r8(void *h, u32 addr)
 {
 	return hal_read8((struct rtw_hal_com_t *)h, addr);
@@ -851,6 +852,7 @@ static void hal_mac_reg_w32(void *h, u32 addr, u32 val)
 {
 	hal_write32((struct rtw_hal_com_t *)h, addr, val);
 }
+#endif /* CONFIG_USB_HCI || CONFIG_PCI_HCI */
 
 
 #ifdef DBG_HAL_MAC_MEM_MOINTOR
@@ -3506,6 +3508,7 @@ rtw_hal_mac_chk_allq_empty(struct hal_info_t *hal_info, u8 *empty)
 	return RTW_HAL_STATUS_SUCCESS;
 }
 
+#ifdef CONFIG_WOWLAN
 static void _dump_txq_status(struct mac_ax_tx_queue_empty *val)
 {
 	u8 i = 0;
@@ -3520,6 +3523,7 @@ static void _dump_txq_status(struct mac_ax_tx_queue_empty *val)
 	PHL_INFO("%s : h2c_empty %d.\n", __func__, val->h2c_empty);
 	PHL_INFO("%s : others_empty %d.\n", __func__, val->others_empty);
 }
+#endif /* CONFIG_WOWLAN */
 
 #ifdef CONFIG_WOWLAN
 enum rtw_hal_status

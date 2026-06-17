@@ -1540,6 +1540,7 @@ static int rtw_build_max_cohost_bssid_ind(_adapter *padapter, u8 *pbuf)
 	return info_len;
 }
 
+#if CONFIG_IEEE80211_BAND_6GHZ
 static int rtw_build_6g_oper_info(_adapter *padapter, struct _ADAPTER_LINK *padapter_link,
 	u8 *pbuf, struct rtw_chan_def *chandef)
 {
@@ -1560,6 +1561,7 @@ static int rtw_build_6g_oper_info(_adapter *padapter, struct _ADAPTER_LINK *pada
 	/* Set 6GHz Operation Information (optional) */
 	return info_len;
 }
+#endif /* CONFIG_IEEE80211_BAND_6GHZ */
 
 u32	rtw_build_he_operation_ie(_adapter *padapter,
 				struct _ADAPTER_LINK *padapter_link,

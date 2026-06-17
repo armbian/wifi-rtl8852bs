@@ -1132,6 +1132,7 @@ is_ch_in_same_band(struct rtw_chan_def *chdef_a, struct rtw_chan_def *chdef_b)
 	return ch_in_same_band;
 }
 
+#ifdef CONFIG_DBCC_SUPPORT
 static bool
 is_ch_in_interference_band(struct rtw_chan_def *chdef_a, struct rtw_chan_def *chdef_b)
 {
@@ -1156,6 +1157,7 @@ is_ch_in_interference_band(struct rtw_chan_def *chdef_a, struct rtw_chan_def *ch
 	}
 	return ch_in_same_band;
 }
+#endif /* CONFIG_DBCC_SUPPORT */
 
 static void _phl_dump_mr_cc_info(struct phl_info_t *phl_info,
 					struct rtw_mr_chctx_info *mr_cc_info)

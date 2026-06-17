@@ -5896,6 +5896,7 @@ _connect_swch_done_notify(struct _ADAPTER *a,
 	return status;
 }
 
+#ifdef CONFIG_DBCC_SUPPORT
 static enum rtw_phl_status _connect_disconnect_end_notify(struct _ADAPTER *a)
 {
 	struct dvobj_priv *d = adapter_to_dvobj(a);
@@ -5917,6 +5918,7 @@ static enum rtw_phl_status _connect_disconnect_end_notify(struct _ADAPTER *a)
 
 	return status;
 }
+#endif /* CONFIG_DBCC_SUPPORT */
 
 static void _connect_cmd_done(struct _ADAPTER *a)
 {

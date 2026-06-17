@@ -2817,6 +2817,7 @@ fail:
 #endif
 }
 
+#if defined(CONFIG_PHL_RELEASE_RPT_ENABLE) || defined(CONFIG_PCI_HCI)
 static u32 rtw_phl_get_hw_tx_fail_cnt(struct rtw_hal_stainfo_t *hal_sta,
 	enum phl_ac_queue qsel) {
 #if defined(CONFIG_PHL_RELEASE_RPT_ENABLE) || defined(CONFIG_PCI_HCI)
@@ -2862,6 +2863,7 @@ static void rtw_phl_reset_tx_fail_cnt(struct phl_info_t *phl_info,
 	PHL_WARN("%s not support\n", __func__);
 #endif
 }
+#endif /* CONFIG_PHL_RELEASE_RPT_ENABLE || CONFIG_PCI_HCI */
 
 /**
  * rtw_phl_get_tx_fail_rpt() - get tx fail info.

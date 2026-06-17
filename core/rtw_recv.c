@@ -3471,6 +3471,7 @@ move_to_next:
 	return ret;
 }
 
+#if defined(CONFIG_80211N_HT) && defined(CONFIG_RECV_REORDERING_CTRL)
 static int recv_process_mpdu(_adapter *padapter, union recv_frame *prframe)
 {
 	struct rx_pkt_attrib *pattrib = &prframe->u.hdr.attrib;
@@ -3575,6 +3576,7 @@ static int recv_process_mpdu(_adapter *padapter, union recv_frame *prframe)
 exit:
 	return ret;
 }
+#endif /* CONFIG_80211N_HT && CONFIG_RECV_REORDERING_CTRL */
 
 #if defined(CONFIG_80211N_HT) && defined(CONFIG_RECV_REORDERING_CTRL)
 static int check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_num)

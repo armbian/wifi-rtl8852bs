@@ -2018,9 +2018,9 @@ static void dump_bytes(struct mac_ax_adapter *adapter, u8 *start, u32 size)
 #endif
 }
 
+#if PROXY_MDNS_DUMP
 static void mdns_sprintf(struct mac_ax_adapter *adapter, char *content, u8 *in, u32 len)
 {
-#if PROXY_MDNS_DUMP
 	u32 idx;
 	u32 write_idx;
 
@@ -2045,20 +2045,20 @@ static void mdns_sprintf(struct mac_ax_adapter *adapter, char *content, u8 *in, 
 	}
 	content[write_idx++] = '>';
 	content[write_idx] = 0;
-#endif
 }
+#endif /* PROXY_MDNS_DUMP */
 
+#if PROXY_MDNS_DUMP
 static void dump_mdns_machine(struct mac_ax_adapter *adapter,
 			      struct rtw_hal_mac_proxy_mdns_machine *machine)
 {
-#if PROXY_MDNS_DUMP
 
 	char p[128];
 
 	mdns_sprintf(adapter, p, machine->name, machine->len);
 	PLTFM_MSG_TRACE("[MDNS][Mchn] %s (%d)\n", &p, machine->len);
-#endif
 }
+#endif /* PROXY_MDNS_DUMP */
 
 static void dump_mdns_rsp_hdr(struct mac_ax_adapter *adapter,
 			      struct rtw_hal_mac_proxy_mdns_rsp_hdr h)

@@ -3179,6 +3179,7 @@ u8 rtw_hw_wow(struct _ADAPTER *a, u8 wow_en)
 }
 #endif /* CONFIG_WOWLAN */
 
+#if defined(CONFIG_USB_HCI) || defined(CONFIG_PCI_HCI)
 static u32 rtw_tx_sts_total(u32 *tx_sts, u8 num)
 {
 	u32 ret = 0;
@@ -3188,6 +3189,7 @@ static u32 rtw_tx_sts_total(u32 *tx_sts, u8 num)
 		ret += tx_sts[i];
 	return ret;
 }
+#endif /* CONFIG_USB_HCI || CONFIG_PCI_HCI */
 
 int rtw_get_sta_tx_stat(_adapter *adapter, struct sta_info *psta)
 {

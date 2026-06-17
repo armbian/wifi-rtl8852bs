@@ -1833,6 +1833,7 @@ end:
 #endif /* CONFIG_WOWLAN */
 }
 
+#ifdef CONFIG_WOWLAN
 static void _wow_stop_reinit(struct phl_info_t *phl_info)
 {
 	enum rtw_phl_status pstatus = RTW_PHL_STATUS_FAILURE;
@@ -1858,6 +1859,7 @@ static void _wow_stop_reinit(struct phl_info_t *phl_info)
 		PHL_ERR("%s : rtw_phl_start fail!\n", __func__);
 	phl_cmd_role_recover(phl_info);
 }
+#endif /* CONFIG_WOWLAN */
 
 void phl_wow_stop(struct phl_info_t *phl_info, struct rtw_phl_stainfo_t *sta, u8 *hw_reinit)
 {

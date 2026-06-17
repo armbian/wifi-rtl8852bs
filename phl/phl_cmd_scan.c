@@ -1429,6 +1429,7 @@ _phl_cmd_scan_req_submit(struct phl_info_t *phl_info,
 	return RTW_PHL_STATUS_SUCCESS;
 }
 
+#ifdef CONFIG_DBCC_SUPPORT
 static u8
 _cmd_scan_dbcc_policy(struct phl_info_t *phl_info,
                       struct rtw_phl_scan_param *param)
@@ -1458,6 +1459,7 @@ _cmd_scan_dbcc_policy(struct phl_info_t *phl_info,
 
 	 return sctrl_num;
 }
+#endif /* CONFIG_DBCC_SUPPORT */
 
 /* For EXTERNAL application to request scan (expose) */
 /* @pscan: scan object

@@ -766,6 +766,7 @@ void phl_dbg_cmd_phl_rx(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 }
 #endif /* DEBUG_PHL_RX */
 
+#ifdef CONFIG_WOWLAN
 static const char *_get_mac_pwr_st_str(enum rtw_mac_pwr_st st)
 {
 	switch (st) {
@@ -793,6 +794,7 @@ static const char *_get_wow_opmode_str(enum rtw_wow_op_mode mode)
 		return "n/a";
 	}
 }
+#endif /* CONFIG_WOWLAN */
 
 void _dump_wow_stats(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 	u32 input_num, char *output, u32 out_len)
