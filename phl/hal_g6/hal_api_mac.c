@@ -116,7 +116,7 @@ rtw_hal_mac_watchdog(struct hal_info_t *hal_info, struct rtw_phl_com_t *phl_com)
 	#endif
 }
 
-enum rtw_hal_status
+static enum rtw_hal_status
 hal_mac_set_chip_id(struct rtw_hal_com_t *hal_com,
 			struct mac_ax_adapter *mac)
 {
@@ -964,7 +964,7 @@ static void hal_mac_event_notify(void *h,
 
 }
 
-struct rtw_h2c_pkt *hal_query_h2c_pkt(struct rtw_phl_com_t *phl_com,
+static struct rtw_h2c_pkt *hal_query_h2c_pkt(struct rtw_phl_com_t *phl_com,
 									  struct rtw_hal_com_t *hal_com,
 									  enum h2c_buf_class type)
 {
@@ -998,7 +998,7 @@ struct rtw_h2c_pkt *hal_query_h2c_pkt(struct rtw_phl_com_t *phl_com,
 	return h2c_pkt;
 }
 
-enum rtw_hal_status hal_pltfm_tx(struct rtw_phl_com_t *phl_com,
+static enum rtw_hal_status hal_pltfm_tx(struct rtw_phl_com_t *phl_com,
 								 struct rtw_hal_com_t *hal_com,
 								 struct rtw_h2c_pkt *pkt)
 {
@@ -1012,7 +1012,7 @@ enum rtw_hal_status hal_pltfm_tx(struct rtw_phl_com_t *phl_com,
 	return hstatus;
 }
 
-void hal_ser_l2_notify(void *phl, void *hal)
+static void hal_ser_l2_notify(void *phl, void *hal)
 {
 	struct rtw_phl_com_t *phl_com = (struct rtw_phl_com_t *)phl;
 
@@ -1128,7 +1128,7 @@ void hal_mac_msg_print(void *p, u8 dbg_level, s8 *fmt, ...)
 }
 
 struct mac_ax_pltfm_cb rtw_plt_cb = {0};
-void rtw_plt_cb_init(void)
+static void rtw_plt_cb_init(void)
 {
 	/* R/W register */
 #ifdef CONFIG_SDIO_HCI
@@ -1279,7 +1279,7 @@ void rtw_hal_mac_get_fw_ver(struct hal_info_t *hal_info, char *ver_str, u16 len)
 #define _IS_FW_READY(hal_info) \
 		(hal_to_mac(hal_info)->sm.fwdl == MAC_AX_FWDL_INIT_RDY)
 
-void hal_mac_print_fw_version(struct hal_info_t *hal_info)
+static void hal_mac_print_fw_version(struct hal_info_t *hal_info)
 {
 	char ver[20] = {0};
 	rtw_hal_mac_get_fw_ver(hal_info, ver, 20);
@@ -3217,7 +3217,7 @@ rtw_hal_mac_hw_rx_resume(struct hal_info_t *hal_info)
 #define FW_PLE_SIZE 0x800
 #define FW_PLE_SEGMENT_SIZE 512 /*Because PHL_PRINT have prefix 5 bytes "PHL: "*/
 
-void
+static void
 _hal_fw_dbg_dump(struct hal_info_t *hal_info, u8 *buffer, u16 bufsize)
 {
 	char str[FW_PLE_SEGMENT_SIZE + 1] = {0};
@@ -3299,7 +3299,7 @@ rtw_hal_mac_trx_init(void *mac, struct hal_init_info_t *init_info)
 	return RTW_HAL_STATUS_SUCCESS;
 }
 
-void _hal_mac_get_ofld_cap(struct rtw_phl_com_t *phl_com, struct hal_info_t *hal_info)
+static void _hal_mac_get_ofld_cap(struct rtw_phl_com_t *phl_com, struct hal_info_t *hal_info)
 {
 #ifdef CONFIG_FW_IO_OFLD_SUPPORT
 	struct mac_ax_adapter *mac = hal_to_mac(hal_info);
@@ -5283,7 +5283,7 @@ rtw_hal_mac_ax_bfee_set_csi_rrsc(void *mac, u8 band, u32 rrsc)
  * @he_rate:
  */
 
-enum rtw_hal_status
+static enum rtw_hal_status
 rtw_hal_mac_ax_bfee_forced_csi_rate(void *mac, struct rtw_phl_stainfo_t *sta,
 	u8 ht_rate, u8 vht_rate, u8 he_rate)
 {
@@ -5520,7 +5520,7 @@ rtw_hal_mac_ax_set_mu_fix_mode(
 }
 
 
-void
+static void
 _hal_mac_fill_mu_sc_tbl_row(u32 *mac_score, void *hal_score)
 {
 	struct hal_mu_score_tbl_score *h_score =
@@ -5581,7 +5581,7 @@ rtw_hal_mac_parse_c2h(void *hal, u8 *buf, u32 buf_len, void *c2h)
  * Required information in (hal_handle_rx_buffer_XXXXX case RX_DESC_PKT_TYPE_PPDU_STATUS),
  * it cannot be used by core/phl/other hal module
  **/
-void
+static void
 _hal_mac_ax_ppdu_sts_to_hal_ppdu_sts(
 	struct mac_ax_ppdu_rpt *mac_ppdu, void *hal_ppdu_sts)
 {
@@ -5621,7 +5621,7 @@ _hal_mac_ax_ppdu_sts_to_hal_ppdu_sts(
  * if any information is required for other core/phl module,
  * copy to rx meta data or hal_info from halmac ax ppdu status.
  **/
-void
+static void
 _hal_mac_ax_ppdu_sts_to_hal_info(struct hal_info_t *hal_info,
 	struct mac_ax_ppdu_rpt *mac_ppdu, void *rx_mdata)
 {
@@ -6002,7 +6002,7 @@ rtw_hal_mac_parse_dfs(struct hal_info_t *hal_info,
 }
 #endif /*CONFIG_PHL_DFS*/
 
-enum rtw_hal_status
+static enum rtw_hal_status
 _hal_mac_get_pkt_ofld(struct hal_info_t *hal_info, u8 *id)
 {
 	struct rtw_hal_com_t *hal_com = hal_info->hal_com;
@@ -6023,7 +6023,7 @@ _hal_mac_get_pkt_ofld(struct hal_info_t *hal_info, u8 *id)
 	return RTW_HAL_STATUS_SUCCESS;
 }
 
-enum rtw_hal_status
+static enum rtw_hal_status
 _hal_mac_chk_pkt_ofld(struct hal_info_t *hal_info)
 {
 	struct mac_ax_adapter *mac = (struct mac_ax_adapter *)hal_info->mac;
@@ -6052,7 +6052,7 @@ _hal_mac_chk_pkt_ofld(struct hal_info_t *hal_info)
 	}
 }
 
-enum rtw_hal_status
+static enum rtw_hal_status
 _hal_mac_add_pkt_ofld(struct hal_info_t *hal_info, u8 *pkt, u16 len, u8 *id)
 {
 	struct mac_ax_adapter *mac = (struct mac_ax_adapter *)hal_info->mac;
@@ -6074,7 +6074,7 @@ _hal_mac_add_pkt_ofld(struct hal_info_t *hal_info, u8 *pkt, u16 len, u8 *id)
 	return status;
 }
 
-enum rtw_hal_status
+static enum rtw_hal_status
 _hal_mac_del_pkt_ofld(struct hal_info_t *hal_info, u8 *id)
 {
 	struct mac_ax_adapter *mac = (struct mac_ax_adapter *)hal_info->mac;
@@ -6095,7 +6095,7 @@ _hal_mac_del_pkt_ofld(struct hal_info_t *hal_info, u8 *id)
 	return RTW_HAL_STATUS_SUCCESS;
 }
 
-enum rtw_hal_status
+static enum rtw_hal_status
 _hal_mac_read_pkt_ofld(struct hal_info_t *hal_info, u8 *id)
 {
 	struct mac_ax_adapter *mac = (struct mac_ax_adapter *)hal_info->mac;
@@ -7205,7 +7205,7 @@ rtw_hal_mac_set_reset_rx_cnt(struct hal_info_t *hal_info, u8 cur_phy_idx)
 	return ret;
 }
 
-enum rtw_hal_status
+static enum rtw_hal_status
 rtw_hal_mac_tx_idle_poll(struct rtw_hal_com_t *hal_com, u8 band_idx)
 {
 	struct hal_info_t *hal = hal_com->hal_priv;
@@ -7247,7 +7247,7 @@ enum rtw_sch_txen_cfg {
 	RTW_TXEN_ALL = 0xFFFF,
 };
 
-enum rtw_hal_status
+static enum rtw_hal_status
 rtw_hal_mac_set_sch_tx_en(struct rtw_hal_com_t *hal_com, u8 band_idx,
 						u16 tx_en, u16 tx_en_mask)
 {
@@ -8568,7 +8568,7 @@ rtw_hal_mac_is_tx_mgnt_empty(struct hal_info_t *hal_info, u8 band, u8 *st)
 
 /* FW Sounding Command */
 /* 1. NDPA Content */
-void _hal_max_ax_snd_cmd_ndpa(struct mac_ax_ndpa_para *mac_ndpa,
+static void _hal_max_ax_snd_cmd_ndpa(struct mac_ax_ndpa_para *mac_ndpa,
 			      struct hal_ndpa_para *hal_ndpa,
 			      bool he, u8 sta_nr)
 {
@@ -8621,7 +8621,7 @@ void _hal_max_ax_snd_cmd_ndpa(struct mac_ax_ndpa_para *mac_ndpa,
 	}
 }
 /* 2-1. BFRP Content - VHT */
-void _hal_max_ax_snd_cmd_bfrp_vht(struct mac_ax_bfrp_para *mac_bfrp,
+static void _hal_max_ax_snd_cmd_bfrp_vht(struct mac_ax_bfrp_para *mac_bfrp,
 				 struct hal_bfrp_para *hal_bfrp, u8 bfrp_num)
 {
 	struct mac_ax_vht_bfrp_para *mac_vht_bfrp = NULL;
@@ -8640,7 +8640,7 @@ void _hal_max_ax_snd_cmd_bfrp_vht(struct mac_ax_bfrp_para *mac_bfrp,
 	}
 }
 /* 2-2. BFRP Content - HE */
-void _hal_max_ax_snd_cmd_bfrp_he(struct mac_ax_bfrp_para *mac_bfrp,
+static void _hal_max_ax_snd_cmd_bfrp_he(struct mac_ax_bfrp_para *mac_bfrp,
 			      struct hal_bfrp_para *hal_bfrp,
 			      u8 num_1, u8 num_2)
 {
@@ -8745,7 +8745,7 @@ void _hal_max_ax_snd_cmd_bfrp_he(struct mac_ax_bfrp_para *mac_bfrp,
 }
 
 /* 2-3 he bfrp f2p cmd */
-void _hal_max_ax_snd_cmd_bfrp_he_f2p(struct mac_ax_snd_f2P *mac_bfrp_f2p,
+static void _hal_max_ax_snd_cmd_bfrp_he_f2p(struct mac_ax_snd_f2P *mac_bfrp_f2p,
 				     struct hal_bfrp_para *hal_bfrp,
 				     u8 num_1, u8 num_2)
 {
@@ -8824,7 +8824,7 @@ void _hal_max_ax_snd_cmd_bfrp_he_f2p(struct mac_ax_snd_f2P *mac_bfrp_f2p,
 
 
 /* 3. WD Content */
-void _hal_max_ax_snd_cmd_wd(struct mac_ax_snd_wd_para *mac_wd,
+static void _hal_max_ax_snd_cmd_wd(struct mac_ax_snd_wd_para *mac_wd,
 			    struct hal_snd_wd_para *hal_wd)
 {
 	PHL_TRACE(COMP_PHL_SOUND, _PHL_INFO_, "==> _hal_max_ax_snd_cmd_wd \n");
@@ -9961,7 +9961,7 @@ enum rtw_hal_status rtw_hal_mac_cfg_rxhci(struct hal_info_t *hal, u8 en)
 }
 
 #ifdef CONFIG_MCC_SUPPORT
-void _hal_mac_mcc_fill_role_info(struct rtw_phl_mcc_role *mcc_role,
+static void _hal_mac_mcc_fill_role_info(struct rtw_phl_mcc_role *mcc_role,
 				struct mac_ax_mcc_role *info)
 {
 	struct rtw_phl_mcc_policy_info *policy = &mcc_role->policy;
@@ -10003,7 +10003,7 @@ void _hal_mac_mcc_fill_role_info(struct rtw_phl_mcc_role *mcc_role,
 		info->courtesy_en, info->courtesy_num, info->courtesy_target);
 }
 
-void _hal_mac_mcc_fill_duration_info(struct rtw_phl_mcc_en_info *en_info,
+static void _hal_mac_mcc_fill_duration_info(struct rtw_phl_mcc_en_info *en_info,
 					struct rtw_phl_mcc_bt_info *bt_info,
 					struct mac_ax_mcc_duration_info *info)
 {
@@ -10024,7 +10024,7 @@ void _hal_mac_mcc_fill_duration_info(struct rtw_phl_mcc_en_info *en_info,
 		info->start_tsf_low);
 }
 
-void _hal_mac_mcc_fill_start_info(u8 group, u8 macid, u32 tsf_high, u32 tsf_low,
+static void _hal_mac_mcc_fill_start_info(u8 group, u8 macid, u32 tsf_high, u32 tsf_low,
 			u8 btc_in_group, u8 old_group_action, u8 old_group,
 			struct mac_ax_mcc_start *info)
 {
@@ -10520,7 +10520,7 @@ exit:
 #define P2P_TYPE_GO 0
 #define P2P_TYPE_GC 1
 
-void _hal_mac_dump_p2p_act_struct(struct mac_ax_p2p_act_info *mac_p2p_info)
+static void _hal_mac_dump_p2p_act_struct(struct mac_ax_p2p_act_info *mac_p2p_info)
 {
 	PHL_TRACE(COMP_PHL_P2PPS, _PHL_INFO_, "[NoA]_hal_mac_dump_p2p_act_struct(): macid = %d\n",
 		mac_p2p_info->macid);
@@ -10544,7 +10544,7 @@ void _hal_mac_dump_p2p_act_struct(struct mac_ax_p2p_act_info *mac_p2p_info)
 		mac_p2p_info->ctw);
 }
 
-void _hal_mac_noa_fill_info(u8 action,
+static void _hal_mac_noa_fill_info(u8 action,
 	struct rtw_phl_noa_desc *desc,
 	u16 macid,
 	struct mac_ax_p2p_act_info *mac_p2p_info)
@@ -10564,7 +10564,7 @@ void _hal_mac_noa_fill_info(u8 action,
 	mac_p2p_info->cnt = desc->count;
 }
 
-enum rtw_hal_status _hal_mac_get_p2p_stat(struct hal_info_t *hal)
+static enum rtw_hal_status _hal_mac_get_p2p_stat(struct hal_info_t *hal)
 {
 	struct mac_ax_adapter *mac = hal_to_mac(hal);
 	u16 loop_cnt;
@@ -10614,7 +10614,7 @@ enum rtw_hal_status rtw_hal_mac_p2p_macid_ctrl(struct hal_info_t *hal,
 	return h_sts;
 }
 
-enum rtw_hal_status _hal_mac_set_p2p_act(struct hal_info_t *hal,
+static enum rtw_hal_status _hal_mac_set_p2p_act(struct hal_info_t *hal,
 	struct mac_ax_p2p_act_info *mac_p2p_info)
 {
 	enum rtw_hal_status h_stat = RTW_HAL_STATUS_FAILURE;

@@ -17,7 +17,7 @@
 #ifdef CONFIG_POWER_SAVE
 #define case_pwr_state(src) \
 	case PS_PWR_STATE_##src: return #src
-const char *hal_ps_pwr_state_to_str(u8 pwr_state)
+static const char *hal_ps_pwr_state_to_str(u8 pwr_state)
 {
 	switch (pwr_state) {
 	case_pwr_state(ACTIVE);
@@ -248,7 +248,8 @@ _hal_ps_pwr_lvl_cfg(struct rtw_phl_com_t *phl_com, struct hal_info_t *hal_info,
 	return status;
 }
 
-void _hal_ps_proc_hw_rf_state_done(void* priv, struct phl_msg* msg)
+#ifdef CONFIG_HW_RADIO_ONOFF_DETECT
+static void _hal_ps_proc_hw_rf_state_done(void* priv, struct phl_msg* msg)
 {
 	struct rtw_phl_com_t *phl_com = (struct rtw_phl_com_t *)priv;
 
@@ -256,6 +257,7 @@ void _hal_ps_proc_hw_rf_state_done(void* priv, struct phl_msg* msg)
 		_os_kmem_free(phlcom_to_drvpriv(phl_com), msg->inbuf, msg->inlen);
 	}
 }
+#endif /* CONFIG_HW_RADIO_ONOFF_DETECT */
 
 /**
  * configured requested power level

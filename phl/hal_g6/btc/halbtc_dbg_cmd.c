@@ -1862,7 +1862,7 @@ static void _cmd_set_bt_psd(struct btc_t *btc, u32 *used,
 	_bt_psd_setup(btc, (u8)idx, (u8)type);
 }
 
-s8 _get_bw_att_db(struct btc_t *btc)
+static s8 _get_bw_att_db(struct btc_t *btc)
 {
 	struct btc_wl_info *wl = &btc->cx.wl;
 	s8 bw_att_db = 13;
@@ -2706,7 +2706,7 @@ static u16 _bt_psd_get_tx_rate(struct btc_t *btc)
 	return (plink->tx_rate);
 }
 
-u8 _bt_psd_get_tx_ss_num(struct btc_t *btc)
+static u8 _bt_psd_get_tx_ss_num(struct btc_t *btc)
 {
 	struct btc_wl_link_info *plink = NULL;
 	u8 ss = 0, i;
@@ -2735,7 +2735,7 @@ u8 _bt_psd_get_tx_ss_num(struct btc_t *btc)
 	return ss;
 }
 
-s8 _bt_psd_get_tx_pwr_dbm(struct btc_t *btc, u8 rf_path)
+static s8 _bt_psd_get_tx_pwr_dbm(struct btc_t *btc, u8 rf_path)
 {
 	s16 wl_txp_dbm_tssi;
 	u32 reg_add;

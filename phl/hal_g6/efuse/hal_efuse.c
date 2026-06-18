@@ -31,18 +31,18 @@ c. efuse information query, map size/used bytes...
 #define get_a_die_start_offset(limit_log_size, a_die_size) (limit_log_size - a_die_size)
 
 /* WIFI EFUSE API */
-void efuse_shadow_read_one_byte(struct efuse_t *efuse, u16 offset, u8 *value)
+static void efuse_shadow_read_one_byte(struct efuse_t *efuse, u16 offset, u8 *value)
 {
 	*value = efuse->shadow_map[offset];
 }
 
-void efuse_shadow_read_two_byte(struct efuse_t *efuse, u16 offset, u16 *value)
+static void efuse_shadow_read_two_byte(struct efuse_t *efuse, u16 offset, u16 *value)
 {
 	*value = efuse->shadow_map[offset];
 	*value |= efuse->shadow_map[offset+1] << 8;
 }
 
-void efuse_shadow_read_four_byte(struct efuse_t *efuse, u16 offset, u32 *value)
+static void efuse_shadow_read_four_byte(struct efuse_t *efuse, u16 offset, u32 *value)
 {
 	*value = efuse->shadow_map[offset];
 	*value |= efuse->shadow_map[offset+1] << 8;
@@ -50,18 +50,18 @@ void efuse_shadow_read_four_byte(struct efuse_t *efuse, u16 offset, u32 *value)
 	*value |= efuse->shadow_map[offset+3] << 24;
 }
 
-void efuse_shadow_write_one_byte(struct efuse_t *efuse, u16 offset, u16 value)
+static void efuse_shadow_write_one_byte(struct efuse_t *efuse, u16 offset, u16 value)
 {
 	efuse->shadow_map[offset] = (u8)(value&0x00FF);
 }
 
-void efuse_shadow_write_two_byte(struct efuse_t *efuse, u16 offset, u16 value)
+static void efuse_shadow_write_two_byte(struct efuse_t *efuse, u16 offset, u16 value)
 {
 	efuse->shadow_map[offset] = (u8)(value&0x00FF);
 	efuse->shadow_map[offset+1] = (u8)((value&0xFF00) >> 8);
 }
 
-void efuse_shadow_write_four_byte(struct efuse_t *efuse, u16 offset, u32 value)
+static void efuse_shadow_write_four_byte(struct efuse_t *efuse, u16 offset, u32 value)
 {
 	efuse->shadow_map[offset] = (u8)(value&0x000000FF);
 	efuse->shadow_map[offset+1] = (u8)((value&0x0000FF00) >> 8);
@@ -69,7 +69,7 @@ void efuse_shadow_write_four_byte(struct efuse_t *efuse, u16 offset, u32 value)
 	efuse->shadow_map[offset+3] = (u8)((value&0xFF000000) >> 24);
 }
 
-u32 efuse_check_autoload(struct efuse_t *efuse)
+static u32 efuse_check_autoload(struct efuse_t *efuse)
 {
 	enum rtw_hal_status hal_status = RTW_HAL_STATUS_FAILURE;
 
@@ -81,7 +81,7 @@ u32 efuse_check_autoload(struct efuse_t *efuse)
 	return hal_status;
 }
 
-u32 efuse_hidden_handle(struct efuse_t *efuse)
+static u32 efuse_hidden_handle(struct efuse_t *efuse)
 {
 	enum rtw_hal_status hal_status = RTW_HAL_STATUS_FAILURE;
 
@@ -90,7 +90,7 @@ u32 efuse_hidden_handle(struct efuse_t *efuse)
 	return hal_status;
 }
 
-enum rtw_hal_status efuse_set_hw_cap(struct efuse_t *efuse)
+static enum rtw_hal_status efuse_set_hw_cap(struct efuse_t *efuse)
 {
 	enum rtw_hal_status status = RTW_HAL_STATUS_FAILURE;
 	struct rtw_hal_com_t *hal_com = efuse->hal_com;
@@ -161,7 +161,7 @@ enum rtw_hal_status efuse_set_hw_cap(struct efuse_t *efuse)
  *     RFE_41(efuse_x02CA=0x29): 1T1R(Tx/Rx@pathB)
  *
  */
-void efuse_compatible_chk(struct efuse_t *efuse)
+static void efuse_compatible_chk(struct efuse_t *efuse)
 {
 	rtw_hal_rf_rfe_ant_num_chk(efuse->hal_com);
 }
@@ -192,7 +192,7 @@ enum rtw_hal_status rtw_efuse_shadow_load(void *efuse, bool is_limit)
 	return status;
 }
 
-enum rtw_hal_status rtw_efuse_shadow_file_load(void *efuse, char *ic_name, bool is_limit)
+static enum rtw_hal_status rtw_efuse_shadow_file_load(void *efuse, char *ic_name, bool is_limit)
 {
 	enum rtw_hal_status status = RTW_HAL_STATUS_SUCCESS;
 
@@ -421,7 +421,7 @@ enum rtw_hal_status rtw_efuse_shadow2buf(void *efuse, u8 *destbuf, u16 buflen)
 	return status;
 }
 
-enum rtw_hal_status
+static enum rtw_hal_status
 efuse_map_buf2shadow(struct efuse_t *efuse, u8 *srcbuf, u16 buflen)
 {
 	enum rtw_hal_status status = RTW_HAL_STATUS_SUCCESS;
@@ -433,7 +433,7 @@ efuse_map_buf2shadow(struct efuse_t *efuse, u8 *srcbuf, u16 buflen)
 	return status;
 }
 
-enum rtw_hal_status
+static enum rtw_hal_status
 efuse_file_map2version(struct efuse_t *efuse, u8 *srcbuf, u16 buflen)
 {
 	enum rtw_hal_status status = RTW_HAL_STATUS_SUCCESS;
@@ -446,7 +446,7 @@ efuse_file_map2version(struct efuse_t *efuse, u8 *srcbuf, u16 buflen)
 	return status;
 }
 
-enum rtw_hal_status
+static enum rtw_hal_status
 efuse_file_mask2buf(struct efuse_t *efuse, u8 *srcbuf, u16 buflen)
 {
 	enum rtw_hal_status status = RTW_HAL_STATUS_FAILURE;
@@ -461,7 +461,7 @@ efuse_file_mask2buf(struct efuse_t *efuse, u8 *srcbuf, u16 buflen)
 	return status;
 }
 
-enum rtw_hal_status
+static enum rtw_hal_status
 efuse_file_mask2version(struct efuse_t *efuse, u8 *srcbuf, u16 buflen)
 {
 	enum rtw_hal_status status = RTW_HAL_STATUS_FAILURE;
@@ -1050,18 +1050,18 @@ void rtw_efuse_deinit(struct rtw_hal_com_t *hal_com, void *efuse)
 }
 
 /* BT EFUSE API */
-void efuse_bt_shadow_read_one_byte(struct efuse_t *efuse, u16 offset, u8 *value)
+static void efuse_bt_shadow_read_one_byte(struct efuse_t *efuse, u16 offset, u8 *value)
 {
    *value = efuse->bt_shadow_map[offset];
 }
 
-void efuse_bt_shadow_read_two_byte(struct efuse_t *efuse, u16 offset, u16 *value)
+static void efuse_bt_shadow_read_two_byte(struct efuse_t *efuse, u16 offset, u16 *value)
 {
    *value = efuse->bt_shadow_map[offset];
    *value |= efuse->bt_shadow_map[offset+1] << 8;
 }
 
-void efuse_bt_shadow_read_four_byte(struct efuse_t *efuse, u16 offset, u32 *value)
+static void efuse_bt_shadow_read_four_byte(struct efuse_t *efuse, u16 offset, u32 *value)
 {
    *value = efuse->bt_shadow_map[offset];
    *value |= efuse->bt_shadow_map[offset+1] << 8;
@@ -1069,18 +1069,18 @@ void efuse_bt_shadow_read_four_byte(struct efuse_t *efuse, u16 offset, u32 *valu
    *value |= efuse->bt_shadow_map[offset+3] << 24;
 }
 
-void efuse_bt_shadow_write_one_byte(struct efuse_t *efuse, u16 offset, u16 value)
+static void efuse_bt_shadow_write_one_byte(struct efuse_t *efuse, u16 offset, u16 value)
 {
    efuse->bt_shadow_map[offset] = (u8)(value&0x00FF);
 }
 
-void efuse_bt_shadow_write_two_byte(struct efuse_t *efuse, u16 offset, u16 value)
+static void efuse_bt_shadow_write_two_byte(struct efuse_t *efuse, u16 offset, u16 value)
 {
    efuse->bt_shadow_map[offset] = (u8)(value&0x00FF);
    efuse->bt_shadow_map[offset+1] = (u8)((value&0xFF00) >> 8);
 }
 
-void efuse_bt_shadow_write_four_byte(struct efuse_t *efuse, u16 offset, u32 value)
+static void efuse_bt_shadow_write_four_byte(struct efuse_t *efuse, u16 offset, u32 value)
 {
    efuse->bt_shadow_map[offset] = (u8)(value&0x000000FF);
    efuse->bt_shadow_map[offset+1] = (u8)((value&0x0000FF00) >> 8);
@@ -1252,7 +1252,7 @@ enum rtw_hal_status rtw_efuse_bt_shadow2buf(void *efuse, u8 *destbuf, u16 buflen
 	return status;
 }
 
-enum rtw_hal_status
+static enum rtw_hal_status
 efuse_bt_map_buf2shadow(struct efuse_t *efuse, u8 *srcbuf, u16 buflen)
 {
 	enum rtw_hal_status status = RTW_HAL_STATUS_FAILURE;
@@ -1265,7 +1265,7 @@ efuse_bt_map_buf2shadow(struct efuse_t *efuse, u8 *srcbuf, u16 buflen)
 	return status;
 }
 
-enum rtw_hal_status
+static enum rtw_hal_status
 efuse_bt_file_mask2buf(struct efuse_t *efuse, u8 *srcbuf, u16 buflen)
 {
 	enum rtw_hal_status status = RTW_HAL_STATUS_FAILURE;

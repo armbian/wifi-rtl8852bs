@@ -95,7 +95,7 @@ static u8 hal_mapping_hw_tx_chnl_8852bs(struct hal_info_t *hal,
 	return dma_ch;
 }
 
-u16 hal_get_avail_page_8852bs(struct rtw_hal_com_t *hal_com, u8 dma_ch,
+static u16 hal_get_avail_page_8852bs(struct rtw_hal_com_t *hal_com, u8 dma_ch,
 			u16 *host_idx, u16 *hw_idx)
 {
 	enum rtw_hal_status hstatus = RTW_HAL_STATUS_FAILURE;
@@ -106,7 +106,7 @@ static void hal_trx_deinit_8852bs(struct hal_info_t *hal)
 {
 }
 
-enum rtw_hal_status hal_trx_init_8852bs(struct hal_info_t *hal)
+static enum rtw_hal_status hal_trx_init_8852bs(struct hal_info_t *hal)
 {
 	enum rtw_hal_status hstatus = RTW_HAL_STATUS_FAILURE;
 

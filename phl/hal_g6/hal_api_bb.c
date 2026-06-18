@@ -548,7 +548,7 @@ rtw_hal_bb_get_efuse_info(struct rtw_hal_com_t *hal_com,
 	return RTW_HAL_STATUS_SUCCESS;
 }
 
-u8 hal_get_primary_channel_idx(u8 pri_ch,
+static u8 hal_get_primary_channel_idx(u8 pri_ch,
 				u8 central_ch, enum channel_width bw,
 				enum chan_offset bw_offset)
 {
@@ -1631,7 +1631,7 @@ u32 rtw_hal_bb_process_c2h(void *hal, struct rtw_c2h_info *c2h, struct c2h_evt_m
 #endif
 }
 
-u16 rtw_hal_bb_get_su_rx_rate(struct rtw_hal_com_t *hal_com,
+static u16 rtw_hal_bb_get_su_rx_rate(struct rtw_hal_com_t *hal_com,
 				enum phl_band_idx band_idx)
 {
 	struct hal_info_t *hal_info = (struct hal_info_t *)(hal_com->hal_priv);

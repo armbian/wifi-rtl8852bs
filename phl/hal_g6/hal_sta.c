@@ -15,7 +15,7 @@
 #define _HAL_STA_C_
 #include "hal_headers.h"
 
-void
+static void
 _hal_sta_rssi_init(struct rtw_phl_stainfo_t *sta)
 {
 	sta->hal_sta->rssi_stat.assoc_rssi = 0;
@@ -480,7 +480,7 @@ out:
 	return sts;
 }
 
-enum rtw_hal_status
+static enum rtw_hal_status
 _hal_update_ba_cam(struct hal_info_t *hal_info, u8 valid, u16 macid,
                    u8 dialog_token, u16 timeout, u16 start_seq_num, u16 ba_policy,
                    u16 tid, u16 buf_size, u8 camid, u8 band_idx, u8 uid, bool is_std)

@@ -19,7 +19,7 @@
  * 	Dump all of the csi buffer status;
  * @csi_obj: (struct hal_csi_obj *)
  **/
-void _dump_csi_buf_status(struct hal_csi_obj *csi_obj)
+static void _dump_csi_buf_status(struct hal_csi_obj *csi_obj)
 {
 	struct hal_csi_buf *csi_buf = NULL;
 	u8 i = 0;
@@ -48,7 +48,7 @@ void _dump_csi_buf_status(struct hal_csi_obj *csi_obj)
  * return
  * @sub_idx: (u8) csi buffer sub index
  **/
-u8 __query_avl_buf_idx_20(struct hal_csi_buf *csi_buf)
+static u8 __query_avl_buf_idx_20(struct hal_csi_buf *csi_buf)
 {
 	u8 sub_idx = CSI_BUF_SUB_IDX_NON;
 	do {
@@ -84,7 +84,7 @@ u8 __query_avl_buf_idx_20(struct hal_csi_buf *csi_buf)
  * return
  * @sub_idx: (u8) csi buffer sub index
  **/
-u8 __query_avl_buf_idx_40(struct hal_csi_buf *csi_buf)
+static u8 __query_avl_buf_idx_40(struct hal_csi_buf *csi_buf)
 {
 	u8 sub_idx = CSI_BUF_SUB_IDX_NON;
 	do {
@@ -110,7 +110,7 @@ u8 __query_avl_buf_idx_40(struct hal_csi_buf *csi_buf)
  * return
  * @sub_idx: (u8) csi buffer sub index
  **/
-u8 __query_avl_buf_idx_80(struct hal_csi_buf *csi_buf)
+static u8 __query_avl_buf_idx_80(struct hal_csi_buf *csi_buf)
 {
 	u8 sub_idx = CSI_BUF_SUB_IDX_NON;
 
@@ -130,7 +130,7 @@ u8 __query_avl_buf_idx_80(struct hal_csi_buf *csi_buf)
  * return
  * @sub_idx: (u8) csi buffer sub index
  **/
-u8 __query_avl_buf_idx_160(struct hal_csi_buf *csi_buf)
+static u8 __query_avl_buf_idx_160(struct hal_csi_buf *csi_buf)
 {
 	u8 sub_idx = CSI_BUF_SUB_IDX_NON;
 
@@ -152,7 +152,7 @@ u8 __query_avl_buf_idx_160(struct hal_csi_buf *csi_buf)
  * @sub_id: (u8) available csi buffer sub index
  * @csi_buf: (struct hal_csi_buf *) original hal csi buffer
  **/
-struct hal_csi_buf *_query_csi_buf_su(
+static struct hal_csi_buf *_query_csi_buf_su(
 	struct hal_info_t *hal_info,
 	enum hal_csi_buf_size size,
 	u8 *sub_id)
@@ -221,7 +221,7 @@ struct hal_csi_buf *_query_csi_buf_su(
  * @sub_id: (u8) available csi buffer sub index
  * @csi_buf: (struct hal_csi_buf *) original hal csi buffer
  **/
-struct hal_csi_buf *_query_csi_buf_mu(
+static struct hal_csi_buf *_query_csi_buf_mu(
 	struct hal_info_t *hal_info,
 	enum hal_csi_buf_size size,
 	u8 *sub_id)
@@ -290,7 +290,7 @@ struct hal_csi_buf *_query_csi_buf_mu(
  * return
  * @ret: enum hal_csi_buf_size
  **/
-enum hal_csi_buf_size
+static enum hal_csi_buf_size
 _bw2csi(enum channel_width bw)
 {
 	enum hal_csi_buf_size ret = HAL_CSI_BUF_SIZE_NONE;
@@ -313,7 +313,7 @@ _bw2csi(enum channel_width bw)
 	return ret;
 }
 
-enum rtw_hal_status _hal_csi_init_buf(struct hal_info_t *hal_info, u8 num)
+static enum rtw_hal_status _hal_csi_init_buf(struct hal_info_t *hal_info, u8 num)
 {
 	enum rtw_hal_status status = RTW_HAL_STATUS_SUCCESS;
 	void *drv_priv = hal_to_drvpriv(hal_info);
