@@ -152,7 +152,7 @@ u32 fill_sec_cam_info(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-u32 fill_addr_cam_sec_only(struct mac_ax_adapter *adapter,
+static u32 fill_addr_cam_sec_only(struct mac_ax_adapter *adapter,
 			   struct mac_ax_role_info *info,
 			   struct addr_sec_only_info *addr_sec_info)
 {
@@ -208,7 +208,7 @@ u32 fill_addr_cam_sec_only(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-u32 mac_upd_sec_infotbl(struct mac_ax_adapter *adapter,
+static u32 mac_upd_sec_infotbl(struct mac_ax_adapter *adapter,
 			struct fwcmd_seccam_info *info)
 {
 	u32 ret = 0, s_info_tbl[6], cam_address = 0;
@@ -300,7 +300,7 @@ fail:
 	return ret;
 }
 
-u8 check_key_index(u8 addr_cam_sec_mode, u8 key_type, u8 key_index)
+static u8 check_key_index(u8 addr_cam_sec_mode, u8 key_type, u8 key_index)
 {
 	switch (addr_cam_sec_mode) {
 	case ADDR_CAM_SEC_MODE_ZERO:
@@ -361,7 +361,7 @@ u8 check_key_index(u8 addr_cam_sec_mode, u8 key_type, u8 key_index)
 	return 1;
 }
 
-u8 decide_key_index(u8 addr_cam_sec_mode, u8 key_type)
+static u8 decide_key_index(u8 addr_cam_sec_mode, u8 key_type)
 {
 	u8 key_index = 0;
 
@@ -404,7 +404,7 @@ u8 decide_key_index(u8 addr_cam_sec_mode, u8 key_type)
 	return key_index;
 }
 
-u8 decide_sec_cam_index(struct mac_ax_adapter *adapter, u8 *sec_cam_idx)
+static u8 decide_sec_cam_index(struct mac_ax_adapter *adapter, u8 *sec_cam_idx)
 {
 	u8 sec_idx = 0, i = 0;
 	/* call by pointer */
@@ -460,7 +460,7 @@ u8 decide_sec_cam_index(struct mac_ax_adapter *adapter, u8 *sec_cam_idx)
 	return MACSECCAMFL;
 }
 
-u8 delete_key_from_addr_cam(struct mac_ax_adapter *adapter,
+static u8 delete_key_from_addr_cam(struct mac_ax_adapter *adapter,
 			    struct mac_role_tbl *role, u8 key_type,
 			    u8 key_id, u8 *sec_cam_idx)
 {
@@ -516,7 +516,7 @@ u8 delete_key_from_addr_cam(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-u8 insert_key_to_addr_cam(struct mac_ax_adapter *adapter,
+static u8 insert_key_to_addr_cam(struct mac_ax_adapter *adapter,
 			  struct mac_role_tbl *role, u8 key_type,
 			  u8 key_id, u8 sec_cam_idx)
 {
@@ -565,7 +565,7 @@ u8 insert_key_to_addr_cam(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-u32 m_security_cam_hal(struct mac_ax_adapter *adapter,
+static u32 m_security_cam_hal(struct mac_ax_adapter *adapter,
 		       struct mac_ax_sec_cam_info *sec_cam_info,
 		       u8 mac_id, u8 key_id, u8 key_type,
 		       u8 sec_cam_idx, u8 clear)
@@ -832,7 +832,7 @@ u32 mac_sta_hw_security_support(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-u8 check_key_type(u8 addr_cam_sec_mode, u8 key_index)
+static u8 check_key_type(u8 addr_cam_sec_mode, u8 key_index)
 {
 	switch (addr_cam_sec_mode) {
 	case ADDR_CAM_SEC_MODE_ZERO:

@@ -1924,7 +1924,7 @@ static u32 nav_ctrl_init(struct mac_ax_adapter *adapter, u8 band)
 	return MACSUCCESS;
 }
 
-u32 dmac_init(struct mac_ax_adapter *adapter, struct mac_ax_trx_info *info,
+static u32 dmac_init(struct mac_ax_adapter *adapter, struct mac_ax_trx_info *info,
 	      enum mac_ax_band band)
 {
 	u32 ret = 0;

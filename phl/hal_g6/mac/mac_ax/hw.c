@@ -60,7 +60,7 @@ struct mac_ax_hw_info *mac_get_hw_info(struct mac_ax_adapter *adapter)
 	return adapter->hw_info->done ? adapter->hw_info : NULL;
 }
 
-u32 get_block_tx_sel_msk(enum mac_ax_block_tx_sel src, u32 *msk)
+static u32 get_block_tx_sel_msk(enum mac_ax_block_tx_sel src, u32 *msk)
 {
 	switch (src) {
 	case MAC_AX_CCA:
@@ -91,7 +91,7 @@ u32 get_block_tx_sel_msk(enum mac_ax_block_tx_sel src, u32 *msk)
 	return MACSUCCESS;
 }
 
-u32 cfg_block_tx(struct mac_ax_adapter *adapter,
+static u32 cfg_block_tx(struct mac_ax_adapter *adapter,
 		 enum mac_ax_block_tx_sel src, u8 band, u8 en)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
@@ -132,7 +132,7 @@ u32 cfg_block_tx(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-u32 get_block_tx(struct mac_ax_adapter *adapter,
+static u32 get_block_tx(struct mac_ax_adapter *adapter,
 		 enum mac_ax_block_tx_sel src, u8 band, u8 *en)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
@@ -605,7 +605,7 @@ static u32 set_accept_icverr(struct mac_ax_adapter *adapter, u8 enable)
 	return MACSUCCESS;
 }
 
-u32 set_gt3_timer(struct mac_ax_adapter *adapter,
+static u32 set_gt3_timer(struct mac_ax_adapter *adapter,
 		  struct mac_ax_gt3_cfg *cfg)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
@@ -663,7 +663,7 @@ u32 set_cctl_rty_limit(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-u32 set_data_rty_limit(struct mac_ax_adapter *adapter,
+static u32 set_data_rty_limit(struct mac_ax_adapter *adapter,
 		       struct mac_ax_rty_lmt *rty)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
@@ -704,7 +704,7 @@ u32 set_data_rty_limit(struct mac_ax_adapter *adapter,
 	return ret;
 }
 
-u32 get_data_rty_limit(struct mac_ax_adapter *adapter,
+static u32 get_data_rty_limit(struct mac_ax_adapter *adapter,
 		       struct mac_ax_rty_lmt *rty)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
@@ -754,7 +754,7 @@ u32 set_bacam_mode(struct mac_ax_adapter *adapter, u8 mode_sel)
 #endif
 }
 
-u32 set_xtal_aac(struct mac_ax_adapter *adapter, u8 aac_mode)
+static u32 set_xtal_aac(struct mac_ax_adapter *adapter, u8 aac_mode)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
 
@@ -772,7 +772,7 @@ u32 set_xtal_aac(struct mac_ax_adapter *adapter, u8 aac_mode)
 	return MACSUCCESS;
 }
 
-u32 set_rxd_zld_en(struct mac_ax_adapter *adapter, u8 enable)
+static u32 set_rxd_zld_en(struct mac_ax_adapter *adapter, u8 enable)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
 	u32 val32;
@@ -795,7 +795,7 @@ u32 set_rxd_zld_en(struct mac_ax_adapter *adapter, u8 enable)
 	return MACSUCCESS;
 }
 
-u32 set_partial_pld_mode(struct mac_ax_adapter *adapter, u8 enable)
+static u32 set_partial_pld_mode(struct mac_ax_adapter *adapter, u8 enable)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
 	u32 val32;
@@ -813,7 +813,7 @@ u32 set_partial_pld_mode(struct mac_ax_adapter *adapter, u8 enable)
 	return MACSUCCESS;
 }
 
-u32 set_nav_padding(struct mac_ax_adapter *adapter,
+static u32 set_nav_padding(struct mac_ax_adapter *adapter,
 		    struct mac_ax_nav_padding *nav)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
@@ -898,7 +898,7 @@ static void set_delay_tx_cfg(struct mac_ax_adapter *adapter,
 	MAC_REG_W32(R_AX_SS_DELAYTX_LEN_THR, val32);
 }
 
-u32 set_core_swr_volt(struct mac_ax_adapter *adapter,
+static u32 set_core_swr_volt(struct mac_ax_adapter *adapter,
 		      enum mac_ax_core_swr_volt volt_sel)
 {
 	u8 i, j, adjust = 0;
@@ -943,7 +943,8 @@ u32 set_core_swr_volt(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-u32 set_pcie_driving_mponly(struct mac_ax_adapter *adapter,
+#if MAC_AX_PCIE_SUPPORT
+static u32 set_pcie_driving_mponly(struct mac_ax_adapter *adapter,
 			    enum mac_ax_pcie_driving_ctrl drving_ctrl)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
@@ -971,6 +972,7 @@ u32 set_pcie_driving_mponly(struct mac_ax_adapter *adapter,
 
 	return MACSUCCESS;
 }
+#endif /* MAC_AX_PCIE_SUPPORT */
 
 u32 set_macid_pause(struct mac_ax_adapter *adapter,
 		    struct mac_ax_macid_pause_cfg *cfg)
@@ -1074,7 +1076,8 @@ u32 set_macid_pause(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-u32 set_cctl_preld(struct mac_ax_adapter *adapter,
+#if MAC_AX_PCIE_SUPPORT
+static u32 set_cctl_preld(struct mac_ax_adapter *adapter,
 		   struct mac_ax_cctl_preld_cfg *cfg)
 {
 #if MAC_AX_PCIE_SUPPORT
@@ -1095,6 +1098,7 @@ u32 set_cctl_preld(struct mac_ax_adapter *adapter,
 	return MACPROCERR;
 #endif
 }
+#endif /* MAC_AX_PCIE_SUPPORT */
 
 u32 macid_pause(struct mac_ax_adapter *adapter,
 		struct mac_ax_macid_pause_grp *grp)
@@ -1591,7 +1595,7 @@ u32 scheduler_set_prebkf(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-u32 mac_get_tx_cnt(struct mac_ax_adapter *adapter,
+static u32 mac_get_tx_cnt(struct mac_ax_adapter *adapter,
 		   struct mac_ax_tx_cnt *cnt)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
@@ -1617,7 +1621,7 @@ u32 mac_get_tx_cnt(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-u32 cfg_wdt_isr_rst(struct mac_ax_adapter *adapter)
+static u32 cfg_wdt_isr_rst(struct mac_ax_adapter *adapter)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
 	u8 val = MAC_REG_R8(R_AX_PLATFORM_ENABLE);
@@ -1631,7 +1635,7 @@ u32 cfg_wdt_isr_rst(struct mac_ax_adapter *adapter)
 	return MACSUCCESS;
 }
 
-u32 mac_clr_tx_cnt(struct mac_ax_adapter *adapter,
+static u32 mac_clr_tx_cnt(struct mac_ax_adapter *adapter,
 		   struct mac_ax_tx_cnt *cnt)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
@@ -1709,7 +1713,7 @@ u32 mac_clr_tx_cnt(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-u32 mac_set_adapter_info(struct mac_ax_adapter *adapter,
+static u32 mac_set_adapter_info(struct mac_ax_adapter *adapter,
 			 struct mac_ax_adapter_info *set)
 {
 #ifdef RTW_WKARD_GET_PROCESSOR_ID
@@ -2118,7 +2122,7 @@ u32 get_bacam_mode(struct mac_ax_adapter *adapter, u8 *mode_sel)
 #endif
 }
 
-u32 get_pwr_state(struct mac_ax_adapter *adapter, enum mac_ax_mac_pwr_st *st)
+static u32 get_pwr_state(struct mac_ax_adapter *adapter, enum mac_ax_mac_pwr_st *st)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
 	u32 val;
@@ -2144,7 +2148,7 @@ u32 get_pwr_state(struct mac_ax_adapter *adapter, enum mac_ax_mac_pwr_st *st)
 	return MACSUCCESS;
 }
 
-void get_dflt_nav(struct mac_ax_adapter *adapter, u16 *nav)
+static void get_dflt_nav(struct mac_ax_adapter *adapter, u16 *nav)
 {
 	/* data NAV is consist of SIFS and ACK/BA time */
 	/* currently, we use SIFS + 64-bitmap BA as default NAV */

@@ -22,7 +22,7 @@
 #define PWR_K_CHK_OFFSET 0x5E9
 #define PWR_K_CHK_VALUE 0xAA
 
-u32 _patch_ck_buf_level(struct mac_ax_adapter *adapter)
+static u32 _patch_ck_buf_level(struct mac_ax_adapter *adapter)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
 	u32 val32;

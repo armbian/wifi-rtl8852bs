@@ -330,7 +330,7 @@ static u32 dbcc_chk_notify_done(struct mac_ax_adapter *adapter)
 	return MACSUCCESS;
 }
 
-u32 dbcc_trx_ctrl_bkp(struct mac_ax_adapter *adapter, enum mac_ax_band band)
+static u32 dbcc_trx_ctrl_bkp(struct mac_ax_adapter *adapter, enum mac_ax_band band)
 {
 	struct mac_ax_ops *mops = adapter_to_mac_ops(adapter);
 	struct mac_ax_dbcc_info *dbcc_info = adapter->dbcc_info;

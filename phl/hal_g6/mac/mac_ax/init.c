@@ -21,7 +21,7 @@
 #include "_pcie.h"
 #endif
 
-u32 mac_set_dut_env_mode(struct mac_ax_adapter *adapter, enum rtw_mac_env_mode env_mode)
+static u32 mac_set_dut_env_mode(struct mac_ax_adapter *adapter, enum rtw_mac_env_mode env_mode)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
 	u32 val32;
@@ -178,7 +178,7 @@ struct mac_ax_adapter *get_mac_ax_adapter(enum mac_ax_intf intf,
 }
 #endif
 
-u32 hci_func_en(struct mac_ax_adapter *adapter)
+static u32 hci_func_en(struct mac_ax_adapter *adapter)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
 	u32 val32, reg;
@@ -204,7 +204,7 @@ u32 hci_func_en(struct mac_ax_adapter *adapter)
 	return ret;
 }
 
-u32 dmac_pre_init(struct mac_ax_adapter *adapter, enum mac_ax_qta_mode mode, u8 fwdl)
+static u32 dmac_pre_init(struct mac_ax_adapter *adapter, enum mac_ax_qta_mode mode, u8 fwdl)
 {
 	struct mac_ax_priv_ops *p_ops = adapter_to_priv_ops(adapter);
 	u32 ret;
@@ -302,7 +302,7 @@ u32 cmac_func_en(struct mac_ax_adapter *adapter, u8 band, u8 en)
 	return MACSUCCESS;
 }
 
-u32 chip_func_en(struct mac_ax_adapter *adapter)
+static u32 chip_func_en(struct mac_ax_adapter *adapter)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
 

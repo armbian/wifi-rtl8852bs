@@ -1506,7 +1506,7 @@ static struct c2h_proc_func c2h_proc_fw_info_cmd[] = {
 	{FWCMD_C2H_FUNC_NULL, NULL},
 };
 
-u32 c2h_fw_info(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
+static u32 c2h_fw_info(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 		struct rtw_c2h_info *info)
 {
 	struct c2h_proc_func *proc = c2h_proc_fw_info_cmd;
@@ -1947,7 +1947,7 @@ static struct c2h_proc_func c2h_proc_fw_ofld_cmd[] = {
 	{FWCMD_C2H_FUNC_NULL, NULL},
 };
 
-u32 c2h_fw_ofld(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
+static u32 c2h_fw_ofld(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 		struct rtw_c2h_info *info)
 {
 	struct c2h_proc_func *proc = c2h_proc_fw_ofld_cmd;
@@ -2031,7 +2031,7 @@ static struct c2h_proc_func c2h_proc_twt_cmd[] = {
 	{FWCMD_C2H_FUNC_NULL, NULL}
 };
 
-u32 c2h_twt(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
+static u32 c2h_twt(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 	    struct rtw_c2h_info *info)
 {
 	struct c2h_proc_func *proc = c2h_proc_twt_cmd;
@@ -2061,7 +2061,7 @@ u32 c2h_twt(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 	return handler(adapter, buf, len, info);
 }
 
-u32 c2h_wow_aoac_report_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
+static u32 c2h_wow_aoac_report_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 			    struct rtw_c2h_info *info)
 {
 	struct mac_ax_wowlan_info *wowlan_info = &adapter->wowlan_info;
@@ -2085,7 +2085,7 @@ static struct c2h_proc_func c2h_proc_wow_cmd[] = {
 	{FWCMD_C2H_FUNC_NULL, NULL},
 };
 
-u32 c2h_wow(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
+static u32 c2h_wow(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 	    struct rtw_c2h_info *info)
 {
 	struct c2h_proc_func *proc = c2h_proc_wow_cmd;
@@ -2115,7 +2115,7 @@ u32 c2h_wow(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 	return handler(adapter, buf, len, info);
 }
 
-u32 c2h_mcc_rcv_ack_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
+static u32 c2h_mcc_rcv_ack_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 			struct rtw_c2h_info *info)
 {
 	struct mac_ax_state_mach *sm = &adapter->sm;
@@ -2157,7 +2157,7 @@ u32 c2h_mcc_rcv_ack_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 	return MACSUCCESS;
 }
 
-u32 c2h_mcc_req_ack_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
+static u32 c2h_mcc_req_ack_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 			struct rtw_c2h_info *info)
 {
 	struct mac_ax_state_mach *sm = &adapter->sm;
@@ -2199,7 +2199,7 @@ u32 c2h_mcc_req_ack_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 	return MACSUCCESS;
 }
 
-u32 c2h_mcc_tsf_rpt_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
+static u32 c2h_mcc_tsf_rpt_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 			struct rtw_c2h_info *info)
 {
 	struct mac_ax_mcc_group_info *mcc_info = &adapter->mcc_group_info;
@@ -2251,7 +2251,7 @@ u32 c2h_mcc_tsf_rpt_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 	return MACSUCCESS;
 }
 
-u32 c2h_mcc_status_rpt_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
+static u32 c2h_mcc_status_rpt_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 			   struct rtw_c2h_info *info)
 {
 	struct mac_ax_mcc_group_info *mcc_info = &adapter->mcc_group_info;
@@ -2359,7 +2359,7 @@ static struct c2h_proc_func c2h_proc_mcc_cmd[] = {
 	{FWCMD_C2H_FUNC_NULL, NULL},
 };
 
-u32 c2h_mcc(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
+static u32 c2h_mcc(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 	    struct rtw_c2h_info *info)
 {
 	struct c2h_proc_func *proc = c2h_proc_mcc_cmd;
@@ -2392,7 +2392,7 @@ u32 c2h_mcc(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 	return handler(adapter, buf, len, info);
 }
 
-u32 c2h_rx_dbg_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
+static u32 c2h_rx_dbg_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 		   struct rtw_c2h_info *info)
 {
 	PLTFM_MSG_ERR("[ERR]%s: FW encounter Rx problem!\n", __func__);
@@ -2405,7 +2405,7 @@ static struct c2h_proc_func c2h_proc_fw_dbg_cmd[] = {
 	{FWCMD_C2H_FUNC_NULL, NULL},
 };
 
-u32 c2h_fw_dbg(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
+static u32 c2h_fw_dbg(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 	       struct rtw_c2h_info *info)
 {
 	struct c2h_proc_func *proc = c2h_proc_fw_dbg_cmd;
@@ -2438,7 +2438,7 @@ u32 c2h_fw_dbg(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 	return handler(adapter, buf, len, info);
 }
 
-u32 c2h_wps_rpt(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
+static u32 c2h_wps_rpt(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 		struct rtw_c2h_info *info)
 {
 	PLTFM_MSG_TRACE("recevied wps report\n");
@@ -2487,7 +2487,7 @@ static u32 c2h_cl_misc(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 	return handler(adapter, buf, len, info);
 }
 
-u32 c2h_fast_ch_sw_rpt_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
+static u32 c2h_fast_ch_sw_rpt_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 			   struct rtw_c2h_info *info)
 {
 	u32 *c2h_content;
@@ -2508,7 +2508,7 @@ static struct c2h_proc_func c2h_proc_fast_ch_sw_cmd[] = {
 	{FWCMD_C2H_FUNC_NULL, NULL},
 };
 
-u32 c2h_fast_ch_sw(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
+static u32 c2h_fast_ch_sw(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 		   struct rtw_c2h_info *info)
 {
 	u32 hdr0;
@@ -2540,7 +2540,7 @@ u32 c2h_fast_ch_sw(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 	return  handler(adapter, buf, len, info);
 }
 
-u32 c2h_port_init_stat(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
+static u32 c2h_port_init_stat(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 		       struct rtw_c2h_info *info)
 {
 	struct fwcmd_port_init_stat stat;
@@ -2590,7 +2590,7 @@ u32 c2h_port_init_stat(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 	return MACSUCCESS;
 }
 
-u32 c2h_port_cfg_stat(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
+static u32 c2h_port_cfg_stat(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 		      struct rtw_c2h_info *info)
 {
 	struct fwcmd_port_cfg_stat stat;
@@ -2671,7 +2671,7 @@ static u32 c2h_cl_mport(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 	return handler(adapter, buf, len, info);
 }
 
-u32 c2h_nan_act_req_ack_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
+static u32 c2h_nan_act_req_ack_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 			    struct rtw_c2h_info *info)
 {
 	struct fwcmd_act_schedule_req_ack act_schedule;
@@ -2691,7 +2691,7 @@ u32 c2h_nan_act_req_ack_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 	return MACSUCCESS;
 }
 
-u32 c2h_nan_cluster_info_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
+static u32 c2h_nan_cluster_info_hdl(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
 			     struct rtw_c2h_info *info)
 {
 	struct fwcmd_nan_info_notify_cluster_info cluster_info;
@@ -2750,7 +2750,7 @@ static struct c2h_proc_func c2h_proc_nan_cmd[] = {
 	{FWCMD_C2H_FUNC_NULL, NULL},
 };
 
-u32 c2h_nan(struct mac_ax_adapter *adapter, u8 *buf, u32 len, struct rtw_c2h_info *info)
+static u32 c2h_nan(struct mac_ax_adapter *adapter, u8 *buf, u32 len, struct rtw_c2h_info *info)
 {
 	struct c2h_proc_func *proc = c2h_proc_nan_cmd;
 	u32(*handler)(struct mac_ax_adapter *adapter, u8 *buf, u32 len,
@@ -3170,7 +3170,7 @@ u32 mac_host_getpkt_h2c(struct mac_ax_adapter *adapter, u8 macid, u8 pkttype)
 }
 
 #if MAC_AX_PHL_H2C
-u32 __ie_cam_set_cmd(struct mac_ax_adapter *adapter, struct rtw_h2c_pkt *h2cb,
+static u32 __ie_cam_set_cmd(struct mac_ax_adapter *adapter, struct rtw_h2c_pkt *h2cb,
 		     struct mac_ax_ie_cam_cmd_info *info)
 {
 	struct fwcmd_ie_cam *cmd;
@@ -3302,7 +3302,7 @@ fail:
 	return ret;
 }
 
-u32 _mac_send_h2creg(struct mac_ax_adapter *adapter,
+static u32 _mac_send_h2creg(struct mac_ax_adapter *adapter,
 		     struct mac_ax_h2creg_info *h2c)
 {
 #define MAC_AX_H2CREG_CNT 100
@@ -3379,7 +3379,7 @@ u32 _mac_send_h2creg(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-u32 __recv_c2hreg(struct mac_ax_adapter *adapter, struct fwcmd_c2hreg *c2h)
+static u32 __recv_c2hreg(struct mac_ax_adapter *adapter, struct fwcmd_c2hreg *c2h)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
 	struct mac_ax_priv_ops *p_ops = adapter_to_priv_ops(adapter);
@@ -3405,7 +3405,7 @@ u32 __recv_c2hreg(struct mac_ax_adapter *adapter, struct fwcmd_c2hreg *c2h)
 	return MACSUCCESS;
 }
 
-u32 mac_recv_c2hreg(struct mac_ax_adapter *adapter,
+static u32 mac_recv_c2hreg(struct mac_ax_adapter *adapter,
 		    struct mac_ax_c2hreg_cont *cont)
 {
 	u32 ret;
@@ -3498,7 +3498,7 @@ fail:
 	return ret;
 }
 
-u32 poll_c2hreg(struct mac_ax_adapter *adapter,
+static u32 poll_c2hreg(struct mac_ax_adapter *adapter,
 		struct mac_ax_c2hreg_poll *c2h)
 {
 	u32 cnt, poll_us, ret;

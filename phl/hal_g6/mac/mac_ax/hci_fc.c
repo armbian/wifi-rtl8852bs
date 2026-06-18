@@ -1611,7 +1611,7 @@ static struct mac_ax_hfc_prec_cfg hfc_preccfg_sdio = {
 };
 #endif
 
-u32 hfc_reset_param(struct mac_ax_adapter *adapter)
+static u32 hfc_reset_param(struct mac_ax_adapter *adapter)
 {
 	struct mac_ax_hfc_param *param;
 	struct mac_ax_hfc_ch_cfg *ch_cfg, *ch_cfg_ini;

@@ -145,7 +145,7 @@ u32 mac_read_lte_8852b(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-void _patch_hi_pri_resp_tx_8852b(struct mac_ax_adapter *adapter)
+static void _patch_hi_pri_resp_tx_8852b(struct mac_ax_adapter *adapter)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
 	u8 val;

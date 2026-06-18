@@ -22,7 +22,7 @@ static u8 _patch_reg_sdio(struct mac_ax_adapter *adapter, u32 adr);
 static u16 _patch_fs_enuf(struct mac_ax_adapter *adapter,
 			  struct mac_ax_sdio_tx_info *tx_info);
 
-u8 _pltfm_sdio_cmd53_r8(struct mac_ax_adapter *adapter, u32 adr)
+static u8 _pltfm_sdio_cmd53_r8(struct mac_ax_adapter *adapter, u32 adr)
 {
 	u32 dw_adr = adr & 0xFFFFFFFC;
 	u8 dw_sh = adr - dw_adr;
@@ -55,7 +55,7 @@ u8 _pltfm_sdio_cmd53_r8(struct mac_ax_adapter *adapter, u32 adr)
 	return val32.byte[dw_sh];
 }
 
-u16 _pltfm_sdio_cmd53_r16(struct mac_ax_adapter *adapter, u32 adr)
+static u16 _pltfm_sdio_cmd53_r16(struct mac_ax_adapter *adapter, u32 adr)
 {
 	u32 dw_adr = adr & 0xFFFFFFFD;
 	u8 dw_sh = (adr - dw_adr) ? 1 : 0;
@@ -88,7 +88,7 @@ u16 _pltfm_sdio_cmd53_r16(struct mac_ax_adapter *adapter, u32 adr)
 	return val32.word[dw_sh];
 }
 
-u32 _pltfm_sdio_cmd53_r32(struct mac_ax_adapter *adapter, u32 adr)
+static u32 _pltfm_sdio_cmd53_r32(struct mac_ax_adapter *adapter, u32 adr)
 {
 	u8 cnt = 0;
 	__le32 dword = 0x00000000;

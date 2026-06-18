@@ -1553,7 +1553,7 @@ static void ps_dbg_dump(struct mac_ax_adapter *adapter)
 	}
 }
 
-u32 fw_backtrace_dump(struct mac_ax_adapter *adapter)
+static u32 fw_backtrace_dump(struct mac_ax_adapter *adapter)
 {
 	u32 addr = 0;
 	u32 str_addr = 0;
@@ -1646,7 +1646,7 @@ u32 fw_backtrace_dump(struct mac_ax_adapter *adapter)
 	return MACSUCCESS;
 }
 
-u32 fw_ple_fwerror_dump(struct mac_ax_adapter *adapter)
+static u32 fw_ple_fwerror_dump(struct mac_ax_adapter *adapter)
 {
 	u32 addr = 0;
 	u32 val = 0;

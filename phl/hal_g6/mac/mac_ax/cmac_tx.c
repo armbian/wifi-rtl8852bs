@@ -628,7 +628,7 @@ u32 set_hw_sch_tx_en(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-u32 hw_sch_tx_en_h2c_pkt(struct mac_ax_adapter *adapter, u8 band,
+static u32 hw_sch_tx_en_h2c_pkt(struct mac_ax_adapter *adapter, u8 band,
 			 u16 tx_en_u16, u16 mask_u16)
 {
 	u32 ret = MACSUCCESS;
