@@ -1501,7 +1501,7 @@ void _action_freerun(struct btc_t *btc)
 	_set_policy(btc, BTC_CXP_OFF_EQ0, __func__);
 }
 
-void _action_fddtrain(struct btc_t *btc)
+static void _action_fddtrain(struct btc_t *btc)
 {
 	struct btc_dm *dm = &btc->dm;
 	struct btc_bt_info *bt = &btc->cx.bt;

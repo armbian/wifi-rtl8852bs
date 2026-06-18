@@ -626,7 +626,7 @@ void _set_init_info(struct btc_t *btc)
 	hal_btc_fw_set_drv_info(btc, CXDRVINFO_CTRL);
 }
 
-void _update_role_link_mode(struct btc_t *btc, bool client_joined, u32 noa)
+static void _update_role_link_mode(struct btc_t *btc, bool client_joined, u32 noa)
 {
 	struct btc_wl_role_info *wl_rinfo = &btc->cx.wl.role_info;
 	struct btc_wl_role_info_bpos wl_role = wl_rinfo->role_map.role;
@@ -668,7 +668,7 @@ void _update_role_link_mode(struct btc_t *btc, bool client_joined, u32 noa)
 		 wl_rinfo->connect_cnt, type, client_joined, noa);
 }
 
-u8 _get_role_link_mode(struct btc_t *btc, u8 role)
+static u8 _get_role_link_mode(struct btc_t *btc, u8 role)
 {
 	switch(role) {
 	case PHL_RTYPE_STATION:
@@ -702,7 +702,7 @@ u8 _get_wl_role_idx(struct btc_t *btc, u8 role)
 	return rid; /*cation: return BTC_WL_MAX_ROLE_NUMBER if role not found */
 }
 
-void _set_wl_req_mac(struct btc_t *btc, u8 mac_id)
+static void _set_wl_req_mac(struct btc_t *btc, u8 mac_id)
 {
 	struct btc_wl_info *wl = &btc->cx.wl;
 	struct btc_chip_ops *ops = btc->chip->ops;

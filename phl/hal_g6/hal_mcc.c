@@ -19,7 +19,7 @@
 #ifdef CONFIG_MCC_SUPPORT
 #define _mcc_fill_slot_bt_coex(_dbg_hal_i, _en) ((struct rtw_phl_mcc_dbg_hal_info *)_dbg_hal_i)->btc_in_group = _en;
 
-void _mcc_update_slot_dbg_info(struct rtw_phl_mcc_dbg_hal_info *dbg_hal_i,
+static void _mcc_update_slot_dbg_info(struct rtw_phl_mcc_dbg_hal_info *dbg_hal_i,
 				bool bt_role, u16 macid, u16 dur)
 {
 	struct rtw_phl_mcc_dbg_slot_info *dbg_slot_i = NULL;
@@ -39,7 +39,7 @@ void _mcc_update_slot_dbg_info(struct rtw_phl_mcc_dbg_hal_info *dbg_hal_i,
 	}
 }
 
-void _mcc_update_dbg_info(struct rtw_phl_mcc_en_info *info,
+static void _mcc_update_dbg_info(struct rtw_phl_mcc_en_info *info,
 			struct rtw_phl_mcc_bt_info *bt_info)
 {
 	u8 idx = 0;
@@ -56,7 +56,7 @@ void _mcc_update_dbg_info(struct rtw_phl_mcc_en_info *info,
 	}
 }
 
-void _mcc_fill_slot_dbg_info(struct rtw_phl_mcc_dbg_hal_info *dbg_hal_i,
+static void _mcc_fill_slot_dbg_info(struct rtw_phl_mcc_dbg_hal_info *dbg_hal_i,
 				struct rtw_phl_mcc_role *mrole)
 {
 	struct rtw_phl_mcc_dbg_slot_info *dbg_slot_i = NULL;
@@ -77,7 +77,7 @@ exit:
 	return;
 }
 
-enum rtw_hal_status _mcc_add_bt_role(struct hal_info_t *hal, u8 group,
+static enum rtw_hal_status _mcc_add_bt_role(struct hal_info_t *hal, u8 group,
 			struct rtw_phl_mcc_slot_info *slot_i,
 			struct rtw_phl_mcc_dbg_hal_info *dbg_hal_i)
 {
@@ -93,7 +93,7 @@ enum rtw_hal_status _mcc_add_bt_role(struct hal_info_t *hal, u8 group,
 	return status;
 }
 
-enum rtw_hal_status _mcc_add_wifi_role(struct hal_info_t *hal,
+static enum rtw_hal_status _mcc_add_wifi_role(struct hal_info_t *hal,
 				u8 group, struct rtw_phl_mcc_slot_info *slot_i,
 				struct rtw_phl_mcc_dbg_hal_info *dbg_hal_i)
 {
@@ -123,7 +123,7 @@ exit:
 	return status;
 }
 
-enum rtw_hal_status _mcc_fill_role_setting(struct hal_info_t *hal,
+static enum rtw_hal_status _mcc_fill_role_setting(struct hal_info_t *hal,
 			struct rtw_phl_mcc_en_info *info)
 {
 	enum rtw_hal_status status = RTW_HAL_STATUS_FAILURE;
@@ -159,7 +159,7 @@ exit:
 	return status;
 }
 
-enum rtw_hal_status _mcc_replace_pattern(struct hal_info_t *hal,
+static enum rtw_hal_status _mcc_replace_pattern(struct hal_info_t *hal,
 				struct rtw_phl_mcc_en_info *ori_info,
 				struct rtw_phl_mcc_en_info *new_info,
 				struct rtw_phl_mcc_bt_info *new_bt_info)
@@ -208,7 +208,7 @@ exit:
 	return status;
 }
 
-void
+static void
 _mcc_check_start_t(struct rtw_phl_mcc_en_info *ori_info,
 			struct rtw_phl_mcc_en_info *new_info)
 {
@@ -318,7 +318,7 @@ exit:
 	return status;
 }
 
-enum rtw_hal_status _mcc_set_duration(void *hal,
+static enum rtw_hal_status _mcc_set_duration(void *hal,
 					struct rtw_phl_mcc_en_info *info,
 					struct rtw_phl_mcc_bt_info *bt_info)
 {

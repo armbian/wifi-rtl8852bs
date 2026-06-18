@@ -92,7 +92,7 @@ void rtw_hal_bf_dbg_dump_entry_all(void *hal)
 	}
 }
 
-void _reset_bf_entry(struct hal_bf_entry *bf_entry)
+static void _reset_bf_entry(struct hal_bf_entry *bf_entry)
 {
 	bf_entry->macid = 0;
 	bf_entry->aid12 = 0;
@@ -102,7 +102,7 @@ void _reset_bf_entry(struct hal_bf_entry *bf_entry)
 	bf_entry->couter = 0;
 }
 
-void _reset_sumu_entry(struct hal_sumu_entry *entry)
+static void _reset_sumu_entry(struct hal_sumu_entry *entry)
 {
 	entry->snd_sts = 0;
 	return;
@@ -292,7 +292,7 @@ static enum rtw_hal_status _enqueue_busy_mu_entry(
 }
 
 /* hal bf init */
-enum rtw_hal_status _hal_bf_init_su_entry(
+static enum rtw_hal_status _hal_bf_init_su_entry(
 				struct hal_info_t *hal_info,
 				u8 num)
 {
@@ -330,7 +330,7 @@ enum rtw_hal_status _hal_bf_init_su_entry(
 }
 
 
-enum rtw_hal_status _hal_bf_init_mu_entry(
+static enum rtw_hal_status _hal_bf_init_mu_entry(
 	struct hal_info_t *hal_info,
 	u8 num)
 {
@@ -368,7 +368,7 @@ enum rtw_hal_status _hal_bf_init_mu_entry(
 }
 
 
-enum rtw_hal_status _hal_bf_init_bf_entry(
+static enum rtw_hal_status _hal_bf_init_bf_entry(
 	struct hal_info_t *hal_info,
 	u8 num)
 {
@@ -763,7 +763,8 @@ void hal_bf_update_entry_snd_sts(struct hal_info_t *hal_info, void *entry)
 
 }
 
-enum rtw_hal_status
+#ifdef RTW_WKARD_DYNAMIC_BFEE_CAP
+static enum rtw_hal_status
 hal_bf_hw_mac_deinit_bfee(struct hal_info_t *hal_info, u8 band)
 {
 	enum rtw_hal_status status = RTW_HAL_STATUS_SUCCESS;
@@ -790,6 +791,7 @@ hal_bf_hw_mac_deinit_bfee(struct hal_info_t *hal_info, u8 band)
 
 	return status;
 }
+#endif /* RTW_WKARD_DYNAMIC_BFEE_CAP */
 
 /**
  * rtw_hal_bf_get_entry_snd_sts

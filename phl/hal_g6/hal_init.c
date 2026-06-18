@@ -733,7 +733,7 @@ static enum rtw_hal_status hal_set_ops(struct rtw_phl_com_t *phl_com,
 }
 
 #ifdef RTW_PHL_BCN
-enum rtw_hal_status hal_bcn_init(struct hal_info_t *hal_info)
+static enum rtw_hal_status hal_bcn_init(struct hal_info_t *hal_info)
 {
 	struct bcn_entry_pool *bcn_pool = &hal_info->hal_com->bcn_pool;
 
@@ -744,7 +744,7 @@ enum rtw_hal_status hal_bcn_init(struct hal_info_t *hal_info)
 	return RTW_HAL_STATUS_SUCCESS;
 }
 
-enum rtw_hal_status hal_bcn_deinit(struct hal_info_t *hal_info)
+static enum rtw_hal_status hal_bcn_deinit(struct hal_info_t *hal_info)
 {
 	void *drv_priv = hal_to_drvpriv(hal_info);
 	struct bcn_entry_pool *bcn_pool = &hal_info->hal_com->bcn_pool;
@@ -764,7 +764,7 @@ enum rtw_hal_status hal_bcn_deinit(struct hal_info_t *hal_info)
 	return RTW_HAL_STATUS_SUCCESS;
 }
 
-enum rtw_hal_status hal_alloc_bcn_entry(struct rtw_phl_com_t *phl_com, struct hal_info_t *hal_info,
+static enum rtw_hal_status hal_alloc_bcn_entry(struct rtw_phl_com_t *phl_com, struct hal_info_t *hal_info,
 		struct rtw_bcn_entry **bcn_entry, struct rtw_bcn_info_cmn *bcn_cmn)
 {
 	void *drv_priv = hal_to_drvpriv(hal_info);
@@ -786,7 +786,7 @@ enum rtw_hal_status hal_alloc_bcn_entry(struct rtw_phl_com_t *phl_com, struct ha
 	return RTW_HAL_STATUS_SUCCESS;
 }
 
-enum rtw_hal_status hal_free_bcn_entry(struct rtw_phl_com_t *phl_com, struct hal_info_t *hal_info,
+static enum rtw_hal_status hal_free_bcn_entry(struct rtw_phl_com_t *phl_com, struct hal_info_t *hal_info,
 		u8 bcn_id)
 {
 	void *drv_priv = hal_to_drvpriv(hal_info);
@@ -817,7 +817,7 @@ enum rtw_hal_status hal_free_bcn_entry(struct rtw_phl_com_t *phl_com, struct hal
 		return RTW_HAL_STATUS_FAILURE;
 }
 
-enum rtw_hal_status hal_get_bcn_entry(struct rtw_phl_com_t *phl_com, struct hal_info_t *hal_info,
+static enum rtw_hal_status hal_get_bcn_entry(struct rtw_phl_com_t *phl_com, struct hal_info_t *hal_info,
 		struct rtw_bcn_entry **bcn_entry, u8 bcn_id)
 {
 	void *drv_priv = hal_to_drvpriv(hal_info);
@@ -846,7 +846,7 @@ enum rtw_hal_status hal_get_bcn_entry(struct rtw_phl_com_t *phl_com, struct hal_
 		return RTW_HAL_STATUS_FAILURE;
 }
 
-enum rtw_hal_status hal_update_bcn_entry(struct rtw_phl_com_t *phl_com,
+static enum rtw_hal_status hal_update_bcn_entry(struct rtw_phl_com_t *phl_com,
                                          struct hal_info_t *hal_info,
                                          struct rtw_bcn_entry *bcn_entry,
                                          struct rtw_bcn_info_cmn *bcn_cmn)
@@ -1349,7 +1349,7 @@ enum rtw_hal_status rtw_hal_preload(struct rtw_phl_com_t *phl_com, void *hal)
 	return hal_status;
 }
 
-enum rtw_hal_status hal_rfe_type_chk(struct rtw_phl_com_t *phl_com,
+static enum rtw_hal_status hal_rfe_type_chk(struct rtw_phl_com_t *phl_com,
 				     struct hal_info_t *hal_info)
 {
 	enum rtw_hal_status hal_status = RTW_HAL_STATUS_UNKNOWN_RFE_TYPE;
@@ -1559,7 +1559,7 @@ rtw_hal_beacon_stop(void *hal,
 	return hsts;
 }
 
-enum rtw_hal_status
+static enum rtw_hal_status
 hal_ver_check(struct rtw_hal_com_t *hal_com)
 {
 	if ((hal_com->mac_vc.mac_ver < hal_com->bb_vc.mac_ver) ||

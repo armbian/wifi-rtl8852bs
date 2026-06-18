@@ -19,7 +19,7 @@
 
 #ifdef CONFIG_HAL_TEST_MP
 
-void
+static void
 _mp_get_plcp_common_info(struct mp_context *mp,
                             struct mp_tx_arg *arg,
                             struct halbb_plcp_info *plcp_tx_struct)
@@ -164,7 +164,7 @@ _mp_get_plcp_common_info(struct mp_context *mp,
 	}
 }
 
-void
+static void
 _mp_get_plcp_user_info(struct mp_context *mp,
                         struct usr_plcp_gen_in *plcp_user_struct)
 {

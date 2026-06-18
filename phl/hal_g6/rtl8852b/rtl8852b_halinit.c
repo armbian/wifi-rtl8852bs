@@ -192,7 +192,7 @@ void init_default_value_8852b(struct hal_info_t *hal)
 {
 }
 
-u32 _hal_cfg_rom_fw_8852b(enum rtw_fw_type fw_type, struct rtw_fw_info_t *fw_info,
+static u32 _hal_cfg_rom_fw_8852b(enum rtw_fw_type fw_type, struct rtw_fw_info_t *fw_info,
 			  char *ic_name)
 {
 	char *hal_phy_folder = FW_FILE_CONFIG_PATH;
@@ -232,7 +232,7 @@ u32 _hal_cfg_rom_fw_8852b(enum rtw_fw_type fw_type, struct rtw_fw_info_t *fw_inf
 	return RTW_HAL_STATUS_SUCCESS;
 }
 
-u32 _hal_cfg_intnal_fw_8852b(struct rtw_phl_com_t *phl_com,enum rtw_fw_type fw_type,struct rtw_fw_info_t *fw_info)
+static u32 _hal_cfg_intnal_fw_8852b(struct rtw_phl_com_t *phl_com,enum rtw_fw_type fw_type,struct rtw_fw_info_t *fw_info)
 {
 	/* any related to fw from header can be defined here */
 	return RTW_HAL_STATUS_SUCCESS;

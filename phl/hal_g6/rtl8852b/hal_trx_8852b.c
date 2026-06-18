@@ -423,7 +423,7 @@ _hal_parsing_rx_wd_8852b(struct hal_info_t *hal,
  * 	rxwd : rx desc
  */
 
-enum rtw_hal_status
+static enum rtw_hal_status
 hal_parsing_rx_wd_8852b(struct rtw_phl_com_t *phl_com,
 				struct hal_info_t *hal,
 				u8 *buf, u8 **pkt, u16 *pkt_len,

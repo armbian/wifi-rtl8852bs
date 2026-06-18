@@ -39,7 +39,7 @@ static const struct csi_rpt_na csi_na[CSI_NA_MATRIX_SIZE] =
 };
 
 
-u32 _cal_he_csi_size(u8 mu, enum channel_width bw, u8 nr, u8 nc, u8 ng, u8 cb)
+static u32 _cal_he_csi_size(u8 mu, enum channel_width bw, u8 nr, u8 nc, u8 ng, u8 cb)
 {
 	u8 na = 0;
 	u8 ns = 0;
@@ -97,7 +97,7 @@ u32 _cal_he_csi_size(u8 mu, enum channel_width bw, u8 nr, u8 nc, u8 ng, u8 cb)
 	return csi_size;
 }
 
-u32 _cal_he_cqi_only_rpt_size(enum channel_width bw, u8 nc)
+static u32 _cal_he_cqi_only_rpt_size(enum channel_width bw, u8 nc)
 {
 	u32 ret = 0;
 	if (CHANNEL_WIDTH_80 == bw)
@@ -111,7 +111,7 @@ u32 _cal_he_cqi_only_rpt_size(enum channel_width bw, u8 nc)
 }
 
 /*1. BF Resource Related*/
-u8 _get_bw_ru_end_idx(enum channel_width bw) {
+static u8 _get_bw_ru_end_idx(enum channel_width bw) {
 	u8 ru_end_idx = 0;
 
 	switch (bw) {
@@ -133,7 +133,7 @@ u8 _get_bw_ru_end_idx(enum channel_width bw) {
 	return ru_end_idx;
 }
 
-void _hal_snd_set_default_var(struct hal_snd_obj *snd_obj)
+static void _hal_snd_set_default_var(struct hal_snd_obj *snd_obj)
 {
 	snd_obj->ndpa_xpara.bw = CHANNEL_WIDTH_20;
 	snd_obj->ndpa_xpara.rate = RTW_DATA_RATE_OFDM6;

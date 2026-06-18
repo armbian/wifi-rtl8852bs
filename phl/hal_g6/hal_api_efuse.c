@@ -405,7 +405,7 @@ enum rtw_hal_status rtw_hal_efuse_renew(
 	return status;
 }
 
-void hal_efuse_dump_wifi_map(
+static void hal_efuse_dump_wifi_map(
 	struct hal_info_t *hal_info,
 	u32 *used_len,
 	char *output,
@@ -465,7 +465,7 @@ exit:
 	*out_len = _out_len;
 }
 
-void hal_efuse_dump_wifi_logic_map(
+static void hal_efuse_dump_wifi_logic_map(
 	struct hal_info_t *hal_info,
 	u32 *used_len,
 	char *output,
@@ -525,7 +525,7 @@ exit:
 	*out_len = _out_len;
 }
 
-void hal_efuse_cmd_parser(
+static void hal_efuse_cmd_parser(
 	struct hal_info_t *hal_info,
 	char input[][MAX_ARGV],
 	u32 input_num,
@@ -582,7 +582,7 @@ void hal_efuse_cmd_parser(
 	}
 }
 
-s32 hal_efuse_cmd(
+static s32 hal_efuse_cmd(
 	struct hal_info_t *hal_info,
 	char *input,
 	char *output,

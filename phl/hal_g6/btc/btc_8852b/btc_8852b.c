@@ -474,7 +474,7 @@ u8 _8852b_bt_rssi(struct btc_t *btc, u8 val)
 	return (val);
 }
 
-void _8852b_wl_trx_mask(struct btc_t *btc, u32 type, u8 group, u32 val)
+static void _8852b_wl_trx_mask(struct btc_t *btc, u32 type, u8 group, u32 val)
 {
 	if (btc->hal->chip_id == CHIP_WIFI6_8851B) {
 		if (group > BTC_BT_SS_GROUP)
@@ -531,7 +531,7 @@ void _8852b_wl_req_mac(struct btc_t *btc, u8 mac_id)
 	_write_cx_reg(btc, R_BTC_CFG, val1);
 }
 
-void _8852b_wl_pri(struct btc_t *btc, u8 map, bool state)
+static void _8852b_wl_pri(struct btc_t *btc, u8 map, bool state)
 {
 	u32 reg = 0, bitmap = 0;
 

@@ -271,7 +271,7 @@ enum rtw_hal_status rtw_hal_mp_config_set_mac_addr(
 	return hal_status;
 }
 
-u8 hal_mp_primary_channel_decision(u8 cent_ch, enum channel_width bw, u8 tx_sc)
+static u8 hal_mp_primary_channel_decision(u8 cent_ch, enum channel_width bw, u8 tx_sc)
 {
 	u8 pri_ch = 0;
 
@@ -326,7 +326,7 @@ u8 hal_mp_primary_channel_decision(u8 cent_ch, enum channel_width bw, u8 tx_sc)
 	return pri_ch;
 }
 
-enum chan_offset
+static enum chan_offset
 hal_mp_chan_offset_decision(u8 pri_ch, u8 cent_ch, enum channel_width bw)
 {
 	enum chan_offset offset = CHAN_OFFSET_NO_EXT;

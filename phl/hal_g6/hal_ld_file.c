@@ -1780,7 +1780,7 @@ _hal_parse_txpwrtrack(void *drv_priv, void *para_info_t, u8 *psrc_buf, u32 bufle
 	return 1;
 }
 
-void
+static void
 _hal_decrypt_para_file(
 	char *paraFile,
 	u32  buflen
@@ -1824,7 +1824,7 @@ _hal_decrypt_para_file(
 	PHL_TRACE(COMP_PHL_DBG, _PHL_DEBUG_, "<===== %s(): countLines:%u, curPos:%u\n", __func__, i, currentPos);
 }
 
-void
+static void
 _hal_dl_para_file(struct rtw_phl_com_t *phl_com,
 	void *para_info_t, char *ic_name,
 	int (*parser_fun)(void *drv_priv, void *para_info_t, u8 *psrc_buf, u32 buflen),
@@ -1981,7 +1981,7 @@ _hal_dl_para_file(struct rtw_phl_com_t *phl_com,
 #endif
 }
 
-enum rtw_hal_status
+static enum rtw_hal_status
 _phl_pwrlmt_para_alloc(struct rtw_phl_com_t* phl_com,
 				struct rtw_para_pwrlmt_info_t *para_info)
 {
@@ -2036,7 +2036,7 @@ _phl_pwrlmt_para_alloc(struct rtw_phl_com_t* phl_com,
 #endif
 }
 
-enum rtw_hal_status
+static enum rtw_hal_status
 phl_load_file_data_alloc(struct rtw_phl_com_t* phl_com, struct rtw_para_info_t *para_info)
 {
 #ifdef CONFIG_LOAD_PHY_PARA_FROM_FILE
