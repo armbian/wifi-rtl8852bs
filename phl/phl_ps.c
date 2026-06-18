@@ -173,7 +173,7 @@ static void _ps_ntfy_after_pwr_cfg(struct phl_info_t *phl_info, u8 ps_mode,
 }
 
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_ps_ctrl_datapath(struct phl_info_t *phl_info, bool pause)
 {
 	struct phl_data_ctl_t ctl = {0};
@@ -553,7 +553,7 @@ static enum rtw_phl_status _lps_leave_proto_cfg(struct phl_info_t *phl_info, str
 	return RTW_PHL_STATUS_SUCCESS;
 }
 
-enum rtw_phl_status phl_ps_lps_proto_cfg(struct phl_info_t *phl_info, struct ps_cfg *cfg, bool lps_en)
+static enum rtw_phl_status phl_ps_lps_proto_cfg(struct phl_info_t *phl_info, struct ps_cfg *cfg, bool lps_en)
 {
 	if (lps_en)
 		return _lps_enter_proto_cfg(phl_info, cfg);
@@ -561,7 +561,7 @@ enum rtw_phl_status phl_ps_lps_proto_cfg(struct phl_info_t *phl_info, struct ps_
 		return _lps_leave_proto_cfg(phl_info, cfg);
 }
 
-enum rtw_phl_status phl_ps_lps_enter(struct phl_info_t *phl_info, struct ps_cfg *cfg)
+static enum rtw_phl_status phl_ps_lps_enter(struct phl_info_t *phl_info, struct ps_cfg *cfg)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
 
@@ -584,7 +584,7 @@ enum rtw_phl_status phl_ps_lps_enter(struct phl_info_t *phl_info, struct ps_cfg 
 	return RTW_PHL_STATUS_SUCCESS;
 }
 
-enum rtw_phl_status phl_ps_lps_leave(struct phl_info_t *phl_info, struct ps_cfg *cfg)
+static enum rtw_phl_status phl_ps_lps_leave(struct phl_info_t *phl_info, struct ps_cfg *cfg)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
 
@@ -607,7 +607,7 @@ enum rtw_phl_status phl_ps_lps_leave(struct phl_info_t *phl_info, struct ps_cfg 
 	return RTW_PHL_STATUS_SUCCESS;
 }
 
-enum rtw_phl_status phl_ps_ips_proto_cfg(struct phl_info_t *phl_info, struct ps_cfg *cfg, bool ips_en)
+static enum rtw_phl_status phl_ps_ips_proto_cfg(struct phl_info_t *phl_info, struct ps_cfg *cfg, bool ips_en)
 {
 	/* ips protocol config */
 	PHL_TRACE(COMP_PHL_PS, _PHL_INFO_, "[PS], %s(): \n", __func__);
@@ -619,7 +619,7 @@ enum rtw_phl_status phl_ps_ips_proto_cfg(struct phl_info_t *phl_info, struct ps_
 	return phl_ps_ips_cfg(phl_info, cfg, ips_en);
 }
 
-enum rtw_phl_status phl_ps_ips_enter(struct phl_info_t *phl_info, struct ps_cfg *cfg)
+static enum rtw_phl_status phl_ps_ips_enter(struct phl_info_t *phl_info, struct ps_cfg *cfg)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
 
@@ -642,7 +642,7 @@ enum rtw_phl_status phl_ps_ips_enter(struct phl_info_t *phl_info, struct ps_cfg 
 	return status;
 }
 
-enum rtw_phl_status phl_ps_ips_leave(struct phl_info_t *phl_info, struct ps_cfg *cfg)
+static enum rtw_phl_status phl_ps_ips_leave(struct phl_info_t *phl_info, struct ps_cfg *cfg)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
 

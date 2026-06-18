@@ -16,7 +16,7 @@
 
 #ifdef CONFIG_PHL_CMD_BF
 
-void __reset_snd_grp(struct phl_snd_grp *grp)
+static void __reset_snd_grp(struct phl_snd_grp *grp)
 {
 	u8 i = 0;
 
@@ -284,7 +284,7 @@ rtw_phl_sound_abort(void *phl)
 }
 
 /* set fixed mode parameters APIs*/
-void rtw_phl_snd_dump_fix_para(struct phl_info_t *phl_info)
+static void rtw_phl_snd_dump_fix_para(struct phl_info_t *phl_info)
 {
 	struct phl_sound_obj *snd = (struct phl_sound_obj *)phl_info->snd_obj;
 	struct phl_snd_fix_param *para = NULL;
@@ -311,7 +311,7 @@ void rtw_phl_snd_dump_fix_para(struct phl_info_t *phl_info)
 	PHL_TRACE(COMP_PHL_SOUND, _PHL_INFO_, "<=== rtw_phl_snd_fix_dump_para \n");
 }
 /* fixed group idx */
-void rtw_phl_snd_fix_gidx(struct phl_info_t *phl_info, bool en, u8 gidx)
+static void rtw_phl_snd_fix_gidx(struct phl_info_t *phl_info, bool en, u8 gidx)
 {
 	struct phl_sound_obj *snd = (struct phl_sound_obj *)phl_info->snd_obj;
 	PHL_TRACE(COMP_PHL_SOUND, _PHL_INFO_, "rtw_phl_snd_fix_gidx() set sounding gidx = 0x%x\n", gidx);
@@ -323,7 +323,7 @@ void rtw_phl_snd_fix_gidx(struct phl_info_t *phl_info, bool en, u8 gidx)
 	}
 }
 /* fixed snd feedback type */
-void rtw_phl_snd_fix_snd_fb_type(struct phl_info_t *phl_info,
+static void rtw_phl_snd_fix_snd_fb_type(struct phl_info_t *phl_info,
 				 bool en, enum snd_fb_type fb_type)
 {
 	struct phl_sound_obj *snd = (struct phl_sound_obj *)phl_info->snd_obj;
@@ -338,7 +338,7 @@ void rtw_phl_snd_fix_snd_fb_type(struct phl_info_t *phl_info,
 }
 
 /* fixed sounding sta macids */
-void rtw_phl_snd_fix_set_sta(struct phl_info_t *phl_info,
+static void rtw_phl_snd_fix_set_sta(struct phl_info_t *phl_info,
 					bool en, u8 sidx, u16 macid)
 {
 	struct phl_sound_obj *snd = (struct phl_sound_obj *)phl_info->snd_obj;
@@ -356,7 +356,7 @@ void rtw_phl_snd_fix_set_sta(struct phl_info_t *phl_info,
 }
 
 /* fixed sounding sta bw */
-void rtw_phl_snd_fix_set_bw(struct phl_info_t *phl_info,
+static void rtw_phl_snd_fix_set_bw(struct phl_info_t *phl_info,
 					bool en, u8 sidx, enum channel_width bw)
 {
 	struct phl_sound_obj *snd = (struct phl_sound_obj *)phl_info->snd_obj;
@@ -492,7 +492,7 @@ phl_snd_get_grp_byidx(struct phl_info_t *phl_info, u8 gidx)
  * input:
  * @grp: (struct phl_snd_grp *) target sounding grp,
  */
-enum rtw_phl_status
+static enum rtw_phl_status
 phl_snd_func_remove_grp(struct phl_info_t *phl_info, struct phl_snd_grp *grp)
 {
 	enum rtw_phl_status pstatus = RTW_PHL_STATUS_FAILURE;
@@ -552,7 +552,7 @@ phl_snd_func_remove_grp_all(struct phl_info_t *phl_info)
  * return:
  * @gidx: u8, the group idx in snd_param->grp[n]
  */
-u8 _phl_snd_get_available_gidx(struct phl_sound_obj *snd)
+static u8 _phl_snd_get_available_gidx(struct phl_sound_obj *snd)
 {
 	struct phl_sound_param *param = &snd->snd_param;
 	u8 gidx = MAX_SND_GRP_NUM;
@@ -575,7 +575,7 @@ u8 _phl_snd_get_available_gidx(struct phl_sound_obj *snd)
  * 	 the function will use  the macid / bw information in sta_info;
  * @gidx: the group idx to add
  */
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_snd_func_grp_add_sta(
 	struct phl_info_t *phl_info, struct rtw_phl_stainfo_t *sta, u8 gidx)
 {
@@ -638,7 +638,7 @@ _phl_snd_func_grp_add_sta(
  * @psta: (struct rtw_phl_stainfo_t *)Primary Sounding STA,
  *         if pSTA is unavailable , SND PROC for this group will be terminated.
  **/
-enum rtw_phl_status
+static enum rtw_phl_status
 phl_snd_func_add_snd_grp(
 	struct phl_info_t *phl_info, bool he_snd,
 	u8 wrole_idx, struct rtw_phl_stainfo_t *psta, u8 *gidx)
@@ -693,7 +693,7 @@ phl_snd_func_add_snd_grp(
  * input:
  * @grp: (struct phl_snd_grp *) the target group.
  */
-void _phl_snd_func_set_grp_fb_mu(struct phl_snd_grp *grp)
+static void _phl_snd_func_set_grp_fb_mu(struct phl_snd_grp *grp)
 {
 	u8 i = 0;
 	if (grp == NULL)
@@ -841,7 +841,7 @@ phl_snd_func_grouping(struct phl_info_t *phl_info, u8 wroleidx)
 /* SND PROC */
 
 /* Free BF/CQI resource */
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_snd_proc_release_res_cqi(
 	struct phl_info_t *phl_info, struct phl_snd_grp *grp)
 {
@@ -852,7 +852,7 @@ _phl_snd_proc_release_res_cqi(
 	return pstatus;
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_snd_proc_release_res_bf(
 	struct phl_info_t *phl_info, struct phl_snd_grp *grp)
 {
@@ -915,7 +915,7 @@ phl_snd_proc_release_res(struct phl_info_t *phl_info, struct phl_snd_grp *grp)
  * @grp: (struct phl_sound_grp *) sounding gorup
  * @nsta: return value : how many sta query resource success
  **/
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_snd_proc_get_res_cqi_fb(
 	struct phl_info_t *phl_info, struct phl_snd_grp *grp, u8 *nsta)
 {
@@ -961,7 +961,7 @@ _phl_snd_proc_get_res_cqi_fb(
  * @grp: (struct phl_sound_grp *) sounding gorup
  * @nsta: return value : how many sta query bf resource success
  **/
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_snd_proc_get_res_bf(
 	struct phl_info_t *phl_info, struct phl_snd_grp *grp, u8 *nsta)
 {
@@ -1090,7 +1090,7 @@ static u8 _get_mu_mimo_gid_2sta(u8 primary, u8 secondary)
 	return ret;
 }
 /* pre calculate mu-gid */
-enum rtw_phl_status
+static enum rtw_phl_status
 phl_snd_cal_mu_grp_bitmap(struct phl_info_t *phl_info, struct phl_snd_grp *grp)
 {
 	enum rtw_phl_status pstatus = RTW_PHL_STATUS_SUCCESS;
@@ -1228,7 +1228,7 @@ phl_snd_proc_precfg(struct phl_info_t *phl_info, struct phl_snd_grp *grp)
 /* 3. Send Sounding Command to HAL/FW */
 /*TODO: RU Allocation is now hard code value */
 /* HE TB Sounding : 2 sta in a grp */
-void
+static void
 _phl_snd_proc_fw_cmd_he_tb_2sta(struct phl_info_t *phl_info,
 				struct phl_snd_grp *grp,
 				u8 *cmd, u8 bfrp_num)
@@ -1282,7 +1282,7 @@ _phl_snd_proc_fw_cmd_he_tb_2sta(struct phl_info_t *phl_info,
 }
 
 /* HE TB Sounding : 3 sta in a grp */
-void
+static void
 _phl_snd_proc_fw_cmd_he_tb_3sta(struct phl_info_t *phl_info,
 				struct phl_snd_grp *grp,
 				u8 *cmd, u8 bfrp_num)
@@ -1347,7 +1347,7 @@ _phl_snd_proc_fw_cmd_he_tb_3sta(struct phl_info_t *phl_info,
 }
 
 /* HE TB Sounding : 4 sta in a grp */
-void
+static void
 _phl_snd_proc_fw_cmd_he_tb_4sta(struct phl_info_t *phl_info,
 				struct phl_snd_grp *grp,
 				u8 *cmd, u8 bfrp_num)
@@ -1586,7 +1586,7 @@ phl_snd_proc_start_sounding_fw(struct phl_info_t *phl_info,
 /* 4. Post Configruation */
 
 /* BY MU_GID if MU Sounding */
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_snd_proc_postcfg_mu_gid(struct phl_info_t *phl_info,
 					struct phl_snd_grp *grp)
 {
@@ -1637,7 +1637,7 @@ _phl_snd_proc_postcfg_mu_gid(struct phl_info_t *phl_info,
 	return pstatus;
 }
 /* Per STA setting */
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_snd_proc_postcfg_sta(struct phl_info_t *phl_info,
 				struct phl_snd_grp *grp)
 {

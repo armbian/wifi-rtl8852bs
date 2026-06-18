@@ -298,7 +298,7 @@ exit:
 	return phl_status;
 }
 
-u16 _phl_get_macid(struct phl_info_t *phl_info,
+static u16 _phl_get_macid(struct phl_info_t *phl_info,
 		struct rtw_phl_stainfo_t *phl_sta)
 {
 	/* TODO: macid management */
@@ -694,7 +694,7 @@ _exit:
  * @phl: see phl_info_t
  * @macid: macid
  */
-u8
+static u8
 rtw_phl_macid_is_wrole_shared(void *phl, u16 macid)
 {
 	struct phl_info_t *phl_info = (struct phl_info_t *)phl;
@@ -725,7 +725,7 @@ rtw_phl_macid_is_wrole_shared(void *phl, u16 macid)
  * @macid: macid
  * @wrole: check id belong to this wifi role
  */
-u8
+static u8
 rtw_phl_macid_is_wrole_specific(void *phl,
 					u16 macid, struct rtw_wifi_role_t *wrole)
 {
@@ -777,7 +777,7 @@ _phl_stainfo_init(struct phl_info_t *phl_info,
 	return RTW_PHL_STATUS_SUCCESS;
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_stainfo_deinit(struct phl_info_t *phl_info,
 				struct rtw_phl_stainfo_t *phl_sta)
 {
@@ -796,7 +796,7 @@ _phl_stainfo_deinit(struct phl_info_t *phl_info,
 	return RTW_PHL_STATUS_SUCCESS;
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 phl_stainfo_enqueue(struct phl_info_t *phl_info,
 			 struct phl_queue *sta_queue,
 			 struct rtw_phl_stainfo_t *psta)
@@ -813,7 +813,7 @@ phl_stainfo_enqueue(struct phl_info_t *phl_info,
 	return RTW_PHL_STATUS_SUCCESS;
 }
 
-struct rtw_phl_stainfo_t *
+static struct rtw_phl_stainfo_t *
 phl_stainfo_dequeue(struct phl_info_t *phl_info,
 			struct phl_queue *sta_queue)
 {
@@ -835,7 +835,7 @@ phl_stainfo_dequeue(struct phl_info_t *phl_info,
 	return psta;
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 phl_stainfo_queue_del(struct phl_info_t *phl_info,
 			 struct phl_queue *sta_queue,
 			 struct rtw_phl_stainfo_t *psta)
@@ -854,7 +854,7 @@ phl_stainfo_queue_del(struct phl_info_t *phl_info,
 	return RTW_PHL_STATUS_SUCCESS;
 }
 
-struct rtw_phl_stainfo_t *
+static struct rtw_phl_stainfo_t *
 phl_stainfo_queue_search(struct phl_info_t *phl_info,
                          struct phl_queue *sta_queue,
                          u8 *addr)
@@ -893,7 +893,7 @@ _exit:
 	return sta;
 }
 
-struct rtw_phl_stainfo_t *
+static struct rtw_phl_stainfo_t *
 phl_stainfo_queue_get_first(struct phl_info_t *phl_info,
 			 struct phl_queue *sta_queue)
 {
@@ -1301,7 +1301,7 @@ phl_free_stainfo_sw(struct phl_info_t *phl_info, struct rtw_phl_stainfo_t *sta)
 	return pstatus;
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 __phl_free_stainfo_sw(struct phl_info_t *phl_info, struct rtw_phl_stainfo_t *sta)
 {
 	enum rtw_phl_status pstatus = RTW_PHL_STATUS_FAILURE;
@@ -1374,7 +1374,7 @@ _exit:
 	return pstatus;
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 __phl_free_stainfo_hw(struct phl_info_t *phl_info, struct rtw_phl_stainfo_t *sta)
 {
 	struct rtw_wifi_role_t *wrole = sta->wrole;
@@ -1410,7 +1410,7 @@ __phl_free_stainfo(struct phl_info_t *phl, struct rtw_phl_stainfo_t *sta)
 	return pstatus;
 }
 
-u8 _phl_tx_ring_register_decision(struct phl_info_t *phl_info,
+static u8 _phl_tx_ring_register_decision(struct phl_info_t *phl_info,
 				  struct rtw_phl_stainfo_t *sta)
 {
 	/* In one TXQ case, only register 1 shared tring to save memory usage */
@@ -1623,7 +1623,7 @@ _exit:
 	return pstatus;
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 __phl_alloc_stainfo_hw(struct phl_info_t *phl_info,
 				    struct rtw_wifi_role_t *wrole,
 				    struct rtw_wifi_role_link_t *rlink,
@@ -2197,7 +2197,7 @@ phl_update_media_status_hdl(struct phl_info_t *phl_info, u8 *param)
 			media_sts->sta, media_sts->sta_addr, media_sts->is_connect);
 }
 
-void phl_update_media_status_done(void *drv_priv, u8 *cmd, u32 cmd_len,
+static void phl_update_media_status_done(void *drv_priv, u8 *cmd, u32 cmd_len,
 						enum rtw_phl_status status)
 {
 	if (cmd) {
@@ -3156,7 +3156,7 @@ _associated_tsf_error_handle_done(void *drv_priv, u8 *cmd, u32 cmd_len, enum rtw
 	}
 }
 
-void
+static void
 _associated_tsf_error_handle(struct phl_info_t *phl,
 			struct rtw_phl_stainfo_t *sta)
 {
@@ -3178,7 +3178,7 @@ _associated_tsf_error_handle(struct phl_info_t *phl,
 	}
 }
 
-bool
+static bool
 _error_tsf_detect(struct phl_info_t *phl, struct rtw_rx_bcn_info *bcn_i,
 			struct rtw_bcn_pkt_info *info)
 {
@@ -3245,7 +3245,7 @@ static void _data_sorting(u16 *array, u16 num)
 /*
  * Get next idx
  */
-u8 _get_fidx(u8 num, u8 cur_idx, u8 boundary)
+static u8 _get_fidx(u8 num, u8 cur_idx, u8 boundary)
 {
 	u8 idx = 0;
 
@@ -3262,7 +3262,7 @@ u8 _get_fidx(u8 num, u8 cur_idx, u8 boundary)
 /*
  * Get previous idx
  */
-u8 _get_bidx(u8 num, u8 cur_idx)
+static u8 _get_bidx(u8 num, u8 cur_idx)
 {
 	u8 idx = 0;
 
@@ -3353,7 +3353,7 @@ _min_tbtt(u32 tbtt1, u32 tbtt2, u32 bcn_intvl)
 	return min;
 }
 
-void _phl_sta_up_bcn_offset_info(struct phl_info_t *phl,
+static void _phl_sta_up_bcn_offset_info(struct phl_info_t *phl,
 			struct rtw_rx_bcn_info *bcn_i)
 {
 	struct rtw_bcn_long_i *bcn_l = &bcn_i->bcn_l_i;
@@ -4468,7 +4468,7 @@ static bool _phl_self_mld_chk(struct phl_info_t *phl_info,
 	return is_self;
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_link_mld_stainfo(struct rtw_phl_mld_t *mld,
                       struct rtw_phl_stainfo_t *phl_sta,
                       u8 lidx)
@@ -4876,7 +4876,7 @@ phl_cmd_set_seciv_hdl(struct phl_info_t *phl_info, u8 *param)
 }
 #endif
 
-enum rtw_phl_status
+static enum rtw_phl_status
 rtw_phl_cmd_set_sta_seciv(void *phl,
                        struct rtw_wifi_role_t *wifi_role,
                        struct rtw_phl_stainfo_t *sta,

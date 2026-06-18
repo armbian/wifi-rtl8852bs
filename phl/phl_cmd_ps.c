@@ -96,7 +96,7 @@ struct _ps_time_info {
 
 #define case_defer_rson(src) \
 		case PS_DEFER_##src: return #src
-const char *_defer_rson_to_str(u8 defer_rson)
+static const char *_defer_rson_to_str(u8 defer_rson)
 {
 	switch (defer_rson) {
 	case_defer_rson(DHCP_PKT);
@@ -192,7 +192,7 @@ static bool _chk_rssi_diff_reach_thld(struct cmd_ps *ps)
  * return true if beacon offset changed
  * @ps: see cmd_ps
  */
-bool _chk_bcn_offset_changed(struct cmd_ps *ps)
+static bool _chk_bcn_offset_changed(struct cmd_ps *ps)
 {
 	struct phl_info_t *phl_info = ps->phl_info;
 	u8 ridx = MAX_WIFI_ROLE_NUMBER;
@@ -353,7 +353,7 @@ static void _ps_cofig_pvb_wait_rx(struct cmd_ps *ps, bool pvb_wait_rx)
  * @leave_proto: whether to leave protocol
  * @rson: the reason of leaving power saving
  */
-enum rtw_phl_status _leave_ps(struct cmd_ps *ps, bool leave_proto, char *rson)
+static enum rtw_phl_status _leave_ps(struct cmd_ps *ps, bool leave_proto, char *rson)
 {
 	struct phl_info_t *phl_info = ps->phl_info;
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
@@ -505,7 +505,7 @@ _exit:
  * @macid: target macid to enter lps
  * @rson: the reason of entering power saving
  */
-enum rtw_phl_status _enter_ps(struct cmd_ps *ps, u8 ps_mode, u16 macid, bool sw_only, char *rson)
+static enum rtw_phl_status _enter_ps(struct cmd_ps *ps, u8 ps_mode, u16 macid, bool sw_only, char *rson)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
 	struct ps_cfg cfg = {0};
@@ -1516,7 +1516,7 @@ static enum phl_mdl_ret_code _ps_cancel_pwr_req_cmn(struct cmd_ps *ps, struct ph
 
 #define case_pkt_evt(src) \
 	case PKT_EVT_##src: return #src
-const char *_ps_pkt_evt_to_str(u8 pkt_evt)
+static const char *_ps_pkt_evt_to_str(u8 pkt_evt)
 {
 	switch (pkt_evt) {
 	case_pkt_evt(DHCP);

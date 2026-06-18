@@ -325,7 +325,7 @@ next_ch:
 }
 
 /* Notification complete */
-void _cmd_scan_timer_notify_cb(void *priv, struct phl_msg *msg)
+static void _cmd_scan_timer_notify_cb(void *priv, struct phl_msg *msg)
 {
 	struct cmd_scan_ctrl *sctrl = (struct cmd_scan_ctrl *)priv;
 
@@ -376,7 +376,7 @@ static void _cmd_scan_timer(void *context)
 }
 
 /* Notification complete */
-void _cmd_swch_done_notify_cb(
+static void _cmd_swch_done_notify_cb(
 	void *drv, struct phl_msg *msg)
 {
 	if (msg->inbuf) {
@@ -384,7 +384,7 @@ void _cmd_swch_done_notify_cb(
 	}
 }
 
-enum rtw_phl_status _cmd_swch_done_notify(
+static enum rtw_phl_status _cmd_swch_done_notify(
 	void *dispr, void *drv, struct rtw_phl_scan_param *param, u8 sctrl_idx)
 {
 	enum rtw_phl_status pstatus = RTW_PHL_STATUS_SUCCESS;
@@ -425,7 +425,7 @@ enum rtw_phl_status _cmd_swch_done_notify(
 	return pstatus;
 }
 
-void _cmd_scan_end(
+static void _cmd_scan_end(
 	void *drv, struct rtw_phl_scan_param *param,
 	u8 band_idx)
 {
@@ -492,7 +492,7 @@ error:
 }
 
 /* Notification complete */
-void _cmd_abort_notify_cb(
+static void _cmd_abort_notify_cb(
 	void *drv, struct phl_msg *msg)
 {
 	struct rtw_phl_scan_param *param = (struct rtw_phl_scan_param *)msg->inbuf;
@@ -503,7 +503,7 @@ void _cmd_abort_notify_cb(
 	_cmd_scan_end(drv, param, msg->band_idx);
 }
 
-void _cmd_abort_notify(void *dispr, void *drv,
+static void _cmd_abort_notify(void *dispr, void *drv,
 	struct rtw_phl_scan_param *param, bool abort)
 {
 	enum rtw_phl_status pstatus = RTW_PHL_STATUS_SUCCESS;
@@ -578,7 +578,7 @@ void _cmd_abort_notify(void *dispr, void *drv,
 	}
 }
 
-enum phl_mdl_ret_code _cmd_scan_fail_ev_hdlr(
+static enum phl_mdl_ret_code _cmd_scan_fail_ev_hdlr(
 	void* dispr, void* priv, struct phl_msg* msg)
 {
 	struct rtw_phl_scan_param *param = (struct rtw_phl_scan_param*)priv;
@@ -640,7 +640,7 @@ enum phl_mdl_ret_code _cmd_scan_fail_ev_hdlr(
 	return MDL_RET_SUCCESS;
 }
 
-enum phl_mdl_ret_code _cmd_scan_hdl_external_evt(
+static enum phl_mdl_ret_code _cmd_scan_hdl_external_evt(
 	void* dispr, void* priv, struct phl_msg* msg)
 {
 	PHL_DBG("%s :: From others MDL =%d , EVT_ID=%d\n", __func__,
@@ -727,7 +727,7 @@ static bool _handle_probing(void *d, struct rtw_phl_scan_param *param, u8 sctrl_
 	return true;
 }
 
-void
+static void
 _cmd_scan_start(struct phl_info_t *phl_info,
 		struct cmd_scan_ctrl *sctrl,
 		u8 band_idx)
@@ -739,7 +739,7 @@ _cmd_scan_start(struct phl_info_t *phl_info,
 	rtw_hal_notification(phl_info->hal, MSG_EVT_SCAN_START, band_idx);
 }
 
-enum phl_mdl_ret_code _cmd_scan_hdl_internal_evt(
+static enum phl_mdl_ret_code _cmd_scan_hdl_internal_evt(
 	void* dispr, void* priv, struct phl_msg* msg)
 {
 	struct rtw_phl_scan_param *param = (struct rtw_phl_scan_param*)priv;
@@ -953,7 +953,7 @@ enum phl_mdl_ret_code _cmd_scan_hdl_internal_evt(
 }
 
 
-enum phl_mdl_ret_code _phl_cmd_scan_req_acquired(
+static enum phl_mdl_ret_code _phl_cmd_scan_req_acquired(
 	void* dispr, void* priv)
 {
 	enum rtw_phl_status pstatus = RTW_PHL_STATUS_SUCCESS;
@@ -1017,7 +1017,7 @@ error:
 	return MDL_RET_FAIL;
 }
 
-enum phl_mdl_ret_code _phl_cmd_scan_req_abort(
+static enum phl_mdl_ret_code _phl_cmd_scan_req_abort(
 	void* dispr, void* priv)
 {
 	struct rtw_phl_scan_param *param = (struct rtw_phl_scan_param*)priv;
@@ -1029,7 +1029,7 @@ enum phl_mdl_ret_code _phl_cmd_scan_req_abort(
 	return MDL_RET_SUCCESS;
 }
 
-enum phl_mdl_ret_code _phl_cmd_scan_req_ev_hdlr(
+static enum phl_mdl_ret_code _phl_cmd_scan_req_ev_hdlr(
 	void* dispr, void* priv,
 	struct phl_msg* msg)
 {
@@ -1067,7 +1067,7 @@ enum phl_mdl_ret_code _phl_cmd_scan_req_ev_hdlr(
 	return ret;
 }
 
-enum phl_mdl_ret_code _phl_cmd_scan_req_set_info(
+static enum phl_mdl_ret_code _phl_cmd_scan_req_set_info(
 	void* dispr, void* priv, struct phl_module_op_info* info)
 {
 	enum phl_mdl_ret_code ret = MDL_RET_IGNORE;
@@ -1116,7 +1116,7 @@ enum phl_mdl_ret_code _phl_cmd_scan_req_set_info(
 	return ret;
 }
 
-enum phl_mdl_ret_code _phl_cmd_scan_req_query_info(
+static enum phl_mdl_ret_code _phl_cmd_scan_req_query_info(
 	void* dispr, void* priv, struct phl_module_op_info* info)
 {
 	struct rtw_phl_scan_param *param = (struct rtw_phl_scan_param*)priv;
@@ -1375,7 +1375,7 @@ _cmd_scan_req_deinit(struct phl_info_t *phl_info,
 	}
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_cmd_scan_req_submit(struct phl_info_t *phl_info,
 		       struct rtw_phl_scan_param *param)
 {

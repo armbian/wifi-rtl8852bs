@@ -634,7 +634,7 @@ phl_wifi_role_start_hdl(struct phl_info_t *phl_info, u8 *param)
 	return _phl_wifi_role_start(phl_info, cmd_wr->wrole, cmd_wr->mld);
 }
 
-void phl_wifi_role_start_done(void *drv_priv, u8 *cmd, u32 cmd_len,
+static void phl_wifi_role_start_done(void *drv_priv, u8 *cmd, u32 cmd_len,
 						enum rtw_phl_status status)
 {
 	if (cmd) {
@@ -984,7 +984,7 @@ rtw_phl_wifi_role_realloc_band(void *phl,
 }
 #endif /*CONFIG_DBCC_SUPPORT*/
 
-enum rtw_phl_status
+static enum rtw_phl_status
 phl_wifi_role_realloc_port(struct phl_info_t *phl_info,
                            struct rtw_wifi_role_t *wrole,
                            struct rtw_wifi_role_link_t *rlink,
@@ -1077,7 +1077,7 @@ rtw_phl_wifi_role_realloc_port(void *phl,
 }
 
 
-enum rtw_phl_status
+static enum rtw_phl_status
 phl_wifi_role_realloc_wmm(struct phl_info_t *phl_info,
                           struct rtw_wifi_role_link_t *rlink,
                           u8 new_wmm)
@@ -1566,7 +1566,7 @@ phl_wifi_role_chg_hdl(struct phl_info_t *phl_info, u8 *param)
 	                            wr_chg->info);
 }
 
-void phl_wifi_role_chg_done(void *drv_priv, u8 *cmd, u32 cmd_len,
+static void phl_wifi_role_chg_done(void *drv_priv, u8 *cmd, u32 cmd_len,
 						enum rtw_phl_status status)
 {
 	struct wr_chg_param *wr_chg = NULL;
@@ -1687,7 +1687,7 @@ rtw_phl_cmd_wrole_change(void *phl,
 }
 #endif /*CONFIG_CMD_DISP*/
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_wifi_role_stop(struct phl_info_t *phl_i, struct rtw_wifi_role_t *wrole)
 {
 	enum rtw_phl_status psts = RTW_PHL_STATUS_FAILURE;
@@ -1735,7 +1735,7 @@ phl_wifi_role_stop_hdl(struct phl_info_t *phl_info, u8 *param)
 
 	return _phl_wifi_role_stop(phl_info, wrole);
 }
-void phl_wifi_role_stop_done(void *drv_priv, u8 *cmd, u32 cmd_len,
+static void phl_wifi_role_stop_done(void *drv_priv, u8 *cmd, u32 cmd_len,
 						enum rtw_phl_status status)
 {
 	if (cmd) {
@@ -2091,7 +2091,7 @@ phl_wifi_role_macid_all_pause(struct phl_info_t *phl_info, struct rtw_wifi_role_
 	return pstatus;
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 phl_get_cur_tsf(void *phl,
 	struct rtw_phl_port_tsf *tsf)
 {

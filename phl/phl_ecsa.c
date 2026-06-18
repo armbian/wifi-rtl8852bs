@@ -16,7 +16,7 @@
 #include "phl_headers.h"
 
 #ifdef CONFIG_PHL_ECSA
-void
+static void
 _phl_ecsa_dump_param(
 	struct rtw_phl_ecsa_param *param
 )
@@ -34,7 +34,7 @@ _phl_ecsa_dump_param(
 	PHL_DUMP_CHAN_DEF(&(param->new_chan_def));
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_ecsa_tx_pause(
 	struct phl_ecsa_ctrl_t *ecsa_ctrl
 )
@@ -65,7 +65,7 @@ _phl_ecsa_tx_pause(
 	return status;
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_ecsa_tx_resume(
 	struct phl_ecsa_ctrl_t *ecsa_ctrl
 )
@@ -96,7 +96,7 @@ _phl_ecsa_tx_resume(
 	return status;
 }
 
-u32
+static u32
 _phl_ecsa_calculate_next_timer_ap(
 	struct phl_ecsa_ctrl_t *ecsa_ctrl
 )
@@ -158,7 +158,7 @@ _phl_ecsa_calculate_next_timer_ap(
 	return next_timeslot_us/1000;
 }
 
-u32
+static u32
 _phl_ecsa_calculate_next_timer_sta(
 	struct phl_ecsa_ctrl_t *ecsa_ctrl
 )
@@ -197,7 +197,7 @@ _phl_ecsa_calculate_next_timer_sta(
 	return next_timeslot;
 }
 
-void
+static void
 _phl_ecsa_calculate_next_timer(
 	struct phl_ecsa_ctrl_t *ecsa_ctrl
 )
@@ -216,7 +216,7 @@ _phl_ecsa_calculate_next_timer(
 
 }
 
-void _phl_ecsa_state_change_ap(
+static void _phl_ecsa_state_change_ap(
 	struct phl_ecsa_ctrl_t *ecsa_ctrl
 )
 {
@@ -285,7 +285,7 @@ void _phl_ecsa_state_change_ap(
 	_os_spinunlock(d, &(ecsa_ctrl->lock), _bh, NULL);
 }
 
-void _phl_ecsa_state_change_sta(
+static void _phl_ecsa_state_change_sta(
 	struct phl_ecsa_ctrl_t *ecsa_ctrl
 )
 {
@@ -341,7 +341,7 @@ void _phl_ecsa_state_change_sta(
 	_os_spinunlock(d, &(ecsa_ctrl->lock), _bh, NULL);
 }
 
-void
+static void
 _phl_ecsa_timer_callback(
 	void *context
 	)
@@ -355,7 +355,7 @@ _phl_ecsa_timer_callback(
 		_phl_ecsa_state_change_sta(ecsa_ctrl);
 }
 
-void
+static void
 _phl_ecsa_cmd_abort_hdlr(
 	void* dispr,
 	void* priv,
@@ -410,7 +410,7 @@ _phl_ecsa_cmd_abort_hdlr(
 	}
 }
 
-enum phl_mdl_ret_code
+static enum phl_mdl_ret_code
 _phl_ecsa_cmd_acquired(
 	void* dispr,
 	void* priv)
@@ -438,7 +438,7 @@ exit:
 	return ret;
 }
 
-enum phl_mdl_ret_code
+static enum phl_mdl_ret_code
 _phl_ecsa_cmd_abort(
 	void* dispr,
 	void* priv)
@@ -447,7 +447,7 @@ _phl_ecsa_cmd_abort(
 	return MDL_RET_SUCCESS;
 }
 
-enum phl_mdl_ret_code
+static enum phl_mdl_ret_code
 _phl_ecsa_cmd_msg_hdlr(
 	void* dispr,
 	void* priv,
@@ -708,7 +708,7 @@ _phl_ecsa_cmd_msg_hdlr(
 	return ret;
 }
 
-enum phl_mdl_ret_code
+static enum phl_mdl_ret_code
 _phl_ecsa_cmd_set_info(
 	void* dispr,
 	void* priv,
@@ -720,7 +720,7 @@ _phl_ecsa_cmd_set_info(
 	return ret;
 }
 
-enum phl_mdl_ret_code
+static enum phl_mdl_ret_code
 _phl_ecsa_cmd_query_info(
 	void* dispr,
 	void* priv,

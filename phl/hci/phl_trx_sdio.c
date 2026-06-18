@@ -764,7 +764,7 @@ static enum rtw_phl_status phl_recycle_rx_buf_sdio(struct phl_info_t *phl,
 
 	return RTW_PHL_STATUS_SUCCESS;
 }
-void phl_rx_handle_normal(struct phl_info_t *phl,
+static void phl_rx_handle_normal(struct phl_info_t *phl,
 					 struct rtw_phl_rx_pkt *phl_rx)
 {
  	enum rtw_phl_status pstatus = RTW_PHL_STATUS_FAILURE;
@@ -1623,7 +1623,7 @@ static void *phl_get_rxbd_buf_sdio(struct phl_info_t *phl)
 	return NULL;
 }
 
-void phl_recycle_rx_pkt_sdio(struct phl_info_t *phl_info,
+static void phl_recycle_rx_pkt_sdio(struct phl_info_t *phl_info,
 				struct rtw_phl_rx_pkt *phl_rx)
 {
 	if (phl_rx->r.os_priv)
@@ -1636,7 +1636,7 @@ void phl_recycle_rx_pkt_sdio(struct phl_info_t *phl_info,
 }
 
 
-void phl_tx_watchdog_sdio(struct phl_info_t *phl_info)
+static void phl_tx_watchdog_sdio(struct phl_info_t *phl_info)
 {
 
 }
