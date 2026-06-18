@@ -306,7 +306,7 @@ void halrf_dump_rfk_reg(struct rf_info *rf, char input[][16], u32 *_used,
 	*_out_len = out_len;
 }
 
-void _halrf_dpk_info(struct rf_info *rf, char input[][16], u32 *_used,
+static void _halrf_dpk_info(struct rf_info *rf, char input[][16], u32 *_used,
 			 char *output, u32 *_out_len)
 {
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
@@ -467,7 +467,7 @@ void _halrf_dpk_info(struct rf_info *rf, char input[][16], u32 *_used,
 
 }
 
-void halrf_dpk_read_rc_mtx(struct rf_info *rf, char input[][16], u32 *_used,
+static void halrf_dpk_read_rc_mtx(struct rf_info *rf, char input[][16], u32 *_used,
 			 char *output, u32 *_out_len, u32 path)
 {
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
@@ -512,7 +512,7 @@ void halrf_dpk_read_rc_mtx(struct rf_info *rf, char input[][16], u32 *_used,
 	*_out_len = out_len;
 }
 
-void halrf_dpk_read_rx_sram(struct rf_info *rf, char input[][16], u32 *_used,
+static void halrf_dpk_read_rx_sram(struct rf_info *rf, char input[][16], u32 *_used,
 			 char *output, u32 *_out_len, u32 path)
 {
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
@@ -555,7 +555,7 @@ void halrf_dpk_read_rx_sram(struct rf_info *rf, char input[][16], u32 *_used,
 	*_out_len = out_len;
 }
 
-void halrf_dpk_read_coef(struct rf_info *rf, char input[][16], u32 *_used,
+static void halrf_dpk_read_coef(struct rf_info *rf, char input[][16], u32 *_used,
 			 char *output, u32 *_out_len, u32 path, bool is_first)
 {
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
@@ -830,7 +830,7 @@ void halrf_rx_dck_info(struct rf_info *rf, char input[][16], u32 *_used,
 	*_out_len = out_len;
 }
 
-void halrf_get_rx_dck_value(struct rf_info *rf, char input[][16], u32 *_used,
+static void halrf_get_rx_dck_value(struct rf_info *rf, char input[][16], u32 *_used,
 			 char *output, u32 *_out_len)
 {
 	u32 val_1 = 0, val_2 = 0;
@@ -913,7 +913,7 @@ void halrf_rx_dck_dbg_cmd(struct rf_info *rf, char input[][16], u32 *_used,
 	*_out_len = out_len;
 }
 
-void halrf_dack_dbg_info(struct rf_info *rf, char input[][16], u32 *_used,
+static void halrf_dack_dbg_info(struct rf_info *rf, char input[][16], u32 *_used,
 			 char *output, u32 *_out_len)
 {
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
@@ -1047,7 +1047,7 @@ void halrf_dack_dbg_cmd(struct rf_info *rf, char input[][16], u32 *_used,
 #endif
 }
 
-void _halrf_tssi_info(struct rf_info *rf, char input[][16], u32 *_used,
+static void _halrf_tssi_info(struct rf_info *rf, char input[][16], u32 *_used,
 			 char *output, u32 *_out_len)
 {
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
@@ -1874,7 +1874,7 @@ void halrf_test_cmd(struct rf_info *rf, char input[][16], u32 *_used,
 #endif
 }
 
-void _halrf_gapk_info(struct rf_info *rf, char input[][16], u32 *_used,
+static void _halrf_gapk_info(struct rf_info *rf, char input[][16], u32 *_used,
 			 char *output, u32 *_out_len)
 {
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
@@ -2523,7 +2523,7 @@ void halrf_chl_rfk_dbg_cmd(struct rf_info *rf, char input[][16], u32 *_used,
 	*_out_len = out_len;
 }
 
-void _halrf_op5k_info(struct rf_info *rf, char input[][16], u32 *_used,
+static void _halrf_op5k_info(struct rf_info *rf, char input[][16], u32 *_used,
 			 char *output, u32 *_out_len)
 {
 	struct halrf_op5k_info *op5k = &rf->op5k_info;

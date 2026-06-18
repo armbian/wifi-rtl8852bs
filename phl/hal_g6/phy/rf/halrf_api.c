@@ -127,7 +127,7 @@ void halrf_reload_bkprf(struct rf_info *rf,
 	}
 }
 
-void halrf_wait_rx_mode(struct rf_info *rf, u8 kpath)
+static void halrf_wait_rx_mode(struct rf_info *rf, u8 kpath)
 {
 	u8 path, rf_mode = 0;
 	u16 count = 0;
@@ -884,7 +884,7 @@ void halrf_ops_txgapk_init(struct rf_info *rf)
 
 }
 
-u32 halrf_c2h_rfk_parsing(struct rf_info *rf, u8 cmdid, u16 len, u8 *c2h)
+static u32 halrf_c2h_rfk_parsing(struct rf_info *rf, u8 cmdid, u16 len, u8 *c2h)
 {
 	u32 i;
 

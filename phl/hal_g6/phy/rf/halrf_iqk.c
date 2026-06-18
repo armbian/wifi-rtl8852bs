@@ -30,7 +30,7 @@ void iqk_restore(struct rf_info *rf, u8 path)
 	return;
 }
 
-void iqk_backup_mac_reg(struct rf_info *rf, u32 *backup_mac_reg_val)
+static void iqk_backup_mac_reg(struct rf_info *rf, u32 *backup_mac_reg_val)
 {
 	struct rfk_iqk_info *iqk_info = rf->rfk_iqk_info;
 	u32 i;
@@ -49,7 +49,7 @@ void iqk_backup_mac_reg(struct rf_info *rf, u32 *backup_mac_reg_val)
 	}
 }
 
-void iqk_backup_bb_reg(struct rf_info *rf, u32 *backup_bb_reg_val)
+static void iqk_backup_bb_reg(struct rf_info *rf, u32 *backup_bb_reg_val)
 {
 	struct rfk_iqk_info *iqk_info = rf->rfk_iqk_info;
 	u32 i;
@@ -68,7 +68,7 @@ void iqk_backup_bb_reg(struct rf_info *rf, u32 *backup_bb_reg_val)
 	}
 }
 
-void iqk_backup_rf_reg(struct rf_info *rf, u32 *backup_rf_reg_val, u8 rf_path)
+static void iqk_backup_rf_reg(struct rf_info *rf, u32 *backup_rf_reg_val, u8 rf_path)
 {
 	struct rfk_iqk_info *iqk_info = rf->rfk_iqk_info;
 	u32 i;
@@ -88,7 +88,7 @@ void iqk_backup_rf_reg(struct rf_info *rf, u32 *backup_rf_reg_val, u8 rf_path)
 	}
 }
 
-void iqk_restore_mac_reg(struct rf_info *rf, u32 *backup_mac_reg_val)
+static void iqk_restore_mac_reg(struct rf_info *rf, u32 *backup_mac_reg_val)
 {
 	struct rfk_iqk_info *iqk_info = rf->rfk_iqk_info;
 	u32 i;
@@ -108,7 +108,7 @@ void iqk_restore_mac_reg(struct rf_info *rf, u32 *backup_mac_reg_val)
 	}
 }
 
-void iqk_restore_bb_reg(struct rf_info *rf, u32 *backup_bb_reg_val)
+static void iqk_restore_bb_reg(struct rf_info *rf, u32 *backup_bb_reg_val)
 {
 	struct rfk_iqk_info *iqk_info = rf->rfk_iqk_info;
 	u32 i;
@@ -127,7 +127,7 @@ void iqk_restore_bb_reg(struct rf_info *rf, u32 *backup_bb_reg_val)
 	}
 }
 
-void iqk_restore_rf_reg(struct rf_info *rf, u32 *backup_rf_reg_val, u8 rf_path)
+static void iqk_restore_rf_reg(struct rf_info *rf, u32 *backup_rf_reg_val, u8 rf_path)
 {
 	struct rfk_iqk_info *iqk_info = rf->rfk_iqk_info;
 	u32 i;
@@ -266,7 +266,7 @@ void halrf_iqk_init(struct rf_info *rf)
 return;
 }
 
-void halrf_doiqk(struct rf_info *rf, bool force, enum phl_phy_idx phy_idx,
+static void halrf_doiqk(struct rf_info *rf, bool force, enum phl_phy_idx phy_idx,
 		 u8 path)
 {
 	struct halrf_iqk_info *iqk_info = &rf->iqk;
@@ -316,7 +316,7 @@ void halrf_doiqk(struct rf_info *rf, bool force, enum phl_phy_idx phy_idx,
 	return;
 }
 
-void halrf_drv_iqk(struct rf_info *rf, enum phl_phy_idx phy_idx, bool force) {
+static void halrf_drv_iqk(struct rf_info *rf, enum phl_phy_idx phy_idx, bool force) {
 
 	/*drv_iqk*/ 	
 	RF_DBG(rf, DBG_RF_IQK, "[IQK]====  DRV IQK ==== \n");
@@ -367,7 +367,7 @@ bool halrf_check_fwiqk_done(struct rf_info *rf)
 		return isfail;
 }
 
-void halrf_iqk_get_ch_info(struct rf_info *rf, enum phl_phy_idx phy_idx, u8 path)
+static void halrf_iqk_get_ch_info(struct rf_info *rf, enum phl_phy_idx phy_idx, u8 path)
 {
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
 
@@ -394,7 +394,7 @@ void halrf_iqk_get_ch_info(struct rf_info *rf, enum phl_phy_idx phy_idx, u8 path
 	return;
 }
 
-void halrf_iqk_set_info(struct rf_info *rf, enum phl_phy_idx phy_idx, u8 path)
+static void halrf_iqk_set_info(struct rf_info *rf, enum phl_phy_idx phy_idx, u8 path)
 {
 		struct rtw_hal_com_t *hal_i = rf->hal_com;
 	
@@ -422,7 +422,7 @@ void halrf_iqk_set_info(struct rf_info *rf, enum phl_phy_idx phy_idx, u8 path)
 			return;
 }
 
-u8 halrf_get_fw_iqk_times(struct rf_info *rf)
+static u8 halrf_get_fw_iqk_times(struct rf_info *rf)
 {
 	struct halrf_iqk_info *iqk_info = &rf->iqk;
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
@@ -452,7 +452,7 @@ u8 halrf_get_fw_iqk_times(struct rf_info *rf)
 }
 
 
-bool halrf_fw_iqk(struct rf_info *rf, enum phl_phy_idx phy_idx, bool force) {
+static bool halrf_fw_iqk(struct rf_info *rf, enum phl_phy_idx phy_idx, bool force) {
 	
 	struct halrf_iqk_info *iqk_info = &rf->iqk;
 	u32 data_to_fw[2] = {0};

@@ -325,7 +325,7 @@ s32 halrf_cmd(struct rf_info *rf, char *input, char *output, u32 out_len)
 	return 0;
 }
 
-u32 halrf_get_multiple(u8 pow, u8 base)
+static u32 halrf_get_multiple(u8 pow, u8 base)
 {
 	u8 i;
 	u32 return_value = 1;
@@ -336,7 +336,7 @@ u32 halrf_get_multiple(u8 pow, u8 base)
 	return	return_value;
 }
 
-u32 halrf_str_2_dec(u8 val)
+static u32 halrf_str_2_dec(u8 val)
 {
 	if (val >= 0x30 && val <= 0x39) /*0~9*/
 		return	(val - 0x30);

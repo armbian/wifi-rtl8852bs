@@ -18,7 +18,7 @@
 #define t_avg 100
 
 
-void halrf_afe_init_8852b(struct rf_info *rf)
+static void halrf_afe_init_8852b(struct rf_info *rf)
 {
 	halrf_write_fwofld_start(rf);		/*FW Offload Start*/
 
@@ -36,11 +36,11 @@ void halrf_afe_init_8852b(struct rf_info *rf)
 
 	halrf_write_fwofld_end(rf);		/*FW Offload End*/
 }
-void halrf_dack_init_8852b(struct rf_info *rf)
+static void halrf_dack_init_8852b(struct rf_info *rf)
 {
 }
 
-void halrf_drck_8852b(struct rf_info *rf)
+static void halrf_drck_8852b(struct rf_info *rf)
 {
 	u32 c = 10000;
 	u32 rck_d;
@@ -82,7 +82,7 @@ void halrf_drck_8852b(struct rf_info *rf)
 	RF_DBG(rf, DBG_RF_DACK, "[DACK]0xc0cc = 0x%x\n", halrf_rreg(rf, 0xc0cc, MASKDWORD));
 }
 
-void halrf_addck_backup_8852b(struct rf_info *rf)
+static void halrf_addck_backup_8852b(struct rf_info *rf)
 {
 	struct halrf_dack_info *dack = &rf->dack;
 
@@ -95,7 +95,7 @@ void halrf_addck_backup_8852b(struct rf_info *rf)
 	dack->addck_d[1][1] = (u16)halrf_rreg(rf, 0xc1fc,0x003ff) ;
 }
 
-void halrf_addck_reload_8852b(struct rf_info *rf)
+static void halrf_addck_reload_8852b(struct rf_info *rf)
 {
 	struct halrf_dack_info *dack = &rf->dack;
 
@@ -117,7 +117,7 @@ void halrf_addck_reload_8852b(struct rf_info *rf)
 	halrf_write_fwofld_end(rf);		/*FW Offload End*/
 }
 
-void halrf_dack_backup_s0_8852b(struct rf_info *rf)
+static void halrf_dack_backup_s0_8852b(struct rf_info *rf)
 {
 	struct halrf_dack_info *dack = &rf->dack;
 	u8 i;
@@ -161,7 +161,7 @@ void halrf_dack_backup_s0_8852b(struct rf_info *rf)
 	dack->dadck_d[0][1] = (u8)halrf_rreg(rf, 0xc084, 0xff000000);
 }
 
-void halrf_dack_backup_s1_8852b(struct rf_info *rf)
+static void halrf_dack_backup_s1_8852b(struct rf_info *rf)
 {
 	struct halrf_dack_info *dack = &rf->dack;
 	u8 i;
@@ -204,7 +204,7 @@ void halrf_dack_backup_s1_8852b(struct rf_info *rf)
 	dack->dadck_d[1][1] = (u8)halrf_rreg(rf, 0xc184, 0xff000000);
 }
 
-void halrf_dack_reload_by_path_8852b(struct rf_info *rf, enum rf_path path)
+static void halrf_dack_reload_by_path_8852b(struct rf_info *rf, enum rf_path path)
 {
 	struct halrf_dack_info *dack = &rf->dack;
 	u8 i;
@@ -230,7 +230,7 @@ void halrf_dack_reload_by_path_8852b(struct rf_info *rf, enum rf_path path)
 	/*DADCK*/
 }
 
-void halrf_dack_reload_8852b(struct rf_info *rf, enum rf_path path)
+static void halrf_dack_reload_8852b(struct rf_info *rf, enum rf_path path)
 {
 	u32 oft;
 
@@ -248,7 +248,7 @@ void halrf_dack_reload_8852b(struct rf_info *rf, enum rf_path path)
 	halrf_wreg(rf, 0xc024 + oft, 0x3, 0x0);
 }
 
-void halrf_check_addc_8852b(struct rf_info *rf, enum rf_path path)
+static void halrf_check_addc_8852b(struct rf_info *rf, enum rf_path path)
 {
 	u32 temp, dc_re, dc_im;
 	u32 i, m, p, t;
@@ -338,7 +338,7 @@ void halrf_check_addc_8852b(struct rf_info *rf, enum rf_path path)
 		path, dc_re, dc_im);
 }
 
-void halrf_addck_8852b(struct rf_info *rf)
+static void halrf_addck_8852b(struct rf_info *rf)
 {
 	struct halrf_dack_info *dack = &rf->dack;
 	u32 c = 10000;
@@ -480,7 +480,7 @@ void halrf_addck_8852b(struct rf_info *rf)
 #endif
 }
 
-void halrf_check_dadc_8852b(struct rf_info *rf, enum rf_path path)
+static void halrf_check_dadc_8852b(struct rf_info *rf, enum rf_path path)
 {
 	halrf_write_fwofld_start(rf);		/*FW Offload Start*/
 
@@ -518,7 +518,7 @@ void halrf_check_dadc_8852b(struct rf_info *rf, enum rf_path path)
 	halrf_write_fwofld_end(rf);		/*FW Offload End*/
 }
 
-void halrf_dack_8852b_s0(struct rf_info *rf)
+static void halrf_dack_8852b_s0(struct rf_info *rf)
 {
 	struct halrf_dack_info *dack = &rf->dack;
 	u32 c = 10000;
@@ -622,7 +622,7 @@ void halrf_dack_8852b_s0(struct rf_info *rf)
 	halrf_wreg(rf, 0x12b8, BIT(30), 0x0);
 }
 
-void halrf_dack_8852b_s1(struct rf_info *rf)
+static void halrf_dack_8852b_s1(struct rf_info *rf)
 {
 	struct halrf_dack_info *dack = &rf->dack;
 	u32 c = 10000;
@@ -732,7 +732,7 @@ void halrf_dack_8852b(struct rf_info *rf)
 	halrf_dack_8852b_s1(rf);
 }
 
-void halrf_dack_dump_8852b(struct rf_info *rf)
+static void halrf_dack_dump_8852b(struct rf_info *rf)
 {
 	struct halrf_dack_info *dack = &rf->dack;
 	u8 i;

@@ -374,7 +374,7 @@ void halrf_rxck_force_8852b(struct rf_info *rf, enum rf_path path, bool force, e
 }
 
 
-void halrf_arfc_si_reset_8852b(struct rf_info *rf, bool is_reset)
+static void halrf_arfc_si_reset_8852b(struct rf_info *rf, bool is_reset)
 {
 	u8 val;
 

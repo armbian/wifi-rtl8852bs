@@ -16,7 +16,7 @@
 
 #ifdef RF_8852B_SUPPORT
 
-void _halrf_psd_backup_bb_registers_8852b(
+static void _halrf_psd_backup_bb_registers_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	u32 *reg,
@@ -33,7 +33,7 @@ void _halrf_psd_backup_bb_registers_8852b(
 	}
 }
 
-void _halrf_psd_reload_bb_registers_8852b(
+static void _halrf_psd_reload_bb_registers_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	u32 *reg,
