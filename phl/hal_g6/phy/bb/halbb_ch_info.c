@@ -99,7 +99,7 @@ bool halbb_ch_info_valid_chk_8852a(struct bb_info *bb, struct physts_rxd *desc)
 	return true;
 }
 
-void halbb_ch_info_cr_dump(struct bb_info *bb)
+static void halbb_ch_info_cr_dump(struct bb_info *bb)
 {
 	struct bb_ch_rpt_info *ch_rpt = &bb->bb_ch_rpt_i;
 	struct bb_ch_info_cr_info *cr = &ch_rpt->bb_ch_info_cr_i;
@@ -123,7 +123,7 @@ void halbb_ch_info_cr_dump(struct bb_info *bb)
 		 cur_cfg->ch_i_ele_bitmap, cur_cfg->ch_i_type, cur_cfg->ch_i_seg_len);
 }
 
-void halbb_ch_info_physts_get_buf(struct bb_info *bb, u8 *rpt_buf,
+static void halbb_ch_info_physts_get_buf(struct bb_info *bb, u8 *rpt_buf,
 				 struct bb_ch_rpt_hdr_info *hdr,
 				 struct bb_phy_info_rpt *phy_info,
 				 struct bb_ch_info_drv_rpt *drv)
@@ -138,7 +138,7 @@ void halbb_ch_info_physts_get_buf(struct bb_info *bb, u8 *rpt_buf,
 	rpt_buf = (u8*)buf->octet;
 }
 
-void halbb_ch_info_print(struct bb_info *bb, char input[][16], u32 *_used,
+static void halbb_ch_info_print(struct bb_info *bb, char input[][16], u32 *_used,
 			 char *output, u32 *_out_len)
 {
 	struct bb_ch_rpt_info *ch_rpt = &bb->bb_ch_rpt_i;
@@ -327,7 +327,7 @@ bool halbb_ch_info_wait_from_physts(struct bb_info *bb, u32 dly, u32 dly_max,
 	return rpt_success;
 }
 
-bool halbb_ch_info_chk_cr_valid(struct bb_info *bb, struct bb_ch_info_cr_cfg_info *cfg)
+static bool halbb_ch_info_chk_cr_valid(struct bb_info *bb, struct bb_ch_info_cr_cfg_info *cfg)
 {
 	struct bb_ch_rpt_info *ch_rpt = &bb->bb_ch_rpt_i;
 	struct bb_ch_rpt_size_info *rpt_size = &ch_rpt->bb_ch_rpt_size_i;
@@ -579,7 +579,7 @@ void halbb_ch_info_status_en(struct bb_info *bb, bool en, enum phl_phy_idx phy_i
 	}
 }
 
-void halbb_ch_info_self_test(struct bb_info *bb)
+static void halbb_ch_info_self_test(struct bb_info *bb)
 {
 	struct bb_ch_rpt_info *ch_rpt = &bb->bb_ch_rpt_i;
 	struct bb_ch_info_cr_cfg_info *cfg = &ch_rpt->bb_ch_info_cr_cfg_i;
@@ -610,7 +610,7 @@ void halbb_ch_info_self_test(struct bb_info *bb)
 	}
 }
 
-enum bb_ch_info_t halbb_ch_info_get_data(struct bb_info *bb, struct physts_rxd *desc, u8 *addr, u32 len,
+static enum bb_ch_info_t halbb_ch_info_get_data(struct bb_info *bb, struct physts_rxd *desc, u8 *addr, u32 len,
 					struct bb_ch_rpt_hdr_info *hdr,
 					struct bb_phy_info_rpt *phy_info,
 					struct bb_ch_info_drv_rpt *drv)
@@ -759,7 +759,7 @@ enum bb_ch_info_t halbb_ch_info_parsing(struct bb_info *bb, u8 *addr, u32 len,
 	return rpt;
 }
 
-void halbb_ch_info_bbcr_init(struct bb_info *bb)
+static void halbb_ch_info_bbcr_init(struct bb_info *bb)
 {
 	struct bb_ch_rpt_info *ch_rpt = &bb->bb_ch_rpt_i;
 	struct bb_ch_info_cr_cfg_info *cfg = &ch_rpt->bb_ch_info_cr_cfg_i;
@@ -853,7 +853,7 @@ void halbb_ch_info_init(struct bb_info *bb)
 	halbb_ch_info_size_query(bb, &ch_rpt_size_info, bb->bb_phy_idx);
 }
 
-void halbb_ch_info_print_buf(struct bb_info *bb)
+static void halbb_ch_info_print_buf(struct bb_info *bb)
 {
 	struct bb_ch_rpt_info *ch_rpt = &bb->bb_ch_rpt_i;
 	u16 i = 0;
@@ -906,7 +906,7 @@ bool halbb_ch_info_buf_alloc(struct bb_info *bb)
 	return true;
 }
 
-void halbb_ch_info_reset(struct bb_info *bb)
+static void halbb_ch_info_reset(struct bb_info *bb)
 {
 	struct bb_ch_rpt_info *ch_rpt = &bb->bb_ch_rpt_i;
 

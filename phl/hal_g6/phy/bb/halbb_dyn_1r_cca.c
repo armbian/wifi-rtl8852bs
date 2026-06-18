@@ -26,7 +26,7 @@
 
 #ifdef HALBB_DYN_1R_CCA_SUPPORT
 
-void halbb_1r_cca_cr_cfg(struct bb_info *bb, enum rf_path rx_path)
+static void halbb_1r_cca_cr_cfg(struct bb_info *bb, enum rf_path rx_path)
 {
 	struct bb_dyn_1r_cca_info *dyn_1r_cca = &bb->bb_dyn_1r_cca_i;
 
@@ -44,7 +44,7 @@ void halbb_1r_cca_cr_cfg(struct bb_info *bb, enum rf_path rx_path)
 	}
 }
 
-void halbb_dyn_1r_cca_cfg(struct bb_info *bb, enum rf_path rx_path)
+static void halbb_dyn_1r_cca_cfg(struct bb_info *bb, enum rf_path rx_path)
 {
 	struct bb_dyn_1r_cca_info *dyn_1r_cca = &bb->bb_dyn_1r_cca_i;
 
@@ -150,7 +150,7 @@ void halbb_dyn_1r_cca_init(struct bb_info *bb)
 	dyn_1r_cca->dyn_1r_cca_rssi_min_th= 40 << 5;
 }
 
-void halbb_dyn_1r_cca_en(struct bb_info *bb, bool en)
+static void halbb_dyn_1r_cca_en(struct bb_info *bb, bool en)
 {
 	struct bb_dyn_1r_cca_info *dyn_1r_cca = &bb->bb_dyn_1r_cca_i;
 

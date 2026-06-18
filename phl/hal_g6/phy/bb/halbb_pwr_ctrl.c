@@ -28,7 +28,7 @@
 
 /* @ Dynamic CCA TH part */
 
-void halbb_set_ccath_macid(struct bb_info *bb, u16 macid, s8 cca_th, bool cca_th_en,
+static void halbb_set_ccath_macid(struct bb_info *bb, u16 macid, s8 cca_th, bool cca_th_en,
 	enum phl_band_idx hw_band)
 {
 	u32 ret_v = 0;
@@ -54,7 +54,7 @@ void halbb_set_ccath_macid(struct bb_info *bb, u16 macid, s8 cca_th, bool cca_th
 		BB_WARNING("Error Set Pwr Macid for API return fail!!\n");
 }
 
-void halbb_ccath_init(struct bb_info *bb)
+static void halbb_ccath_init(struct bb_info *bb)
 {
 	u8 i;
 	struct bb_dyncca_info *dyncca_i = &bb->bb_dyncca_i;
@@ -69,7 +69,7 @@ void halbb_ccath_init(struct bb_info *bb)
 	}
 }
 
-void halbb_cca_th_per_sta(struct bb_info *bb, u16 macid)
+static void halbb_cca_th_per_sta(struct bb_info *bb, u16 macid)
 {
 	bool noisy_state = bb->is_noisy;
 	struct bb_dyncca_info *dyncca_i = &bb->bb_dyncca_i;
@@ -101,7 +101,7 @@ void halbb_cca_th_per_sta(struct bb_info *bb, u16 macid)
 	dyn_ccath = (s8)rssi - 110 - offset; 
 }
 
-void halbb_dyncca_th(struct bb_info *bb)
+static void halbb_dyncca_th(struct bb_info *bb)
 {
 	struct bb_dyncca_info *dyncca_i = &bb->bb_dyncca_i;
 	u8 i;
@@ -123,7 +123,7 @@ void halbb_dyncca_th(struct bb_info *bb)
 }
 
 /* @ Power Ctrl part */
-s8 halbb_get_pwr_macid_idx(struct bb_info *bb, u16 macid, u8 idx)
+static s8 halbb_get_pwr_macid_idx(struct bb_info *bb, u16 macid, u8 idx)
 {
 	s8 tx_pwr = 0;
 	struct bb_dtp_info *dtp = &bb->bb_pwr_ctrl_i.dtp_i[macid];
@@ -137,7 +137,7 @@ s8 halbb_get_pwr_macid_idx(struct bb_info *bb, u16 macid, u8 idx)
 	return tx_pwr; /* S(8,1)*/
 }
 
-bool halbb_get_pwr_macid_en_idx(struct bb_info *bb, u16 macid, u8 idx)
+static bool halbb_get_pwr_macid_en_idx(struct bb_info *bb, u16 macid, u8 idx)
 {
 	bool pwr_en = false;
 	struct bb_dtp_info *dtp = &bb->bb_pwr_ctrl_i.dtp_i[macid];
@@ -183,7 +183,7 @@ void halbb_set_pwr_macid_idx(struct bb_info *bb, u16 macid, s8 pwr, bool pwr_en,
 		BB_WARNING("Error Set Pwr Macid for API return fail!!\n");
 }
 
-void halbb_pwr_ctrl_en(struct bb_info *bb, bool pwr_ctrl_en)
+static void halbb_pwr_ctrl_en(struct bb_info *bb, bool pwr_ctrl_en)
 {
 	u32 ret_v = 0;
 	u32 mask_en = 0;
@@ -242,7 +242,7 @@ void halbb_pwr_ctrl_en(struct bb_info *bb, bool pwr_ctrl_en)
 	if (ret_v != 0)
 		BB_WARNING("Error Enable Power Control for API return fail!!\n");
 }
-void halbb_pwr_ctrl_th(struct bb_info *bb)
+static void halbb_pwr_ctrl_th(struct bb_info *bb)
 {
 	bool noisy_state = bb->is_noisy;
 	struct bb_pwr_ctrl_info *pwr_ctrl_i = &bb->bb_pwr_ctrl_i;
@@ -268,7 +268,7 @@ void halbb_pwr_ctrl_th(struct bb_info *bb)
 		  pwr_ctrl_i->enhance_pwr_th[2]);
 }
 
-u8 halbb_pwr_lvl_check(struct bb_info *bb, u8 rssi_in, u8 last_pwr_lvl)
+static u8 halbb_pwr_lvl_check(struct bb_info *bb, u8 rssi_in, u8 last_pwr_lvl)
 {
 	u8 i;
 	u8 th[HALBB_PWR_STATE_NUM];
@@ -306,7 +306,7 @@ u8 halbb_pwr_lvl_check(struct bb_info *bb, u8 rssi_in, u8 last_pwr_lvl)
 		return TX_HP_LV_UNCHANGE;
 }
 
-void halbb_set_pwr_ctrl(struct bb_info *bb, u16 macid, u8 pwr_lv)
+static void halbb_set_pwr_ctrl(struct bb_info *bb, u16 macid, u8 pwr_lv)
 {
 	struct rtw_phl_stainfo_t *sta;
 	s8 pwr = 0;
@@ -347,7 +347,7 @@ void halbb_set_pwr_ctrl(struct bb_info *bb, u16 macid, u8 pwr_lv)
 	/* only use pwr_tbl_0 */
 }
 
-void halbb_pwr_ctrl_per_sta(struct bb_info *bb, u16 macid)
+static void halbb_pwr_ctrl_per_sta(struct bb_info *bb, u16 macid)
 {
 	struct rtw_phl_stainfo_t *sta;
 	struct bb_dtp_info *dtp = &bb->bb_pwr_ctrl_i.dtp_i[macid];
@@ -418,7 +418,7 @@ void halbb_pwr_ctrl(struct bb_info *bb)
 	halbb_fwofld_bitmap_en(bb, false, FW_OFLD_BB_API);
 	#endif
 }
-void halbb_pwr_ctrl_para_init(struct bb_info *bb)
+static void halbb_pwr_ctrl_para_init(struct bb_info *bb)
 {
 	struct bb_pwr_ctrl_info *pwr_ctrl_i = &bb->bb_pwr_ctrl_i;
 
@@ -927,7 +927,7 @@ void halbb_tssi_ctrl_set_fast_mode_cfg(struct bb_info *bb,
 	}
 }
 
-void halbb_set_tx_src(struct bb_info *bb, u8 option, s8 pw_val, enum phl_phy_idx phy_idx) {
+static void halbb_set_tx_src(struct bb_info *bb, u8 option, s8 pw_val, enum phl_phy_idx phy_idx) {
 
 	BB_DBG(bb, DBG_PWR_CTRL, "[%s] %d", __func__, phy_idx);
 

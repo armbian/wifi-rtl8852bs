@@ -33,7 +33,7 @@
 #include "halbb_precomp.h"
 #include "halbb_dbg_cmd_table.h"
 
-void halbb_bbcr_rw_dbg(struct bb_info *bb, char input[][16], u32 *_used,
+static void halbb_bbcr_rw_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 		       char *output, u32 *_out_len)
 {
 	u32 val[10] = {0};
@@ -118,7 +118,7 @@ void halbb_bbcr_rw_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 #endif
 }
 
-void halbb_bb_td_dbg(struct bb_info *bb, char input[][16], u32 *_used,
+static void halbb_bb_td_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 			      char *output, u32 *_out_len)
 {
 	struct bb_dbg_info *dbg = &bb->bb_dbg_i;
@@ -211,7 +211,7 @@ void halbb_bb_td_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 	}
 }
 
-void halbb_bb_fd_dbg(struct bb_info *bb, char input[][16], u32 *_used,
+static void halbb_bb_fd_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 			      char *output, u32 *_out_len)
 {
 	u32 val[10] = {0};
@@ -245,7 +245,7 @@ void halbb_bb_fd_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 	//odm_fill_h2c_cmd(bb, PHYDM_H2C_FW_TRACE_EN, cmd_length, h2c_parameter);
 }*/
 
-void halbb_cmn_msg_setting(struct bb_info *bb, char input[][16], u32 *_used,
+static void halbb_cmn_msg_setting(struct bb_info *bb, char input[][16], u32 *_used,
 			   char *output, u32 *_out_len)
 {
 	u32 val[3] = {0};
@@ -270,7 +270,7 @@ void halbb_cmn_msg_setting(struct bb_info *bb, char input[][16], u32 *_used,
 	}
 }
 
-void halbb_trace_dbg(struct bb_info *bb, char input[][16], u32 *_used,
+static void halbb_trace_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 		       char *output, u32 *_out_len)
 {
 	u64 pre_debug_components, one = 1;
@@ -438,7 +438,7 @@ void halbb_trace_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 	*_out_len = out_len;
 }
 
-u32 halbb_get_multiple(u8 pow, u8 base)
+static u32 halbb_get_multiple(u8 pow, u8 base)
 {
 	u8 i;
 	u32 return_value = 1;
@@ -449,7 +449,7 @@ u32 halbb_get_multiple(u8 pow, u8 base)
 	return	return_value;
 }
 
-u32 halbb_str_2_dec(u8 val)
+static u32 halbb_str_2_dec(u8 val)
 {
 	if (val >= 0x30 && val <= 0x39) /*0~9*/
 		return	(val - 0x30);
@@ -921,7 +921,7 @@ s32 halbb_cmd(struct bb_info *bb, char *input, char *output, u32 out_len)
 	return 0;
 }
 
-void halbb_fwdbg_trace(struct bb_info *bb, u32 dbg_comp, u8 fw_trace_en)
+static void halbb_fwdbg_trace(struct bb_info *bb, u32 dbg_comp, u8 fw_trace_en)
 {
 	struct bb_fw_dbg_cmn_info *bb_fwdbg = &bb->bb_fwdbg_i;
 	u32 *bb_h2c = (u32 *) bb_fwdbg;

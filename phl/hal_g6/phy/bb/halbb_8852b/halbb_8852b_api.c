@@ -312,7 +312,7 @@ void halbb_tssi_cont_en_8852b(struct bb_info *bb, bool en, enum rf_path path)
 	else
 		halbb_set_reg(bb, tssi_trk_man[path], BIT(30), 0x1);
 }
-void halbb_bb_reset_all_8852b(struct bb_info *bb, enum phl_phy_idx phy_idx)
+static void halbb_bb_reset_all_8852b(struct bb_info *bb, enum phl_phy_idx phy_idx)
 {
 	BB_DBG(bb, DBG_DBG_API, "%s\n", __func__);
 
@@ -476,7 +476,7 @@ u32 halbb_read_rf_reg_8852b(struct bb_info *bb, enum rf_path path, u32 reg_addr,
 	return readback_value;
 }
 
-void halbb_5m_mask_8852b(struct bb_info *bb, u8 pri_ch_idx, enum channel_width bw,
+static void halbb_5m_mask_8852b(struct bb_info *bb, u8 pri_ch_idx, enum channel_width bw,
 			   enum phl_phy_idx phy_idx)
 {
 	bool mask_5m_low = false;
@@ -1973,7 +1973,7 @@ void halbb_pre_agc_en_8852b(struct bb_info *bb, bool enable)
 	       en, en);
 }
 
-s8 halbb_efuse_exchange_8852b(struct bb_info *bb, u8 value,
+static s8 halbb_efuse_exchange_8852b(struct bb_info *bb, u8 value,
 				enum efuse_bit_mask mask)
 {
 	s8 tmp = 0;
@@ -1993,7 +1993,7 @@ s8 halbb_efuse_exchange_8852b(struct bb_info *bb, u8 value,
 	return tmp;
 }
 
-void halbb_ext_loss_avg_update_8852b(struct bb_info *bb)
+static void halbb_ext_loss_avg_update_8852b(struct bb_info *bb)
 {
 	struct bb_ch_info *ch = &bb->bb_ch_i;
 	struct bb_edcca_info *bb_edcca = &bb->bb_edcca_i;

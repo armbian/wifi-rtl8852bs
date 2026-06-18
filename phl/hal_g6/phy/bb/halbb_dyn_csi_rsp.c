@@ -33,7 +33,7 @@ bool halbb_dyn_csi_rsp_rlt_get(struct bb_info *bb){
 	return bf->is_csi_rsp_en;
 }
 
-void halbb_csi_rsp_rlt(struct bb_info *bb, bool en)
+static void halbb_csi_rsp_rlt(struct bb_info *bb, bool en)
 {
 	struct bf_ch_raw_info *bf = &bb->bb_cmn_hooker->bf_ch_raw_i;
 	enum dcr_csi_rsp;
@@ -65,7 +65,7 @@ void halbb_csi_rsp_rlt(struct bb_info *bb, bool en)
 #endif
 }
 
-bool halbb_dcr_is_he_connect(struct bb_info *bb) {
+static bool halbb_dcr_is_he_connect(struct bb_info *bb) {
 	struct rtw_phl_stainfo_t *sta;
 	struct bb_link_info *link = &bb->bb_link_i;
 	bool rlt = false;
@@ -87,7 +87,7 @@ bool halbb_dcr_is_he_connect(struct bb_info *bb) {
 	return rlt;
 }	
 
-void halbb_dcr_config_ch_info_he(struct bb_info *bb) {
+static void halbb_dcr_config_ch_info_he(struct bb_info *bb) {
 	struct bb_ch_rpt_info *ch_rpt = &bb->bb_ch_rpt_i;
 	struct bb_ch_info_cr_cfg_info *cfg = &ch_rpt->bb_ch_info_cr_cfg_i;
 	struct bf_ch_raw_info *bf = &bb->bb_cmn_hooker->bf_ch_raw_i;
@@ -116,7 +116,7 @@ void halbb_dcr_config_ch_info_he(struct bb_info *bb) {
 
 }
 
-bool halbb_dcr_get_ch_raw_info(struct bb_info *bb, bool is_csi_en)
+static bool halbb_dcr_get_ch_raw_info(struct bb_info *bb, bool is_csi_en)
 {	
 	struct bf_ch_raw_info *bf = &bb->bb_cmn_hooker->bf_ch_raw_i;
 	struct bb_ch_info_physts_info *ch_physts = &bb->bb_ch_rpt_i.bb_ch_info_physts_i;
@@ -197,7 +197,7 @@ void halbb_dcr_reset(struct bb_info *bb)
 	bf->is_csi_rsp_en = true;
 }
 
-bool halbb_dcr_abort(struct bb_info *bb)
+static bool halbb_dcr_abort(struct bb_info *bb)
 {
 	struct bb_link_info *link = &bb->bb_link_i;
 	struct bf_ch_raw_info *bf = &bb->bb_cmn_hooker->bf_ch_raw_i;
@@ -236,7 +236,7 @@ bool halbb_dcr_abort(struct bb_info *bb)
 	return false;
 }
 
-bool halbb_dcr_ch_est(struct bb_info *bb, u16 *addr)
+static bool halbb_dcr_ch_est(struct bb_info *bb, u16 *addr)
 {
 	struct bf_ch_raw_info *bf = &bb->bb_cmn_hooker->bf_ch_raw_i;
 	u32 ix;

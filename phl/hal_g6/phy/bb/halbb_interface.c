@@ -359,7 +359,7 @@ bool halbb_test_h2c_c2h_flow(struct bb_info *bb)
 }
 
 
-u32 halbb_c2h_mu_gptbl_rpt(struct bb_info *bb, u16 len, u8 *c2h)
+static u32 halbb_c2h_mu_gptbl_rpt(struct bb_info *bb, u16 len, u8 *c2h)
 {
 	/* Set MU grouping table and return value */
 	u32 val = 0;
@@ -395,7 +395,7 @@ u32 halbb_c2h_mu_gptbl_rpt(struct bb_info *bb, u16 len, u8 *c2h)
 }
 
 #ifdef HALBB_DYN_L2H_SUPPORT
-u32 halbb_c2h_lowrt_rty(struct bb_info *bb, u16 len, u8 *c2h)
+static u32 halbb_c2h_lowrt_rty(struct bb_info *bb, u16 len, u8 *c2h)
 {
 	u32 c2h_rty_cnt = 0;
 	struct bb_dyn_l2h_info *dyn_l2h_i = &bb->bb_dyn_l2h_i;
@@ -405,7 +405,7 @@ u32 halbb_c2h_lowrt_rty(struct bb_info *bb, u16 len, u8 *c2h)
 	return 0;
 }
 
-void halbb_fw_ctrl_rtyrpt(struct bb_info *bb, u8 rpt_rtycnt, u8 en_fw_rpt)
+static void halbb_fw_ctrl_rtyrpt(struct bb_info *bb, u8 rpt_rtycnt, u8 en_fw_rpt)
 {
 	struct bb_fw_dbg_cmn_info *fwmn_i = &bb->bb_fwdbg_i;
 	u32 *bb_h2c = (u32 *) fwmn_i;
@@ -445,7 +445,7 @@ u32 halbb_c2h_fw_trig_tx_rpt(struct bb_info *bb, u16 len, u8 *c2h)
 	return val;
 }*/
 
-u32 halbb_c2h_fw_h2c_test(struct bb_info *bb, u16 len, u8 *c2h)
+static u32 halbb_c2h_fw_h2c_test(struct bb_info *bb, u16 len, u8 *c2h)
 {
 	u16 i;
 	u32 val = (u32)false;
@@ -456,7 +456,7 @@ u32 halbb_c2h_fw_h2c_test(struct bb_info *bb, u16 len, u8 *c2h)
 	return val;
 }
 
-u32 halbb_c2h_ra_parsing(struct bb_info *bb, u8 cmdid, u16 len, u8 *c2h)
+static u32 halbb_c2h_ra_parsing(struct bb_info *bb, u8 cmdid, u16 len, u8 *c2h)
 {
 	u32 val = 0;
 	u16 i;
@@ -483,7 +483,7 @@ u32 halbb_c2h_ra_parsing(struct bb_info *bb, u8 cmdid, u16 len, u8 *c2h)
 	return val;
 }
 
-u32 halbb_c2h_dm_parsing(struct bb_info *bb, u8 cmdid, u16 len, u8 *c2h)
+static u32 halbb_c2h_dm_parsing(struct bb_info *bb, u8 cmdid, u16 len, u8 *c2h)
 {
 	u32 val = 0;
 	u16 i;
@@ -515,7 +515,7 @@ u32 halbb_c2h_dm_parsing(struct bb_info *bb, u8 cmdid, u16 len, u8 *c2h)
 	return val;
 }
 
-u32 halbb_c2h_rua_parsing(struct bb_info *bb, u8 cmdid, u16 len, u8 *c2h)
+static u32 halbb_c2h_rua_parsing(struct bb_info *bb, u8 cmdid, u16 len, u8 *c2h)
 {
 	u32 val = 0;
 	u8 *printaddr = c2h;
@@ -559,7 +559,7 @@ u32 rtw_halbb_c2h_parsing(struct bb_info *bb, u8 classid, u8 cmdid, u16 len, u8 
 	return val;
 }
 
-enum rf_path halbb_config_path(struct bb_info *bb, enum phl_band_idx band_idx,
+static enum rf_path halbb_config_path(struct bb_info *bb, enum phl_band_idx band_idx,
 			u8 rf_num)
 {
 	enum rf_path path_set = RF_PATH_A;
@@ -725,7 +725,7 @@ u8 halbb_set_cmac_databw_er(struct bb_info *bb, struct rtw_phl_stainfo_t *phl_st
 	return 0;
 }
 
-bool halbb_set_pwr_by_rate_tbl(struct bb_info *bb, struct rtw_phl_stainfo_t *phl_sta_i)
+static bool halbb_set_pwr_by_rate_tbl(struct bb_info *bb, struct rtw_phl_stainfo_t *phl_sta_i)
 {
 	struct halbb_pwr_by_rate_tbl pwr_t = {{0}};
 	u8 i = 0;

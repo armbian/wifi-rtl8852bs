@@ -519,7 +519,7 @@ void halbb_sta_info_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 	}
 }
 
-void halbb_traffic_load_decision(struct bb_info *bb)
+static void halbb_traffic_load_decision(struct bb_info *bb)
 {
 	struct rtw_stats *stat = &bb->phl_com->phl_stats;
 	struct bb_link_info *link = &bb->bb_link_i;
@@ -647,7 +647,7 @@ u8 halbb_get_rssi_min(struct bb_info *bb)
 	return rssi_min;
 }
 
-void halbb_cmn_info_self_update(struct bb_info *bb)
+static void halbb_cmn_info_self_update(struct bb_info *bb)
 {
 	struct rtw_hal_com_t *hal = bb->hal_com;
 	struct bb_link_info *link = &bb->bb_link_i;
@@ -872,7 +872,7 @@ void halbb_watchdog_reset(struct bb_info *bb)
 
 }
 
-void halbb_update_hal_info(struct bb_info *bb)
+static void halbb_update_hal_info(struct bb_info *bb)
 {
 	struct rtw_hal_com_t *hal = bb->hal_com;
 
@@ -884,7 +884,7 @@ void halbb_store_data(struct bb_info *bb)
 	halbb_cmn_info_rpt_store_data(bb);
 }
 
-void halbb_reset(struct bb_info *bb)
+static void halbb_reset(struct bb_info *bb)
 {
 	if (bb->bb_cmn_hooker->bb_cmn_dbg_i.cmn_log_2_cnsl_en)
 		return;
@@ -899,7 +899,7 @@ void halbb_reset(struct bb_info *bb)
 	halbb_cmn_info_rpt_reset(bb);
 }
 
-void halbb_watchdog_normal(struct bb_info *bb, enum phl_phy_idx phy_idx)
+static void halbb_watchdog_normal(struct bb_info *bb, enum phl_phy_idx phy_idx)
 {
 	halbb_cmn_info_self_update(bb);
 	halbb_ic_hw_setting(bb);
@@ -957,7 +957,7 @@ void halbb_watchdog_normal(struct bb_info *bb, enum phl_phy_idx phy_idx)
 	halbb_reset(bb);
 }
 
-void halbb_watchdog_low_io(struct bb_info *bb, enum phl_phy_idx phy_idx)
+static void halbb_watchdog_low_io(struct bb_info *bb, enum phl_phy_idx phy_idx)
 {
 	halbb_cmn_info_self_update(bb);
 	halbb_ic_hw_setting_low_io(bb);
@@ -981,7 +981,7 @@ void halbb_watchdog_low_io(struct bb_info *bb, enum phl_phy_idx phy_idx)
 	halbb_reset(bb);
 }
 
-void halbb_watchdog_non_io(struct bb_info *bb, enum phl_phy_idx phy_idx)
+static void halbb_watchdog_non_io(struct bb_info *bb, enum phl_phy_idx phy_idx)
 {
 	halbb_cmn_info_self_update(bb);
 	halbb_ic_hw_setting_non_io(bb);
@@ -990,7 +990,7 @@ void halbb_watchdog_non_io(struct bb_info *bb, enum phl_phy_idx phy_idx)
 	halbb_reset(bb);
 }
 
-void halbb_watchdog_mp(struct bb_info *bb, enum phl_phy_idx phy_idx)
+static void halbb_watchdog_mp(struct bb_info *bb, enum phl_phy_idx phy_idx)
 {
 	halbb_cmn_info_self_update(bb);
 	halbb_basic_dbg_message(bb);
@@ -999,7 +999,8 @@ void halbb_watchdog_mp(struct bb_info *bb, enum phl_phy_idx phy_idx)
 	halbb_reset(bb);
 }
 
-void halbb_watchdog_dbcc(struct bb_info *bb)
+#ifdef HALBB_DBCC_SUPPORT
+static void halbb_watchdog_dbcc(struct bb_info *bb)
 {
 #ifdef HALBB_DBCC_SUPPORT
 	BB_DBG(bb, DBG_COMMON_FLOW, "[%s] phy_idx=%d\n", __func__,
@@ -1032,8 +1033,9 @@ void halbb_watchdog_dbcc(struct bb_info *bb)
 	halbb_reset(bb);
 #endif
 }
+#endif /* HALBB_DBCC_SUPPORT */
 
-void halbb_watchdog_per_phy(struct bb_info *bb_0, enum bb_watchdog_mode_t mode, enum phl_phy_idx phy_idx)
+static void halbb_watchdog_per_phy(struct bb_info *bb_0, enum bb_watchdog_mode_t mode, enum phl_phy_idx phy_idx)
 {
 	struct bb_info *bb = bb_0;
 	bool is_mp_mode = false;
@@ -1106,7 +1108,7 @@ void halbb_watchdog(struct bb_info *bb_0, enum bb_watchdog_mode_t mode, enum phl
 #endif
 }
 
-void halbb_new_entry_connect(struct bb_info *bb)
+static void halbb_new_entry_connect(struct bb_info *bb)
 {
 	struct bb_dig_info *dig = &bb->bb_dig_i;
 	u8 igi_new;

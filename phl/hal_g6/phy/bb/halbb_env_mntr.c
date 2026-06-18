@@ -26,7 +26,7 @@
 
 #ifdef HALBB_ENV_MNTR_SUPPORT
 
-u16 halbb_ccx_get_ratio(struct bb_info *bb, u16 rpt, u16 score)
+static u16 halbb_ccx_get_ratio(struct bb_info *bb, u16 rpt, u16 score)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	u32 numer = 0;
@@ -44,7 +44,7 @@ u16 halbb_ccx_get_ratio(struct bb_info *bb, u16 rpt, u16 score)
 	return ret;
 }
 
-void halbb_ccx_ms_2_period_unit(struct bb_info *bb, u16 time_ms, u32 *period,
+static void halbb_ccx_ms_2_period_unit(struct bb_info *bb, u16 time_ms, u32 *period,
 				u32 *unit_idx)
 {
 	if (time_ms >= 2097)
@@ -75,7 +75,7 @@ u32 halbb_ccx_idx_cnt_2_us(struct bb_info *bb, u16 idx_cnt)
 	return time_us;
 }
 
-u16 halbb_ccx_us_2_idx_cnt(struct bb_info *bb, u32 time_us)
+static u16 halbb_ccx_us_2_idx_cnt(struct bb_info *bb, u32 time_us)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	u16 idx_cnt = 0;
@@ -85,7 +85,7 @@ u16 halbb_ccx_us_2_idx_cnt(struct bb_info *bb, u32 time_us)
 	return idx_cnt;
 }
 
-void halbb_ccx_top_setting_init(struct bb_info *bb)
+static void halbb_ccx_top_setting_init(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_env_mntr_cr_info *cr = &env->bb_env_mntr_cr_i;
@@ -109,7 +109,7 @@ void halbb_ccx_top_setting_init(struct bb_info *bb)
 			       4); /*dccl output, full bandwidth*/
 }
 
-void halbb_ccx_racing_release(struct bb_info *bb, u8 func_sel)
+static void halbb_ccx_racing_release(struct bb_info *bb, u8 func_sel)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 
@@ -126,7 +126,7 @@ void halbb_ccx_racing_release(struct bb_info *bb, u8 func_sel)
 	env->edcca_clm_app = EDCCA_CLM_INIT;
 }
 
-u8 halbb_ccx_racing_ctrl(struct bb_info *bb, enum halbb_racing_lv rac_lv)
+static u8 halbb_ccx_racing_ctrl(struct bb_info *bb, enum halbb_racing_lv rac_lv)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	u8 set_result = HALBB_SET_SUCCESS;
@@ -154,7 +154,7 @@ u8 halbb_ccx_racing_ctrl(struct bb_info *bb, enum halbb_racing_lv rac_lv)
 	return set_result;
 }
 
-void halbb_ccx_trigger(struct bb_info *bb, u8 func_sel)
+static void halbb_ccx_trigger(struct bb_info *bb, u8 func_sel)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_env_mntr_cr_info *cr = &env->bb_env_mntr_cr_i;
@@ -180,7 +180,7 @@ void halbb_ccx_trigger(struct bb_info *bb, u8 func_sel)
 	env->ccx_ongoing = true;
 }
 
-void halbb_ccx_edcca_opt_set(struct bb_info *bb, enum ccx_edcca_opt_sc_idx sc)
+static void halbb_ccx_edcca_opt_set(struct bb_info *bb, enum ccx_edcca_opt_sc_idx sc)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_env_mntr_cr_info *cr = &env->bb_env_mntr_cr_i;
@@ -414,7 +414,7 @@ void halbb_ccx_edcca_opt_set(struct bb_info *bb, enum ccx_edcca_opt_sc_idx sc)
 	}
 }
 
-void halbb_ccx_ext_loss_update(struct bb_info *bb)
+static void halbb_ccx_ext_loss_update(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_ch_info *ch = &bb->bb_ch_i;
@@ -468,7 +468,7 @@ void halbb_ccx_ext_loss_update(struct bb_info *bb)
 
 #ifdef NHM_SUPPORT
 
-void halbb_nhm_cal_wgt(struct bb_info *bb)
+static void halbb_nhm_cal_wgt(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	u8 i = 0;
@@ -499,7 +499,7 @@ void halbb_nhm_cal_wgt(struct bb_info *bb)
 	       env->nhm_wgt[2], env->nhm_wgt[1], env->nhm_wgt[0]);
 }
 
-u8 halbb_nhm_cal_wgt_avg(struct bb_info *bb, u8 start_i, u8 end_i, u16 n_sum,
+static u8 halbb_nhm_cal_wgt_avg(struct bb_info *bb, u8 start_i, u8 end_i, u16 n_sum,
 			 u8 frac_bit_num)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
@@ -536,7 +536,7 @@ u8 halbb_nhm_cal_wgt_avg(struct bb_info *bb, u8 start_i, u8 end_i, u16 n_sum,
 	return wgt_avg;
 }
 
-u16 halbb_nhm_exclu_noise_figure(struct bb_info *bb)
+static u16 halbb_nhm_exclu_noise_figure(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct rtw_hw_band *hw_band = &bb->hal_com->band[bb->bb_phy_idx];
@@ -592,7 +592,7 @@ u16 halbb_nhm_exclu_noise_figure(struct bb_info *bb)
 	return non_noise_f;
 }
 
-void halbb_nhm_get_utility(struct bb_info *bb)
+static void halbb_nhm_get_utility(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_edcca_info *bb_edcca = &bb->bb_edcca_i;
@@ -663,7 +663,7 @@ void halbb_nhm_get_utility(struct bb_info *bb)
 	       5 * (env->nhm_pwr_0p5 & 0x1));
 }
 
-bool halbb_nhm_get_fw_result_h2c(struct bb_info *bb)
+static bool halbb_nhm_get_fw_result_h2c(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	u8 env_h2c_content[4];
@@ -694,7 +694,7 @@ bool halbb_nhm_get_fw_result_h2c(struct bb_info *bb)
 	return true;
 }
 
-void halbb_nhm_get_fw_result_c2h(struct bb_info *bb_0, u8 *c2h)
+static void halbb_nhm_get_fw_result_c2h(struct bb_info *bb_0, u8 *c2h)
 {
 	struct bb_info *bb = bb_0;
 	struct bb_env_mntr_info *env = NULL;
@@ -752,7 +752,7 @@ void halbb_nhm_get_fw_result_c2h(struct bb_info *bb_0, u8 *c2h)
 	       5 * (env->nhm_pwr_0p5 & 0x1));
 }
 
-bool halbb_nhm_get_result(struct bb_info *bb)
+static bool halbb_nhm_get_result(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_env_mntr_cr_info *cr = &env->bb_env_mntr_cr_i;
@@ -826,7 +826,7 @@ bool halbb_nhm_get_result(struct bb_info *bb)
 	return true;
 }
 
-void halbb_nhm_set_th_reg(struct bb_info *bb)
+static void halbb_nhm_set_th_reg(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_env_mntr_cr_info *cr = &env->bb_env_mntr_cr_i;
@@ -887,7 +887,7 @@ void halbb_nhm_set_th_reg(struct bb_info *bb)
 	       env->nhm_th[2], env->nhm_th[1], env->nhm_th[0]);
 }
 
-bool
+static bool
 halbb_nhm_th_update_chk(struct bb_info *bb, struct ccx_para_info *para,
 			u8 *nhm_th)
 {
@@ -959,7 +959,7 @@ CHK_NHM_UPDATE_FINISHED:
 	return is_update;
 }
 
-bool halbb_nhm_set(struct bb_info *bb, struct ccx_para_info *para)
+static bool halbb_nhm_set(struct bb_info *bb, struct ccx_para_info *para)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_link_info *link = &bb->bb_link_i;
@@ -1093,7 +1093,7 @@ bool halbb_nhm_set(struct bb_info *bb, struct ccx_para_info *para)
 	return HALBB_SET_SUCCESS;
 }
 
-void halbb_nhm_init(struct bb_info *bb)
+static void halbb_nhm_init(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_env_mntr_cr_info *cr = &env->bb_env_mntr_cr_i;
@@ -1315,14 +1315,14 @@ void halbb_nhm_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 #endif /*#ifdef NHM_SUPPORT*/
 #ifdef CLM_SUPPORT
 
-void halbb_clm_get_utility(struct bb_info *bb)
+static void halbb_clm_get_utility(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 
 	env->clm_ratio = (u8)halbb_ccx_get_ratio(bb, env->clm_result, 100);
 }
 
-bool
+static bool
 halbb_clm_get_result(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
@@ -1343,7 +1343,7 @@ halbb_clm_get_result(struct bb_info *bb)
 	return true;
 }
 
-bool halbb_clm_set(struct bb_info *bb, struct ccx_para_info *para)
+static bool halbb_clm_set(struct bb_info *bb, struct ccx_para_info *para)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_env_mntr_cr_info *cr = &env->bb_env_mntr_cr_i;
@@ -1449,7 +1449,7 @@ bool halbb_clm_set(struct bb_info *bb, struct ccx_para_info *para)
 	return HALBB_SET_SUCCESS;
 }
 
-void halbb_clm_init(struct bb_info *bb)
+static void halbb_clm_init(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_env_mntr_cr_info *cr = &env->bb_env_mntr_cr_i;
@@ -1472,7 +1472,7 @@ void halbb_clm_init(struct bb_info *bb)
 	halbb_set_reg_curr_phy(bb, cr->clm_en, cr->clm_en_m, true);
 }
 
-void halbb_clm_set_dbg_sel(struct bb_info *bb, u8 dbg_sel)
+static void halbb_clm_set_dbg_sel(struct bb_info *bb, u8 dbg_sel)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_env_mntr_cr_info *cr = &env->bb_env_mntr_cr_i;
@@ -1615,7 +1615,7 @@ void halbb_clm_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 
 #ifdef IFS_CLM_SUPPORT
 
-void halbb_ifs_clm_get_utility(struct bb_info *bb)
+static void halbb_ifs_clm_get_utility(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	u8 i = 0;
@@ -1680,7 +1680,7 @@ void halbb_ifs_clm_get_utility(struct bb_info *bb)
 		       env->ifs_clm_cca_avg[i]);
 }
 
-bool
+static bool
 halbb_ifs_clm_get_result(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
@@ -1795,7 +1795,7 @@ halbb_ifs_clm_get_result(struct bb_info *bb)
 	return true;
 }
 
-void halbb_ifs_clm_set_th_reg(struct bb_info *bb)
+static void halbb_ifs_clm_set_th_reg(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_env_mntr_cr_info *cr = &env->bb_env_mntr_cr_i;
@@ -1841,7 +1841,7 @@ void halbb_ifs_clm_set_th_reg(struct bb_info *bb)
 		       i + 1, env->ifs_clm_th_l[i], env->ifs_clm_th_h[i]);
 }
 
-bool halbb_ifs_clm_th_update_chk(struct bb_info *bb, struct ccx_para_info *para,
+static bool halbb_ifs_clm_th_update_chk(struct bb_info *bb, struct ccx_para_info *para,
 				 u16 *ifs_th_l, u16 *ifs_th_h)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
@@ -1903,7 +1903,7 @@ CHK_IFS_UPDATE_FINISHED:
 	return is_update;
 }
 
-bool halbb_ifs_clm_set(struct bb_info *bb, struct ccx_para_info *para)
+static bool halbb_ifs_clm_set(struct bb_info *bb, struct ccx_para_info *para)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_env_mntr_cr_info *cr = &env->bb_env_mntr_cr_i;
@@ -1974,7 +1974,7 @@ bool halbb_ifs_clm_set(struct bb_info *bb, struct ccx_para_info *para)
 	return HALBB_SET_SUCCESS;
 }
 
-void halbb_ifs_clm_init(struct bb_info *bb)
+static void halbb_ifs_clm_init(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_env_mntr_cr_info *cr = &env->bb_env_mntr_cr_i;
@@ -2157,7 +2157,7 @@ void halbb_ifs_clm_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 #endif
 
 #ifdef FAHM_SUPPORT
-u16 halbb_fahm_get_ratio(struct bb_info *bb, u16 rpt, u16 score)
+static u16 halbb_fahm_get_ratio(struct bb_info *bb, u16 rpt, u16 score)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	u32 numer = 0;
@@ -2175,7 +2175,7 @@ u16 halbb_fahm_get_ratio(struct bb_info *bb, u16 rpt, u16 score)
 	return ret;
 }
 
-void halbb_fahm_racing_release(struct bb_info *bb)
+static void halbb_fahm_racing_release(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 
@@ -2187,7 +2187,7 @@ void halbb_fahm_racing_release(struct bb_info *bb)
 	env->fahm_app = FAHM_INIT;
 }
 
-u8 halbb_fahm_racing_ctrl(struct bb_info *bb, enum halbb_racing_lv rac_lv)
+static u8 halbb_fahm_racing_ctrl(struct bb_info *bb, enum halbb_racing_lv rac_lv)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	u8 set_result = HALBB_SET_SUCCESS;
@@ -2214,7 +2214,7 @@ u8 halbb_fahm_racing_ctrl(struct bb_info *bb, enum halbb_racing_lv rac_lv)
 	return set_result;
 }
 
-void halbb_fahm_hw_trigger(struct bb_info *bb)
+static void halbb_fahm_hw_trigger(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_env_mntr_cr_info *cr = &env->bb_env_mntr_cr_i;
@@ -2229,7 +2229,7 @@ void halbb_fahm_hw_trigger(struct bb_info *bb)
 	env->fahm_ongoing = true;
 }
 
-void halbb_fahm_cal_wgt(struct bb_info *bb)
+static void halbb_fahm_cal_wgt(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	u8 i = 0;
@@ -2260,7 +2260,7 @@ void halbb_fahm_cal_wgt(struct bb_info *bb)
 	       env->fahm_wgt[2], env->fahm_wgt[1], env->fahm_wgt[0]);
 }
 
-u8 halbb_fahm_cal_wgt_avg(struct bb_info *bb, u8 start_i, u8 end_i, u16 n_sum,
+static u8 halbb_fahm_cal_wgt_avg(struct bb_info *bb, u8 start_i, u8 end_i, u16 n_sum,
 		        u8 frac_bit_num)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
@@ -2298,7 +2298,7 @@ u8 halbb_fahm_cal_wgt_avg(struct bb_info *bb, u8 start_i, u8 end_i, u16 n_sum,
 }
 
 
-void halbb_fahm_get_utility(struct bb_info *bb)
+static void halbb_fahm_get_utility(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	u8 i = 0;
@@ -2355,7 +2355,7 @@ void halbb_fahm_get_utility(struct bb_info *bb)
 	       env->fahm_denom_ratio, env->fahm_denom_permil);
 }
 
-bool halbb_fahm_get_result(struct bb_info *bb)
+static bool halbb_fahm_get_result(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_env_mntr_cr_info *cr = &env->bb_env_mntr_cr_i;
@@ -2420,7 +2420,7 @@ bool halbb_fahm_get_result(struct bb_info *bb)
 	return true;
 }
 
-void halbb_fahm_set_th_reg(struct bb_info *bb)
+static void halbb_fahm_set_th_reg(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_env_mntr_cr_info *cr = &env->bb_env_mntr_cr_i;
@@ -2492,7 +2492,7 @@ void halbb_fahm_set_th_reg(struct bb_info *bb)
 	       env->fahm_th[1], env->fahm_th[0]);
 }
 
-bool
+static bool
 halbb_fahm_th_update_chk(struct bb_info *bb, struct fahm_para_info *para,
 			 u8 *fahm_th)
 {
@@ -2565,7 +2565,7 @@ CHK_FAHM_UPDATE_FINISHED:
 	return is_update;
 }
 
-bool halbb_fahm_set(struct bb_info *bb, struct fahm_para_info *para)
+static bool halbb_fahm_set(struct bb_info *bb, struct fahm_para_info *para)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_link_info *link = &bb->bb_link_i;
@@ -2666,7 +2666,7 @@ bool halbb_fahm_set(struct bb_info *bb, struct fahm_para_info *para)
 	return HALBB_SET_SUCCESS;
 }
 
-void halbb_fahm_get_bg_result(struct bb_info *bb, struct fahm_report *bg_rpt)
+static void halbb_fahm_get_bg_result(struct bb_info *bb, struct fahm_report *bg_rpt)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 
@@ -2674,7 +2674,7 @@ void halbb_fahm_get_bg_result(struct bb_info *bb, struct fahm_report *bg_rpt)
 		      sizeof(struct fahm_report));
 }
 
-void halbb_fahm_get_bg_setting(struct bb_info *bb,
+static void halbb_fahm_get_bg_setting(struct bb_info *bb,
 			       struct fahm_para_info *bg_para)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
@@ -2758,7 +2758,7 @@ bool halbb_fahm_result(struct bb_info *bb, struct fahm_report *rpt)
 	return rpt->fahm_rpt_result;
 }
 
-void halbb_fahm_init(struct bb_info *bb)
+static void halbb_fahm_init(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_env_mntr_cr_info *cr = &env->bb_env_mntr_cr_i;
@@ -2943,7 +2943,7 @@ void halbb_fahm_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 #endif
 #ifdef EDCCA_CLM_SUPPORT
 
-void halbb_edcca_clm_get_utility(struct bb_info *bb)
+static void halbb_edcca_clm_get_utility(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 
@@ -2952,7 +2952,7 @@ void halbb_edcca_clm_get_utility(struct bb_info *bb)
 						       100);
 }
 
-bool
+static bool
 halbb_edcca_clm_get_result(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
@@ -2976,7 +2976,7 @@ halbb_edcca_clm_get_result(struct bb_info *bb)
 	return true;
 }
 
-bool halbb_edcca_clm_set(struct bb_info *bb, struct ccx_para_info *para)
+static bool halbb_edcca_clm_set(struct bb_info *bb, struct ccx_para_info *para)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_env_mntr_cr_info *cr = &env->bb_env_mntr_cr_i;
@@ -3028,7 +3028,7 @@ bool halbb_edcca_clm_set(struct bb_info *bb, struct ccx_para_info *para)
 	return HALBB_SET_SUCCESS;
 }
 
-void halbb_edcca_clm_init(struct bb_info *bb)
+static void halbb_edcca_clm_init(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	struct bb_env_mntr_cr_info *cr = &env->bb_env_mntr_cr_i;
@@ -3135,7 +3135,7 @@ u32 halbb_env_mntr_get_fw_result_c2h(struct bb_info *bb, u8 *c2h)
 	return true;
 }
 
-bool
+static bool
 halbb_env_mntr_init_app_chk(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
@@ -3150,7 +3150,7 @@ halbb_env_mntr_init_app_chk(struct bb_info *bb)
 	return chk_result;
 }
 
-bool
+static bool
 halbb_env_mntr_bg_app_chk(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
@@ -3167,7 +3167,7 @@ halbb_env_mntr_bg_app_chk(struct bb_info *bb)
 	return chk_result;
 }
 
-void halbb_env_mntr_cmn_log(struct bb_info *bb)
+static void halbb_env_mntr_cmn_log(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 	u8 i = 0;
@@ -3666,7 +3666,7 @@ u8 halbb_env_mntr_result(struct bb_info *bb_0, struct env_mntr_rpt *rpt,
 	return rpt->ccx_rpt_result;
 }
 
-void halbb_env_mntr_fw_ctrl(struct bb_info *bb, u8 func_sel, u8 pause_type)
+static void halbb_env_mntr_fw_ctrl(struct bb_info *bb, u8 func_sel, u8 pause_type)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
 
@@ -3691,7 +3691,7 @@ void halbb_env_mntr_fw_ctrl(struct bb_info *bb, u8 func_sel, u8 pause_type)
 }
 
 /*Environment Monitor*/
-bool
+static bool
 halbb_env_mntr_watchdog_chk(struct bb_info *bb, bool is_chk_fahm)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
@@ -3867,7 +3867,7 @@ void halbb_env_mntr_init(struct bb_info *bb)
 	env->idle_pwr_physts= 0;
 }
 
-void halbb_env_mntr_dbg_show_rpt(struct bb_info *bb, u32 *_used, char *output,
+static void halbb_env_mntr_dbg_show_rpt(struct bb_info *bb, u32 *_used, char *output,
 				 u32 *_out_len, struct env_mntr_rpt *rpt,
 				 struct fahm_report *fahm_rpt, bool is_show_rpt,
 				 bool is_show_nhm_rpt, bool is_show_fahm_rpt,
@@ -4088,7 +4088,7 @@ void halbb_env_mntr_dbg_show_rpt(struct bb_info *bb, u32 *_used, char *output,
 	}
 }
 
-void halbb_env_mntr_dbg_bg_result(struct bb_info *bb, u32 *_used, char *output,
+static void halbb_env_mntr_dbg_bg_result(struct bb_info *bb, u32 *_used, char *output,
 				  u32 *_out_len)
 {
 	struct env_mntr_rpt rpt = {0};
@@ -4110,7 +4110,7 @@ void halbb_env_mntr_dbg_bg_result(struct bb_info *bb, u32 *_used, char *output,
 				    is_show_fahm_rpt, is_show_extloss);
 }
 
-void halbb_env_mntr_dbg_bg_para(struct bb_info *bb, u32 *_used, char *output,
+static void halbb_env_mntr_dbg_bg_para(struct bb_info *bb, u32 *_used, char *output,
 				u32 *_out_len)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
@@ -4166,7 +4166,7 @@ void halbb_env_mntr_dbg_bg_para(struct bb_info *bb, u32 *_used, char *output,
 		    env->fahm_numer_opt, env->fahm_denom_opt);
 }
 
-void halbb_env_mntr_dbg_trigger(struct bb_info *bb, u32 *_used, char *output,
+static void halbb_env_mntr_dbg_trigger(struct bb_info *bb, u32 *_used, char *output,
 				  u32 *_out_len, bool is_adv_trig,
 				  u16 mntr_time)
 {
@@ -4230,7 +4230,7 @@ void halbb_env_mntr_dbg_trigger(struct bb_info *bb, u32 *_used, char *output,
 		    fahm_set_result, fahm_trig_rpt.fahm_rpt_stamp);
 }
 
-void halbb_env_mntr_dbg_get_result(struct bb_info *bb, u32 *_used, char *output,
+static void halbb_env_mntr_dbg_get_result(struct bb_info *bb, u32 *_used, char *output,
 				  u32 *_out_len)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;

@@ -62,7 +62,7 @@ void halbb_print_hist_2_buf(struct bb_info *bb, u16 *val, u16 len, char *buf,
 	}
 }
 
-void halbb_rx_pop_hist(struct bb_info *bb)
+static void halbb_rx_pop_hist(struct bb_info *bb)
 {
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
 	u8 pop_idx = 0;
@@ -82,7 +82,7 @@ void halbb_rx_pop_hist(struct bb_info *bb)
 		cmn_rpt->bb_physts_pop_i.pop_hist_ofdm[pop_idx]++;
 }
 
-void halbb_rx_pkt_cnt_rpt_beacon(struct bb_info *bb, struct physts_rxd *desc)
+static void halbb_rx_pkt_cnt_rpt_beacon(struct bb_info *bb, struct physts_rxd *desc)
 {
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
 
@@ -174,7 +174,7 @@ u16 halbb_get_plurality_rx_rate_mu(struct bb_info *bb)
 	return rx_rate_plurality;
 }
 
-void halbb_mu_rate_idx_generate(struct bb_info *bb, struct physts_rxd *desc, struct bb_rate_info *ra_i)
+static void halbb_mu_rate_idx_generate(struct bb_info *bb, struct physts_rxd *desc, struct bb_rate_info *ra_i)
 {
 	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	struct bb_physts_rslt_13_info *psts_13 = &physts->bb_physts_rslt_13_i;
@@ -439,7 +439,7 @@ void halbb_show_rssi_and_rate_distribution_mu(struct bb_info *bb)
 	}
 }
 
-void halbb_rx_pkt_mu_cnt_rpt(struct bb_info *bb, struct physts_rxd *desc, enum channel_width rx_bw)
+static void halbb_rx_pkt_mu_cnt_rpt(struct bb_info *bb, struct physts_rxd *desc, enum channel_width rx_bw)
 {
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
 	struct bb_pkt_cnt_mu_info *pkt_cnt = &cmn_rpt->bb_pkt_cnt_mu_i;
@@ -500,7 +500,7 @@ void halbb_rx_pkt_mu_cnt_rpt(struct bb_info *bb, struct physts_rxd *desc, enum c
 	}
 }
 
-void halbb_rx_pkt_mu_rssi_statistic(struct bb_info *bb)
+static void halbb_rx_pkt_mu_rssi_statistic(struct bb_info *bb)
 {
 	struct bb_physts_rslt_hdr_info	*psts_h = &bb->bb_physts_i.bb_physts_rslt_hdr_i;
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
@@ -533,7 +533,7 @@ void halbb_rx_pkt_mu_rssi_statistic(struct bb_info *bb)
 #define CMN_RPT_SU
 #ifdef CMN_RPT_SU
 
-void halbb_basic_dbg_07_hist_su_per_path(struct bb_info *bb)
+static void halbb_basic_dbg_07_hist_su_per_path(struct bb_info *bb)
 {
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
 	struct bb_pkt_cnt_su_info *pkt_cnt = &cmn_rpt->bb_pkt_cnt_su_i;
@@ -1056,7 +1056,7 @@ void halbb_show_rssi_and_rate_distribution_su(struct bb_info *bb)
 	}
 }
 
-void halbb_rx_pkt_su_non_data_cnt_rpt(struct bb_info *bb, struct physts_rxd *desc, enum channel_width rx_bw)
+static void halbb_rx_pkt_su_non_data_cnt_rpt(struct bb_info *bb, struct physts_rxd *desc, enum channel_width rx_bw)
 {
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
 	struct bb_pkt_cnt_su_info *pkt_cnt = &cmn_rpt->bb_pkt_cnt_su_i;
@@ -1070,7 +1070,7 @@ void halbb_rx_pkt_su_non_data_cnt_rpt(struct bb_info *bb, struct physts_rxd *des
 	}
 }
 
-void halbb_rx_pkt_su_cnt_rpt(struct bb_info *bb, struct physts_rxd *desc, enum channel_width rx_bw)
+static void halbb_rx_pkt_su_cnt_rpt(struct bb_info *bb, struct physts_rxd *desc, enum channel_width rx_bw)
 {
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
 	struct bb_pkt_cnt_su_info *pkt_cnt = &cmn_rpt->bb_pkt_cnt_su_i;
@@ -1175,7 +1175,7 @@ void halbb_rx_pkt_su_cnt_rpt(struct bb_info *bb, struct physts_rxd *desc, enum c
 	}
 }
 
-void halbb_rx_pkt_su_phy_hist_per_path(struct bb_info *bb, u32 physts_bitmap)
+static void halbb_rx_pkt_su_phy_hist_per_path(struct bb_info *bb, u32 physts_bitmap)
 {
 	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	struct bb_physts_rslt_4_to_7_info *psts_r = NULL;
@@ -1207,7 +1207,7 @@ void halbb_rx_pkt_su_phy_hist_per_path(struct bb_info *bb, u32 physts_bitmap)
 	}
 }
 
-void halbb_rx_pkt_su_phy_hist(struct bb_info *bb)
+static void halbb_rx_pkt_su_phy_hist(struct bb_info *bb)
 {
 	struct bb_physts_rslt_1_info	*psts_1 = &bb->bb_physts_i.bb_physts_rslt_1_i;
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
@@ -1272,7 +1272,7 @@ void halbb_rx_pkt_su_phy_hist(struct bb_info *bb)
 	//	acc->cfo_avg_acc, acc->evm_max_acc, acc->evm_min_acc, acc->cn_avg_acc);
 }
 
-void halbb_rx_pkt_su_rssi_statistic(struct bb_info *bb)
+static void halbb_rx_pkt_su_rssi_statistic(struct bb_info *bb)
 {
 	struct bb_physts_rslt_hdr_info	*psts_h = &bb->bb_physts_i.bb_physts_rslt_hdr_i;
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
@@ -1309,7 +1309,7 @@ void halbb_rx_pkt_su_rssi_statistic(struct bb_info *bb)
 
 //#define ORI_RSSI_FLAG
 
-void halbb_rx_pkt_su_store_in_sta_info(struct bb_info *bb, struct physts_rxd *desc)
+static void halbb_rx_pkt_su_store_in_sta_info(struct bb_info *bb, struct physts_rxd *desc)
 {
 	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	struct bb_physts_rslt_hdr_info	*psts_h = &physts->bb_physts_rslt_hdr_i;
@@ -1539,7 +1539,7 @@ void halbb_cmn_rpt(struct bb_info *bb, struct physts_rxd *desc, u32 physts_bitma
 	}
 }
 
-void halbb_physts_hist_init(struct bb_info *bb)
+static void halbb_physts_hist_init(struct bb_info *bb)
 {
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
 	struct bb_physts_hist_th_info *hist_th = &cmn_rpt->bb_physts_hist_th_i;

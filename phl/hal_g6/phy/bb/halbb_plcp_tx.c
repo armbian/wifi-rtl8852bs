@@ -46,7 +46,7 @@ const u8 ru_alloc_b1_7_tbl[RU_SIZE_NUM][2] = {{0, 37}, //RU26
 					      {2, 0},  //RU996x3
 					      {2, 0}}; //RU996x3_484
 #endif
-u8 halbb_set_crc8(struct bb_info *bb, unsigned char in[], u8 len)
+static u8 halbb_set_crc8(struct bb_info *bb, unsigned char in[], u8 len)
 {
 	u16 i = 0;
 	u8 reg0 = 1;
@@ -77,7 +77,7 @@ u8 halbb_set_crc8(struct bb_info *bb, unsigned char in[], u8 len)
 
 }
 
-void halbb_ic_cfg(struct bb_info *bb, struct halbb_plcp_info *in,
+static void halbb_ic_cfg(struct bb_info *bb, struct halbb_plcp_info *in,
 		  struct bb_plcp_cr_info *cr, enum phl_phy_idx phy_idx)
 {
 	u16 i = 0;
@@ -515,7 +515,7 @@ u8 halbb_eht_sig_gi_ltf_tbl(struct bb_info *bb, u8 gi, u8 ltf)
 	return out;
 }
 #endif
-u32 halbb_cfg_ch20_with_data(struct bb_info *bb, struct halbb_plcp_info *in)
+static u32 halbb_cfg_ch20_with_data(struct bb_info *bb, struct halbb_plcp_info *in)
 {
 	u32 ch20_with_data = 0;
 #if 0 // BE_IC_TYPE
@@ -990,7 +990,7 @@ u32 halbb_ru_size_id_2_ru_alloc(struct bb_info *bb, u8 ru_id, u8 ru_size, u8 pri
 	return ru_alloc;
 }
 #endif
-void halbb_he_sigb(struct bb_info *bb, struct halbb_plcp_info *in,
+static void halbb_he_sigb(struct bb_info *bb, struct halbb_plcp_info *in,
 		   struct plcp_tx_pre_fec_padding_setting_in_t *in_plcp,
 		   enum phl_phy_idx phy_idx)
 {
@@ -1088,7 +1088,7 @@ void halbb_he_sigb(struct bb_info *bb, struct halbb_plcp_info *in,
 	}
 }
 
-bool halbb_ru_info_init(struct bb_info *bb, struct halbb_plcp_info *in,
+static bool halbb_ru_info_init(struct bb_info *bb, struct halbb_plcp_info *in,
 			struct plcp_tx_pre_fec_padding_setting_in_t *in_plcp,
 			struct plcp_tx_pre_fec_padding_setting_out_t *out,
 			enum phl_phy_idx phy_idx)
@@ -1164,7 +1164,7 @@ bool halbb_ru_info_init(struct bb_info *bb, struct halbb_plcp_info *in,
 	return invalid_chk;
 }
 
-void halbb_plcp_gen_init(struct bb_info *bb, struct halbb_plcp_info *in,
+static void halbb_plcp_gen_init(struct bb_info *bb, struct halbb_plcp_info *in,
 			 struct plcp_tx_pre_fec_padding_setting_in_t *in_plcp)
 {
 	u32 i = 0;
@@ -1234,7 +1234,7 @@ void halbb_plcp_gen_init(struct bb_info *bb, struct halbb_plcp_info *in,
 	}
 }
 
-void halbb_plcp_lsig(struct bb_info *bb, struct halbb_plcp_info *in,
+static void halbb_plcp_lsig(struct bb_info *bb, struct halbb_plcp_info *in,
 		     struct plcp_tx_pre_fec_padding_setting_out_t *out_plcp,
 		     enum phl_phy_idx phy_idx)
 {
@@ -1292,7 +1292,7 @@ void halbb_plcp_lsig(struct bb_info *bb, struct halbb_plcp_info *in,
 	halbb_set_reg_cmn(bb, cr->lsig, cr->lsig_m, lsig, phy_idx);
 }
 
-void halbb_plcp_siga(struct bb_info *bb, struct halbb_plcp_info *in,
+static void halbb_plcp_siga(struct bb_info *bb, struct halbb_plcp_info *in,
 		     struct plcp_tx_pre_fec_padding_setting_out_t *out_plcp,
 	     	     enum phl_phy_idx phy_idx)
 {
@@ -1576,7 +1576,7 @@ void halbb_plcp_siga(struct bb_info *bb, struct halbb_plcp_info *in,
 }
 
 
-void halbb_cfg_txinfo(struct bb_info *bb, struct halbb_plcp_info *in,
+static void halbb_cfg_txinfo(struct bb_info *bb, struct halbb_plcp_info *in,
 		      struct plcp_tx_pre_fec_padding_setting_out_t *out_plcp,
 	     	      enum phl_phy_idx phy_idx)
 {
@@ -1663,7 +1663,7 @@ void halbb_cfg_txinfo(struct bb_info *bb, struct halbb_plcp_info *in,
 	}
 }
 
-void halbb_cfg_txctrl(struct bb_info *bb, struct halbb_plcp_info *in,
+static void halbb_cfg_txctrl(struct bb_info *bb, struct halbb_plcp_info *in,
 		      struct plcp_tx_pre_fec_padding_setting_out_t *out_plcp,
 	     	      enum phl_phy_idx phy_idx)//Add random value
 {
@@ -1862,7 +1862,7 @@ void halbb_cfg_txctrl(struct bb_info *bb, struct halbb_plcp_info *in,
 	halbb_set_reg_cmn(bb, cr->n_sym, cr->n_sym_m, out_plcp->n_sym, phy_idx);
 }
 
-void halbb_plcp_delimiter(struct bb_info *bb, struct halbb_plcp_info *in,
+static void halbb_plcp_delimiter(struct bb_info *bb, struct halbb_plcp_info *in,
 			  struct plcp_tx_pre_fec_padding_setting_out_t *out_plcp,
 	     		  enum phl_phy_idx phy_idx) //Add random value
 {
@@ -1937,7 +1937,7 @@ void halbb_plcp_delimiter(struct bb_info *bb, struct halbb_plcp_info *in,
 	}
 }
 
-void halbb_cfg_cck(struct bb_info *bb, struct halbb_plcp_info *in, enum phl_phy_idx phy_idx)
+static void halbb_cfg_cck(struct bb_info *bb, struct halbb_plcp_info *in, enum phl_phy_idx phy_idx)
 {
 	struct bb_plcp_cr_info *cr = &bb->bb_plcp_i.bb_plcp_cr_i;
 
@@ -1979,7 +1979,7 @@ void halbb_cfg_cck(struct bb_info *bb, struct halbb_plcp_info *in, enum phl_phy_
 	halbb_set_reg(bb, cr->b_carrier_suppress_tx, cr->b_carrier_suppress_tx_m, 0);
 }
 
-void halbb_vht_sigb(struct bb_info *bb, struct halbb_plcp_info *in,
+static void halbb_vht_sigb(struct bb_info *bb, struct halbb_plcp_info *in,
 		    struct plcp_tx_pre_fec_padding_setting_out_t *out_plcp,
 	     	    enum phl_phy_idx phy_idx)
 {
@@ -2045,7 +2045,7 @@ void halbb_vht_sigb(struct bb_info *bb, struct halbb_plcp_info *in,
 	halbb_set_reg_cmn(bb, vht_sigb_cr[0], vht_sigb_cr_m[0], vht_sigb, phy_idx);
 }
 
-void halbb_service(struct bb_info *bb, struct halbb_plcp_info *in,
+static void halbb_service(struct bb_info *bb, struct halbb_plcp_info *in,
 	     	   enum phl_phy_idx phy_idx)
 {
 	u8 i = 0;

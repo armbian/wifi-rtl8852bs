@@ -117,7 +117,7 @@ void halbb_dyn_cfo_trk_loop_init(struct bb_info *bb)
 
 #endif
 
-void halbb_digital_cfo_comp(struct bb_info *bb, s32 curr_cfo)
+static void halbb_digital_cfo_comp(struct bb_info *bb, s32 curr_cfo)
 {
 	switch (bb->ic_type) {
 
@@ -168,7 +168,7 @@ void halbb_digital_cfo_comp(struct bb_info *bb, s32 curr_cfo)
 	}
 }
 
-void halbb_digital_cfo_comp_init(struct bb_info *bb)
+static void halbb_digital_cfo_comp_init(struct bb_info *bb)
 {
 	struct bb_cfo_trk_info *cfo_trk = &bb->bb_cfo_trk_i;
 	struct bb_cfo_trk_cr_info *cr = &bb->bb_cfo_trk_i.bb_cfo_trk_cr_i;
@@ -189,7 +189,7 @@ void halbb_digital_cfo_comp_init(struct bb_info *bb)
 	}
 }
 
-void halbb_cfo_trk_reset(struct bb_info *bb)
+static void halbb_cfo_trk_reset(struct bb_info *bb)
 {
 	struct bb_cfo_trk_info *bb_cfo_trk = &bb->bb_cfo_trk_i;
 
@@ -207,7 +207,7 @@ void halbb_cfo_trk_reset(struct bb_info *bb)
 }
 
 #ifdef HALBB_CFO_DAMPING_CHK
-void halbb_cfo_recorder(struct bb_info *bb, u8 step_curr, bool is_positive)
+static void halbb_cfo_recorder(struct bb_info *bb, u8 step_curr, bool is_positive)
 {
 	struct bb_cfo_trk_info *bb_cfo_trk = &bb->bb_cfo_trk_i;
 	struct bb_cfo_rc_info *bb_cfo_rc = &bb_cfo_trk->bb_cfo_rc_i;
@@ -240,7 +240,7 @@ void halbb_cfo_recorder(struct bb_info *bb, u8 step_curr, bool is_positive)
 	       bb_cfo_rc->step_bitmap & BIT0);
 }
 
-void halbb_cfo_damping_chk(struct bb_info *bb)
+static void halbb_cfo_damping_chk(struct bb_info *bb)
 {
 	struct bb_cfo_trk_info *bb_cfo_trk = &bb->bb_cfo_trk_i;
 	struct bb_cfo_rc_info *bb_cfo_rc = &bb_cfo_trk->bb_cfo_rc_i;
@@ -320,7 +320,7 @@ void halbb_cfo_damping_chk(struct bb_info *bb)
 	       bb_cfo_rc->force_damping_step, step_pattern_match);
 }
 
-void halbb_cfo_damping_chk_init(struct bb_info *bb)
+static void halbb_cfo_damping_chk_init(struct bb_info *bb)
 {
 	struct bb_cfo_trk_info *bb_cfo_trk = &bb->bb_cfo_trk_i;
 	struct bb_cfo_rc_info *bb_cfo_rc = &bb_cfo_trk->bb_cfo_rc_i;
@@ -352,7 +352,7 @@ void halbb_cfo_acc_io_en(struct bb_info *bb)
 	halbb_cfg_timers(bb, BB_SET_TIMER, &bb->bb_cfo_trk_i.cfo_timer_i);
 }
 
-void halbb_cfo_acc_callback(void *context)
+static void halbb_cfo_acc_callback(void *context)
 {
 	struct bb_info *bb = (struct bb_info *)context;
 	struct bb_cfo_trk_info *cfo_trk = &bb->bb_cfo_trk_i;
@@ -488,7 +488,7 @@ void halbb_set_crystal_cap(struct bb_info *bb, u8 crystal_cap)
 		bb_cfo_trk->x_cap_ofst = bb_cfo_trk->x_cap_ofst * (-1);
 }
 
-void halbb_crystal_cap_adjust(struct bb_info *bb, s32 curr_cfo)
+static void halbb_crystal_cap_adjust(struct bb_info *bb, s32 curr_cfo)
 {
 	struct bb_cfo_trk_info *bb_cfo_trk = &bb->bb_cfo_trk_i;
 	struct bb_cfo_rc_info *bb_cfo_rc = &bb_cfo_trk->bb_cfo_rc_i;
@@ -567,7 +567,7 @@ void halbb_crystal_cap_adjust(struct bb_info *bb, s32 curr_cfo)
 	halbb_set_crystal_cap(bb, x_cap);
 }
 
-s32 halbb_avg_cfo_calc(struct bb_info *bb)
+static s32 halbb_avg_cfo_calc(struct bb_info *bb)
 {
 	struct bb_cfo_trk_info *bb_cfo_trk = &bb->bb_cfo_trk_i;
 	struct bb_link_info *bb_link = &bb->bb_link_i;
@@ -597,7 +597,7 @@ s32 halbb_avg_cfo_calc(struct bb_info *bb)
 	return cfo_all_avg;
 }
 
-s32 halbb_multi_sta_avg_cfo_calc(struct bb_info *bb)
+static s32 halbb_multi_sta_avg_cfo_calc(struct bb_info *bb)
 {
 	struct bb_cfo_trk_info *bb_cfo_trk = &bb->bb_cfo_trk_i;
 	struct rtw_hal_com_t *hal = bb->hal_com;
@@ -791,7 +791,7 @@ void halbb_set_cfo_pause_val(struct bb_info *bb, u32 *val_buf, u8 val_len)
 	halbb_set_crystal_cap(bb, (u8)(val_buf[0] & 0xff));
 }
 
-void
+static void
 halbb_cfo_counter_rst(struct bb_info *bb)
 {
 	struct bb_cfo_trk_info *bb_cfo_trk = &bb->bb_cfo_trk_i;
@@ -824,7 +824,7 @@ halbb_cfo_counter_rst(struct bb_info *bb)
 	bb_cfo_trk->cfo_pkt_cnt = 0;
 }
 
-bool
+static bool
 halbb_cfo_trk_abort(struct bb_info *bb)
 {
 	struct bb_cfo_trk_info *cfo_trk = &bb->bb_cfo_trk_i;
@@ -915,7 +915,7 @@ void halbb_cfo_ul_ofdma_acc_disable(struct bb_info *bb)
 	bb_cfo_trk->bb_cfo_trk_acc_mode = CFO_ACC_MODE_0;
 }
 
-bool halbb_cfo_acc_mode_en(struct bb_info *bb)
+static bool halbb_cfo_acc_mode_en(struct bb_info *bb)
 {
 	struct bb_cfo_trk_info *cfo_trk = &bb->bb_cfo_trk_i;
 	struct bb_link_info *link = &bb->bb_link_i;

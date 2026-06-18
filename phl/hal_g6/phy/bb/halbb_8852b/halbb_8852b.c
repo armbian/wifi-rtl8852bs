@@ -85,7 +85,7 @@ bool halbb_chk_tx_idle_8852b(struct bb_info *bb, enum phl_phy_idx phy_idx)
 	return idle;
 }
 
-void halbb_stop_pmac_tx_8852b(struct bb_info *bb,
+static void halbb_stop_pmac_tx_8852b(struct bb_info *bb,
 			      struct halbb_pmac_info *tx_info,
 			      enum phl_phy_idx phy_idx)
 {
@@ -107,7 +107,7 @@ void halbb_stop_pmac_tx_8852b(struct bb_info *bb,
 }
 
 
-void halbb_start_pmac_tx_8852b(struct bb_info *bb,
+static void halbb_start_pmac_tx_8852b(struct bb_info *bb,
 			       struct halbb_pmac_info *tx_info,
 			       enum halbb_pmac_mode mode, u32 pkt_cnt,u16 period,
 			       enum phl_phy_idx phy_idx)

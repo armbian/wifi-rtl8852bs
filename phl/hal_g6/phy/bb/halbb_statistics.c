@@ -850,7 +850,7 @@ void halbb_ofdm_cnt_statistics(struct bb_info *bb, enum phl_phy_idx phy_idx)
 
 }
 
-void halbb_cck_tx_cnt_statistics(struct bb_info *bb)
+static void halbb_cck_tx_cnt_statistics(struct bb_info *bb)
 {
 	struct bb_stat_info *stat_t = &bb->bb_stat_i;
 	struct bb_tx_cnt_info *tx = &stat_t->bb_tx_cnt_i;
@@ -864,7 +864,7 @@ void halbb_cck_tx_cnt_statistics(struct bb_info *bb)
 	tx->cck_mac_txen = ret_value;
 }
 
-void halbb_ofdm_tx_cnt_statistics(struct bb_info *bb, enum phl_phy_idx phy_idx)
+static void halbb_ofdm_tx_cnt_statistics(struct bb_info *bb, enum phl_phy_idx phy_idx)
 {
 	struct bb_stat_info *stat_t = &bb->bb_stat_i;
 	struct bb_tx_cnt_info *tx = &stat_t->bb_tx_cnt_i;
@@ -1736,7 +1736,7 @@ void halbb_cr_cfg_stat_init(struct bb_info *bb)
 
 #if DVLP_DBCC
 
-void halbb_pmac_cck_tx_cnt(struct bb_info *bb)
+static void halbb_pmac_cck_tx_cnt(struct bb_info *bb)
 {
 	struct bb_stat_info *stat_t = &bb->bb_stat_i;
 	struct bb_tx_cnt_info *tx = &stat_t->bb_tx_cnt_i;
@@ -1747,7 +1747,7 @@ void halbb_pmac_cck_tx_cnt(struct bb_info *bb)
 	tx->cck_mac_txen = halbb_get_reg(bb, cr->ccktxen, cr->ccktxen_m);
 }
 
-void halbb_pmac_cck_cnt(struct bb_info *bb)
+static void halbb_pmac_cck_cnt(struct bb_info *bb)
 {
 	struct bb_stat_info *stat_t = &bb->bb_stat_i;
 	struct bb_fa_info *fa = &stat_t->bb_fa_i;
@@ -1839,7 +1839,7 @@ void halbb_pmac_cck_cnt(struct bb_info *bb)
 	}
 }
 
-void halbb_pmac_ofdm_tx_cnt(struct bb_info *bb)
+static void halbb_pmac_ofdm_tx_cnt(struct bb_info *bb)
 {
 	struct bb_stat_info *stat_t = &bb->bb_stat_i;
 	struct bb_tx_cnt_info *tx = &stat_t->bb_tx_cnt_i;
@@ -1853,7 +1853,7 @@ void halbb_pmac_ofdm_tx_cnt(struct bb_info *bb)
 	tx->ofdm_mac_txen = (ret_value & cr->ofdmtxen_m) >> 16;
 }
 
-void halbb_pmac_ofdm_cnt(struct bb_info *bb)
+static void halbb_pmac_ofdm_cnt(struct bb_info *bb)
 {
 	struct bb_stat_info *stat_t = &bb->bb_stat_i;
 	struct bb_fa_info *fa = &stat_t->bb_fa_i;
@@ -1991,7 +1991,7 @@ void halbb_pmac_ofdm_cnt(struct bb_info *bb)
 	cca->pop_cnt = ret_value;
 }
 
-void halbb_pmac_print_cnt(struct bb_info *bb, bool cck_en)
+static void halbb_pmac_print_cnt(struct bb_info *bb, bool cck_en)
 {
 	struct bb_stat_info *stat_t = &bb->bb_stat_i;
 	struct bb_fa_info *fa = &stat_t->bb_fa_i;
@@ -2110,7 +2110,7 @@ void halbb_pmac_print_cnt(struct bb_info *bb, bool cck_en)
 	BB_DBG(bb, DBG_FA_CNT, " *[DIG] IGI=%d\n", stat_info->igi_fa_rssi);
 }
 
-void halbb_pmac_print_cnt2(struct bb_info *bb)
+static void halbb_pmac_print_cnt2(struct bb_info *bb)
 {
 	struct bb_stat_info *stat_t = &bb->bb_stat_i;
 	struct bb_crc2_info *crc2 = &stat_t->bb_crc2_i;
@@ -2184,7 +2184,7 @@ void halbb_pmac_print_cnt2(struct bb_info *bb)
 #endif
 }
 
-void halbb_pmac_print_cnt3(struct bb_info *bb)
+static void halbb_pmac_print_cnt3(struct bb_info *bb)
 {
 	struct bb_stat_info *stat_t = &bb->bb_stat_i;
 	struct bb_fa_info *fa = &stat_t->bb_fa_i;
@@ -2277,7 +2277,7 @@ void halbb_pmac_print_cnt3(struct bb_info *bb)
 
 }
 
-void halbb_pmac_cnt_reg_reset(struct bb_info *bb, bool cck_en)
+static void halbb_pmac_cnt_reg_reset(struct bb_info *bb, bool cck_en)
 {
 	struct bb_stat_cr_info *cr = &bb->bb_stat_i.bb_stat_cr_i;
 

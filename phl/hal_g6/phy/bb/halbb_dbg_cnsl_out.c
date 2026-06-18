@@ -27,7 +27,7 @@
 
 #ifdef HALBB_CNSL_CMN_INFO_SUPPORT
 
-void halbb_env_mntr_log_cnsl(struct bb_info *bb, u32 *_used,
+static void halbb_env_mntr_log_cnsl(struct bb_info *bb, u32 *_used,
 			     char *output, u32 *_out_len)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
@@ -180,7 +180,7 @@ void halbb_env_mntr_log_cnsl(struct bb_info *bb, u32 *_used,
 	}
 }
 
-void halbb_edcca_cmn_log_cnsl(struct bb_info *bb, u32 *_used, char *output,
+static void halbb_edcca_cmn_log_cnsl(struct bb_info *bb, u32 *_used, char *output,
 			      u32 *_out_len)
 {
 	struct bb_edcca_info *bb_edcca = &bb->bb_edcca_i;
@@ -212,7 +212,7 @@ void halbb_edcca_cmn_log_cnsl(struct bb_info *bb, u32 *_used, char *output,
 		    obss_th - 128);
 }
 
-void halbb_basic_dbg_msg_pmac_cnsl(struct bb_info *bb, u32 *_used,
+static void halbb_basic_dbg_msg_pmac_cnsl(struct bb_info *bb, u32 *_used,
 				   char *output, u32 *_out_len)
 {
 #ifdef HALBB_STATISTICS_SUPPORT
@@ -269,7 +269,7 @@ void halbb_basic_dbg_msg_pmac_cnsl(struct bb_info *bb, u32 *_used,
 #endif
 }
 
-void halbb_crc32_cnt2_cmn_log_cnsl(struct bb_info *bb, u32 *_used,
+static void halbb_crc32_cnt2_cmn_log_cnsl(struct bb_info *bb, u32 *_used,
 				   char *output, u32 *_out_len)
 {
 	struct bb_stat_info *stat_t = &bb->bb_stat_i;
@@ -301,7 +301,7 @@ void halbb_crc32_cnt2_cmn_log_cnsl(struct bb_info *bb, u32 *_used,
 		    crc2->cnt_vht2_crc32_error, crc2->cnt_he2_crc32_error);
 }
 
-void halbb_crc32_cnt3_cmn_log_cnsl(struct bb_info *bb, u32 *_used,
+static void halbb_crc32_cnt3_cmn_log_cnsl(struct bb_info *bb, u32 *_used,
 				   char *output, u32 *_out_len)
 {
 	struct bb_stat_info *stat_t = &bb->bb_stat_i;
@@ -807,7 +807,7 @@ void halbb_basic_dbg_msg_tx_dbg_reg_cnsl(struct bb_info *bb, u32 *_used,
 	}
 }
 
-void halbb_basic_dbg_msg_tx_info_cnsl(struct bb_info *bb, u32 *_used,
+static void halbb_basic_dbg_msg_tx_info_cnsl(struct bb_info *bb, u32 *_used,
 				      char *output, u32 *_out_len)
 {
 	struct bb_ch_info *ch = &bb->bb_ch_i;
@@ -849,7 +849,7 @@ void halbb_basic_dbg_msg_tx_info_cnsl(struct bb_info *bb, u32 *_used,
 	halbb_ra_dbgreg_cnsl(bb, _used, output, _out_len);
 }
 
-void halbb_basic_dbg_msg_rx_info_cnsl(struct bb_info *bb, u32 *_used,
+static void halbb_basic_dbg_msg_rx_info_cnsl(struct bb_info *bb, u32 *_used,
 				      char *output, u32 *_out_len)
 {
 	struct bb_ch_info *ch = &bb->bb_ch_i;
@@ -888,7 +888,7 @@ void halbb_basic_dbg_msg_rx_info_cnsl(struct bb_info *bb, u32 *_used,
 }
 
 
-void halbb_basic_dbg_msg_physts_su_cnsl(struct bb_info *bb, u32 *_used,
+static void halbb_basic_dbg_msg_physts_su_cnsl(struct bb_info *bb, u32 *_used,
 					char *output, u32 *_out_len)
 {
 	struct bb_ch_info *ch = &bb->bb_ch_i;
@@ -1272,7 +1272,7 @@ void halbb_basic_dbg_msg_physts_su_cnsl(struct bb_info *bb, u32 *_used,
 }
 
 
-void halbb_show_phy_hitogram_su_cnsl(struct bb_info *bb, u32 *_used,
+static void halbb_show_phy_hitogram_su_cnsl(struct bb_info *bb, u32 *_used,
 						 char *output, u32 *_out_len)
 {
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
@@ -1360,7 +1360,7 @@ void halbb_show_phy_hitogram_su_cnsl(struct bb_info *bb, u32 *_used,
 		    "valid_cnt = %d\n", valid_cnt);
 }
 
-void halbb_basic_dbg_msg_physts_mu_cnsl(struct bb_info *bb, u32 *_used,
+static void halbb_basic_dbg_msg_physts_mu_cnsl(struct bb_info *bb, u32 *_used,
 					char *output, u32 *_out_len)
 {
 	struct bb_ch_info *ch = &bb->bb_ch_i;
@@ -1606,7 +1606,7 @@ void halbb_basic_dbg_msg_physts_mu_cnsl(struct bb_info *bb, u32 *_used,
 	}
 }
 
-void halbb_dm_summary_cnsl(struct bb_info *bb, u32 *_used,
+static void halbb_dm_summary_cnsl(struct bb_info *bb, u32 *_used,
 			   char *output, u32 *_out_len)
 {
 #ifdef HALBB_CFO_TRK_SUPPORT
@@ -1685,7 +1685,7 @@ void halbb_dm_summary_cnsl(struct bb_info *bb, u32 *_used,
 #endif
 }
 
-void halbb_reset_cnsl(struct bb_info *bb)
+static void halbb_reset_cnsl(struct bb_info *bb)
 {
 	if (bb->bb_cmn_hooker->bb_cmn_dbg_i.cmn_log_2_cnsl_en ||
 	    bb->bb_cmn_hooker->bb_cmn_dbg_i.cmn_log_2_drv_statistic_en) {
