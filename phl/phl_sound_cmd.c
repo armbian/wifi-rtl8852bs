@@ -16,7 +16,7 @@
 
 #ifdef CONFIG_PHL_CMD_BF
 /* START of sounding / beamform cmd_disp module */
-void
+static void
 _phl_snd_cmd_set_eng_busy(struct phl_info_t *phl_info, enum snd_cmd_disp_ctrl ctrl)
 {
 	struct phl_sound_obj *snd = (struct phl_sound_obj *)phl_info->snd_obj;
@@ -26,7 +26,7 @@ _phl_snd_cmd_set_eng_busy(struct phl_info_t *phl_info, enum snd_cmd_disp_ctrl ct
 	}
 }
 
-void
+static void
 _phl_snd_cmd_set_eng_idle(struct phl_info_t *phl_info, enum snd_cmd_disp_ctrl ctrl)
 {
 	struct phl_sound_obj *snd = (struct phl_sound_obj *)phl_info->snd_obj;
@@ -36,7 +36,7 @@ _phl_snd_cmd_set_eng_idle(struct phl_info_t *phl_info, enum snd_cmd_disp_ctrl ct
 	}
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_snd_cmd_get_eng_status(struct phl_info_t *phl_info, enum snd_cmd_disp_ctrl ctrl)
 {
 	struct phl_sound_obj *snd = (struct phl_sound_obj *)phl_info->snd_obj;
@@ -53,7 +53,7 @@ _phl_snd_cmd_get_eng_status(struct phl_info_t *phl_info, enum snd_cmd_disp_ctrl 
 	}
 	return pstatus;
 }
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_snd_aquire_eng(struct phl_info_t *phl_info, enum snd_cmd_disp_ctrl ctrl)
 {
 	struct phl_sound_obj *snd = (struct phl_sound_obj *)phl_info->snd_obj;
@@ -76,7 +76,7 @@ _phl_snd_aquire_eng(struct phl_info_t *phl_info, enum snd_cmd_disp_ctrl ctrl)
 	return pstatus;
 }
 
-void
+static void
 _phl_snd_free_eng(struct phl_info_t *phl_info, enum snd_cmd_disp_ctrl ctrl)
 {
 	struct phl_sound_obj *snd = (struct phl_sound_obj *)phl_info->snd_obj;
@@ -89,7 +89,7 @@ _phl_snd_free_eng(struct phl_info_t *phl_info, enum snd_cmd_disp_ctrl ctrl)
 	}
 }
 
-void _snd_cmd_timer_callback(void *context)
+static void _snd_cmd_timer_callback(void *context)
 {
 	struct phl_sound_obj *snd_obj = (struct phl_sound_obj *)context;
 	struct snd_cmd_bfer *cur_snd_cmd = NULL;
@@ -623,7 +623,7 @@ enum rtw_phl_status phl_snd_cmd_register_module(struct phl_info_t *phl_info)
  * _phl_snd_cmd_post_set_vht_gid(...)
  * 	used by rtw_phl_snd_cmd_set_vht_gid(..)
  **/
-void _phl_snd_cmd_post_set_vht_gid(void* priv, struct phl_msg* msg)
+static void _phl_snd_cmd_post_set_vht_gid(void* priv, struct phl_msg* msg)
 {
 	struct phl_info_t *phl_info = (struct phl_info_t *)priv;
 
@@ -688,7 +688,7 @@ exit:
 	return phl_status;
 }
 
-void _phl_snd_cmd_post_set_aid(void* priv, struct phl_msg* msg)
+static void _phl_snd_cmd_post_set_aid(void* priv, struct phl_msg* msg)
 {
 	struct phl_info_t *phl_info = (struct phl_info_t *)priv;
 #ifdef RTW_WKARD_BFEE_SET_AID
@@ -767,7 +767,8 @@ exit:
 /**
  * For other module, such as LPS, direct set aid.
  **/
-enum rtw_phl_status
+#ifdef RTW_WKARD_BFEE_SET_AID
+static enum rtw_phl_status
 phl_snd_cmd_set_aid_info(struct phl_info_t *phl,
 			 struct rtw_wifi_role_t *wrole,
 			 struct rtw_phl_stainfo_t *sta,
@@ -791,6 +792,7 @@ phl_snd_cmd_set_aid_info(struct phl_info_t *phl,
 	PHL_TRACE(COMP_PHL_DBG, _PHL_INFO_, "<-- %s\n", __func__);
 	return phl_status;
 }
+#endif /* RTW_WKARD_BFEE_SET_AID */
 
 #ifdef RTW_WKARD_BFEE_SET_AID
 enum rtw_phl_status
@@ -825,7 +827,7 @@ _phl_cmd_snd_restore_aid(struct phl_info_t *phl,
 #endif
 
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_snd_cmd_ntfy_ps_enter(struct phl_info_t *phl,
 			   struct rtw_wifi_role_t *wrole)
 {
@@ -843,7 +845,7 @@ _phl_snd_cmd_ntfy_ps_enter(struct phl_info_t *phl,
 	return phl_status;
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_snd_cmd_ntfy_ps_leave(struct phl_info_t *phl,
 			   struct rtw_wifi_role_t *wrole)
 {
@@ -883,7 +885,7 @@ void phl_snd_cmd_sound_cancel_msg(struct phl_info_t *phl_info)
 	phl_disp_eng_cancel_msg(phl_info, 0, &snd_obj->msg_hdl);
 }
 
-void _phl_snd_cmd_post_sound_evt_success(
+static void _phl_snd_cmd_post_sound_evt_success(
 	struct phl_info_t *phl_info,
 	struct snd_cmd_bfer *cmd_buf)
 {
@@ -970,7 +972,7 @@ void _phl_snd_cmd_post_sound_evt_success(
 
 }
 
-void _phl_snd_cmd_post_sound_evt_fail(
+static void _phl_snd_cmd_post_sound_evt_fail(
 	struct phl_info_t *phl_info,
 	struct snd_cmd_bfer *cmd_buf)
 {
@@ -1008,7 +1010,7 @@ void _phl_snd_cmd_post_sound_evt_fail(
 	}
 }
 
-void _phl_snd_cmd_post_sound_evt(void* priv, struct phl_msg* msg)
+static void _phl_snd_cmd_post_sound_evt(void* priv, struct phl_msg* msg)
 {
 	struct phl_info_t *phl_info = (struct phl_info_t *)priv;
 	struct snd_cmd_bfer *cmd_buf = NULL;

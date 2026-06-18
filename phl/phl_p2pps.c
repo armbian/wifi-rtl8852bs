@@ -46,7 +46,7 @@ void phl_p2pps_deinit(struct phl_info_t *phl_info)
 	phl_com->p2pps_info = NULL;
 }
 
-void
+static void
 _phl_p2pps_dump_single_noa_desc(struct rtw_phl_noa_desc *desc)
 {
 	PHL_TRACE(COMP_PHL_P2PPS, _PHL_INFO_, "[NOA]_phl_p2pps_dump_single_noa_desc():enable = %d\n",
@@ -71,7 +71,7 @@ _phl_p2pps_dump_single_noa_desc(struct rtw_phl_noa_desc *desc)
 		desc->rlink);
 }
 
-void
+static void
 _phl_p2pps_dump_noa_table(struct rtw_phl_p2pps_info *psinfo,
 	struct rtw_phl_noa_info *info)
 {
@@ -113,7 +113,7 @@ _phl_p2pps_dump_noa_table(struct rtw_phl_p2pps_info *psinfo,
 	_os_spinunlock(drvpriv, &psinfo->p2pps_lock, _bh, NULL);
 }
 
-struct rtw_phl_noa_info *
+static struct rtw_phl_noa_info *
 _phl_p2pps_get_noa_info_by_role(struct rtw_phl_p2pps_info *psinfo,
 	struct rtw_wifi_role_t *wrole)
 {
@@ -121,7 +121,7 @@ _phl_p2pps_get_noa_info_by_role(struct rtw_phl_p2pps_info *psinfo,
 	return &psinfo->noa_info[idx];
 }
 
-struct rtw_phl_noa_desc *
+static struct rtw_phl_noa_desc *
 _phl_p2pps_get_first_noa_desc_with_cnt255(struct phl_info_t *phl,
 	struct rtw_phl_noa_info *info)
 {
@@ -141,7 +141,7 @@ _phl_p2pps_get_first_noa_desc_with_cnt255(struct phl_info_t *phl,
 
 #ifdef RTW_WKARD_P2PPS_SINGLE_NOA
 
-u8
+static u8
 _phl_p2pps_query_mcc_inprog_wkard(struct phl_info_t *phl_info,
 	struct rtw_wifi_role_t *w_role)
 {
@@ -154,7 +154,7 @@ _phl_p2pps_query_mcc_inprog_wkard(struct phl_info_t *phl_info,
 	return ret;
 }
 
-struct rtw_wifi_role_t *
+static struct rtw_wifi_role_t *
 _phl_get_role_by_band_port(struct phl_info_t* phl_info,
                            u8 hw_band,
                            u8 hw_port)
@@ -187,7 +187,7 @@ _phl_get_role_by_band_port(struct phl_info_t* phl_info,
 	return NULL;
 }
 
-void
+static void
 _phl_p2pps_calc_next_noa_s_time(struct phl_info_t *phl_info,
 	struct rtw_wifi_role_t *w_role,
 	struct rtw_phl_tsf32_tog_rpt *rpt,
@@ -218,7 +218,7 @@ _phl_p2pps_calc_next_noa_s_time(struct phl_info_t *phl_info,
 	new_desc->start_t_l = new_st & 0xFFFFFFFF;
 }
 
-void _phl_p2pps_ap_on_tsf32_tog(struct phl_info_t* phl_info,
+static void _phl_p2pps_ap_on_tsf32_tog(struct phl_info_t* phl_info,
 	struct rtw_wifi_role_t *wrole,
 	struct rtw_phl_tsf32_tog_rpt *rpt)
 {
@@ -278,7 +278,7 @@ void phl_p2pps_tsf32_tog_handler(struct phl_info_t* phl_info)
 	}
 }
 
-void
+static void
 _phl_p2pps_copy_noa_desc(struct rtw_phl_p2pps_info *psinfo,
 	struct rtw_phl_noa_desc *dest,
 	struct rtw_phl_noa_desc *src)
@@ -290,7 +290,7 @@ _phl_p2pps_copy_noa_desc(struct rtw_phl_p2pps_info *psinfo,
 	_os_spinunlock(drvpriv, &psinfo->p2pps_lock, _bh, NULL);
 }
 
-void
+static void
 _phl_p2pps_clear_noa_desc(struct rtw_phl_p2pps_info *psinfo,
 	struct rtw_phl_noa_desc *desc)
 {
@@ -301,7 +301,7 @@ _phl_p2pps_clear_noa_desc(struct rtw_phl_p2pps_info *psinfo,
 	_os_spinunlock(drvpriv, &psinfo->p2pps_lock, _bh, NULL);
 }
 
-void
+static void
 _phl_p2pps_noa_increase_desc(struct rtw_phl_p2pps_info *psinfo,
 	struct rtw_phl_noa_info *info)
 {
@@ -312,7 +312,7 @@ _phl_p2pps_noa_increase_desc(struct rtw_phl_p2pps_info *psinfo,
 	_os_spinunlock(drvpriv, &psinfo->p2pps_lock, _bh, NULL);
 }
 
-void
+static void
 _phl_p2pps_noa_decrease_desc(struct rtw_phl_p2pps_info *psinfo,
 	struct rtw_phl_noa_info *info)
 {
@@ -326,7 +326,7 @@ _phl_p2pps_noa_decrease_desc(struct rtw_phl_p2pps_info *psinfo,
 	_os_spinunlock(drvpriv, &psinfo->p2pps_lock, _bh, NULL);
 }
 
-u8
+static u8
 _phl_p2pps_noa_should_activate(struct rtw_phl_p2pps_info *psinfo,
 	struct rtw_phl_noa_desc *in_desc)
 {
@@ -372,7 +372,7 @@ exit:
 	return ret;
 }
 
-u8
+static u8
 _phl_p2pps_noa_is_all_disable(struct rtw_phl_p2pps_info *psinfo,
 	struct rtw_phl_noa_info *info)
 {
@@ -390,7 +390,7 @@ _phl_p2pps_noa_is_all_disable(struct rtw_phl_p2pps_info *psinfo,
 	return true;
 }
 
-u8
+static u8
 _phl_p2pps_noa_assign_noaid(struct rtw_phl_p2pps_info *psinfo,
 	struct rtw_phl_noa_info *info,
 	struct rtw_phl_noa_desc *desc)
@@ -420,7 +420,7 @@ _phl_p2pps_noa_assign_noaid(struct rtw_phl_p2pps_info *psinfo,
 	return id;
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_p2pps_noa_disable(struct rtw_phl_p2pps_info *psinfo,
                        struct rtw_phl_noa_info *noa_info,
                        struct rtw_phl_noa_desc *noa_desc,
@@ -491,7 +491,7 @@ _phl_p2pps_noa_disable(struct rtw_phl_p2pps_info *psinfo,
 	return ret;
 }
 
-void _phl_p2pps_noa_disable_all(struct phl_info_t *phl,
+static void _phl_p2pps_noa_disable_all(struct phl_info_t *phl,
 	struct rtw_wifi_role_t *w_role)
 {
 	struct rtw_phl_p2pps_info *psinfo = phl_to_p2pps_info(phl);
@@ -514,7 +514,7 @@ void _phl_p2pps_noa_disable_all(struct phl_info_t *phl,
 	PHL_TRACE(COMP_PHL_P2PPS, _PHL_INFO_, "[NOA]%s:<====\n", __func__);
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_p2p_ps_up_clients_macid_for_ap_role(struct phl_info_t *phl,
 		struct rtw_phl_p2pps_info *psinfo, struct rtw_wifi_role_t *wrole)
 {
@@ -548,7 +548,7 @@ exit:
 	return psts;
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_p2pps_noa_enable(struct rtw_phl_p2pps_info *psinfo,
                       struct rtw_phl_noa_info *noa_info,
                       struct rtw_phl_noa_desc *noa_desc,
@@ -622,7 +622,7 @@ _phl_p2pps_noa_enable(struct rtw_phl_p2pps_info *psinfo,
 	return ret;
 }
 
-bool
+static bool
 _phl_p2p_noa_runing(struct phl_info_t *phl,
 			struct rtw_wifi_role_t *w_role)
 {

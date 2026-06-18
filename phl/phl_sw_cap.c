@@ -67,7 +67,7 @@ _phl_pwrlmt_para_free(
 	para_info->ext_reg_map_num = 0;
 }
 
-enum channel_width _phl_sw_cap_get_hi_bw(struct phy_cap_t *phy_cap)
+static enum channel_width _phl_sw_cap_get_hi_bw(struct phy_cap_t *phy_cap)
 {
 	enum channel_width bw = CHANNEL_WIDTH_20;
 	do {
@@ -200,7 +200,7 @@ void rtw_phl_init_free_para_buf(struct rtw_phl_com_t *phl_com)
 }
 
 
-u16 _phl_sw_role_cap_bf(enum role_type rtype)
+static u16 _phl_sw_role_cap_bf(enum role_type rtype)
 {
 	u16 def_bf_cap = 0;
 

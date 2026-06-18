@@ -17,7 +17,7 @@
 
 #ifdef CONFIG_MCC_SUPPORT
 #include "phl_mcc.h"
-void _mcc_dump_state(enum rtw_phl_mcc_state *state)
+static void _mcc_dump_state(enum rtw_phl_mcc_state *state)
 {
 	if (MCC_NONE == *state) {
 		PHL_TRACE(COMP_PHL_MCC, _PHL_INFO_, "_mcc_dump_state(): MCC_NONE\n");
@@ -41,7 +41,7 @@ void _mcc_dump_state(enum rtw_phl_mcc_state *state)
 	}
 }
 
-void _mcc_dump_mode(enum rtw_phl_tdmra_wmode *mode)
+static void _mcc_dump_mode(enum rtw_phl_tdmra_wmode *mode)
 {
 	if (RTW_PHL_TDMRA_AP_CLIENT_WMODE == *mode) {
 		PHL_TRACE(COMP_PHL_MCC, _PHL_INFO_, "_mcc_dump_mode(): RTW_PHL_TDMRA_AP_CLIENT_WMODE\n");
@@ -55,13 +55,13 @@ void _mcc_dump_mode(enum rtw_phl_tdmra_wmode *mode)
 	}
 }
 
-void _mcc_dump_sync_tsf_info(struct rtw_phl_mcc_sync_tsf_info *info)
+static void _mcc_dump_sync_tsf_info(struct rtw_phl_mcc_sync_tsf_info *info)
 {
 	PHL_TRACE(COMP_PHL_MCC, _PHL_INFO_, "_mcc_dump_sync_tsf_info(): sync_en(%d), source macid(%d), target macid(%d), offset(%d)\n",
 		info->sync_en, info->source, info->target, info->offset);
 }
 
-void _mcc_dump_dur_info(struct rtw_phl_mcc_dur_info *dur_i)
+static void _mcc_dump_dur_info(struct rtw_phl_mcc_dur_info *dur_i)
 {
 	struct rtw_phl_mcc_dur_lim_info *dur_l = NULL;
 
@@ -72,7 +72,7 @@ void _mcc_dump_dur_info(struct rtw_phl_mcc_dur_info *dur_i)
 		dur_l->max_toa, dur_l->max_tob);
 }
 
-void _mcc_dump_role_info(struct rtw_phl_mcc_role *mrole)
+static void _mcc_dump_role_info(struct rtw_phl_mcc_role *mrole)
 {
 	struct rtw_phl_mcc_policy_info *policy = &mrole->policy;
 	u8 i = 0;
@@ -102,7 +102,7 @@ void _mcc_dump_role_info(struct rtw_phl_mcc_role *mrole)
 		policy->courtesy_target);
 }
 
-void _mcc_dump_pattern(struct rtw_phl_mcc_pattern *m_pattern)
+static void _mcc_dump_pattern(struct rtw_phl_mcc_pattern *m_pattern)
 {
 	struct rtw_phl_mcc_courtesy *courtesy_i = &m_pattern->courtesy_i;
 
@@ -120,7 +120,7 @@ void _mcc_dump_pattern(struct rtw_phl_mcc_pattern *m_pattern)
 	}
 }
 
-void _mcc_dump_ref_role_info(struct rtw_phl_mcc_en_info *info)
+static void _mcc_dump_ref_role_info(struct rtw_phl_mcc_en_info *info)
 {
 	struct rtw_phl_mcc_role *ref_role = NULL;
 
@@ -133,7 +133,7 @@ void _mcc_dump_ref_role_info(struct rtw_phl_mcc_en_info *info)
 		ref_role->chandef->offset);
 }
 
-void _mcc_dump_en_info(struct rtw_phl_mcc_en_info *info)
+static void _mcc_dump_en_info(struct rtw_phl_mcc_en_info *info)
 {
 	struct rtw_phl_mcc_role *m_role = NULL;
 	u8 midx = 0;
@@ -152,7 +152,7 @@ void _mcc_dump_en_info(struct rtw_phl_mcc_en_info *info)
 	}
 }
 
-void _mcc_dump_bt_ino(struct rtw_phl_mcc_bt_info *bt_info)
+static void _mcc_dump_bt_ino(struct rtw_phl_mcc_bt_info *bt_info)
 {
 	u8 seg_num = BT_SEG_NUM;
 
@@ -163,7 +163,7 @@ void _mcc_dump_bt_ino(struct rtw_phl_mcc_bt_info *bt_info)
 		bt_info->bt_seg[1], bt_info->add_bt_role);
 }
 
-void _mcc_dump_mcc_info(struct phl_mcc_info *minfo)
+static void _mcc_dump_mcc_info(struct phl_mcc_info *minfo)
 {
 	PHL_TRACE(COMP_PHL_MCC, _PHL_INFO_, ">>> _mcc_dump_mcc_info():\n");
 	_mcc_dump_mode(&minfo->mcc_mode);
@@ -173,7 +173,7 @@ void _mcc_dump_mcc_info(struct phl_mcc_info *minfo)
 	PHL_TRACE(COMP_PHL_MCC, _PHL_INFO_, "<<< _mcc_dump_mcc_info():\n");
 }
 
-void _mcc_set_state(struct phl_mcc_info *minfo, enum rtw_phl_mcc_state state)
+static void _mcc_set_state(struct phl_mcc_info *minfo, enum rtw_phl_mcc_state state)
 {
 	PHL_TRACE(COMP_PHL_MCC, _PHL_ALWAYS_, "_mcc_set_state(): Set from (%d) to (%d)\n",
 		minfo->state, state);
@@ -181,7 +181,7 @@ void _mcc_set_state(struct phl_mcc_info *minfo, enum rtw_phl_mcc_state state)
 	_mcc_dump_state(&minfo->state);
 }
 
-struct rtw_phl_mcc_role *
+static struct rtw_phl_mcc_role *
 _mcc_get_mrole_by_wrole(struct phl_mcc_info *minfo,
 				struct rtw_wifi_role_t *wrole)
 {
@@ -202,7 +202,7 @@ _mcc_get_mrole_by_wrole(struct phl_mcc_info *minfo,
 	return NULL;
 }
 
-u8
+static u8
 _mcc_get_mrole_idx_by_wrole(struct phl_mcc_info *minfo,
 				struct rtw_wifi_role_t *wrole, u8 *idx)
 {
@@ -226,7 +226,7 @@ _mcc_get_mrole_idx_by_wrole(struct phl_mcc_info *minfo,
 	return status;
 }
 
-struct rtw_phl_mcc_role *
+static struct rtw_phl_mcc_role *
 _mcc_get_mrole_by_category(struct rtw_phl_mcc_en_info *en_info,
 			enum _mcc_role_cat category)
 {
@@ -252,7 +252,7 @@ _mcc_get_mrole_by_category(struct rtw_phl_mcc_en_info *en_info,
 	return NULL;
 }
 
-enum rtw_phl_status _mcc_transfer_mode(struct phl_info_t *phl,
+static enum rtw_phl_status _mcc_transfer_mode(struct phl_info_t *phl,
 				struct phl_mcc_info *minfo, u8 role_map)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
@@ -300,7 +300,7 @@ exit:
 	return status;
 }
 
-enum rtw_phl_status _mcc_get_role_map(struct phl_info_t *phl,
+static enum rtw_phl_status _mcc_get_role_map(struct phl_info_t *phl,
 				struct hw_band_ctl_t *band_ctrl, u8 *role_map)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
@@ -320,7 +320,7 @@ enum rtw_phl_status _mcc_get_role_map(struct phl_info_t *phl,
 	return status;
 }
 
-void _mcc_set_fw_log_info(struct phl_info_t *phl, u8 hw_band,
+static void _mcc_set_fw_log_info(struct phl_info_t *phl, u8 hw_band,
 			bool en_fw_mcc_log, u8 fw_mcc_log_lv)
 {
 	struct phl_mcc_info *minfo = get_mcc_info(phl, hw_band);
@@ -335,7 +335,7 @@ void _mcc_set_fw_log_info(struct phl_info_t *phl, u8 hw_band,
 	}
 }
 
-void _mcc_up_fw_log_setting(struct phl_info_t *phl, struct phl_mcc_info *minfo)
+static void _mcc_up_fw_log_setting(struct phl_info_t *phl, struct phl_mcc_info *minfo)
 {
 	struct phl_mcc_fw_log_info *fw_log_i = &minfo->fw_log_i;
 
@@ -346,7 +346,7 @@ void _mcc_up_fw_log_setting(struct phl_info_t *phl, struct phl_mcc_info *minfo)
 	}
 }
 
-void _mcc_set_unspecific_dur(struct phl_mcc_info *minfo)
+static void _mcc_set_unspecific_dur(struct phl_mcc_info *minfo)
 {
 	struct rtw_phl_mcc_en_info *en_info = &minfo->en_info;
 	struct rtw_phl_mcc_role *m_role = NULL;
@@ -360,7 +360,7 @@ void _mcc_set_unspecific_dur(struct phl_mcc_info *minfo)
 	}
 }
 
-void _mcc_fill_dur_lim_info(struct phl_info_t *phl,
+static void _mcc_fill_dur_lim_info(struct phl_info_t *phl,
 				struct rtw_phl_mcc_role *mrole,
 				struct phl_mcc_dur_lim_req_info *dur_req)
 {
@@ -409,7 +409,7 @@ exit:
 	return;
 }
 
-void _mcc_fill_default_policy(struct phl_info_t *phl,
+static void _mcc_fill_default_policy(struct phl_info_t *phl,
 				struct rtw_phl_mcc_role *mrole)
 {
 	struct rtw_phl_mcc_policy_info *policy = &mrole->policy;
@@ -434,7 +434,7 @@ void _mcc_fill_default_policy(struct phl_info_t *phl,
 	}
 }
 
-void _mcc_fill_mcc_role_policy_info(struct phl_info_t *phl,
+static void _mcc_fill_mcc_role_policy_info(struct phl_info_t *phl,
                                     struct rtw_wifi_role_t *wrole,
                                     struct rtw_wifi_role_link_t *rlink,
                                     struct rtw_phl_mcc_role *mrole)
@@ -477,7 +477,7 @@ exit:
 	return;
 }
 
-void _mcc_fill_macid_bitmap_by_role(struct phl_info_t *phl,
+static void _mcc_fill_macid_bitmap_by_role(struct phl_info_t *phl,
 					struct rtw_phl_mcc_role *mrole)
 {
 	struct macid_ctl_t *mc = phl_to_mac_ctrl(phl);
@@ -499,7 +499,7 @@ void _mcc_fill_macid_bitmap_by_role(struct phl_info_t *phl,
 		used_macid->len, max_map_idx);
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _mcc_fill_mcc_role_basic_info(struct phl_info_t *phl,
                               struct rtw_wifi_role_t *wrole,
                               struct rtw_wifi_role_link_t *rlink,
@@ -531,7 +531,7 @@ exit:
 	return status;
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _mcc_fill_ref_role_info(struct phl_info_t *phl,
                         struct rtw_phl_mcc_en_info *en_info,
                         struct rtw_wifi_role_t *wrole,
@@ -562,7 +562,7 @@ exit:
 	return status;
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _mcc_fill_role_info(struct phl_info_t *phl,
                     struct rtw_phl_mcc_en_info *en_info,
                     u8 role_map,
@@ -625,7 +625,7 @@ exit:
 	return status;
 }
 
-void _mcc_fill_coex_mode(struct phl_info_t *phl, struct phl_mcc_info *minfo)
+static void _mcc_fill_coex_mode(struct phl_info_t *phl, struct phl_mcc_info *minfo)
 {
 	/* if get from core or ....
 	else*/
@@ -634,7 +634,7 @@ void _mcc_fill_coex_mode(struct phl_info_t *phl, struct phl_mcc_info *minfo)
 		minfo->coex_mode);
 }
 
-void _mcc_fill_bt_dur(struct phl_info_t *phl, enum phl_band_idx band_idx,
+static void _mcc_fill_bt_dur(struct phl_info_t *phl, enum phl_band_idx band_idx,
 			struct phl_mcc_info *minfo)
 {
 	minfo->bt_info.bt_dur = (u16)rtw_hal_get_btc_req_slot(phl->hal, band_idx);
@@ -652,7 +652,7 @@ void _mcc_fill_bt_dur(struct phl_info_t *phl, enum phl_band_idx band_idx,
  * @dur: time slot
  * @mrole: mcc role info
  */
-void _mcc_fill_slot_info(struct rtw_phl_mcc_pattern *m_pattern, bool bt_role,
+static void _mcc_fill_slot_info(struct rtw_phl_mcc_pattern *m_pattern, bool bt_role,
 				u16 dur, struct rtw_phl_mcc_role *mrole)
 {
 	if (m_pattern->slot_num >= SLOT_NUM) {
@@ -675,7 +675,7 @@ void _mcc_fill_slot_info(struct rtw_phl_mcc_pattern *m_pattern, bool bt_role,
 	m_pattern->slot_num++;
 }
 
-void _mcc_reset_minfo(struct phl_info_t *phl, struct phl_mcc_info *minfo,
+static void _mcc_reset_minfo(struct phl_info_t *phl, struct phl_mcc_info *minfo,
 				enum _mcc_minfo_reset_type reset_type)
 {
 	void *priv = phl_to_drvpriv(phl);
@@ -708,7 +708,7 @@ void _mcc_reset_minfo(struct phl_info_t *phl, struct phl_mcc_info *minfo,
 				sizeof(struct rtw_phl_mcc_pattern));
 }
 
-void _mcc_clean_noa(struct phl_info_t *phl, struct rtw_phl_mcc_en_info *en_info)
+static void _mcc_clean_noa(struct phl_info_t *phl, struct rtw_phl_mcc_en_info *en_info)
 {
 	struct phl_com_mcc_info *com_info = phl_to_com_mcc_info(phl);
 	struct rtw_phl_mcc_noa param = {0};
@@ -732,7 +732,7 @@ exit:
 	return;
 }
 
-bool _tdmra_calc_noa_2wrole(struct phl_info_t *phl, struct phl_mcc_info *minfo,
+static bool _tdmra_calc_noa_2wrole(struct phl_info_t *phl, struct phl_mcc_info *minfo,
 				struct rtw_phl_mcc_noa *param)
 {
 	struct rtw_phl_mcc_en_info *en_info = &minfo->en_info;
@@ -806,7 +806,7 @@ exit:
 	return ret;
 }
 
-bool _tdmra_calc_noa_1wrole(struct phl_info_t *phl, struct phl_mcc_info *minfo,
+static bool _tdmra_calc_noa_1wrole(struct phl_info_t *phl, struct phl_mcc_info *minfo,
 				struct rtw_phl_mcc_noa *param)
 {
 	struct rtw_phl_mcc_en_info *en_info = &minfo->en_info;
@@ -835,7 +835,7 @@ bool _tdmra_calc_noa_1wrole(struct phl_info_t *phl, struct phl_mcc_info *minfo,
 }
 
 
-void _mcc_up_noa(struct phl_info_t *phl, struct phl_mcc_info *minfo)
+static void _mcc_up_noa(struct phl_info_t *phl, struct phl_mcc_info *minfo)
 
 {
 	struct phl_com_mcc_info *com_info = phl_to_com_mcc_info(phl);
@@ -867,7 +867,7 @@ exit:
 	return;
 }
 
-bool _mcc_adjust_dur_for_2g_mcc_2role_bt(struct phl_mcc_info *minfo)
+static bool _mcc_adjust_dur_for_2g_mcc_2role_bt(struct phl_mcc_info *minfo)
 {
 	struct rtw_phl_mcc_bt_info *bt_info = &minfo->bt_info;
 	struct rtw_phl_mcc_en_info *en_info = &minfo->en_info;
@@ -929,7 +929,7 @@ bool _mcc_adjust_dur_for_2g_mcc_2role_bt(struct phl_mcc_info *minfo)
 	return adjust_ok;
 }
 
-void _mcc_adjust_dur_for_2_band_mcc_2role_bt(struct phl_mcc_info *minfo,
+static void _mcc_adjust_dur_for_2_band_mcc_2role_bt(struct phl_mcc_info *minfo,
 	struct rtw_phl_mcc_role *role_2g, struct rtw_phl_mcc_role *role_non_2g)
 {
 	struct rtw_phl_mcc_en_info *en_info = &minfo->en_info;
@@ -982,7 +982,7 @@ exit:
 	return;
 }
 
-bool _mcc_need_to_seg_bt_dur(struct phl_mcc_info *minfo)
+static bool _mcc_need_to_seg_bt_dur(struct phl_mcc_info *minfo)
 {
 /* Not ready for implementation*/
 	return false;
@@ -1014,7 +1014,7 @@ exit:
 /*
  * 2 wifi slot req + bt slot req
  */
-void _mcc_discision_dur_for_2g_mcc_2role_bt(struct phl_mcc_info *minfo)
+static void _mcc_discision_dur_for_2g_mcc_2role_bt(struct phl_mcc_info *minfo)
 {
 	struct rtw_phl_mcc_en_info *en_info = &minfo->en_info;
 	struct rtw_phl_mcc_role *m_role1 = &en_info->mcc_role[0];
@@ -1050,7 +1050,7 @@ void _mcc_discision_dur_for_2g_mcc_2role_bt(struct phl_mcc_info *minfo)
 	}
 }
 
-bool _mcc_discision_duration_for_2role_bt_v2(struct phl_mcc_info *minfo)
+static bool _mcc_discision_duration_for_2role_bt_v2(struct phl_mcc_info *minfo)
 {
 	struct rtw_phl_mcc_en_info *en_info = &minfo->en_info;
 	struct rtw_phl_mcc_bt_info *bt_info = &minfo->bt_info;
@@ -1085,7 +1085,7 @@ exit:
 	return add_extra_bt_role;
 }
 
-bool _mcc_discision_duration_for_2role_bt(struct phl_mcc_info *minfo)
+static bool _mcc_discision_duration_for_2role_bt(struct phl_mcc_info *minfo)
 {
 	struct rtw_phl_mcc_en_info *en_info = &minfo->en_info;
 	struct rtw_phl_mcc_role *m_role1 = &en_info->mcc_role[0];
@@ -1114,7 +1114,7 @@ exit:
 	return add_extra_bt_role;
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _mcc_calculate_start_tsf(struct phl_info_t *phl,
                          struct rtw_phl_mcc_en_info *en_info)
 {
@@ -1172,7 +1172,7 @@ exit:
 	return status;
 }
 
-void _mcc_set_2_clients_worsecase_default_pattern(struct rtw_phl_mcc_pattern *m_pattern,
+static void _mcc_set_2_clients_worsecase_default_pattern(struct rtw_phl_mcc_pattern *m_pattern,
 					u16 dur_ref)
 {
 	m_pattern->toa_r = CLIENTS_WORSECASE_REF_TOA;
@@ -1194,7 +1194,7 @@ void _mcc_set_2_clients_worsecase_default_pattern(struct rtw_phl_mcc_pattern *m_
  *          bcn                bcn
  * | tob_r | toa_r|tob_a | toa_a| Bt slot |
  */
-s16 _mcc_get_offset_for_2_wslot_1_btslot_p1(s16 dur_r,
+static s16 _mcc_get_offset_for_2_wslot_1_btslot_p1(s16 dur_r,
 				s16 tob_r, s16 tob_a)
 {
 	return dur_r - tob_r + tob_a;
@@ -1207,13 +1207,13 @@ s16 _mcc_get_offset_for_2_wslot_1_btslot_p1(s16 dur_r,
  *          bcn                            bcn
  * | tob_r | toa_r| Bt slot |tob_a | toa_a|
  */
-s16 _mcc_get_offset_for_2_wslot_1_btslot_p2(s16 dur_r, s16 bt_dur,
+static s16 _mcc_get_offset_for_2_wslot_1_btslot_p2(s16 dur_r, s16 bt_dur,
 				s16 tob_r, s16 tob_a)
 {
 	return dur_r - tob_r + bt_dur + tob_a;
 }
 
-void _mcc_get_offset_range_for_2wslot_1btslot_p1(s16 ref_dur, s16 ano_dur,
+static void _mcc_get_offset_range_for_2wslot_1btslot_p1(s16 ref_dur, s16 ano_dur,
 				s16 *bcn_min, s16 *bcn_max)
 {
 	s16 min1 = 0, max1 = 0;
@@ -1234,7 +1234,7 @@ void _mcc_get_offset_range_for_2wslot_1btslot_p1(s16 ref_dur, s16 ano_dur,
 		*bcn_min, *bcn_max);
 }
 
-void _mcc_get_offset_range_for_2wslot_1btslot_p2(s16 ref_dur, s16 ano_dur,
+static void _mcc_get_offset_range_for_2wslot_1btslot_p2(s16 ref_dur, s16 ano_dur,
 				s16 bt_dur, s16 *bcn_min, s16 *bcn_max)
 {
 	s16 min1 = 0, max1 = 0;
@@ -1256,13 +1256,13 @@ void _mcc_get_offset_range_for_2wslot_1btslot_p2(s16 ref_dur, s16 ano_dur,
 		*bcn_min, *bcn_max);
 }
 
-s16 _mcc_get_offset_for_2_clients_worsecase(s16 ref_dur, s16 ano_dur,
+static s16 _mcc_get_offset_for_2_clients_worsecase(s16 ref_dur, s16 ano_dur,
 				u16 ref_bcn_intvl, s16 toa_ref, s16 tob_ano)
 {
 	return toa_ref + tob_ano + ref_dur + ano_dur - (2 * ref_bcn_intvl);
 }
 
-void _mcc_get_offset_range_for_2_clients_worsecase(s16 ref_dur, s16 ano_dur,
+static void _mcc_get_offset_range_for_2_clients_worsecase(s16 ref_dur, s16 ano_dur,
 				u16 ref_bcn_intvl, s16 *bcn_min, s16 *bcn_max)
 {
 	s16 min1 = 0, min2 = 0, max1 = 0, max2 = 0;
@@ -1291,7 +1291,7 @@ void _mcc_get_offset_range_for_2_clients_worsecase(s16 ref_dur, s16 ano_dur,
  * copy from _mcc_calc_2wslot_1btslot_nego_p1
  * | Wifi slot1 | Bt slot | Wifi slot2 |
  */
-bool _mcc_calc_2wslot_1btslot_nego_p2(struct rtw_phl_mcc_dur_info *ref_dur,
+static bool _mcc_calc_2wslot_1btslot_nego_p2(struct rtw_phl_mcc_dur_info *ref_dur,
 			struct rtw_phl_mcc_dur_info *ano_dur, s16 bt_dur,
 			s16 offset, struct rtw_phl_mcc_pattern *m_pattern)
 {
@@ -1407,7 +1407,7 @@ exit:
  *          bcn                bcn
  * | tob_r | toa_r|tob_a | toa_a| Bt slot |
  */
-bool _mcc_calc_2wslot_1btslot_nego_p1(struct rtw_phl_mcc_dur_info *ref_dur,
+static bool _mcc_calc_2wslot_1btslot_nego_p1(struct rtw_phl_mcc_dur_info *ref_dur,
 			struct rtw_phl_mcc_dur_info *ano_dur, s16 offset,
 			s16 bt_dur, struct rtw_phl_mcc_pattern *m_pattern)
 {
@@ -1527,7 +1527,7 @@ exit:
  * @offset: The offset of Bcns
  * @m_pattern: pattern info
  */
-enum rtw_phl_status _mcc_calculate_2wslot_1btslot_pattern2(
+static enum rtw_phl_status _mcc_calculate_2wslot_1btslot_pattern2(
 				struct rtw_phl_mcc_dur_info *ref_dur,
 				struct rtw_phl_mcc_dur_info *ano_dur,
 				u16 offset, s16 bt_dur,
@@ -1629,7 +1629,7 @@ exit:
  * @offset: The offset of Bcns
  * @m_pattern: pattern info
  */
-enum rtw_phl_status _mcc_calculate_2wslot_1btslot_pattern1(
+static enum rtw_phl_status _mcc_calculate_2wslot_1btslot_pattern1(
 			struct rtw_phl_mcc_dur_info *ref_dur,
 			struct rtw_phl_mcc_dur_info *ano_dur,
 			u16 offset, s16 bt_dur,
@@ -1722,7 +1722,7 @@ exit:
 /*
  * Calculate pattern for 2 wifi slot and 1 bt slot
  */
-enum rtw_phl_status _mcc_calculate_2wslot_1btslot_pattern(
+static enum rtw_phl_status _mcc_calculate_2wslot_1btslot_pattern(
 			struct rtw_phl_mcc_dur_info *ref_dur,
 			struct rtw_phl_mcc_dur_info *ano_dur,
 			s16 bt_dur, struct rtw_phl_mcc_pattern *m_pattern)
@@ -1783,7 +1783,7 @@ exit:
  *          bcn_r                                                     bcn_a
  * | tob_r | toa_r|                                        |tob_a | toa_a|
  */
-enum rtw_phl_status _mcc_calc_2_clients_worsecase_pattern(u16 ref_dur,
+static enum rtw_phl_status _mcc_calc_2_clients_worsecase_pattern(u16 ref_dur,
 				u16 ano_dur, u16 offset, u16 ref_bcn_intvl,
 				struct rtw_phl_mcc_pattern *m_pattern)
 {
@@ -1913,7 +1913,7 @@ exit:
 /*
  * |Wifi1 slot|Wifi2 slot|
  */
-bool _mcc_calc_2_wrole_nego_pattern(struct rtw_phl_mcc_dur_info *ref_dur,
+static bool _mcc_calc_2_wrole_nego_pattern(struct rtw_phl_mcc_dur_info *ref_dur,
 				struct rtw_phl_mcc_dur_info *ano_dur, s16 offset,
 				struct rtw_phl_mcc_pattern *m_pattern)
 {
@@ -2293,7 +2293,7 @@ exit:
  *                                  <tob_a> Bcn_a <toa_a>                                  <tob_a> Bcn_a <toa_a>
  *	         <       bcns_offset       >
  */
-enum rtw_phl_status _mcc_calculate_2_wrole_pattern(
+static enum rtw_phl_status _mcc_calculate_2_wrole_pattern(
 				struct rtw_phl_mcc_dur_info *ref_dur,
 				struct rtw_phl_mcc_dur_info *ano_dur,
 				u16 offset,
@@ -2394,7 +2394,7 @@ exit:
  *                                  <tob_a> Bcn_a <toa_a>                                  <tob_a> Bcn_a <toa_a>
  *	         <       bcns_offset       >
  */
-void _mcc_calculate_2_clients_pattern(u16 ref_dur, u16 ano_dur, u16 offset,
+static void _mcc_calculate_2_clients_pattern(u16 ref_dur, u16 ano_dur, u16 offset,
 					struct rtw_phl_mcc_pattern *m_pattern)
 {
 	u16 mcc_intvl = ref_dur + ano_dur;
@@ -2454,7 +2454,7 @@ void _mcc_calculate_2_clients_pattern(u16 ref_dur, u16 ano_dur, u16 offset,
  * @role_ref: reference wifi slot req
  * @role_ano: another wifi slot req
  */
-void _mcc_fill_2_wrole_bt_pattern(struct phl_mcc_info *minfo,
+static void _mcc_fill_2_wrole_bt_pattern(struct phl_mcc_info *minfo,
 	struct rtw_phl_mcc_role *role_ref, struct rtw_phl_mcc_role *role_ano)
 {
 	struct rtw_phl_mcc_en_info *en_info = &minfo->en_info;
@@ -2523,7 +2523,7 @@ exit:
 	return;
 }
 
-bool _mcc_fill_2wrole_pattern_with_limitation(struct phl_mcc_info *minfo,
+static bool _mcc_fill_2wrole_pattern_with_limitation(struct phl_mcc_info *minfo,
 	struct rtw_phl_mcc_role *role_ref, struct rtw_phl_mcc_role *role_ano)
 {
 	struct rtw_phl_mcc_en_info *en_info = &minfo->en_info;
@@ -2567,7 +2567,7 @@ exit:
 	return ret;
 }
 
-void _mcc_fill_2_clients_pattern(struct phl_mcc_info *minfo, u8 worsecase,
+static void _mcc_fill_2_clients_pattern(struct phl_mcc_info *minfo, u8 worsecase,
 	struct rtw_phl_mcc_role *role_ref, struct rtw_phl_mcc_role *role_ano)
 {
 	struct rtw_phl_mcc_en_info *en_info = &minfo->en_info;
@@ -2593,7 +2593,7 @@ exit:
 	return;
 }
 
-enum rtw_phl_status _mcc_get_2_clients_bcn_offset(struct phl_info_t *phl,
+static enum rtw_phl_status _mcc_get_2_clients_bcn_offset(struct phl_info_t *phl,
 			u16 *offset, struct rtw_phl_mcc_role *role_ref,
 			struct rtw_phl_mcc_role *role_ano)
 {
@@ -2639,7 +2639,7 @@ exit:
  *               <         bcns_offset         >
  **/
 
-void _mcc_set_ap_client_default_pattern(struct phl_mcc_info *minfo,
+static void _mcc_set_ap_client_default_pattern(struct phl_mcc_info *minfo,
 					u16 *bcns_offet)
 {
 	struct rtw_phl_mcc_en_info *en_info = &minfo->en_info;
@@ -2659,7 +2659,7 @@ void _mcc_set_ap_client_default_pattern(struct phl_mcc_info *minfo,
 		m_pattern->tob_r, m_pattern->toa_r, m_pattern->tob_a, m_pattern->toa_a);
 }
 
-void _mcc_set_worsecase_dur_for_2_clients_mode(
+static void _mcc_set_worsecase_dur_for_2_clients_mode(
 				struct rtw_phl_mcc_dur_info *dur_i_1,
 				struct rtw_phl_mcc_dur_info *dur_i_2,
 				u16 *mcc_intvl)
@@ -2676,7 +2676,7 @@ void _mcc_set_worsecase_dur_for_2_clients_mode(
 	}
 }
 
-void _mcc_set_dur_for_2_clients_mode(
+static void _mcc_set_dur_for_2_clients_mode(
 				struct rtw_phl_mcc_dur_info *dur_i_1,
 				struct rtw_phl_mcc_dur_info *dur_i_2,
 				u16 *mcc_intvl)
@@ -2717,7 +2717,7 @@ void _mcc_set_dur_for_2_clients_mode(
 	}
 }
 
-enum rtw_phl_status _mcc_fill_info_for_2_clients_mode(struct phl_info_t *phl,
+static enum rtw_phl_status _mcc_fill_info_for_2_clients_mode(struct phl_info_t *phl,
 						struct phl_mcc_info *minfo)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
@@ -2770,7 +2770,7 @@ exit:
 	return status;
 }
 
-void _mcc_set_dur_for_ap_client_mode(u16 *ap_dur, u16 *client_dur, u16 mcc_intvl)
+static void _mcc_set_dur_for_ap_client_mode(u16 *ap_dur, u16 *client_dur, u16 mcc_intvl)
 {
 	if (*ap_dur == MCC_DUR_NONSPECIFIC)
 		*ap_dur = mcc_intvl - *client_dur;
@@ -2786,7 +2786,7 @@ void _mcc_set_dur_for_ap_client_mode(u16 *ap_dur, u16 *client_dur, u16 mcc_intvl
 	*client_dur = mcc_intvl - *ap_dur;
 }
 
-enum rtw_phl_status _mcc_fill_info_for_ap_client_mode(
+static enum rtw_phl_status _mcc_fill_info_for_ap_client_mode(
 			struct phl_info_t *phl, struct phl_mcc_info *minfo)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
@@ -2848,7 +2848,7 @@ exit:
  * |         Wifi slot          |          BT slot         |
  * <tob_r> Bcn_r <toa_r>
 **/
-enum rtw_phl_status _mcc_fill_info_for_ap_bt_mode(
+static enum rtw_phl_status _mcc_fill_info_for_ap_bt_mode(
 			struct phl_info_t *phl, struct phl_mcc_info *minfo)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
@@ -2874,7 +2874,7 @@ exit:
 	return status;
 }
 
-enum rtw_phl_status _mcc_pkt_offload_for_client(struct phl_info_t *phl, u8 macid)
+static enum rtw_phl_status _mcc_pkt_offload_for_client(struct phl_info_t *phl, u8 macid)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
 	struct rtw_phl_stainfo_t *phl_sta = NULL;
@@ -2915,7 +2915,7 @@ exit:
 }
 
 
-enum rtw_phl_status _mcc_pkt_offload(struct phl_info_t *phl,
+static enum rtw_phl_status _mcc_pkt_offload(struct phl_info_t *phl,
 					struct rtw_phl_mcc_en_info *info)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
@@ -2941,7 +2941,7 @@ exit:
 	return status;
 }
 
-enum rtw_phl_status _mcc_update_2_clients_pattern(struct phl_info_t *phl,
+static enum rtw_phl_status _mcc_update_2_clients_pattern(struct phl_info_t *phl,
 				struct phl_mcc_info *ori_minfo,
 				struct phl_mcc_info *new_minfo)
 {
@@ -2966,7 +2966,7 @@ exit:
 	return status;
 }
 
-enum rtw_phl_status _mcc_update_ap_client_pattern(struct phl_info_t *phl,
+static enum rtw_phl_status _mcc_update_ap_client_pattern(struct phl_info_t *phl,
 		struct phl_mcc_info *ori_minfo, struct phl_mcc_info *new_minfo)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
@@ -3000,7 +3000,7 @@ exit:
 	return status;
 }
 
-enum rtw_phl_status _mcc_update_ap_bt_pattern(struct phl_info_t *phl,
+static enum rtw_phl_status _mcc_update_ap_bt_pattern(struct phl_info_t *phl,
 		struct phl_mcc_info *ori_minfo, struct phl_mcc_info *new_minfo)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
@@ -3025,7 +3025,7 @@ exit:
 	return status;
 }
 
-enum rtw_phl_status _mcc_duration_change(struct phl_info_t *phl,
+static enum rtw_phl_status _mcc_duration_change(struct phl_info_t *phl,
 		struct phl_mcc_info *minfo, struct phl_mcc_info *new_minfo)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
@@ -3061,7 +3061,7 @@ exit:
 	return status;
 }
 
-void _mcc_2_clients_tracking(struct phl_info_t *phl,
+static void _mcc_2_clients_tracking(struct phl_info_t *phl,
 				struct phl_mcc_info *minfo
 )
 {
@@ -3151,7 +3151,7 @@ exit:
 	return;
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 rtw_phl_mcc_ap_bt_coex_enable(struct phl_info_t *phl,
                               struct rtw_wifi_role_t *cur_role,
                               struct rtw_wifi_role_link_t *cur_rlink)
@@ -3241,7 +3241,7 @@ exit:
 	return status;
 }
 
-enum rtw_phl_status rtw_phl_mcc_go_bt_coex_disable(struct phl_info_t *phl,
+static enum rtw_phl_status rtw_phl_mcc_go_bt_coex_disable(struct phl_info_t *phl,
 				struct rtw_wifi_role_t *spec_role)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
@@ -3313,7 +3313,7 @@ exit:
 	return;
 }
 
-enum rtw_phl_status rtw_phl_mcc_duration_change(struct phl_info_t *phl,
+static enum rtw_phl_status rtw_phl_mcc_duration_change(struct phl_info_t *phl,
 			struct phl_tdmra_dur_change_info *info)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
@@ -3345,7 +3345,7 @@ exit:
 	return status;
 }
 
-enum rtw_phl_status rtw_phl_mcc_bt_duration_change(struct phl_info_t *phl,
+static enum rtw_phl_status rtw_phl_mcc_bt_duration_change(struct phl_info_t *phl,
 				struct phl_tdmra_dur_change_info *info)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;

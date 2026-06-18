@@ -165,7 +165,7 @@ exit:
 
 
 /* find any existed role */
-struct rtw_wifi_role_t *_find_existed_role(struct phl_info_t *phl_info,
+static struct rtw_wifi_role_t *_find_existed_role(struct phl_info_t *phl_info,
 							enum phl_band_idx band_idx)
 {
 	struct rtw_phl_com_t *phl_com = phl_info->phl_com;
@@ -184,7 +184,7 @@ struct rtw_wifi_role_t *_find_existed_role(struct phl_info_t *phl_info,
 	return wr;
 }
 
-enum rtw_phl_status _tdmra_disable(struct phl_info_t *phl_info,
+static enum rtw_phl_status _tdmra_disable(struct phl_info_t *phl_info,
 			struct rtw_wifi_role_t *cur_wrole, enum phl_band_idx band_idx)
 {
 	enum rtw_phl_status psts = RTW_PHL_STATUS_SUCCESS;
@@ -229,7 +229,7 @@ exit:
  * Specific concurrent mode : 2g ap category x1 + BTC, MCC, MCC + BTC
  * @handle: True: handle specific concurrent mode for all interfaces; False: Not handleand maybe handle it by other coex mechanism.
  */
-enum rtw_phl_status
+static enum rtw_phl_status
 _tdmra_handle(struct phl_info_t *phl_info,
 				struct rtw_wifi_role_t *cur_wrole, u16 slot,
 				enum phl_band_idx band_idx,
@@ -519,7 +519,7 @@ exit:
 /*
  * Disable MR coex mechanism of 2g_scc_1ap_1sta_btc
  */
-enum rtw_phl_status
+static enum rtw_phl_status
 _mr_coex_2g_scc_1ap_1sta_btc_disable(struct phl_info_t *phl,
 			enum phl_band_idx band_idx)
 {

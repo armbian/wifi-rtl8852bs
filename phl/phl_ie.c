@@ -15,7 +15,7 @@
 #define _PHL_IE_C_
 #include "phl_headers.h"
 
-u8 _phl_build_ml_common_info(struct rtw_phl_com_t *phl_com,
+static u8 _phl_build_ml_common_info(struct rtw_phl_com_t *phl_com,
                              struct rtw_phl_ml_ie_info *info,
                              u8 *pbuf,
                              u8 *ml_ctrl)
@@ -79,7 +79,7 @@ _exit:
 	return len;
 }
 
-u8 _phl_build_basic_ml_ie(struct rtw_phl_com_t *phl_com,
+static u8 _phl_build_basic_ml_ie(struct rtw_phl_com_t *phl_com,
                           struct rtw_phl_ml_ie_info *info,
                           u8 *pbuf,
                           u8 *ml_ctrl)
@@ -110,7 +110,7 @@ u8 _phl_build_basic_ml_ie(struct rtw_phl_com_t *phl_com,
 	return len;
 }
 
-u8 _phl_build_probe_request_ml_ie(struct rtw_phl_com_t *phl_com,
+static u8 _phl_build_probe_request_ml_ie(struct rtw_phl_com_t *phl_com,
                                   struct rtw_phl_ml_ie_info *info,
                                   u8 *pbuf,
                                   u8 *ml_ctrl)
@@ -204,7 +204,7 @@ u8 rtw_phl_build_ml_ie(struct rtw_phl_com_t *phl_com,
 	return len;
 }
 
-u8 _phl_build_sta_info(struct rtw_phl_com_t *phl_com,
+static u8 _phl_build_sta_info(struct rtw_phl_com_t *phl_com,
                        struct rtw_phl_per_sta_profile_info *info,
                        u8 *pbuf,
                        u8 *sta_ctrl)
@@ -335,7 +335,7 @@ u8 rtw_phl_build_per_sta_profile(struct rtw_phl_com_t *phl_com,
 	return total_len;
 }
 
-void _set_link_mapping(u8 *ele_pos,
+static void _set_link_mapping(u8 *ele_pos,
                        u16 *tid2link,
                        u8 *indicator,
                        u8 *total_len)
@@ -411,7 +411,7 @@ u8 rtw_phl_build_tid2link(struct rtw_wifi_role_link_t *rlink,
 	return (total_len +3); /* From Element ID/ Len/ Ext ID */
 }
 
-void
+static void
 _dump_tid2link(struct rtw_phl_stainfo_t *sta)
 {
 	u8 idx =0;
@@ -497,7 +497,7 @@ void rtw_phl_tid2link_not_present(struct rtw_phl_stainfo_t *sta, u8 nego)
 	phl_mld_link2tid(sta);
 }
 
-void
+static void
 _dump_per_sta_profile(struct rtw_phl_per_sta_profile_element ele)
 {
 	PHL_INFO("###### _dump_per_sta_profile #######\n");
@@ -560,7 +560,7 @@ _dump_per_sta_profile(struct rtw_phl_per_sta_profile_element ele)
  *                   v
  *                   ele_pos
  */
-void
+static void
 phl_parse_per_sta_profile_ie(struct rtw_phl_com_t *phl_com,
                              u8 *ele_pos,
                              u16 ele_len,
@@ -657,7 +657,7 @@ phl_parse_per_sta_profile_ie(struct rtw_phl_com_t *phl_com,
 	_dump_per_sta_profile(*ele);
 }
 
-void
+static void
 _parse_ml_link_info(struct rtw_phl_com_t *phl_com,
                     u8 *ie_buf,
                     u16 ie_len,
@@ -742,7 +742,7 @@ _parse_ml_link_info(struct rtw_phl_com_t *phl_com,
 	} while(1);
 }
 
-void
+static void
 _dump_ml_basic(struct rtw_phl_ml_element ml_ele)
 {
 	PHL_INFO("###### _dump_ml_basic #######\n");
@@ -790,7 +790,7 @@ _dump_ml_basic(struct rtw_phl_ml_element ml_ele)
 	}
 }
 
-void
+static void
 _parse_ml_basic(struct rtw_phl_com_t *phl_com,
                 u8 *ie_buf,
                 u16 ie_len,
@@ -852,7 +852,7 @@ _parse_ml_basic(struct rtw_phl_com_t *phl_com,
 	                    ml_ele);
 }
 
-void
+static void
 _dump_ml_probe_req(struct rtw_phl_ml_element ml_ele)
 {
 	PHL_INFO("###### _dump_ml_probe_req #######\n");
@@ -862,7 +862,7 @@ _dump_ml_probe_req(struct rtw_phl_ml_element ml_ele)
 		PHL_INFO("%-25s: Not present\n", "MLD ID");
 }
 
-void
+static void
 _parse_ml_probe_req(struct rtw_phl_com_t *phl_com,
                     u8 *ie_buf,
                     u16 ie_len,
@@ -1050,7 +1050,7 @@ rtw_phl_is_ie_fragmentable(u32 eid,
  * affiliated with the same MLD as the reported AP. Therefore,
  * MLD ID would be 0.
  */
-u8 _build_mld_parameters(void *phl,
+static u8 _build_mld_parameters(void *phl,
                          struct rtw_wifi_role_link_t *rlink,
                          u8 *pbuf)
 {
@@ -1122,7 +1122,7 @@ u8 rtw_phl_build_reduced_nb_rpt(struct rtw_wifi_role_t *wrole,
 	return (u8)(p - pstart);
 }
 
-void _dump_reduced_nb_rpt(struct rtw_phl_rnb_rpt_element *reduced_nb_rpt)
+static void _dump_reduced_nb_rpt(struct rtw_phl_rnb_rpt_element *reduced_nb_rpt)
 {
 	struct tbtt_info_header *hdr;
 	struct rtw_phl_tbtt_info *tbtt_info;
@@ -1201,7 +1201,7 @@ void _dump_reduced_nb_rpt(struct rtw_phl_rnb_rpt_element *reduced_nb_rpt)
 	PHL_INFO("###### _dump_reduced_nb_rpt #######\n");
 }
 
-u8 _parse_tbtt_header(struct rtw_phl_com_t *phl_com,
+static u8 _parse_tbtt_header(struct rtw_phl_com_t *phl_com,
                       u8 *pos_start,
                       struct tbtt_info_header *hdr)
 {
@@ -1237,7 +1237,7 @@ exit:
 
 }
 
-u8 _parse_nb_info(struct rtw_phl_com_t *phl_com,
+static u8 _parse_nb_info(struct rtw_phl_com_t *phl_com,
                   u8 *pos_start,
                   struct rtw_phl_neighbor_ap *nb_ap)
 {

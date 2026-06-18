@@ -392,7 +392,7 @@ static void push_back_wait_msg(struct cmd_dispatcher *obj,
 	notify_dispr_thread(obj);
 }
 
- u8 is_higher_priority(void *d, void *priv,_os_list *input, _os_list *obj)
+ static u8 is_higher_priority(void *d, void *priv,_os_list *input, _os_list *obj)
  {
 	struct phl_dispr_msg_ex *ex_input = (struct phl_dispr_msg_ex *)input;
 	struct phl_dispr_msg_ex *ex_obj = (struct phl_dispr_msg_ex *)obj;
@@ -531,7 +531,7 @@ static bool is_msg_canceled(struct cmd_dispatcher *obj, struct phl_dispr_msg_ex 
 	return false;
 }
 
-void init_dispr_msg_pool(struct cmd_dispatcher *obj)
+static void init_dispr_msg_pool(struct cmd_dispatcher *obj)
 {
 	u16 i = 0;
 	void *d = phl_to_drvpriv(obj->phl_info);
@@ -551,7 +551,7 @@ void init_dispr_msg_pool(struct cmd_dispatcher *obj)
 	SET_STATUS_FLAG(obj->status, DISPR_MSGQ_INIT);
 }
 
-void deinit_dispr_msg_pool(struct cmd_dispatcher *obj)
+static void deinit_dispr_msg_pool(struct cmd_dispatcher *obj)
 {
 	void *d = phl_to_drvpriv(obj->phl_info);
 
@@ -564,7 +564,7 @@ void deinit_dispr_msg_pool(struct cmd_dispatcher *obj)
 	pq_deinit(d, &(obj->msg_pend_q));
 }
 
-void cancel_msg(struct cmd_dispatcher *obj, struct phl_dispr_msg_ex *ex)
+static void cancel_msg(struct cmd_dispatcher *obj, struct phl_dispr_msg_ex *ex)
 {
 	void *d = phl_to_drvpriv(obj->phl_info);
 
@@ -577,7 +577,7 @@ void cancel_msg(struct cmd_dispatcher *obj, struct phl_dispr_msg_ex *ex)
 	SET_STATUS_FLAG(ex->status, MSG_STATUS_CANCEL);
 }
 
-void cancel_running_msg(struct cmd_dispatcher *obj)
+static void cancel_running_msg(struct cmd_dispatcher *obj)
 {
 	u16 i = 0;
 
@@ -586,7 +586,7 @@ void cancel_running_msg(struct cmd_dispatcher *obj)
 			cancel_msg(obj, &(obj->msg_ex_pool[i]));
 	}
 }
-void set_msg_bitmap(struct cmd_dispatcher *obj, struct phl_dispr_msg_ex *ex, u8 mdl_id)
+static void set_msg_bitmap(struct cmd_dispatcher *obj, struct phl_dispr_msg_ex *ex, u8 mdl_id)
 {
 	void *d = phl_to_drvpriv(obj->phl_info);
 
@@ -622,7 +622,7 @@ static void set_msg_custom_bitmap(struct cmd_dispatcher *obj, struct phl_dispr_m
 	}
 }
 
-u8 *get_msg_bitmap(struct phl_dispr_msg_ex *ex)
+static u8 *get_msg_bitmap(struct phl_dispr_msg_ex *ex)
 {
 	if (TEST_STATUS_FLAG(ex->status, MSG_STATUS_PRE_PHASE)) {
 		SET_MSG_INDC_FIELD(ex->msg.msg_id, MSG_INDC_PRE_PHASE);
@@ -634,7 +634,7 @@ u8 *get_msg_bitmap(struct phl_dispr_msg_ex *ex)
 }
 
 
-void init_dispr_mdl_mgnt_info(struct cmd_dispatcher *obj)
+static void init_dispr_mdl_mgnt_info(struct cmd_dispatcher *obj)
 {
 	u8 i = 0;
 
@@ -728,7 +728,7 @@ static void clear_wating_req(struct cmd_dispatcher *obj)
 	}
 }
 
-void deregister_cur_cmd_req(struct cmd_dispatcher *obj, u8 notify)
+static void deregister_cur_cmd_req(struct cmd_dispatcher *obj, u8 notify)
 {
 	struct phl_cmd_token_req *req = NULL;
 	void *d = phl_to_drvpriv(obj->phl_info);
@@ -774,7 +774,7 @@ void deregister_cur_cmd_req(struct cmd_dispatcher *obj, u8 notify)
 	PHL_TRACE(COMP_PHL_CMDDISP, _PHL_INFO_, "%s[%d]\n", __func__, obj->idx);
 }
 
-u8 register_cur_cmd_req(struct cmd_dispatcher *obj,
+static u8 register_cur_cmd_req(struct cmd_dispatcher *obj,
 			  struct phl_cmd_token_req_ex *req)
 {
 	void *d = phl_to_drvpriv(obj->phl_info);
@@ -802,7 +802,7 @@ u8 register_cur_cmd_req(struct cmd_dispatcher *obj,
 	}
 }
 
-void cancel_all_cmd_req(struct cmd_dispatcher *obj)
+static void cancel_all_cmd_req(struct cmd_dispatcher *obj)
 {
 	u8 i = 0;
 	struct phl_cmd_token_req_ex* req_ex = NULL;
@@ -814,7 +814,7 @@ void cancel_all_cmd_req(struct cmd_dispatcher *obj)
 	}
 }
 
-void init_cmd_req_pool(struct cmd_dispatcher *obj)
+static void init_cmd_req_pool(struct cmd_dispatcher *obj)
 {
 	u8 i = 0;
 	void *d = phl_to_drvpriv(obj->phl_info);
@@ -834,7 +834,7 @@ void init_cmd_req_pool(struct cmd_dispatcher *obj)
 	SET_STATUS_FLAG(obj->status, DISPR_REQ_INIT);
 }
 
-void deinit_cmd_req_pool(struct cmd_dispatcher *obj)
+static void deinit_cmd_req_pool(struct cmd_dispatcher *obj)
 {
 	void *d = phl_to_drvpriv(obj->phl_info);
 
@@ -848,7 +848,7 @@ void deinit_cmd_req_pool(struct cmd_dispatcher *obj)
 	pq_deinit(d, &(obj->token_op_q));
 }
 
-u8 chk_module_ops(struct phl_bk_module_ops *ops)
+static u8 chk_module_ops(struct phl_bk_module_ops *ops)
 {
 	if (ops == NULL ||
 	    ops->init == NULL ||
@@ -862,7 +862,7 @@ u8 chk_module_ops(struct phl_bk_module_ops *ops)
 	return true;
 }
 
-u8 chk_cmd_req_ops(struct phl_cmd_token_req *req)
+static u8 chk_cmd_req_ops(struct phl_cmd_token_req *req)
 {
 	if (req == NULL ||
 	    req->module_id < PHL_FG_MDL_START ||
@@ -911,7 +911,7 @@ static u8 push_back_token_op_info(struct cmd_dispatcher *obj,
 	return true;
 }
 
-void _handle_token_op_info(struct cmd_dispatcher *obj, struct phl_token_op_info *op_info)
+static void _handle_token_op_info(struct cmd_dispatcher *obj, struct phl_token_op_info *op_info)
 {
 	struct phl_cmd_token_req_ex *req_ex = NULL;
 	void *d = phl_to_drvpriv(obj->phl_info);
@@ -954,7 +954,7 @@ void _handle_token_op_info(struct cmd_dispatcher *obj, struct phl_token_op_info 
 	}
 }
 
-void token_op_hanler(struct cmd_dispatcher *obj)
+static void token_op_hanler(struct cmd_dispatcher *obj)
 {
 	struct phl_token_op_info *info = NULL;
 	void *d = phl_to_drvpriv(obj->phl_info);
@@ -985,7 +985,7 @@ dispr_enqueue_token_op_info(struct cmd_dispatcher *obj,
 	return push_back_token_op_info(obj, op_info, type, data);
 }
 
-u8 bk_module_init(struct cmd_dispatcher *obj, struct phl_bk_module *module)
+static u8 bk_module_init(struct cmd_dispatcher *obj, struct phl_bk_module *module)
 {
 	if (TEST_STATUS_FLAG(module->status, MDL_INIT)) {
 		PHL_TRACE(COMP_PHL_CMDDISP, _PHL_ERR_, "%s[%d] module_id:%d already init\n",
@@ -1004,14 +1004,14 @@ u8 bk_module_init(struct cmd_dispatcher *obj, struct phl_bk_module *module)
 	}
 }
 
-void bk_module_deinit(struct cmd_dispatcher *obj, struct phl_bk_module *module)
+static void bk_module_deinit(struct cmd_dispatcher *obj, struct phl_bk_module *module)
 {
 	if (TEST_STATUS_FLAG(module->status, MDL_INIT))
 		module->ops.deinit((void*)obj, module->priv);
 	CLEAR_STATUS_FLAG(module->status, MDL_INIT);
 }
 
-u8 bk_module_start(struct cmd_dispatcher *obj, struct phl_bk_module *module)
+static u8 bk_module_start(struct cmd_dispatcher *obj, struct phl_bk_module *module)
 {
 	if (!TEST_STATUS_FLAG(module->status, MDL_INIT) ||
 	    TEST_STATUS_FLAG(module->status, MDL_STARTED)) {
@@ -1033,7 +1033,7 @@ u8 bk_module_start(struct cmd_dispatcher *obj, struct phl_bk_module *module)
 	}
 }
 
-u8 bk_module_stop(struct cmd_dispatcher *obj, struct phl_bk_module *module)
+static u8 bk_module_stop(struct cmd_dispatcher *obj, struct phl_bk_module *module)
 {
 	if (!TEST_STATUS_FLAG(module->status, MDL_STARTED))
 		return false;
@@ -1050,7 +1050,7 @@ u8 bk_module_stop(struct cmd_dispatcher *obj, struct phl_bk_module *module)
 	}
 }
 
-void cur_req_hdl(struct cmd_dispatcher *obj, struct phl_dispr_msg_ex *ex)
+static void cur_req_hdl(struct cmd_dispatcher *obj, struct phl_dispr_msg_ex *ex)
 {
 	struct phl_cmd_token_req_ex *cur_req = obj->cur_cmd_req;
 
@@ -1064,7 +1064,7 @@ void cur_req_hdl(struct cmd_dispatcher *obj, struct phl_dispr_msg_ex *ex)
 	cur_req->req.msg_hdlr((void*)obj, cur_req->req.priv, &(ex->msg));
 }
 
-void notify_msg_fail(struct cmd_dispatcher *obj,
+static void notify_msg_fail(struct cmd_dispatcher *obj,
                      struct phl_dispr_msg_ex *ex,
                      enum phl_mdl_ret_code ret)
 {
@@ -1088,7 +1088,7 @@ void notify_msg_fail(struct cmd_dispatcher *obj,
 	}
 }
 
-enum phl_mdl_ret_code feed_mdl_msg(struct cmd_dispatcher *obj,
+static enum phl_mdl_ret_code feed_mdl_msg(struct cmd_dispatcher *obj,
 				   struct phl_bk_module *mdl,
 				   struct phl_dispr_msg_ex *ex)
 {
@@ -1116,7 +1116,7 @@ enum phl_mdl_ret_code feed_mdl_msg(struct cmd_dispatcher *obj,
 	return ret;
 }
 
-void msg_pre_phase_hdl(struct cmd_dispatcher *obj, struct phl_dispr_msg_ex *ex)
+static void msg_pre_phase_hdl(struct cmd_dispatcher *obj, struct phl_dispr_msg_ex *ex)
 {
 	s8 i = 0;
 	void *d = phl_to_drvpriv(obj->phl_info);
@@ -1158,7 +1158,7 @@ void msg_pre_phase_hdl(struct cmd_dispatcher *obj, struct phl_dispr_msg_ex *ex)
 	}
 }
 
-void msg_post_phase_hdl(struct cmd_dispatcher *obj, struct phl_dispr_msg_ex *ex)
+static void msg_post_phase_hdl(struct cmd_dispatcher *obj, struct phl_dispr_msg_ex *ex)
 {
 	s8 i = 0;
 	void *d = phl_to_drvpriv(obj->phl_info);
@@ -1198,7 +1198,7 @@ void msg_post_phase_hdl(struct cmd_dispatcher *obj, struct phl_dispr_msg_ex *ex)
 	}
 }
 
-u8 get_cur_cmd_req_id(struct cmd_dispatcher *obj, u32 *req_status)
+static u8 get_cur_cmd_req_id(struct cmd_dispatcher *obj, u32 *req_status)
 {
 	struct phl_cmd_token_req_ex *cur_req = obj->cur_cmd_req;
 
@@ -1225,7 +1225,7 @@ u8 get_cur_cmd_req_id(struct cmd_dispatcher *obj, u32 *req_status)
 	if (TEST_STATUS_FLAG(ex->status, MSG_STATUS_PENDING)) \
 		goto reschedule;
 
-void msg_dispatch(struct cmd_dispatcher *obj, struct phl_dispr_msg_ex *ex)
+static void msg_dispatch(struct cmd_dispatcher *obj, struct phl_dispr_msg_ex *ex)
 {
 	u8 *bitmap = get_msg_bitmap(ex);
 	void *d = phl_to_drvpriv(obj->phl_info);
@@ -1284,7 +1284,7 @@ recycle:
 	push_back_idle_msg(obj, ex);
 }
 
-void dispr_thread_loop_hdl(struct cmd_dispatcher *obj)
+static void dispr_thread_loop_hdl(struct cmd_dispatcher *obj)
 {
 	struct phl_dispr_msg_ex *ex = NULL;
 
@@ -1312,7 +1312,7 @@ void dispr_thread_loop_hdl(struct cmd_dispatcher *obj)
 	}
 }
 
-void dispr_thread_leave_hdl(struct cmd_dispatcher *obj)
+static void dispr_thread_leave_hdl(struct cmd_dispatcher *obj)
 {
 	deregister_cur_cmd_req(obj, true);
 	/* clear remaining pending & waiting msg */
@@ -1342,7 +1342,7 @@ int background_thread_hdl(void *param)
 	return 0;
 }
 #endif
-u8 search_mdl(void *d, void *mdl, void *priv)
+static u8 search_mdl(void *d, void *mdl, void *priv)
 {
 	enum phl_module_id id = *(enum phl_module_id *)priv;
 	struct phl_bk_module *module = NULL;
@@ -1356,7 +1356,7 @@ u8 search_mdl(void *d, void *mdl, void *priv)
 		return false;
 }
 
-u8 get_module_by_id(struct cmd_dispatcher *obj, enum phl_module_id id,
+static u8 get_module_by_id(struct cmd_dispatcher *obj, enum phl_module_id id,
 		    struct phl_bk_module **mdl)
 {
 	void *d = phl_to_drvpriv(obj->phl_info);
@@ -1474,7 +1474,7 @@ void _notify_dispr_controller(struct cmd_dispatcher *obj, struct phl_dispr_msg_e
 
 }
 
-void dispr_thread_stop_prior_hdl(struct cmd_dispatcher *obj)
+static void dispr_thread_stop_prior_hdl(struct cmd_dispatcher *obj)
 {
 	if (!TEST_STATUS_FLAG(obj->status, DISPR_STARTED))
 		return;
@@ -1485,7 +1485,7 @@ void dispr_thread_stop_prior_hdl(struct cmd_dispatcher *obj)
 	cancel_running_msg(obj);
 }
 
-void dispr_thread_stop_post_hdl(struct cmd_dispatcher *obj)
+static void dispr_thread_stop_post_hdl(struct cmd_dispatcher *obj)
 {
 	void *d = phl_to_drvpriv(obj->phl_info);
 

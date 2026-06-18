@@ -1785,7 +1785,7 @@ void phl_regu_policy_init(void *drv_priv, void *phl)
 	_os_spinunlock(drv_priv, &rg->lock, _bh, NULL);
 }
 
-bool rtw_phl_regulation_valid(void *phl)
+static bool rtw_phl_regulation_valid(void *phl)
 {
 	return _regulation_valid(phl);
 }
