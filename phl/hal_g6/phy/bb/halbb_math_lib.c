@@ -237,7 +237,7 @@ u16 halbb_show_fraction_num(u32 frac_val, u8 bit_num)
 	return val;
 }
 
-u32 halbb_show_fraction_num_opt(u32 frac_val, u8 bit_num, u8 decimal_place)
+static u32 halbb_show_fraction_num_opt(u32 frac_val, u8 bit_num, u8 decimal_place)
 {
 	u8 i = 0;
 	u32 val = 0;

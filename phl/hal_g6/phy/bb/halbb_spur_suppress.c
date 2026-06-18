@@ -25,7 +25,7 @@
 
 #include "halbb_precomp.h"
 
-bool halbb_spur_location(struct bb_info *bb, u8 central_ch,
+static bool halbb_spur_location(struct bb_info *bb, u8 central_ch,
 			 enum channel_width bw, enum band_type band, u32 *intf)
 {
 	bool rpt = false;
@@ -66,7 +66,7 @@ bool halbb_spur_location(struct bb_info *bb, u8 central_ch,
 	return rpt;
 }
 
-bool halbb_spur_location_for_CSI(struct bb_info *bb, u8 central_ch,
+static bool halbb_spur_location_for_CSI(struct bb_info *bb, u8 central_ch,
 				 enum channel_width bw, enum band_type band, u32 *intf)
 {
 	bool rpt = false;

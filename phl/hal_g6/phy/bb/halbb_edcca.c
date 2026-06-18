@@ -25,7 +25,7 @@
 #include "halbb_precomp.h"
 
 #ifdef HALBB_EDCCA_SUPPORT
-bool halbb_edcca_abort(struct bb_info *bb)
+static bool halbb_edcca_abort(struct bb_info *bb)
 {
 	if (!(bb->support_ability & BB_EDCCA)) {
 		BB_DBG(bb, DBG_EDCCA, "edcca disable\n");
@@ -103,7 +103,7 @@ void halbb_set_collision_th(struct bb_info *bb)
 }
 #endif
 
-void halbb_set_edcca_thre(struct bb_info *bb)
+static void halbb_set_edcca_thre(struct bb_info *bb)
 {
 	struct bb_edcca_info *bb_edcca = &bb->bb_edcca_i;
 	struct bb_edcca_cr_info *cr = &bb->bb_edcca_i.bb_edcca_cr_i;
@@ -146,7 +146,7 @@ void halbb_set_edcca_thre(struct bb_info *bb)
 	/* ppdu_level_s80 = max(r_ppdu_level + 3, r_obss_level + 6)*/
 }
 
-u8 halbb_edcca_thre_transfer_rssi(struct bb_info *bb)
+static u8 halbb_edcca_thre_transfer_rssi(struct bb_info *bb)
 {
 	struct bb_link_info *bb_link = &bb->bb_link_i;
 	u8 rssi_min = bb->bb_ch_i.rssi_min >> 1;
@@ -234,7 +234,7 @@ void halbb_edcca_event_nofity(struct bb_info *bb, u8 pause_type)
 	pause_result = halbb_pause_func(bb, F_EDCCA, pause_type, HALBB_PAUSE_LV_2, 1, val, bb->bb_phy_idx);
 }
 
-void halbb_edcca_log(struct bb_info *bb)
+static void halbb_edcca_log(struct bb_info *bb)
 {
 	struct bb_edcca_info *bb_edcca = &bb->bb_edcca_i;
 	struct edcca_hw_rpt *rpt = &bb_edcca->edcca_rpt;
@@ -530,7 +530,7 @@ void halbb_fw_edcca(struct bb_info *bb)
 #endif
 }
 
-void halbb_fw_i(struct bb_info *bb, u8 enable)
+static void halbb_fw_i(struct bb_info *bb, u8 enable)
 {
 	struct bb_h2c_fw_edcca *fw_edcca_i = &bb->bb_fw_edcca_i;
 	u8 cmdlen;
@@ -580,7 +580,7 @@ void halbb_edcca_cmn_log(struct bb_info *bb)
 	       edcca_s_th - 128, ppdu_s_th - 128, obss_th - 128);
 }
 
-void halbb_edcca_cnsl_log(struct bb_info *bb, u32 *_used, char *output,
+static void halbb_edcca_cnsl_log(struct bb_info *bb, u32 *_used, char *output,
 			  u32 *_out_len)
 {
 	struct bb_edcca_info *bb_edcca = &bb->bb_edcca_i;

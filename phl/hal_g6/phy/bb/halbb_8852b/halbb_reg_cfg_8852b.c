@@ -26,16 +26,16 @@
 #include "../halbb_precomp.h"
 #ifdef BB_8852B_SUPPORT
 
-void halbb_cfg_rf_reg_8852b(struct bb_info *bb, u32 addr, u32 data,
+static void halbb_cfg_rf_reg_8852b(struct bb_info *bb, u32 addr, u32 data,
 			     enum rf_path rf_path, u32 reg_addr)
 {
 }
 
-void halbb_cfg_rf_radio_a_8852b(struct bb_info *bb, u32 addr, u32 data)
+static void halbb_cfg_rf_radio_a_8852b(struct bb_info *bb, u32 addr, u32 data)
 {
 }
 
-void halbb_cfg_rf_radio_b_8852b(struct bb_info *bb, u32 addr, u32 data)
+static void halbb_cfg_rf_radio_b_8852b(struct bb_info *bb, u32 addr, u32 data)
 {
 }
 

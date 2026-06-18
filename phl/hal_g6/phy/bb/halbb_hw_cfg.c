@@ -315,7 +315,7 @@ bool halbb_init_gain_table(struct bb_info *bb, bool is_form_folder, u32 folder_l
 }
 
 
-void halbb_get_efuse_ofst_init(struct bb_info *bb)
+static void halbb_get_efuse_ofst_init(struct bb_info *bb)
 {
 	switch (bb->ic_type) {
 

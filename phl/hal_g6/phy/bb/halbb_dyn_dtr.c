@@ -66,7 +66,7 @@ void halbb_dtr_acc_io_en(struct bb_info *bb)
 
 }
 
-void halbb_dtr_acc_callback(void *context)
+static void halbb_dtr_acc_callback(void *context)
 {
 	struct bb_info *bb = (struct bb_info *)context;
 	struct bb_dyn_dtr_info *bb_dyn_dtr = &bb->bb_dyn_dtr_i;
@@ -99,7 +99,7 @@ void halbb_dtr_deinit(struct bb_info *bb)
 	BB_DBG(bb, DBG_DBG_API, "halbb_dtr_deinit");
 }
 
-bool halbb_dtr_acc_mode_en(struct bb_info *bb)
+static bool halbb_dtr_acc_mode_en(struct bb_info *bb)
 {
 	struct bb_link_info *link = &bb->bb_link_i;
 	struct bb_dyn_dtr_info *bb_dyn_dtr = &bb->bb_dyn_dtr_i;

@@ -30,7 +30,7 @@
 
 #ifdef BB_8852B_SUPPORT
 
-bool halbb_sel_headline_8852b(struct bb_info *bb, u32 *array, u32 array_len,
+static bool halbb_sel_headline_8852b(struct bb_info *bb, u32 *array, u32 array_len,
 			      u8 *headline_size, u8 *headline_idx)
 {
 	bool case_match = false;
@@ -133,7 +133,7 @@ bool halbb_sel_headline_8852b(struct bb_info *bb, u32 *array, u32 array_len,
 	return false;
 }
 
-void halbb_flag_2_default_8852b(bool *is_matched, bool *find_target)
+static void halbb_flag_2_default_8852b(bool *is_matched, bool *find_target)
 {
 	*is_matched = true;
 	*find_target = false;

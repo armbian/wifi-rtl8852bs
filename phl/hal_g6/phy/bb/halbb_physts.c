@@ -323,7 +323,7 @@ END:
 	//	 __func__, ch_idx, band, seq_160m_bw, ch_ofst, ch_idx_encoded_tmp);
 }
 
-void halbb_physts_per_path_ie_rpt_en(struct bb_info *bb, bool en)
+static void halbb_physts_per_path_ie_rpt_en(struct bb_info *bb, bool en)
 {
 	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	u32 u32_tmp = 0;
@@ -368,7 +368,7 @@ void halbb_physts_cvrt_2_mp(struct bb_info *bb)
 	physts->show_phy_sts_all_pkt = true;
 }
 
-void halbb_physts_detail_dump_ie_11(struct bb_info *bb)
+static void halbb_physts_detail_dump_ie_11(struct bb_info *bb)
 {
 	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	struct bb_physts_rslt_11_info *psts_11 = &physts->bb_physts_rslt_11_i;
@@ -480,7 +480,7 @@ void halbb_physts_detail_dump_ie_11(struct bb_info *bb)
 	}
 }
 
-void halbb_physts_detail_dump_ie_4_7(struct bb_info *bb, enum bb_physts_ie_t ie)
+static void halbb_physts_detail_dump_ie_4_7(struct bb_info *bb, enum bb_physts_ie_t ie)
 {
 	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	struct bb_physts_rslt_4_to_7_info *psts_r = NULL;
@@ -523,7 +523,7 @@ void halbb_physts_detail_dump_ie_4_7(struct bb_info *bb, enum bb_physts_ie_t ie)
 		 ie_4_7->rf_tia_gain_idx, ie_4_7->tia_shrink_indicator);
 }
 
-void halbb_physts_detail_dump(struct bb_info *bb, u32 bitmap, u32 bitmap_mask)
+static void halbb_physts_detail_dump(struct bb_info *bb, u32 bitmap, u32 bitmap_mask)
 {
 	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	struct bb_physts_rslt_hdr_info	*psts_h = &physts->bb_physts_rslt_hdr_i;
@@ -965,7 +965,7 @@ void halbb_physts_brk_fail_rpt_en(struct bb_info *bb, bool enable,
 	}
 }
 
-void halbb_physts_td_time_rpt_en(struct bb_info *bb, bool en,
+static void halbb_physts_td_time_rpt_en(struct bb_info *bb, bool en,
 				 enum phl_phy_idx phy_idx)
 {
 	struct bb_physts_info *physts = &bb->bb_physts_i;
@@ -998,7 +998,7 @@ void halbb_mod_rssi_by_path_en(struct bb_info *bb, u8 rx_path_en)
 		psts_h->rssi_avg = valid_rssi_max;
 }
 
-u8 halbb_physts_ie_hdr(struct bb_info *bb,
+static u8 halbb_physts_ie_hdr(struct bb_info *bb,
 		       u8 *addr,
 		       struct physts_rxd *desc, u16 *ie_length_hdr)
 {
@@ -1040,7 +1040,7 @@ u8 halbb_physts_ie_hdr(struct bb_info *bb,
 	return physts_hdr->is_valid;
 }
 
-bool halbb_physts_ie_00(struct bb_info *bb,
+static bool halbb_physts_ie_00(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -1067,7 +1067,7 @@ bool halbb_physts_ie_00(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_01(struct bb_info *bb,
+static bool halbb_physts_ie_01(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -1144,7 +1144,7 @@ bool halbb_physts_ie_01(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_02(struct bb_info *bb,
+static bool halbb_physts_ie_02(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -1196,7 +1196,7 @@ bool halbb_physts_ie_02(struct bb_info *bb,
 	
 	return true;
 }
-bool halbb_physts_ie_03(struct bb_info *bb,
+static bool halbb_physts_ie_03(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -1226,7 +1226,7 @@ bool halbb_physts_ie_03(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_04_07(struct bb_info *bb,
+static bool halbb_physts_ie_04_07(struct bb_info *bb,
 			   enum bb_physts_ie_t ie,
 			   u8 *addr,
 			   u16 ie_length,
@@ -1274,7 +1274,7 @@ bool halbb_physts_ie_04_07(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_08(struct bb_info *bb,
+static bool halbb_physts_ie_08(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -1407,7 +1407,7 @@ bool halbb_physts_ie_08(struct bb_info *bb,
 	return true;
 }
 
-void halbb_physts_ie_09_lgcy(struct bb_info *bb,
+static void halbb_physts_ie_09_lgcy(struct bb_info *bb,
 			   u8 *addr,
 			   u8 rate_mode,
 			   struct physts_rxd *desc)
@@ -1421,7 +1421,7 @@ void halbb_physts_ie_09_lgcy(struct bb_info *bb,
 	psts_9->l_sig = (ie_9->l_sig_m << 11) | (ie_9->l_sig_lm << 3) | (ie_9->l_sig_l);
 }
 
-void halbb_physts_ie_09_vht(struct bb_info *bb,
+static void halbb_physts_ie_09_vht(struct bb_info *bb,
 			   u8 *addr,
 			   u8 rate_mode,
 			   struct physts_rxd *desc)
@@ -1437,7 +1437,7 @@ void halbb_physts_ie_09_vht(struct bb_info *bb,
 	psts_9->sig_a2 = (ie_9->sig_a2_m << 2) | (ie_9->sig_a2_l);
 }
 
-void halbb_physts_ie_09_he(struct bb_info *bb,
+static void halbb_physts_ie_09_he(struct bb_info *bb,
 			   u8 *addr,
 			   u8 rate_mode,
 			   struct physts_rxd *desc)
@@ -1465,7 +1465,7 @@ void halbb_physts_ie_09_he(struct bb_info *bb,
 #endif
 }
 
-bool halbb_physts_ie_09(struct bb_info *bb,
+static bool halbb_physts_ie_09(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -1487,7 +1487,7 @@ bool halbb_physts_ie_09(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_10(struct bb_info *bb,
+static bool halbb_physts_ie_10(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -1509,7 +1509,7 @@ bool halbb_physts_ie_10(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_11(struct bb_info *bb,
+static bool halbb_physts_ie_11(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -1531,7 +1531,7 @@ bool halbb_physts_ie_11(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_12(struct bb_info *bb,
+static bool halbb_physts_ie_12(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -1583,7 +1583,7 @@ bool halbb_physts_ie_12(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_13(struct bb_info *bb,
+static bool halbb_physts_ie_13(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -1648,7 +1648,7 @@ bool halbb_physts_ie_13(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_14(struct bb_info *bb,
+static bool halbb_physts_ie_14(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -1699,7 +1699,7 @@ bool halbb_physts_ie_14(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_15(struct bb_info *bb,
+static bool halbb_physts_ie_15(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -1755,7 +1755,7 @@ bool halbb_physts_ie_15(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_17(struct bb_info *bb,
+static bool halbb_physts_ie_17(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -1814,7 +1814,7 @@ bool halbb_physts_ie_17(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_18(struct bb_info *bb,
+static bool halbb_physts_ie_18(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -1841,7 +1841,7 @@ bool halbb_physts_ie_18(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_19(struct bb_info *bb,
+static bool halbb_physts_ie_19(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -1876,7 +1876,7 @@ bool halbb_physts_ie_19(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_20(struct bb_info *bb,
+static bool halbb_physts_ie_20(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -1966,7 +1966,7 @@ bool halbb_physts_ie_20(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_21(struct bb_info *bb,
+static bool halbb_physts_ie_21(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -2056,7 +2056,7 @@ bool halbb_physts_ie_21(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_22(struct bb_info *bb,
+static bool halbb_physts_ie_22(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -2080,7 +2080,7 @@ bool halbb_physts_ie_22(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_24(struct bb_info *bb,
+static bool halbb_physts_ie_24(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -2127,7 +2127,7 @@ bool halbb_physts_ie_24(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_25(struct bb_info *bb,
+static bool halbb_physts_ie_25(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -2171,7 +2171,7 @@ bool halbb_physts_ie_25(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_26(struct bb_info *bb,
+static bool halbb_physts_ie_26(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -2184,7 +2184,7 @@ bool halbb_physts_ie_26(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_27(struct bb_info *bb,
+static bool halbb_physts_ie_27(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -2197,7 +2197,7 @@ bool halbb_physts_ie_27(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_28(struct bb_info *bb,
+static bool halbb_physts_ie_28(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -2244,7 +2244,7 @@ bool halbb_physts_ie_28(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_29(struct bb_info *bb,
+static bool halbb_physts_ie_29(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -2291,7 +2291,7 @@ bool halbb_physts_ie_29(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_30(struct bb_info *bb,
+static bool halbb_physts_ie_30(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -2304,7 +2304,7 @@ bool halbb_physts_ie_30(struct bb_info *bb,
 	return true;
 }
 
-bool halbb_physts_ie_31(struct bb_info *bb,
+static bool halbb_physts_ie_31(struct bb_info *bb,
 			   u8 *addr,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
@@ -2443,7 +2443,7 @@ void halbb_physts_rpt_gen(struct bb_info *bb, u32 physts_bitmap,
 		rpt->snr_fd_avg, rpt->snr_fd[0], rpt->snr_fd[1], rpt->snr_fd[2], rpt->snr_fd[3]);
 }
 
-void halbb_physts_print(struct bb_info *bb, struct physts_rxd *desc,
+static void halbb_physts_print(struct bb_info *bb, struct physts_rxd *desc,
 			u16 total_len, u8 *addr, u32 physts_bitmap)
 {
 	struct bb_physts_info	*physts = &bb->bb_physts_i;
@@ -2517,7 +2517,7 @@ void halbb_physts_print(struct bb_info *bb, struct physts_rxd *desc,
 	BB_TRACE("==============================================\n");
 }
 
-bool halbb_6_physts_parsing(struct bb_info *bb_0,
+static bool halbb_6_physts_parsing(struct bb_info *bb_0,
 			      u8 *addr,
 			      u16 physts_total_length,
 			      struct physts_rxd *desc,
@@ -3016,7 +3016,7 @@ void halbb_physts_parsing_init(struct bb_info *bb)
 	halbb_physts_parsing_init_io_en(bb);
 }
 
-void halbb_physts_query_from_bbcr(struct bb_info *bb)
+static void halbb_physts_query_from_bbcr(struct bb_info *bb)
 {
 	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	//struct bb_physts_cr_info *cr = &physts->bb_physts_cr_i;

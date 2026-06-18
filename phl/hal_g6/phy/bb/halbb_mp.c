@@ -68,7 +68,7 @@ u16 halbb_mp_get_tx_ok(struct bb_info *bb, u32 rate_index,
 	return (u16)tx_ok;
 }
 
-u32 halbb_rx_crc_ok_6(struct bb_info *bb, enum phl_phy_idx phy_idx)
+static u32 halbb_rx_crc_ok_6(struct bb_info *bb, enum phl_phy_idx phy_idx)
 {
 	u32 cck_ok = 0, ofdm_ok = 0, ht_ok = 0, vht_ok = 0, he_ok = 0;
 	u32 crc_ok;
@@ -100,7 +100,7 @@ u32 halbb_rx_crc_ok_6(struct bb_info *bb, enum phl_phy_idx phy_idx)
 	return crc_ok;
 }
 
-u32 halbb_rx_crc_ok_7(struct bb_info *bb, enum phl_phy_idx phy_idx)
+static u32 halbb_rx_crc_ok_7(struct bb_info *bb, enum phl_phy_idx phy_idx)
 {
 	u32 cck_ok = 0, ofdm_ok = 0, ht_ok = 0, vht_ok = 0, he_ok = 0, eht_ok = 0;
 	u32 crc_ok;
@@ -150,7 +150,7 @@ u32 halbb_mp_get_rx_crc_ok(struct bb_info *bb, enum phl_phy_idx phy_idx)
 	return crc_ok;
 }
 
-u32 halbb_rx_crc_err_6(struct bb_info *bb, enum phl_phy_idx phy_idx)
+static u32 halbb_rx_crc_err_6(struct bb_info *bb, enum phl_phy_idx phy_idx)
 {
 	u32 cck_err = 0, ofdm_err = 0, ht_err = 0, vht_err = 0, he_err = 0;
 	u32 crc_err;
@@ -182,7 +182,7 @@ u32 halbb_rx_crc_err_6(struct bb_info *bb, enum phl_phy_idx phy_idx)
 	return crc_err;
 }
 
-u32 halbb_rx_crc_err_7(struct bb_info *bb, enum phl_phy_idx phy_idx)
+static u32 halbb_rx_crc_err_7(struct bb_info *bb, enum phl_phy_idx phy_idx)
 {
 	u32 cck_err = 0, ofdm_err = 0, ht_err = 0, vht_err = 0, he_err = 0, eht_err = 0;
 	u32 crc_err;
@@ -252,7 +252,7 @@ void halbb_mp_reset_cnt(struct bb_info *bb)
 	halbb_set_reg_cmn(bb, cr->rst_all_cnt, cr->rst_all_cnt_m, 0, HW_PHY_1);
 }
 
-void halbb_mp_psts_setting(struct bb_info *bb, u32 ie_bitmap_setting)
+static void halbb_mp_psts_setting(struct bb_info *bb, u32 ie_bitmap_setting)
 {
 	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	struct bb_rpt_cr_info *cr = &bb->bb_rpt_i.bb_rpt_cr_i;
@@ -283,7 +283,7 @@ void halbb_mp_psts_setting(struct bb_info *bb, u32 ie_bitmap_setting)
 
 }
 
-void
+static void
 halbb_mp_get_psts_ie_bitmap(struct bb_info *bb, struct bb_mp_psts *bb_mp_physts)
 {
 	struct bb_physts_info	*physts = &bb->bb_physts_i;
@@ -297,7 +297,7 @@ halbb_mp_get_psts_ie_bitmap(struct bb_info *bb, struct bb_mp_psts *bb_mp_physts)
 }
 
 
-void
+static void
 halbb_mp_get_psts_ie_00(struct bb_info *bb, struct bb_mp_psts *bb_mp_physts)
 {
 	struct bb_physts_info	*physts = &bb->bb_physts_i;
@@ -310,7 +310,7 @@ halbb_mp_get_psts_ie_00(struct bb_info *bb, struct bb_mp_psts *bb_mp_physts)
 
 }
 
-void
+static void
 halbb_mp_get_psts_ie_01(struct bb_info *bb, struct bb_mp_psts *bb_mp_physts)
 {
 	struct bb_physts_info	*physts = &bb->bb_physts_i;
@@ -345,7 +345,7 @@ halbb_mp_get_psts(struct bb_info *bb , struct bb_mp_psts *bb_mp_physts)
 	}
 }
 
-void halbb_keeper_cond(struct bb_info *bb, bool keeper_en, u8 keeper_trig_cond,
+static void halbb_keeper_cond(struct bb_info *bb, bool keeper_en, u8 keeper_trig_cond,
 		       u8 dbg_sel, enum phl_phy_idx phy_idx)
 {
 	struct bb_rpt_cr_info *cr = &bb->bb_rpt_i.bb_rpt_cr_i;
@@ -795,7 +795,7 @@ u8 halbb_mp_get_rssi(struct bb_info *bb, enum rf_path path)
 #endif
 }
 
-s32 halbb_rssi_cal(struct bb_info *bb, u8 rssi_0, u8 rssi_1, bool is_higher_rssi_path, enum phl_phy_idx phy_idx)
+static s32 halbb_rssi_cal(struct bb_info *bb, u8 rssi_0, u8 rssi_1, bool is_higher_rssi_path, enum phl_phy_idx phy_idx)
 {
 	u8 rssi_diff = rssi_0 - rssi_1;
 	s32 rssi_cal;

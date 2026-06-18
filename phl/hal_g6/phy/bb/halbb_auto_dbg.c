@@ -29,7 +29,7 @@
 #define HALBB_CHK_HANG_APIS
 
 #ifdef HALBB_CHK_HANG_APIS
-void halbb_auto_chk_hang_reset(struct bb_info *bb)
+static void halbb_auto_chk_hang_reset(struct bb_info *bb)
 {
 	struct bb_auto_dbg_info *a_dbg = &bb->bb_auto_dbg_i;
 	struct bb_chk_hang_info *chk_hang = &a_dbg->bb_chk_hang_i;
@@ -37,7 +37,7 @@ void halbb_auto_chk_hang_reset(struct bb_info *bb)
 	halbb_mem_set(bb, chk_hang->dbg_port_val, 0, chk_hang->table_size);
 }
 
-void halbb_auto_chk_hang(struct bb_info *bb)
+static void halbb_auto_chk_hang(struct bb_info *bb)
 {
 	struct bb_auto_dbg_info *a_dbg = &bb->bb_auto_dbg_i;
 	struct bb_chk_hang_info *chk_hang = &a_dbg->bb_chk_hang_i;
@@ -78,7 +78,7 @@ void halbb_auto_chk_hang(struct bb_info *bb)
 	halbb_auto_chk_hang_reset(bb);
 }
 
-void halbb_auto_chk_hang_init(struct bb_info *bb)
+static void halbb_auto_chk_hang_init(struct bb_info *bb)
 {
 	struct bb_auto_dbg_info *a_dbg = &bb->bb_auto_dbg_i;
 	struct bb_chk_hang_info *chk_hang = &a_dbg->bb_chk_hang_i;

@@ -172,7 +172,7 @@ void halbb_antdiv_init(struct bb_info *bb)
 	BB_DBG(bb, DBG_INIT, "Init ant_diversity timer");
 }
 
-u8 halbb_antdiv_sel_tx_ant_by_ext_pwr_lmt(struct bb_info *bb)
+static u8 halbb_antdiv_sel_tx_ant_by_ext_pwr_lmt(struct bb_info *bb)
 {
 	struct rtw_tpu_info *tpu = &bb->hal_com->band[bb->bb_phy_idx].rtw_tpu_i;
 	struct rtw_phl_ext_pwr_lmt_info *ext_pwr_info = &bb->hal_com->band[bb->bb_phy_idx].rtw_tpu_i.ext_pwr_lmt_i;
@@ -213,7 +213,7 @@ u8 halbb_antdiv_sel_tx_ant_by_ext_pwr_lmt(struct bb_info *bb)
 	return ret;
 }
 
-void halbb_antdiv_set_tx_ant(struct bb_info *bb, u8 ant)
+static void halbb_antdiv_set_tx_ant(struct bb_info *bb, u8 ant)
 {
 	struct bb_antdiv_cr_info *cr = &bb->bb_ant_div_i.bb_antdiv_cr_i;
 	u8 default_ant;
@@ -324,7 +324,7 @@ void halbb_antdiv_set_ant(struct bb_info *bb, u8 ant)
 	}
 }
 
-void halbb_antdiv_get_rssi(struct bb_info *bb)
+static void halbb_antdiv_get_rssi(struct bb_info *bb)
 {
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
 	struct bb_pkt_cnt_su_info *pkt_cnt = &cmn_rpt->bb_pkt_cnt_su_i;
@@ -378,7 +378,7 @@ void halbb_antdiv_get_rssi(struct bb_info *bb)
 		rssi->aux_rssi_final = rssi->aux_rssi_cck_avg; */
 }
 
-void halbb_antdiv_get_rssi_target_ant(struct bb_info *bb)
+static void halbb_antdiv_get_rssi_target_ant(struct bb_info *bb)
 {
 	struct bb_antdiv_info *bb_ant_div = &bb->bb_ant_div_i;
 	struct bb_antdiv_rssi_info *rssi = &bb_ant_div->bb_rssi_i;
@@ -425,7 +425,7 @@ void halbb_antdiv_get_rssi_target_ant(struct bb_info *bb)
 		(bb_ant_div->target_ant_rssi == MAIN_ANT) ? "MAIN_ANT" : "AUX_ANT");
 }
 
-void halbb_antdiv_get_cn_target_ant(struct bb_info *bb)
+static void halbb_antdiv_get_cn_target_ant(struct bb_info *bb)
 {
 	struct bb_antdiv_info *bb_ant_div = &bb->bb_ant_div_i;
 	struct bb_link_info *bb_link = &bb->bb_link_i;
@@ -1218,7 +1218,7 @@ void halbb_antenna_diversity(struct bb_info *bb)
 	halbb_evm_based_antdiv(bb);
 }
 
-void halbb_antdiv_get_rssi_stat(struct bb_info *bb)
+static void halbb_antdiv_get_rssi_stat(struct bb_info *bb)
 {
 	struct bb_physts_rslt_hdr_info	*psts_h = &bb->bb_physts_i.bb_physts_rslt_hdr_i;
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
@@ -1278,7 +1278,7 @@ void halbb_antdiv_get_rssi_stat(struct bb_info *bb)
 	}
 }
 
-void halbb_antdiv_get_evm_stat(struct bb_info *bb)
+static void halbb_antdiv_get_evm_stat(struct bb_info *bb)
 {
 	struct bb_physts_rslt_1_info	*psts_1 = &bb->bb_physts_i.bb_physts_rslt_1_i;
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
@@ -1335,7 +1335,7 @@ void halbb_antdiv_get_evm_stat(struct bb_info *bb)
 	}
 }
 
-void halbb_antdiv_get_cn_stat(struct bb_info *bb)
+static void halbb_antdiv_get_cn_stat(struct bb_info *bb)
 {
 	struct bb_physts_rslt_1_info	*psts_1 = &bb->bb_physts_i.bb_physts_rslt_1_i;
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
@@ -1371,7 +1371,7 @@ void halbb_antdiv_get_cn_stat(struct bb_info *bb)
 	}
 }
 
-void halbb_antdiv_get_rate_stat(struct bb_info *bb)
+static void halbb_antdiv_get_rate_stat(struct bb_info *bb)
 {
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
 	//struct bb_pkt_cnt_su_info *pkt_cnt = &cmn_rpt->bb_pkt_cnt_su_i;
@@ -1721,7 +1721,7 @@ void halbb_antdiv_io_en(struct bb_info *bb)
 	halbb_evm_based_antdiv(bb);
 }
 
-void halbb_antdiv_callback(void *context)
+static void halbb_antdiv_callback(void *context)
 {
 	struct bb_info *bb = (struct bb_info *)context;
 	struct halbb_timer_info *timer = &bb->bb_ant_div_i.antdiv_timer_i;

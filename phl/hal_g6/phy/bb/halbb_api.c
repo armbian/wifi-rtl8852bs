@@ -152,7 +152,7 @@ u8 halbb_ch_2_band(struct bb_info *bb, u8 fc_ch)
 
 #ifdef BB_8852B_SUPPORT
 
-bool halbb_rf_sw_si_test(struct bb_info *bb, enum rf_path rx_path, u8 reg_addr, int ch_idx)
+static bool halbb_rf_sw_si_test(struct bb_info *bb, enum rf_path rx_path, u8 reg_addr, int ch_idx)
 {
 	u32 channel_change[3] = {0x1, 0x24, 0x99};
 	u32 ofdm_rx = 0x0, reg_value_0 = 0x0, reg_value_1 = 0x0;
@@ -307,7 +307,7 @@ u16 halbb_cfg_cmac_tx_ant(struct bb_info *bb, enum rf_path tx_path)
 }
 
 
-void halbb_gpio_ctrl_dump(struct bb_info *bb)
+static void halbb_gpio_ctrl_dump(struct bb_info *bb)
 {
 	switch (bb->ic_type) {
 
@@ -346,7 +346,7 @@ void halbb_gpio_ctrl_dump(struct bb_info *bb)
 	}
 }
 
-void halbb_gpio_rfm(struct bb_info *bb, enum bb_path path,
+static void halbb_gpio_rfm(struct bb_info *bb, enum bb_path path,
 		    enum bb_rfe_src_sel src, bool dis_tx_gnt_wl,
 		    bool active_tx_opt, bool act_bt_en, u8 rfm_output_val)
 {
@@ -390,7 +390,7 @@ void halbb_gpio_rfm(struct bb_info *bb, enum bb_path path,
 	}
 }
 
-void halbb_gpio_trsw_table(struct bb_info *bb, enum bb_path path,
+static void halbb_gpio_trsw_table(struct bb_info *bb, enum bb_path path,
 			   bool path_en, bool trsw_tx, bool trsw_rx,
 			   bool trsw, bool trsw_b)
 {
@@ -2260,7 +2260,7 @@ void halbb_ctrl_btc_preagc(struct bb_info *bb, bool bt_en)
 	#endif
 }
 
-void halbb_clk_en(struct bb_info *bb, bool en, enum phl_phy_idx phy_idx)
+static void halbb_clk_en(struct bb_info *bb, bool en, enum phl_phy_idx phy_idx)
 {
 	switch (bb->ic_type) {
 
@@ -2275,7 +2275,7 @@ void halbb_clk_en(struct bb_info *bb, bool en, enum phl_phy_idx phy_idx)
 	}
 }
 
-void halbb_pwr_en(struct bb_info *bb, bool en)
+static void halbb_pwr_en(struct bb_info *bb, bool en)
 {
 	switch (bb->ic_type) {
 
@@ -2641,7 +2641,7 @@ bool halbb_ctrl_mlo(struct bb_info *bb, enum mlo_dbcc_mode_type mode)
 }
 #endif
 
-void halbb_set_digital_pwr_comp(struct bb_info *bb, bool en, enum phl_phy_idx phy_idx)
+static void halbb_set_digital_pwr_comp(struct bb_info *bb, bool en, enum phl_phy_idx phy_idx)
 {
 	switch (bb->ic_type) {
 
@@ -2788,7 +2788,7 @@ void halbb_set_tx_pow_per_path_lmt(struct bb_info *bb, s16 pwr_lmt_a, s16 pwr_lm
 	}
 }
 
-u32 halbb_set_tx_pow_chk_cw_boundary(struct bb_info *bb, s16 pw_s10_3)
+static u32 halbb_set_tx_pow_chk_cw_boundary(struct bb_info *bb, s16 pw_s10_3)
 {
 	s16 rf_pw_cw = 0;
 	u32 pw_cw = pw_s10_3;
@@ -2806,7 +2806,7 @@ u32 halbb_set_tx_pow_chk_cw_boundary(struct bb_info *bb, s16 pw_s10_3)
 	return pw_cw;
 }
 
-void halbb_set_tx_pow_ref_and_cw(struct bb_info *bb,
+static void halbb_set_tx_pow_ref_and_cw(struct bb_info *bb,
 				  enum bb_path ref_pow_path,
 				  s16 pw_dbm_ofdm, /*s(9,2)*/
 				  s16 pw_dbm_cck, u8 path_pow_ofst_decrease,/*s(8,3)*/
@@ -3103,7 +3103,7 @@ void halbb_normal_efuse_verify_cck(struct bb_info *bb, s8 rx_gain_offset,
 	}
 }
 
-void halbb_rx_gain_dbg(struct bb_info *bb, char input[][16], u32 *_used,
+static void halbb_rx_gain_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 			char *output, u32 *_out_len)
 {
 	switch (bb->ic_type) {
@@ -3119,7 +3119,7 @@ void halbb_rx_gain_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 	}
 }
 
-void halbb_rx_op1db_dbg(struct bb_info *bb, char input[][16], u32 *_used,
+static void halbb_rx_op1db_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 			char *output, u32 *_out_len)
 {
 	switch (bb->ic_type) {
@@ -3211,7 +3211,7 @@ void halbb_agc_tia_shrink(struct bb_info *bb, bool shrink_en, bool shrink_init,
 	}
 }
 
-void halbb_agc_step_en(struct bb_info *bb, bool pre_pd_agc_en,
+static void halbb_agc_step_en(struct bb_info *bb, bool pre_pd_agc_en,
 		       bool linear_agc_en, bool post_pd_agc_en,
 		       bool nlgc_agc_en, enum rf_path path,
 		       enum phl_phy_idx phy_idx)

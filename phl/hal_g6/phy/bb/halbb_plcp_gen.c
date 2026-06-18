@@ -68,7 +68,7 @@ u32 halbb_max(u32 val_1, u32 val_2)
 	u32 out = val_1 < val_2 ? val_2 : val_1;
 	return out;
 }
-enum spec_list halbb_format2spec(enum packet_format_t in, bool *valid)
+static enum spec_list halbb_format2spec(enum packet_format_t in, bool *valid)
 {
 	enum spec_list spec = SPEC_B_MODE;
 
@@ -109,7 +109,7 @@ enum spec_list halbb_format2spec(enum packet_format_t in, bool *valid)
 	return spec;
 }
 
-void halbb_find_apep(u32 *apep, bool *can_find, u32 *n_mpdu, u32 *mpdu_length, u8 spec_idx)
+static void halbb_find_apep(u32 *apep, bool *can_find, u32 *n_mpdu, u32 *mpdu_length, u8 spec_idx)
 {
 	u32 apep_tmp;
 	bool is_match;
@@ -149,7 +149,7 @@ void halbb_find_apep(u32 *apep, bool *can_find, u32 *n_mpdu, u32 *mpdu_length, u
 }
 
 
-void halbb_com_par_cal(struct bb_info *bb, u16 n_sd, enum coding_rate_t code_rate, u8 n_bpscs, u8 nss, bool dcm, struct plcp_mcs_table_out_t *out)
+static void halbb_com_par_cal(struct bb_info *bb, u16 n_sd, enum coding_rate_t code_rate, u8 n_bpscs, u8 nss, bool dcm, struct plcp_mcs_table_out_t *out)
 {
 	if (dcm)
 		out->n_cbps = (n_sd * nss * n_bpscs) >> 1;
@@ -174,7 +174,7 @@ void halbb_com_par_cal(struct bb_info *bb, u16 n_sd, enum coding_rate_t code_rat
 	}
 }
 
-bool ldpc_extra_check(u32 n_avbits, u32 n_pld, u8 code_rate)
+static bool ldpc_extra_check(u32 n_avbits, u32 n_pld, u8 code_rate)
 {
 	bool cnd0, cnd1, cnd2;
 	u32 n_cw = 0, l_ldpc = 0, l_ldpc_idx = 0;
@@ -229,7 +229,7 @@ bool ldpc_extra_check(u32 n_avbits, u32 n_pld, u8 code_rate)
 	return (cnd0 && cnd1) || cnd2;
 }
 
-bool halbb_legacy_mcs_table(struct bb_info *bb, const struct plcp_mcs_table_in_t *in, struct plcp_mcs_table_out_t *out)
+static bool halbb_legacy_mcs_table(struct bb_info *bb, const struct plcp_mcs_table_in_t *in, struct plcp_mcs_table_out_t *out)
 {
 	u16 n_dbps_table[8] = {24, 36, 48, 72, 96, 144, 192, 216}; // int size
 	u16 n_cbps_table[8] = {48, 48, 96, 96, 192, 192, 288, 288};
@@ -259,7 +259,7 @@ bool halbb_legacy_mcs_table(struct bb_info *bb, const struct plcp_mcs_table_in_t
 	return true;
 }
 
-bool halbb_ht_mcs_table(struct bb_info *bb, const struct plcp_mcs_table_in_t *in, struct plcp_mcs_table_out_t *out)
+static bool halbb_ht_mcs_table(struct bb_info *bb, const struct plcp_mcs_table_in_t *in, struct plcp_mcs_table_out_t *out)
 {
 
 	u8 nss, mcs;
@@ -299,7 +299,7 @@ bool halbb_ht_mcs_table(struct bb_info *bb, const struct plcp_mcs_table_in_t *in
 	return true;
 }
 
-bool halbb_vht_mcs_table(struct bb_info *bb, const struct plcp_mcs_table_in_t *in, struct plcp_mcs_table_out_t *out){
+static bool halbb_vht_mcs_table(struct bb_info *bb, const struct plcp_mcs_table_in_t *in, struct plcp_mcs_table_out_t *out){
 	u16 n_sd_table[4] = {52, 108, 234, 468};
 	enum coding_rate_t code_rate_table[12] = {R12, R12, R34, R12, R34, R23,
 						  R34, R56, R34, R56, R34, R56};
@@ -375,7 +375,7 @@ bool halbb_vht_mcs_table(struct bb_info *bb, const struct plcp_mcs_table_in_t *i
 	return true;
 }
 
-bool halbb_he_mcs_table(struct bb_info *bb, const struct plcp_mcs_table_in_t *in, struct plcp_mcs_table_out_t *out)
+static bool halbb_he_mcs_table(struct bb_info *bb, const struct plcp_mcs_table_in_t *in, struct plcp_mcs_table_out_t *out)
 {
 	struct plcp_mcs_table_out_t out_temp;
 	u16 n_sd_table[8] = {24, 48, 102, 234, 468, 980, 1960, 52};
@@ -404,7 +404,7 @@ bool halbb_he_mcs_table(struct bb_info *bb, const struct plcp_mcs_table_in_t *in
 	return true;
 }
 
-bool halbb_eht_mcs_table(struct bb_info* bb, const struct plcp_mcs_table_in_t* in, struct plcp_mcs_table_out_t* out)
+static bool halbb_eht_mcs_table(struct bb_info* bb, const struct plcp_mcs_table_in_t* in, struct plcp_mcs_table_out_t* out)
 {
 	struct plcp_mcs_table_out_t out_temp;
 	u16 n_sd_table[17] = { 24, 48, 102, 234, 468, 980, 1960, 52 ,3920, 72, 126, 702, 1448, 1682, 2482, 2940, 3408 };
@@ -440,7 +440,7 @@ bool halbb_eht_mcs_table(struct bb_info* bb, const struct plcp_mcs_table_in_t* i
 	return true;
 }
 
-enum plcp_sts halbb_mcs_table(struct bb_info *bb, const struct plcp_mcs_table_in_t *in, struct plcp_mcs_table_out_t *out)
+static enum plcp_sts halbb_mcs_table(struct bb_info *bb, const struct plcp_mcs_table_in_t *in, struct plcp_mcs_table_out_t *out)
 {
 	switch ((enum spec_list)(in->spec_idx)) {
 		case SPEC_LEGACY:
@@ -473,7 +473,7 @@ enum plcp_sts halbb_mcs_table(struct bb_info *bb, const struct plcp_mcs_table_in
 }
 
 
-void halbb_get_mcs_out(struct bb_info *bb, const struct plcp_tx_pre_fec_padding_setting_in_t *in, struct plcp_tx_pre_fec_padding_setting_par_t *par, struct plcp_tx_pre_fec_padding_setting_out_t *out, bool *valid){
+static void halbb_get_mcs_out(struct bb_info *bb, const struct plcp_tx_pre_fec_padding_setting_in_t *in, struct plcp_tx_pre_fec_padding_setting_par_t *par, struct plcp_tx_pre_fec_padding_setting_out_t *out, bool *valid){
 	
 	bool mu_usr_en[14] = { false,false,false,false,false,false,false,true,true,false,true,true,false,true };
 	struct plcp_mcs_table_in_t mcs_in;
@@ -536,7 +536,7 @@ void halbb_get_mcs_out(struct bb_info *bb, const struct plcp_tx_pre_fec_padding_
 	}
 }
 
-void halbb_get_nsym_init(struct bb_info *bb, const struct plcp_tx_pre_fec_padding_setting_in_t *in, struct plcp_tx_pre_fec_padding_setting_par_t *par)
+static void halbb_get_nsym_init(struct bb_info *bb, const struct plcp_tx_pre_fec_padding_setting_in_t *in, struct plcp_tx_pre_fec_padding_setting_par_t *par)
 {
 	u8 n_tail = 6;
 	u8 n_service = 16;
@@ -578,7 +578,7 @@ void halbb_get_nsym_init(struct bb_info *bb, const struct plcp_tx_pre_fec_paddin
 
 }
 
-void halbb_get_nsym(struct bb_info *bb, const struct plcp_tx_pre_fec_padding_setting_in_t *in, const struct plcp_tx_pre_fec_padding_setting_par_t *par, struct plcp_tx_pre_fec_padding_setting_out_t *out)
+static void halbb_get_nsym(struct bb_info *bb, const struct plcp_tx_pre_fec_padding_setting_in_t *in, const struct plcp_tx_pre_fec_padding_setting_par_t *par, struct plcp_tx_pre_fec_padding_setting_out_t *out)
 {
 	u8 n_service, n_tail;
 	u8 t_pe_table[4][4] = {{0, 2, 4, 5}, {0, 0, 1, 2}, {0, 0, 2, 3}, {0, 1, 3, 4}};
@@ -672,7 +672,7 @@ void halbb_get_nsym(struct bb_info *bb, const struct plcp_tx_pre_fec_padding_set
 		out->n_sym_ehtsig = par->com.n_hesigb_sym;
 }
 
-void halbb_get_txtime(struct bb_info *bb, const struct plcp_tx_pre_fec_padding_setting_in_t *in, struct plcp_tx_pre_fec_padding_setting_par_t *par, struct plcp_tx_pre_fec_padding_setting_out_t *out)
+static void halbb_get_txtime(struct bb_info *bb, const struct plcp_tx_pre_fec_padding_setting_in_t *in, struct plcp_tx_pre_fec_padding_setting_par_t *par, struct plcp_tx_pre_fec_padding_setting_out_t *out)
 {
 	struct bb_h2c_fw_tx_setting *fw_tx_i = &bb->bb_fwtx_h2c_i;
 	//n_ma, m_ma
@@ -716,7 +716,7 @@ void halbb_get_txtime(struct bb_info *bb, const struct plcp_tx_pre_fec_padding_s
 	out->gi = par->com.gi;
 }
 
-void halbb_refine_input(struct bb_info *bb, const struct plcp_tx_pre_fec_padding_setting_in_t *in, struct plcp_tx_pre_fec_padding_setting_par_t *par)
+static void halbb_refine_input(struct bb_info *bb, const struct plcp_tx_pre_fec_padding_setting_in_t *in, struct plcp_tx_pre_fec_padding_setting_par_t *par)
 {
 	bool can_find = false , disam;
 	u8 n_tail = 6;

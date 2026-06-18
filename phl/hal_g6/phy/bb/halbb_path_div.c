@@ -26,7 +26,7 @@
 
 #ifdef HALBB_PATH_DIV_SUPPORT
 
-bool halbb_pathdiv_abort(struct bb_info *bb)
+static bool halbb_pathdiv_abort(struct bb_info *bb)
 {
 	if (!(bb->support_ability & BB_PATH_DIV)) {
 		BB_DBG(bb, DBG_PATH_DIV, "Not support path diversity\n");
@@ -150,7 +150,7 @@ void halbb_set_tx_path_by_cmac_tbl(struct bb_info *bb, u8 macid, enum bb_path tx
 
 }
 
-void halbb_set_tx_path_by_reg(struct bb_info *bb, u8 macid, enum bb_path tx_path_sel_1ss)
+static void halbb_set_tx_path_by_reg(struct bb_info *bb, u8 macid, enum bb_path tx_path_sel_1ss)
 {
 	struct bb_pathdiv_info *bb_path_div = &bb->bb_path_div_i;
 	struct rtw_hal_com_t *hal_com = bb->hal_com;

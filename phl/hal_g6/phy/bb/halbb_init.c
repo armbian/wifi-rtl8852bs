@@ -14,7 +14,7 @@
  *****************************************************************************/
 #include "halbb_precomp.h"
 
-bool halbb_chk_bb_rf_pkg_set_valid(struct bb_info *bb)
+static bool halbb_chk_bb_rf_pkg_set_valid(struct bb_info *bb)
 {
 	struct rtw_hal_com_t	*hal_i = bb->hal_com;
 	u8 bb_ver = 0; /*hal_i->bb_para_pkg_ver;*/ /*TBD*/
@@ -228,7 +228,7 @@ void halbb_bb_post_init(struct bb_info *bb, enum phl_phy_idx phy_idx)
 	}
 }
 
-void halbb_mlo_cfg_init(struct bb_info *bb)
+static void halbb_mlo_cfg_init(struct bb_info *bb)
 {
 	BB_DBG(bb, DBG_INIT, "[%s]\n", __func__);
 
@@ -250,7 +250,7 @@ void halbb_mlo_cfg_init(struct bb_info *bb)
 	}
 }
 
-void halbb_cmn_info_self_init_cmn_hook(struct bb_info *bb)
+static void halbb_cmn_info_self_init_cmn_hook(struct bb_info *bb)
 {
 	BB_DBG(bb, DBG_INIT, "[%s]\n", __func__);
 
@@ -417,7 +417,7 @@ void halbb_cmn_info_self_init_per_phy(struct bb_info *bb)
 	bb->bb_dbg_i.cr_fake_init_hook_val = 0xfc;
 }
 
-u64 halbb_supportability_default(struct bb_info *bb)
+static u64 halbb_supportability_default(struct bb_info *bb)
 {
 	struct rtw_phl_com_t *phl = bb->phl_com;
 	struct dev_cap_t *dev = &phl->dev_cap;
@@ -540,7 +540,7 @@ u64 halbb_supportability_default(struct bb_info *bb)
 	return support_ability;
 }
 
-void halbb_supportability_init(struct bb_info *bb)
+static void halbb_supportability_init(struct bb_info *bb)
 {
 	u64 support_ability;
 

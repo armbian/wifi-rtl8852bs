@@ -200,7 +200,7 @@ bool halbb_dig_gaincode_update_en_8852a(struct bb_info *bb)
 #endif
 
 #ifdef HALBB_DIG_DAMPING_CHK
-void halbb_dig_recorder_reset(struct bb_info *bb)
+static void halbb_dig_recorder_reset(struct bb_info *bb)
 {
 	struct bb_dig_info *dig = &bb->bb_dig_i;
 	struct bb_dig_record_info *dig_rc = &dig->bb_dig_record_i;
@@ -210,7 +210,7 @@ void halbb_dig_recorder_reset(struct bb_info *bb)
 	halbb_mem_set(bb, dig_rc, 0, sizeof(struct bb_dig_record_info));
 }
 
-void halbb_dig_recorder(struct bb_info *bb, u8 igi_curr, u32 fa_metrics)
+static void halbb_dig_recorder(struct bb_info *bb, u8 igi_curr, u32 fa_metrics)
 {
 	struct bb_dig_info *dig = &bb->bb_dig_i;
 	struct bb_dig_record_info *dig_rc = &dig->bb_dig_record_i;
@@ -266,7 +266,7 @@ void halbb_dig_recorder(struct bb_info *bb, u8 igi_curr, u32 fa_metrics)
 	       dig_rc->igi_bitmap & BIT0);
 }
 
-void halbb_dig_damping_chk(struct bb_info *bb)
+static void halbb_dig_damping_chk(struct bb_info *bb)
 {
 	struct bb_dig_info *dig = &bb->bb_dig_i;
 	struct bb_dig_record_info *dig_rc = &dig->bb_dig_record_i;
@@ -389,7 +389,7 @@ void halbb_dig_damping_chk(struct bb_info *bb)
 	       dig_rc->damping_lock_en, fa_pattern_match, diff1, diff2);
 }
 
-void halbb_dig_damping_chk_init(struct bb_info *bb)
+static void halbb_dig_damping_chk_init(struct bb_info *bb)
 {
 	struct bb_dig_info *dig = &bb->bb_dig_i;
 	struct bb_dig_record_info *dig_rc = &dig->bb_dig_record_i;
@@ -467,7 +467,7 @@ u8 halbb_get_rxb_idx(struct bb_info *bb, enum rf_path path)
 	return rxb_idx;
 }
 
-u8 halbb_igi_by_edcca(struct bb_info *bb, u8 igi)
+static u8 halbb_igi_by_edcca(struct bb_info *bb, u8 igi)
 {
 #ifdef HALBB_EDCCA_SUPPORT
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
@@ -484,7 +484,7 @@ u8 halbb_igi_by_edcca(struct bb_info *bb, u8 igi)
 	return igi;
 }
 
-void halbb_dig_noisy_lv_decision(struct bb_info *bb)
+static void halbb_dig_noisy_lv_decision(struct bb_info *bb)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 	struct bb_dig_op_unit *bb_dig_u = bb_dig->p_cur_dig_unit;
@@ -517,7 +517,7 @@ void halbb_dig_noisy_lv_decision(struct bb_info *bb)
 	bb_dig_u->fa_valid_state_cnt = 0;
 }
 
-s8 halbb_dig_ofst_by_fa(struct bb_info *bb, u16 fa)
+static s8 halbb_dig_ofst_by_fa(struct bb_info *bb, u16 fa)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 	struct bb_dig_op_para_unit *para = &bb_dig->p_cur_dig_unit->dig_op_para;
@@ -600,7 +600,7 @@ u8 halbb_dig_igi_by_ofst(struct bb_info *bb, u8 igi_pre, s8 ofst)
 	return igi_new;
 }
 
-void halbb_dig_igi_ofst_by_env(struct bb_info *bb)
+static void halbb_dig_igi_ofst_by_env(struct bb_info *bb)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 	struct bb_dig_op_unit *bb_dig_u = bb_dig->p_cur_dig_unit;
@@ -633,7 +633,7 @@ void halbb_dig_igi_ofst_by_env(struct bb_info *bb)
 		   bb_dig_u->cur_noisy_lv, fa_rssi_ofst_pre, bb_dig_u->fa_rssi_ofst, IGI_OFFSET_MAX);
 }
 
-u8 halbb_dig_igi_bound_decision(struct bb_info *bb)
+static u8 halbb_dig_igi_bound_decision(struct bb_info *bb)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 	struct bb_dig_op_unit *bb_dig_u = bb_dig->p_cur_dig_unit;
@@ -682,7 +682,7 @@ u8 halbb_dig_igi_bound_decision(struct bb_info *bb)
 	return igi_new;
 }
 
-bool halbb_dig_fahm_trig(struct bb_info *bb, u16 mntr_time)
+static bool halbb_dig_fahm_trig(struct bb_info *bb, u16 mntr_time)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 	bool is_trig_success = false;
@@ -706,7 +706,7 @@ bool halbb_dig_fahm_trig(struct bb_info *bb, u16 mntr_time)
 	return is_trig_success;
 }
 
-bool halbb_dig_fahm_latch(struct bb_info *bb)
+static bool halbb_dig_fahm_latch(struct bb_info *bb)
 {
 	struct bb_dig_info *dig = &bb->bb_dig_i;
 	struct bb_dig_op_unit *dig_u = dig->p_cur_dig_unit;
@@ -754,7 +754,7 @@ bool halbb_dig_fahm_latch(struct bb_info *bb)
 	return true;
 }
 
-void halbb_sdagc_follow_pagc_config(struct bb_info *bb, bool set_en)
+static void halbb_sdagc_follow_pagc_config(struct bb_info *bb, bool set_en)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 	const struct bb_dig_cr_info *cr = &bb_dig->bb_dig_cr_i;
@@ -778,7 +778,7 @@ void halbb_sdagc_follow_pagc_config(struct bb_info *bb, bool set_en)
 	BB_DIG_DBG(bb, DIG_DBG_LV1, "sdagc_follow_pagc=%d\n", val);
 }
 
-void halbb_dyn_pd_th_cck(struct bb_info *bb, u8 rssi, bool set_en)
+static void halbb_dyn_pd_th_cck(struct bb_info *bb, u8 rssi, bool set_en)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 	struct bb_dig_op_unit *bb_dig_u = bb_dig->p_cur_dig_unit;
@@ -807,7 +807,7 @@ void halbb_dyn_pd_th_cck(struct bb_info *bb, u8 rssi, bool set_en)
 	}
 }
 
-void halbb_dyn_pd_th_ofdm(struct bb_info *bb, u8 rssi, bool set_en)
+static void halbb_dyn_pd_th_ofdm(struct bb_info *bb, u8 rssi, bool set_en)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 	struct bb_dig_op_unit *bb_dig_u = bb_dig->p_cur_dig_unit;
@@ -856,7 +856,7 @@ void halbb_dig_mode_update(struct bb_info *bb, enum dig_op_mode mode, enum phl_p
 	BB_DIG_DBG(bb, DIG_DBG_LV0, "Set DIG op mode %d\n", bb_dig->dig_mode);
 }
 
-void halbb_dig_gain_para_init(struct bb_info *bb)
+static void halbb_dig_gain_para_init(struct bb_info *bb)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 	struct bb_dig_cr_info *cr = &bb_dig->bb_dig_cr_i;
@@ -976,7 +976,7 @@ void halbb_dig_gain_para_init(struct bb_info *bb)
 static const u16 fa_th_no_link[FA_TH_NUM] = {196, 352, 440, 528};
 static const u16 fa_th_linked[FA_TH_NUM] = {4, 8, 12, 16};
 
-void halbb_dig_para_update(struct bb_info *bb)
+static void halbb_dig_para_update(struct bb_info *bb)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 	struct bb_link_info *bb_link = &bb->bb_link_i;
@@ -1013,7 +1013,7 @@ void halbb_dig_para_update(struct bb_info *bb)
 #endif
 }
 
-void halbb_dig_fa_info_update(struct bb_info *bb)
+static void halbb_dig_fa_info_update(struct bb_info *bb)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 	struct bb_dig_op_unit *bb_dig_u = bb_dig->p_cur_dig_unit;
@@ -1023,7 +1023,7 @@ void halbb_dig_fa_info_update(struct bb_info *bb)
 	bb_dig_u->fa_r_acc = 0;
 }
 
-void halbb_dig_op_unit_para_reset_h(struct bb_info *bb)
+static void halbb_dig_op_unit_para_reset_h(struct bb_info *bb)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 	struct bb_dig_op_unit *unit_cur = &bb_dig->dig_state_h_i;
@@ -1040,7 +1040,7 @@ void halbb_dig_op_unit_para_reset_h(struct bb_info *bb)
 }
 
 #ifdef HALBB_DIG_TDMA_SUPPORT
-void halbb_dig_op_unit_para_reset_l(struct bb_info *bb)
+static void halbb_dig_op_unit_para_reset_l(struct bb_info *bb)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 	struct bb_dig_op_unit *unit_cur = &bb_dig->dig_state_l_i;
@@ -1055,7 +1055,7 @@ void halbb_dig_op_unit_para_reset_l(struct bb_info *bb)
 }
 #endif
 
-void halbb_dig_fahm_para_init(struct bb_info *bb)
+static void halbb_dig_fahm_para_init(struct bb_info *bb)
 {
 	struct bb_dig_info *dig = &bb->bb_dig_i;
 #ifdef HALBB_ENV_MNTR_SUPPORT
@@ -1071,7 +1071,7 @@ void halbb_dig_fahm_para_init(struct bb_info *bb)
 	dig->fahm_is_triggered = false;
 }
 
-void halbb_dig_para_reset(struct bb_info *bb)
+static void halbb_dig_para_reset(struct bb_info *bb)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 
@@ -1092,7 +1092,7 @@ void halbb_dig_para_reset(struct bb_info *bb)
 #endif
 }
 
-void halbb_dig_reset(struct bb_info *bb)
+static void halbb_dig_reset(struct bb_info *bb)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 
@@ -1114,7 +1114,7 @@ void halbb_dig_reset(struct bb_info *bb)
 	halbb_sdagc_follow_pagc_config(bb, false);
 }
 
-void halbb_dig_init_io_en(struct bb_info *bb)
+static void halbb_dig_init_io_en(struct bb_info *bb)
 {
 	struct bb_dig_info *dig = &bb->bb_dig_i;
 	u8 igi_new;
@@ -1169,7 +1169,7 @@ void halbb_dig_init(struct bb_info *bb)
 	halbb_dig_init_io_en(bb);
 }
 
-bool halbb_dig_abort(struct bb_info *bb)
+static bool halbb_dig_abort(struct bb_info *bb)
 {
 	struct bb_dig_info *dig = &bb->bb_dig_i;
 
@@ -1370,7 +1370,7 @@ DIG_END:
 }
 
 #ifdef HALBB_DIG_TDMA_SUPPORT
-void halbb_tdma_dig(struct bb_info *bb) {
+static void halbb_tdma_dig(struct bb_info *bb) {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 	struct bb_dig_op_unit *bb_dig_u = bb_dig->p_cur_dig_unit;
 	bool fahm_op_status = false;
@@ -1498,7 +1498,7 @@ void halbb_tdmadig_io_en(struct bb_info *bb)
 	halbb_cfg_timers(bb, BB_SET_TIMER, &bb->bb_dig_i.dig_timer_i);
 }
 
-void halbb_tdmadig_callback(void *context)
+static void halbb_tdmadig_callback(void *context)
 {
 	struct bb_info *bb = (struct bb_info *)context;
 	struct halbb_timer_info *timer = &bb->bb_dig_i.dig_timer_i;
@@ -2247,7 +2247,7 @@ u32 halbb_c2h_mccdm_check(struct bb_info *bb, u16 len, u8 *c2h)
 	return _SUCCESS;
 }
 
-void halbb_mccdm_h2ccmd_rst(struct bb_info *bb)
+static void halbb_mccdm_h2ccmd_rst(struct bb_info *bb)
 {
 	struct mcc_h2c *mcc_cfg;
 	bool ret_val = false;
@@ -2276,7 +2276,7 @@ void halbb_mccdm_h2ccmd_rst(struct bb_info *bb)
 		hal_mem_free(bb->hal_com, mcc_cfg, cmdlen);
 }
 
-void Halbb_mccdm_h2c_handler(struct bb_info *bb)
+static void Halbb_mccdm_h2c_handler(struct bb_info *bb)
 {
 	struct halbb_mcc_dm *mcc_dm = &bb->mcc_dm;
 	struct mcc_h2c_reg_content *reg_cont;
@@ -2345,7 +2345,7 @@ void Halbb_mccdm_h2c_handler(struct bb_info *bb)
 		hal_mem_free(bb->hal_com, mcc_cfg, cmdlen);
 }
 
-void halbb_mccdm_ctrl(struct bb_info *bb)
+static void halbb_mccdm_ctrl(struct bb_info *bb)
 {
 	struct halbb_mcc_dm *mcc_dm = &bb->mcc_dm;
 	u32 val[2] = {0};
@@ -2372,7 +2372,7 @@ void halbb_mccdm_ctrl(struct bb_info *bb)
 	mcc_dm->mcc_pre_status_en = mcc_dm->mcc_status_en;
 }
 
-void halbb_fill_mcccmd(struct bb_info *bb, u8 regid, u16 reg_add, u16 mask,
+static void halbb_fill_mcccmd(struct bb_info *bb, u8 regid, u16 reg_add, u16 mask,
 		       u8 band, u16 val)
 {
 	struct halbb_mcc_dm *mcc_dm = &bb->mcc_dm;
@@ -2383,7 +2383,7 @@ void halbb_fill_mcccmd(struct bb_info *bb, u8 regid, u16 reg_add, u16 mask,
 	mcc_dm->mcc_dm_val[regid][band] = val;
 }
 
-void halbb_mccdm_igi_rst(struct bb_info *bb, u8 clr_port)
+static void halbb_mccdm_igi_rst(struct bb_info *bb, u8 clr_port)
 {
 	struct halbb_mcc_dm *mcc_dm = &bb->mcc_dm;
 
@@ -2410,7 +2410,7 @@ void halbb_mcc_igi_chk(struct bb_info *bb)
 }
 #endif
 
-u8 halbb_mccdm_pd_lower_bound_cal(struct bb_info *bb, u8 bound,
+static u8 halbb_mccdm_pd_lower_bound_cal(struct bb_info *bb, u8 bound,
 				      enum channel_width bw)
 {
 	/*
@@ -2462,7 +2462,7 @@ u8 halbb_mccdm_pd_lower_bound_cal(struct bb_info *bb, u8 bound,
 	return bound_idx;
 }
 
-void halbb_mccdm_pd_cal(struct bb_info *bb)
+static void halbb_mccdm_pd_cal(struct bb_info *bb)
 {
 	struct halbb_mcc_dm *mcc_dm = &bb->mcc_dm;
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;

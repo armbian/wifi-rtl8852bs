@@ -58,7 +58,7 @@ static const u8 he_sigb_n_user [256] = {
 	0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0};
 
-void halbb_sniffer_rpt_reset(struct bb_info *bb)
+static void halbb_sniffer_rpt_reset(struct bb_info *bb)
 {
 	struct bb_snif_info *snif = &bb->bb_cmn_hooker->bb_snif_i;
 
@@ -101,7 +101,7 @@ void halbb_sniffer_mode_en(struct bb_info *bb, bool en)
 	}
 }
 
-bool halbb_sniffer_phy_sts_ie_09(struct bb_info *bb)
+static bool halbb_sniffer_phy_sts_ie_09(struct bb_info *bb)
 {
 	struct bb_snif_info *snif = &bb->bb_cmn_hooker->bb_snif_i;
 	struct bb_physts_info	*physts = &bb->bb_physts_i;
@@ -136,7 +136,7 @@ bool halbb_sniffer_phy_sts_ie_09(struct bb_info *bb)
 	return true;
 }
 
-bool halbb_sniffer_phy_sts_ie_10(struct bb_info *bb)
+static bool halbb_sniffer_phy_sts_ie_10(struct bb_info *bb)
 {
 	struct bb_snif_info *snif = &bb->bb_cmn_hooker->bb_snif_i;
 	struct plcp_hdr_vht_sig_b_info *vht_sig_b = &snif->plcp_hdr_vht_sig_b_i;

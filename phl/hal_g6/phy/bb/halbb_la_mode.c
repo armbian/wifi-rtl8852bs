@@ -34,7 +34,7 @@
 #define SET_MAC_GET_BUF_RPT 1
 
 #if (SET_MAC_GET_BUF_RPT)
-u8 halbb_la_ptrn_chk(struct bb_info *bb)
+static u8 halbb_la_ptrn_chk(struct bb_info *bb)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
 	struct la_string_info *buf = &la->la_string_i;
@@ -97,7 +97,7 @@ u8 halbb_la_ptrn_chk(struct bb_info *bb)
 	return ptrn_match;
 }
 
-void halbb_la_rpt_buf_get(struct bb_info *bb, u16 finish_ofst, bool is_round_up)
+static void halbb_la_rpt_buf_get(struct bb_info *bb, u16 finish_ofst, bool is_round_up)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
 	struct la_string_info *buf = &la->la_string_i;
@@ -181,7 +181,7 @@ void halbb_la_mac_phy_src_sel(struct bb_info *bb, enum phl_phy_idx phy_idx)
 }
 #endif
 
-void halbb_la_set_mac_trig_time(struct bb_info *bb, u32 trig_time, u8 *unit, u8 *unit_num)
+static void halbb_la_set_mac_trig_time(struct bb_info *bb, u32 trig_time, u8 *unit, u8 *unit_num)
 {
 	u32 ref_time = 128;
 	u8 time_unit_num = 0;
@@ -206,7 +206,7 @@ void halbb_la_set_mac_trig_time(struct bb_info *bb, u32 trig_time, u8 *unit, u8 
 	       unit_num[0], unit[0]);
 }
 
-bool halbb_la_mac_cfg_buf(struct bb_info *bb, enum la_buff_mode_t mode)
+static bool halbb_la_mac_cfg_buf(struct bb_info *bb, enum la_buff_mode_t mode)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
 	struct la_mac_cfg_info	*cfg = &la->la_mac_cfg_i;
@@ -288,7 +288,7 @@ bool halbb_la_mac_cfg_buf(struct bb_info *bb, enum la_buff_mode_t mode)
 	return true;
 }
 
-void halbb_la_mac_cfg_buf_default(struct bb_info *bb)
+static void halbb_la_mac_cfg_buf_default(struct bb_info *bb)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
 	struct la_string_info *buf = &la->la_string_i;
@@ -333,7 +333,7 @@ void halbb_la_mac_cfg_buf_default(struct bb_info *bb)
 	buf->smp_number_max = buf->buffer_size >> 3;
 }
 
-void halbb_la_mac_cfg_cmn(struct bb_info *bb)
+static void halbb_la_mac_cfg_cmn(struct bb_info *bb)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
 	struct la_mac_cfg_info	*cfg = &la->la_mac_cfg_i;
@@ -349,7 +349,7 @@ void halbb_la_mac_cfg_cmn(struct bb_info *bb)
 
 }
 
-void halbb_la_mac_init(struct bb_info *bb)
+static void halbb_la_mac_init(struct bb_info *bb)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
 	struct la_mac_cfg_info	*cfg = &la->la_mac_cfg_i;
@@ -365,7 +365,7 @@ void halbb_la_mac_init(struct bb_info *bb)
 #endif
 
 #if SET_MAC_TRIG
-void halbb_la_mac_set_adv_reset(struct bb_info *bb)
+static void halbb_la_mac_set_adv_reset(struct bb_info *bb)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
 	struct la_trig_mac_info *trig_mac = &la->la_trig_mac_i;
@@ -373,7 +373,7 @@ void halbb_la_mac_set_adv_reset(struct bb_info *bb)
 	halbb_mem_set(bb, trig_mac, 0, sizeof(struct la_trig_mac_info));
 }
 
-void halbb_la_mac_set_trig(struct bb_info *bb, bool mac_trig_en)
+static void halbb_la_mac_set_trig(struct bb_info *bb, bool mac_trig_en)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
 	struct la_trig_mac_info	*trig_mac = &la->la_trig_mac_i;
@@ -427,7 +427,7 @@ void halbb_la_mac_set_trig(struct bb_info *bb, bool mac_trig_en)
 #endif
 
 #if SET_BB_DMA_FMT
-void halbb_la_bb_set_dma_type(struct bb_info *bb)
+static void halbb_la_bb_set_dma_type(struct bb_info *bb)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
 	struct la_dma_info	*dma = &la->la_dma_i;
@@ -476,7 +476,7 @@ void halbb_la_bb_set_dma_type(struct bb_info *bb)
 	halbb_set_reg_cmn(bb, cr->r_dma_rdrdy, cr->r_dma_rdrdy_m, r_dma_rdrdy, bb->bb_phy_idx);
 }
 
-void halbb_la_bb_set_dma_type_reset(struct bb_info *bb)
+static void halbb_la_bb_set_dma_type_reset(struct bb_info *bb)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
 	struct la_dma_info	*dma = &la->la_dma_i;
@@ -501,7 +501,7 @@ void halbb_la_bb_set_dma_type_reset(struct bb_info *bb)
 #endif
 
 #if SET_BB_TRIG_RULE
-void halbb_la_bb_set_adv_reset(struct bb_info *bb)
+static void halbb_la_bb_set_adv_reset(struct bb_info *bb)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
 	struct la_adv_trig_info *adv = &la->adv_trig_i;
@@ -509,7 +509,7 @@ void halbb_la_bb_set_adv_reset(struct bb_info *bb)
 	halbb_mem_set(bb, adv, 0, sizeof(struct la_adv_trig_info));
 }
 
-void halbb_la_bb_set_smp_rate(struct bb_info *bb, u8 fix_mode_en,
+static void halbb_la_bb_set_smp_rate(struct bb_info *bb, u8 fix_mode_en,
 					  enum la_bb_smp_clk la_smp_rate_in)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
@@ -545,7 +545,7 @@ void halbb_la_bb_set_smp_rate(struct bb_info *bb, u8 fix_mode_en,
 		 __func__, smp_rate_tmp, la->la_smp_rate_log);
 }
 
-void halbb_la_bb_set_cmn_reset(struct bb_info *bb)
+static void halbb_la_bb_set_cmn_reset(struct bb_info *bb)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
 	enum channel_width bw = bb->hal_com->band[bb->bb_phy_idx].cur_chandef.bw;
@@ -574,7 +574,7 @@ void halbb_la_bb_set_cmn_reset(struct bb_info *bb)
 #endif
 }
 
-void halbb_la_bb_set_re_trig_reset(struct bb_info *bb)
+static void halbb_la_bb_set_re_trig_reset(struct bb_info *bb)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
 	struct la_re_trig_info *re_trig = &la->la_re_trig_i;
@@ -582,7 +582,7 @@ void halbb_la_bb_set_re_trig_reset(struct bb_info *bb)
 	halbb_mem_set(bb, re_trig, 0, sizeof(struct la_re_trig_info));
 }
 
-void halbb_la_bb_set_re_trig(struct bb_info *bb, bool re_trig_en)
+static void halbb_la_bb_set_re_trig(struct bb_info *bb, bool re_trig_en)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
 	struct la_re_trig_info *re_trig = &la->la_re_trig_i;
@@ -610,7 +610,7 @@ void halbb_la_bb_set_re_trig(struct bb_info *bb, bool re_trig_en)
 	halbb_set_reg_cmn(bb, cr->la_re_and1_inv, cr->la_re_and1_inv_m,
 		      re_trig->la_re_and0_inv, bb->bb_phy_idx);
 }
-void halbb_la_bb_set_trig(struct bb_info *bb, bool and0_trig_disable, bool adv_trig_en, bool not_stop_trig_en)
+static void halbb_la_bb_set_trig(struct bb_info *bb, bool and0_trig_disable, bool adv_trig_en, bool not_stop_trig_en)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
 	struct la_adv_trig_info *adv = &la->adv_trig_i;
@@ -713,7 +713,7 @@ void halbb_la_bb_set_trig(struct bb_info *bb, bool and0_trig_disable, bool adv_t
 			      adv->la_and7_val, bb->bb_phy_idx);
 }
 
-void halbb_la_bb_set_dbg_port(struct bb_info *bb, bool not_stop_trig_en)
+static void halbb_la_bb_set_dbg_port(struct bb_info *bb, bool not_stop_trig_en)
 {
 	
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
@@ -738,7 +738,7 @@ void halbb_la_bb_set_dbg_port(struct bb_info *bb, bool not_stop_trig_en)
 	}
 }
 
-void halbb_la_bb_set_general(struct bb_info *bb)
+static void halbb_la_bb_set_general(struct bb_info *bb)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
 	struct la_dma_info	*dma = &la->la_dma_i;
@@ -784,7 +784,7 @@ void halbb_la_bb_set_general(struct bb_info *bb)
 #endif
 
 #if LAMODE_MAIN
-void
+static void
 halbb_la_drv_buf_release(struct bb_info *bb)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
@@ -796,7 +796,7 @@ halbb_la_drv_buf_release(struct bb_info *bb)
 	}
 }
 
-bool
+static bool
 halbb_la_drv_buf_allocate(struct bb_info *bb)
 {
 	
@@ -819,14 +819,14 @@ halbb_la_drv_buf_allocate(struct bb_info *bb)
 	return ret;
 }
 
-void halbb_la_stop(struct bb_info *bb)
+static void halbb_la_stop(struct bb_info *bb)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
 
 	la->la_mode_state = LA_STATE_IDLE;
 }
 
-void halbb_la_main(struct bb_info *bb)
+static void halbb_la_main(struct bb_info *bb)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
 	struct la_dma_info	*dma = &la->la_dma_i;
@@ -977,7 +977,7 @@ void halbb_la_deinit(struct bb_info *bb)
 	halbb_la_drv_buf_release(bb);
 }
 
-void halbb_la_reset(struct bb_info *bb)
+static void halbb_la_reset(struct bb_info *bb)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
 	struct la_string_info *la_string = &la->la_string_i;
@@ -1594,7 +1594,7 @@ void halbb_cr_cfg_la_init(struct bb_info *bb)
 #endif
 
 #if LAMODE_ECHO_CMD
-void halbb_la_cr_dump(struct bb_info *bb)
+static void halbb_la_cr_dump(struct bb_info *bb)
 {
 	struct bb_la_cr_info *cr = &bb->bb_cmn_hooker->bb_la_mode_i.bb_la_cr_i;
 	u32 cr_table[18];
@@ -1627,7 +1627,7 @@ void halbb_la_cr_dump(struct bb_info *bb)
 	halbb_cr_table_dump(bb, cr_table, cr_len);
 }
 
-void halbb_la_buffer_print(struct bb_info *bb, char input[][16], u32 *_used,
+static void halbb_la_buffer_print(struct bb_info *bb, char input[][16], u32 *_used,
 		      char *output, u32 *_out_len)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
@@ -1726,7 +1726,7 @@ void halbb_la_buffer_print(struct bb_info *bb, char input[][16], u32 *_used,
 		     "Dump_End\n\n");
 }
 
-void halbb_la_cmd_bb_show_cfg(struct bb_info *bb, char input[][16], u32 *_used,
+static void halbb_la_cmd_bb_show_cfg(struct bb_info *bb, char input[][16], u32 *_used,
 			      char *output, u32 *_out_len)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
@@ -1848,7 +1848,7 @@ void halbb_la_cmd_bb_show_cfg(struct bb_info *bb, char input[][16], u32 *_used,
 		    "max_num {val:%d}: consective capture LA pattern number\n", la->la_count);
 }
 
-void halbb_la_cmd_bb_cmn(struct bb_info *bb, char input[][16], u32 *_used,
+static void halbb_la_cmd_bb_cmn(struct bb_info *bb, char input[][16], u32 *_used,
 			      char *output, u32 *_out_len)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
@@ -1877,7 +1877,7 @@ void halbb_la_cmd_bb_cmn(struct bb_info *bb, char input[][16], u32 *_used,
 	halbb_la_bb_set_smp_rate(bb, true, (enum la_bb_smp_clk)val[4]);
 }
 
-void halbb_la_cmd_bb_dma(struct bb_info *bb, char input[][16], u32 *_used,
+static void halbb_la_cmd_bb_dma(struct bb_info *bb, char input[][16], u32 *_used,
 			      char *output, u32 *_out_len)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
@@ -1914,7 +1914,7 @@ void halbb_la_cmd_bb_dma(struct bb_info *bb, char input[][16], u32 *_used,
 	}
 }
 
-void halbb_la_cmd_bb_trig(struct bb_info *bb, char input[][16], u32 *_used,
+static void halbb_la_cmd_bb_trig(struct bb_info *bb, char input[][16], u32 *_used,
 			      char *output, u32 *_out_len)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
@@ -1980,7 +1980,7 @@ void halbb_la_cmd_bb_trig(struct bb_info *bb, char input[][16], u32 *_used,
 		 "[Adv_trig_en=%d]\n\n", adv->adv_trig_en);
 }
 
-void halbb_la_cmd_bb_re_trig(struct bb_info *bb, char input[][16], u32 *_used,
+static void halbb_la_cmd_bb_re_trig(struct bb_info *bb, char input[][16], u32 *_used,
 			      char *output, u32 *_out_len)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
@@ -2038,7 +2038,7 @@ void halbb_la_timer_init(struct bb_info *bb)
 	halbb_init_timer(bb, &timer->timer_list, halbb_la_callback, bb, "halbb_la_timer");
 }
 
-void halbb_la_cmd_rtl_test(struct bb_info *bb, char input[][16], u32 *_used,
+static void halbb_la_cmd_rtl_test(struct bb_info *bb, char input[][16], u32 *_used,
 			    char *output, u32 *_out_len)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
@@ -2231,7 +2231,7 @@ void halbb_la_cmd_rtl_test(struct bb_info *bb, char input[][16], u32 *_used,
 	halbb_print_devider(bb, BB_DEVIDER_LEN_32, true, FRC_PRINT_LINE);
 }
 
-void halbb_la_cmd_mac_trig(struct bb_info *bb, char input[][16], u32 *_used,
+static void halbb_la_cmd_mac_trig(struct bb_info *bb, char input[][16], u32 *_used,
 			      char *output, u32 *_out_len)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;
@@ -2265,7 +2265,7 @@ void halbb_la_cmd_mac_trig(struct bb_info *bb, char input[][16], u32 *_used,
 	
 }
 
-void halbb_la_cmd_fast(struct bb_info *bb, char input[][16], u32 *_used,
+static void halbb_la_cmd_fast(struct bb_info *bb, char input[][16], u32 *_used,
 			    char *output, u32 *_out_len)
 {
 	struct bb_la_mode_info *la = &bb->bb_cmn_hooker->bb_la_mode_i;

@@ -87,7 +87,7 @@ void halbb_tdma_cr_sel_io_en(struct bb_info *bb)
 	halbb_tdma_cr_sel_main(bb);
 }
 
-void halbb_tdma_cr_sel_callback(void *context)
+static void halbb_tdma_cr_sel_callback(void *context)
 {
 	struct bb_info *bb = (struct bb_info *)context;
 	struct halbb_timer_info *timer = &bb->bb_dbg_i.tdma_cr_timer_i;
@@ -373,7 +373,7 @@ u32 halbb_get_dbgport_val_by_racing(struct bb_info *bb, u32 dbg_port)
 #endif
 
 #if HALBB_DBG_DVLP_FLAG /*Common debug message - relative*/
-void halbb_crc32_cnt2_cmn_log(struct bb_info *bb)
+static void halbb_crc32_cnt2_cmn_log(struct bb_info *bb)
 {
 	struct bb_stat_info *stat_t = &bb->bb_stat_i;
 	struct bb_crc2_info *crc2 = &stat_t->bb_crc2_i;
@@ -404,7 +404,7 @@ void halbb_crc32_cnt2_cmn_log(struct bb_info *bb)
 	       crc2->cnt_vht2_crc32_error, crc2->cnt_he2_crc32_error);
 }
 
-void halbb_crc32_cnt3_cmn_log(struct bb_info *bb)
+static void halbb_crc32_cnt3_cmn_log(struct bb_info *bb)
 {
 	struct bb_stat_info *stat_t = &bb->bb_stat_i;
 	struct bb_usr_set_info *usr_set = &stat_t->bb_usr_set_i;
@@ -493,7 +493,7 @@ void halbb_crc32_cnt3_cmn_log(struct bb_info *bb)
 	}
 }
 
-void halbb_dig_cmn_log(struct bb_info *bb)
+static void halbb_dig_cmn_log(struct bb_info *bb)
 {
 	struct bb_dig_cr_info *cr = &bb->bb_dig_i.bb_dig_cr_i;
 	u8 i = 0;
@@ -840,7 +840,7 @@ void halbb_get_tx_dbg_reg(struct bb_info *bb)
 	}
 }
 
-void halbb_basic_dbg_msg_ra_dbg_reg(struct bb_info *bb)
+static void halbb_basic_dbg_msg_ra_dbg_reg(struct bb_info *bb)
 {
 	struct rtw_phl_com_t *phl = bb->phl_com;
 	struct dev_cap_t *dev = &phl->dev_cap;
@@ -915,7 +915,7 @@ void halbb_basic_dbg_msg_ra_dbg_reg(struct bb_info *bb)
 	}
 }
 
-void halbb_basic_dbg_msg_tx_dbg_reg(struct bb_info *bb)
+static void halbb_basic_dbg_msg_tx_dbg_reg(struct bb_info *bb)
 {
 	struct bb_dbg_info *dbg = &bb->bb_dbg_i;
 	struct bb_tx_info *txdbg = &dbg->tx_info_i;
@@ -1194,7 +1194,7 @@ void halbb_basic_dbg_msg_tx_dbg_reg(struct bb_info *bb)
 	}
 }
 
-void halbb_basic_dbg_03_msg_pmac(struct bb_info *bb)
+static void halbb_basic_dbg_03_msg_pmac(struct bb_info *bb)
 {
 
 #ifdef HALBB_STATISTICS_SUPPORT
@@ -1258,7 +1258,7 @@ void halbb_basic_dbg_03_msg_pmac(struct bb_info *bb)
 #endif
 }
 
-void halbb_basic_dbg_05_rx(struct bb_info *bb)
+static void halbb_basic_dbg_05_rx(struct bb_info *bb)
 {
 	struct bb_ch_info *ch = &bb->bb_ch_i;
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
@@ -1296,7 +1296,7 @@ void halbb_basic_dbg_05_rx(struct bb_info *bb)
 	BB_DBG(bb, DBG_CMN, "BB monitor1 = (0x%x)\n", bb_monitor1);
 }
 
-void halbb_basic_dbg_msg_tx_info(struct bb_info *bb)
+static void halbb_basic_dbg_msg_tx_info(struct bb_info *bb)
 {
 	struct bb_ch_info *ch = &bb->bb_ch_i;
 	struct rtw_phl_stainfo_t *sta;
@@ -1367,7 +1367,7 @@ void halbb_basic_dbg_msg_tx_info(struct bb_info *bb)
 	halbb_basic_dbg_msg_ra_dbg_reg(bb);
 }
 
-void halbb_basic_dbg_08_rssi_rate_mu(struct bb_info *bb)
+static void halbb_basic_dbg_08_rssi_rate_mu(struct bb_info *bb)
 {
 	struct bb_ch_info *ch = &bb->bb_ch_i;
 	struct bb_link_info *link = &bb->bb_link_i;
@@ -1393,7 +1393,7 @@ void halbb_basic_dbg_08_rssi_rate_mu(struct bb_info *bb)
 	halbb_show_rssi_and_rate_distribution_mu(bb);
 }
 
-void halbb_basic_dbg_06_rssi_rate(struct bb_info *bb)
+static void halbb_basic_dbg_06_rssi_rate(struct bb_info *bb)
 {
 	struct bb_ch_info *ch = &bb->bb_ch_i;
 	struct bb_link_info *link = &bb->bb_link_i;
@@ -1430,7 +1430,7 @@ void halbb_basic_dbg_06_rssi_rate(struct bb_info *bb)
 		  avg_phy_rate, utility);
 }
 
-void halbb_basic_dbg_01_system(struct bb_info *bb)
+static void halbb_basic_dbg_01_system(struct bb_info *bb)
 {
 	struct bb_link_info	*link = &bb->bb_link_i;
 	struct bb_ch_info	*ch = &bb->bb_ch_i;
@@ -1516,7 +1516,7 @@ void halbb_basic_dbg_01_system(struct bb_info *bb)
 	}
 }
 
-void halbb_basic_dbg_04_tx(struct bb_info *bb)
+static void halbb_basic_dbg_04_tx(struct bb_info *bb)
 {
 	if (!(bb->cmn_dbg_msg_component & BB_BASIC_DBG_04_TX)) {
 		BB_DBG(bb, DBG_CMN, "Disabled\n");
@@ -1529,7 +1529,7 @@ void halbb_basic_dbg_04_tx(struct bb_info *bb)
 		halbb_basic_dbg_msg_tx_info(bb);
 }
 
-void halbb_basic_dbg_09_dm_summary(struct bb_info *bb)
+static void halbb_basic_dbg_09_dm_summary(struct bb_info *bb)
 {
 #ifdef HALBB_CFO_TRK_SUPPORT
 	struct bb_cfo_trk_info *cfo_trk = &bb->bb_cfo_trk_i;
