@@ -21,7 +21,7 @@
 
 #ifdef CONFIG_PHL_TEST_MP
 
-void _phl_mp_timer_cb(void *context)
+static void _phl_mp_timer_cb(void *context)
 {
 	struct mp_context *mp_ctx = (struct mp_context *)context;
 	struct phl_info_t *phl_info = (struct phl_info_t *)mp_ctx->phl;

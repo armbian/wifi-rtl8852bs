@@ -33,7 +33,7 @@ struct phl_ser_cmd_info phl_ser_cmd_i[] = {
 };
 
 /* echo phl ser state */
-void _phl_ser_cmd_state(struct phl_info_t *phl_info, u32 *used, char input[][MAX_ARGV],
+static void _phl_ser_cmd_state(struct phl_info_t *phl_info, u32 *used, char input[][MAX_ARGV],
 			u32 input_num, char *output, u32 out_len)
 {
 	struct rtw_stats *ser_stat = &phl_info->phl_com->phl_stats;
@@ -60,7 +60,7 @@ void _phl_ser_cmd_state(struct phl_info_t *phl_info, u32 *used, char input[][MAX
 }
 
 /* echo phl ser cmac */
-void _phl_ser_cmd_cmac(struct phl_info_t *phl_info, u32 *used, char input[][MAX_ARGV],
+static void _phl_ser_cmd_cmac(struct phl_info_t *phl_info, u32 *used, char input[][MAX_ARGV],
 			u32 input_num, char *output, u32 out_len )
 {
 	enum rtw_hal_status status = RTW_HAL_STATUS_FAILURE;
@@ -72,7 +72,7 @@ void _phl_ser_cmd_cmac(struct phl_info_t *phl_info, u32 *used, char input[][MAX_
 }
 
 /* echo phl ser dmac */
-void _phl_ser_cmd_dmac(struct phl_info_t *phl_info, u32 *used, char input[][MAX_ARGV],
+static void _phl_ser_cmd_dmac(struct phl_info_t *phl_info, u32 *used, char input[][MAX_ARGV],
 			u32 input_num, char *output, u32 out_len )
 {
 	enum rtw_hal_status status = RTW_HAL_STATUS_FAILURE;

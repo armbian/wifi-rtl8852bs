@@ -18,7 +18,7 @@
 #include "phl_test_fpga_api.h"
 
 #ifdef CONFIG_PHL_TEST_FPGA
-void fpga_notification_complete(void* priv, struct phl_msg* msg)
+static void fpga_notification_complete(void* priv, struct phl_msg* msg)
 {
 	struct fpga_context *fpga_ctx = (struct fpga_context *)priv;
 
@@ -29,7 +29,7 @@ void fpga_notification_complete(void* priv, struct phl_msg* msg)
 }
 
 
-void fpga_cmd_done_notification(struct fpga_context *fpga_ctx, enum fpga_class fpga_class,
+static void fpga_cmd_done_notification(struct fpga_context *fpga_ctx, enum fpga_class fpga_class,
 							u8 fpga_cmd_id)
 {
 	struct phl_msg msg = {0};
@@ -66,7 +66,7 @@ void fpga_cmd_done_notification(struct fpga_context *fpga_ctx, enum fpga_class f
  * @enum phl_msg_evt_id id: Assign different types of FPGA related msg event
  *	to pass buffer to another layer for further process
  */
-void fpga_buf_notification(struct fpga_context *fpga_ctx, void *buf, u32 buf_len,
+static void fpga_buf_notification(struct fpga_context *fpga_ctx, void *buf, u32 buf_len,
 			 enum phl_msg_evt_id id)
 {
 	struct phl_msg msg = {0};
@@ -98,7 +98,7 @@ void fpga_buf_notification(struct fpga_context *fpga_ctx, void *buf, u32 buf_len
 }
 
 
-bool fpga_get_rpt_check(struct fpga_context *fpga_ctx, void *rpt_buf)
+static bool fpga_get_rpt_check(struct fpga_context *fpga_ctx, void *rpt_buf)
 {
 	bool ret = true;
 #if 0
@@ -118,7 +118,7 @@ bool fpga_get_rpt_check(struct fpga_context *fpga_ctx, void *rpt_buf)
 	return ret;
 }
 
-u8 fpga_get_class_from_buf(struct fpga_context *fpga_ctx)
+static u8 fpga_get_class_from_buf(struct fpga_context *fpga_ctx)
 {
 	u8 *buf_tmp = NULL;
 	u8 fpga_class = FPGA_CLASS_MAX;
@@ -129,7 +129,7 @@ u8 fpga_get_class_from_buf(struct fpga_context *fpga_ctx)
 	return fpga_class;
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _fpga_mlo_replace_tx(struct fpga_context *fpga_ctx,
                      struct rtw_xmit_req *tx_req)
 {
@@ -199,7 +199,7 @@ exit:
 }
 
 
-u8 fpga_bp_handler(void *priv, struct test_bp_info* bp_info)
+static u8 fpga_bp_handler(void *priv, struct test_bp_info* bp_info)
 {
 	struct fpga_context *fpga_ctx = (struct fpga_context *)priv;
 	enum rtw_phl_status phl_status = RTW_PHL_STATUS_FAILURE;
@@ -247,26 +247,26 @@ u8 fpga_bp_handler(void *priv, struct test_bp_info* bp_info)
 	return phl_status;
 }
 
-u8 fpga_get_fail_rsn(void *priv,char* rsn, u32 max_len)
+static u8 fpga_get_fail_rsn(void *priv,char* rsn, u32 max_len)
 {
 	//struct fpga_context *fpga_ctx = (struct fpga_context *)priv;
 	return true;
 }
 
-u8 fpga_is_test_end(void *priv)
+static u8 fpga_is_test_end(void *priv)
 {
 	struct fpga_context *fpga_ctx = (struct fpga_context *)priv;
 
 	return fpga_ctx->is_fpga_test_end;
 }
 
-u8 fpga_is_test_pass(void *priv)
+static u8 fpga_is_test_pass(void *priv)
 {
 	//struct fpga_context *fpga_ctx = (struct fpga_context *)priv;
 	return true;
 }
 
-u8 fpga_start(void *priv)
+static u8 fpga_start(void *priv)
 {
 	struct fpga_context *fpga_ctx = (struct fpga_context *)priv;
 	struct rtw_phl_com_t* phl_com = fpga_ctx->phl_com;

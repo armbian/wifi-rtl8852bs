@@ -24,7 +24,7 @@ enum rtw_phl_status phl_recycle_test_tx(void *phl, struct rtw_xmit_req *treq);
 
 
 
-void _phl_free_rx_req_pool(void *phl)
+static void _phl_free_rx_req_pool(void *phl)
 {
 	struct phl_info_t *phl_info = (struct phl_info_t *)phl;
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
@@ -49,7 +49,7 @@ void _phl_free_rx_req_pool(void *phl)
 
 }
 
-enum rtw_phl_status _phl_alloc_rx_req_pool(void *phl, u32 rx_req_num)
+static enum rtw_phl_status _phl_alloc_rx_req_pool(void *phl, u32 rx_req_num)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
 	struct phl_info_t *phl_info = (struct phl_info_t *)phl;
@@ -91,7 +91,7 @@ enum rtw_phl_status _phl_alloc_rx_req_pool(void *phl, u32 rx_req_num)
 	return status;
 }
 
-struct rtw_test_rx *_phl_query_idle_rx_req(struct phl_info_t *phl_info)
+static struct rtw_test_rx *_phl_query_idle_rx_req(struct phl_info_t *phl_info)
 {
 	struct rtw_test_rx *rreq = NULL;
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
@@ -112,7 +112,7 @@ struct rtw_test_rx *_phl_query_idle_rx_req(struct phl_info_t *phl_info)
 	return rreq;
 }
 
-struct rtw_test_rx *_phl_query_busy_rx_req(struct phl_info_t *phl_info)
+static struct rtw_test_rx *_phl_query_busy_rx_req(struct phl_info_t *phl_info)
 {
 	struct rtw_test_rx *rreq = NULL;
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
@@ -133,7 +133,7 @@ struct rtw_test_rx *_phl_query_busy_rx_req(struct phl_info_t *phl_info)
 	return rreq;
 }
 
-void _phl_release_rx_req(struct phl_info_t *phl_info, struct rtw_test_rx *rreq)
+static void _phl_release_rx_req(struct phl_info_t *phl_info, struct rtw_test_rx *rreq)
 {
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
 	struct rtw_pool *rx_req_pool = &trx_test->rx_req_pool;
@@ -156,7 +156,7 @@ void _phl_release_rx_req(struct phl_info_t *phl_info, struct rtw_test_rx *rreq)
 	_os_spinunlock(drv_priv, &rx_req_pool->idle_lock, _bh, NULL);
 }
 
-void _phl_insert_busy_rx_req(struct phl_info_t *phl_info, struct rtw_test_rx *rreq)
+static void _phl_insert_busy_rx_req(struct phl_info_t *phl_info, struct rtw_test_rx *rreq)
 {
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
 	struct rtw_pool *rx_req_pool = &trx_test->rx_req_pool;
@@ -171,7 +171,7 @@ void _phl_insert_busy_rx_req(struct phl_info_t *phl_info, struct rtw_test_rx *rr
 }
 
 
-void _phl_free_tx_req_pool(void *phl)
+static void _phl_free_tx_req_pool(void *phl)
 {
 	struct phl_info_t *phl_info = (struct phl_info_t *)phl;
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
@@ -196,7 +196,7 @@ void _phl_free_tx_req_pool(void *phl)
 
 }
 
-enum rtw_phl_status _phl_alloc_tx_req_pool(void *phl, u32 tx_req_num)
+static enum rtw_phl_status _phl_alloc_tx_req_pool(void *phl, u32 tx_req_num)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
 	struct phl_info_t *phl_info = (struct phl_info_t *)phl;
@@ -240,7 +240,7 @@ enum rtw_phl_status _phl_alloc_tx_req_pool(void *phl, u32 tx_req_num)
 	return status;
 }
 
-struct rtw_xmit_req *_phl_query_idle_tx_req(struct phl_info_t *phl_info)
+static struct rtw_xmit_req *_phl_query_idle_tx_req(struct phl_info_t *phl_info)
 {
 	struct rtw_xmit_req *treq = NULL;
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
@@ -261,7 +261,7 @@ struct rtw_xmit_req *_phl_query_idle_tx_req(struct phl_info_t *phl_info)
 	return treq;
 }
 
-struct rtw_xmit_req *_phl_query_busy_tx_req(struct phl_info_t *phl_info)
+static struct rtw_xmit_req *_phl_query_busy_tx_req(struct phl_info_t *phl_info)
 {
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
 	struct rtw_pool *tx_req_pool = &trx_test->tx_req_pool;
@@ -282,7 +282,7 @@ struct rtw_xmit_req *_phl_query_busy_tx_req(struct phl_info_t *phl_info)
 	return treq;
 }
 
-void _phl_remove_busy_tx_req(struct phl_info_t *phl_info, struct rtw_xmit_req *treq)
+static void _phl_remove_busy_tx_req(struct phl_info_t *phl_info, struct rtw_xmit_req *treq)
 {
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
 	struct rtw_pool *tx_req_pool = &trx_test->tx_req_pool;
@@ -299,7 +299,7 @@ void _phl_remove_busy_tx_req(struct phl_info_t *phl_info, struct rtw_xmit_req *t
 }
 
 
-void _phl_release_tx_req(struct phl_info_t *phl_info, struct rtw_xmit_req *treq)
+static void _phl_release_tx_req(struct phl_info_t *phl_info, struct rtw_xmit_req *treq)
 {
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
 	struct rtw_pool *tx_req_pool = &trx_test->tx_req_pool;
@@ -322,7 +322,7 @@ void _phl_release_tx_req(struct phl_info_t *phl_info, struct rtw_xmit_req *treq)
 	_os_spinunlock(drv_priv, &tx_req_pool->idle_lock, _bh, NULL);
 }
 
-void _phl_insert_busy_tx_req(struct phl_info_t *phl_info, struct rtw_xmit_req *treq)
+static void _phl_insert_busy_tx_req(struct phl_info_t *phl_info, struct rtw_xmit_req *treq)
 {
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
 	struct rtw_pool *tx_req_pool = &trx_test->tx_req_pool;
@@ -336,7 +336,7 @@ void _phl_insert_busy_tx_req(struct phl_info_t *phl_info, struct rtw_xmit_req *t
 }
 
 
-void _phl_free_tx_pkt_pool(void *phl)
+static void _phl_free_tx_pkt_pool(void *phl)
 {
 	struct phl_info_t *phl_info = (struct phl_info_t *)phl;
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
@@ -386,7 +386,7 @@ void _phl_free_tx_pkt_pool(void *phl)
 }
 
 
-enum rtw_phl_status _phl_alloc_tx_pkt_pool(void *phl, u32 tx_pkt_num,
+static enum rtw_phl_status _phl_alloc_tx_pkt_pool(void *phl, u32 tx_pkt_num,
 					   u32 tx_pkt_size)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
@@ -452,7 +452,7 @@ enum rtw_phl_status _phl_alloc_tx_pkt_pool(void *phl, u32 tx_pkt_num,
 	return status;
 }
 
-struct rtw_payload *_phl_query_idle_tx_pkt(struct phl_info_t *phl_info)
+static struct rtw_payload *_phl_query_idle_tx_pkt(struct phl_info_t *phl_info)
 {
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
 	struct rtw_pool *tx_pkt_pool = &trx_test->tx_pkt_pool;
@@ -473,7 +473,7 @@ struct rtw_payload *_phl_query_idle_tx_pkt(struct phl_info_t *phl_info)
 	return tpkt;
 }
 
-struct rtw_payload *_phl_query_busy_tx_pkt(struct phl_info_t *phl_info)
+static struct rtw_payload *_phl_query_busy_tx_pkt(struct phl_info_t *phl_info)
 {
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
 	struct rtw_pool *tx_pkt_pool = &trx_test->tx_pkt_pool;
@@ -494,7 +494,7 @@ struct rtw_payload *_phl_query_busy_tx_pkt(struct phl_info_t *phl_info)
 	return tpkt;
 }
 
-void _phl_remove_busy_tx_pkt(struct phl_info_t *phl_info, struct rtw_payload *tpkt)
+static void _phl_remove_busy_tx_pkt(struct phl_info_t *phl_info, struct rtw_payload *tpkt)
 {
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
 	struct rtw_pool *tx_pkt_pool = &trx_test->tx_pkt_pool;
@@ -511,7 +511,7 @@ void _phl_remove_busy_tx_pkt(struct phl_info_t *phl_info, struct rtw_payload *tp
 }
 
 
-void _phl_release_tx_pkt(struct phl_info_t *phl_info, struct rtw_payload *tpkt)
+static void _phl_release_tx_pkt(struct phl_info_t *phl_info, struct rtw_payload *tpkt)
 {
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
 	struct rtw_pool *tx_pkt_pool = &trx_test->tx_pkt_pool;
@@ -529,7 +529,7 @@ void _phl_release_tx_pkt(struct phl_info_t *phl_info, struct rtw_payload *tpkt)
 	_os_spinunlock(drv_priv, &tx_pkt_pool->idle_lock, _bh, NULL);
 }
 
-void _phl_insert_busy_tx_pkt(struct phl_info_t *phl_info, struct rtw_payload *tpkt)
+static void _phl_insert_busy_tx_pkt(struct phl_info_t *phl_info, struct rtw_payload *tpkt)
 {
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
 	struct rtw_pool *tx_pkt_pool = &trx_test->tx_pkt_pool;
@@ -543,7 +543,7 @@ void _phl_insert_busy_tx_pkt(struct phl_info_t *phl_info, struct rtw_payload *tp
 	_os_spinunlock(drv_priv, &tx_pkt_pool->busy_lock, _bh, NULL);
 }
 
-u8 _phl_is_tx_test_done(void *phl)
+static u8 _phl_is_tx_test_done(void *phl)
 {
 	struct phl_info_t *phl_info = (struct phl_info_t *)phl;
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
@@ -558,7 +558,7 @@ u8 _phl_is_tx_test_done(void *phl)
 
 
 
-void phl_update_test_param(void *phl, struct rtw_trx_test_param *test_param)
+static void phl_update_test_param(void *phl, struct rtw_trx_test_param *test_param)
 {
 	struct phl_info_t *phl_info = (struct phl_info_t *)phl;
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
@@ -571,7 +571,7 @@ extern enum rtw_phl_status
 phl_wifi_role_start(struct phl_info_t *phl_info,
 				struct rtw_wifi_role_t *wrole,
 				struct rtw_phl_stainfo_t *sta);
-enum rtw_phl_status
+static enum rtw_phl_status
 _phl_test_add_role(void *phl, struct rtw_trx_test_param *test_param)
 {
 	enum rtw_phl_status phl_status = RTW_PHL_STATUS_FAILURE;
@@ -607,7 +607,7 @@ _phl_test_add_role(void *phl, struct rtw_trx_test_param *test_param)
 
 extern enum rtw_phl_status
 phl_wifi_role_stop(struct phl_info_t *phl_info, struct rtw_wifi_role_t *wrole);
-enum rtw_phl_status _phl_test_remove_role(
+static enum rtw_phl_status _phl_test_remove_role(
 					   void *phl,
 				       struct rtw_trx_test_param *test_param)
 {
@@ -622,7 +622,7 @@ enum rtw_phl_status _phl_test_remove_role(
 	return phl_status;
 }
 
-void phl_test_sw_free(void *phl)
+static void phl_test_sw_free(void *phl)
 {
 	FUNCIN();
 
@@ -634,7 +634,7 @@ void phl_test_sw_free(void *phl)
 }
 
 
-enum rtw_phl_status phl_test_sw_alloc(void *phl)
+static enum rtw_phl_status phl_test_sw_alloc(void *phl)
 {
 	enum rtw_phl_status sts = RTW_PHL_STATUS_FAILURE;
 	FUNCIN_WSTS(sts);
@@ -725,7 +725,7 @@ void phl_trx_test_deinit(void *phl)
 }
 
 
-void phl_test_hw_config_init(void *phl, u8 mode)
+static void phl_test_hw_config_init(void *phl, u8 mode)
 {
 	switch (mode) {
 	case TEST_MODE_PHL_TX_RING_TEST:
@@ -742,7 +742,7 @@ void phl_test_hw_config_init(void *phl, u8 mode)
 }
 
 
-void phl_test_hw_config_runtime(void *phl, u8 mode)
+static void phl_test_hw_config_runtime(void *phl, u8 mode)
 {
 	switch (mode) {
 	case TEST_MODE_PHL_TX_RING_TEST:
@@ -759,7 +759,7 @@ void phl_test_hw_config_runtime(void *phl, u8 mode)
 }
 
 
-void phl_test_fill_packet_content(struct phl_info_t *phl_info, u8 *pkt,
+static void phl_test_fill_packet_content(struct phl_info_t *phl_info, u8 *pkt,
 				  u16 size,
 				  struct rtw_trx_test_param *test_param)
 {
@@ -846,7 +846,7 @@ void rtw_phl_test_rx_callback(void *context)
 }
 
 
-enum rtw_phl_status rtw_phl_rx_reap(void *phl, u8 *xmit_req,
+static enum rtw_phl_status rtw_phl_rx_reap(void *phl, u8 *xmit_req,
 				    struct rtw_trx_test_param *param)
 {
 	enum rtw_phl_status sts = RTW_PHL_STATUS_FAILURE;
@@ -913,7 +913,7 @@ enum rtw_phl_status rtw_phl_rx_reap(void *phl, u8 *xmit_req,
 	return sts;
 }
 
-enum rtw_phl_status rtw_phl_test_rxq_notify(void *phl)
+static enum rtw_phl_status rtw_phl_test_rxq_notify(void *phl)
 {
 	enum rtw_phl_status pstatus = RTW_PHL_STATUS_FAILURE;
 	struct phl_info_t *phl_info = (struct phl_info_t *)phl;
@@ -925,7 +925,7 @@ enum rtw_phl_status rtw_phl_test_rxq_notify(void *phl)
 }
 
 
-enum rtw_phl_status phl_tx_ring_test(void *phl,
+static enum rtw_phl_status phl_tx_ring_test(void *phl,
 				     struct rtw_trx_test_param *test_param)
 {
 	struct phl_info_t *phl_info = (struct phl_info_t *)phl;
@@ -998,7 +998,7 @@ enum rtw_phl_status phl_tx_ring_test(void *phl,
 	return sts;
 }
 
-enum rtw_phl_status phl_rx_ring_test(void *phl,
+static enum rtw_phl_status phl_rx_ring_test(void *phl,
 				     struct rtw_trx_test_param *test_param)
 {
 	enum rtw_phl_status sts = RTW_PHL_STATUS_FAILURE;
@@ -1016,7 +1016,7 @@ enum rtw_phl_status phl_rx_ring_test(void *phl,
 }
 
 
-enum rtw_phl_status phl_hal_tx_test(void *phl,
+static enum rtw_phl_status phl_hal_tx_test(void *phl,
 				     struct rtw_trx_test_param *test_param)
 {
 	struct phl_info_t *phl_info = (struct phl_info_t *)phl;
@@ -1083,7 +1083,7 @@ enum rtw_phl_status phl_hal_tx_test(void *phl,
 	return sts;
 }
 
-enum rtw_phl_status phl_hal_rx_test(void *phl,
+static enum rtw_phl_status phl_hal_rx_test(void *phl,
 				     struct rtw_trx_test_param *test_param)
 {
 	struct phl_info_t *phl_info = (struct phl_info_t *)phl;
@@ -1105,7 +1105,7 @@ enum rtw_phl_status phl_hal_rx_test(void *phl,
 }
 
 
-enum rtw_phl_status phl_trx_test_start(void *phl,
+static enum rtw_phl_status phl_trx_test_start(void *phl,
 				       struct rtw_trx_test_param *test_param)
 {
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
@@ -1131,7 +1131,7 @@ enum rtw_phl_status phl_trx_test_start(void *phl,
 	return status;
 }
 
-void phl_trx_test_dump_result(void *phl, struct rtw_trx_test_param *test_param)
+static void phl_trx_test_dump_result(void *phl, struct rtw_trx_test_param *test_param)
 {
 	PHL_INFO("Test Done");
 }
@@ -1179,7 +1179,7 @@ end:
 	return sts;
 }
 
-void _phl_rx_test_pattern(struct phl_info_t *phl_info, void *ptr)
+static void _phl_rx_test_pattern(struct phl_info_t *phl_info, void *ptr)
 {
 	struct rtw_recv_pkt *rpkt = NULL;
 
@@ -1293,7 +1293,7 @@ enum rtw_phl_status rtw_phl_trx_testsuite(void *phl,
 }
 
 
-u8 trx_test_bp_handler(void *priv, struct test_bp_info* bp_info)
+static u8 trx_test_bp_handler(void *priv, struct test_bp_info* bp_info)
 {
 	u8 ret = BP_RET_SKIP_SECTION;
 
@@ -1301,7 +1301,7 @@ u8 trx_test_bp_handler(void *priv, struct test_bp_info* bp_info)
 }
 
 
-u8 trx_test_is_test_end(void *priv)
+static u8 trx_test_is_test_end(void *priv)
 {
 	struct phl_info_t *phl_info = (struct phl_info_t *)priv;
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
@@ -1310,32 +1310,32 @@ u8 trx_test_is_test_end(void *priv)
 	FUNCOUT();
 	return (test_param->is_trx_test_end == true) ? (true) : (false);
 }
-u8 trx_test_is_test_pass(void *priv)
+static u8 trx_test_is_test_pass(void *priv)
 {
 	FUNCIN();
 	FUNCOUT();
 	return true;
 }
 
-u8 trx_test_get_fail_rsn(void *priv, char* rsn, u32 max_len)
-{
-	//struct phl_info_t *phl_info = (struct phl_info_t *)priv;
-	FUNCIN();
-	FUNCOUT();
-	return true;
-
-}
-
-u8 trx_test_start_test(void *priv)
+static u8 trx_test_get_fail_rsn(void *priv, char* rsn, u32 max_len)
 {
 	//struct phl_info_t *phl_info = (struct phl_info_t *)priv;
 	FUNCIN();
 	FUNCOUT();
 	return true;
+
+}
+
+static u8 trx_test_start_test(void *priv)
+{
+	//struct phl_info_t *phl_info = (struct phl_info_t *)priv;
+	FUNCIN();
+	FUNCOUT();
+	return true;
 }
 
 
-void
+static void
 phl_add_trx_test_obj(void *phl)
 {
 	struct phl_info_t *phl_info = (struct phl_info_t *)phl;
