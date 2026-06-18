@@ -1015,7 +1015,7 @@ _exit:
 }
 #endif
 
-void rtw_init_bmc_sta_tx_rate(_adapter *padapter, struct sta_info *psta)
+static void rtw_init_bmc_sta_tx_rate(_adapter *padapter, struct sta_info *psta)
 {
 /* ToDo: need API to query hal_sta->ra_info.ramask */
 #if 0
@@ -1050,7 +1050,7 @@ void rtw_init_bmc_sta_tx_rate(_adapter *padapter, struct sta_info *psta)
 }
 
 #if defined(CONFIG_80211N_HT) && defined(CONFIG_BEAMFORMING)
-void update_sta_info_apmode_ht_bf_cap(_adapter *padapter, struct sta_info *psta)
+static void update_sta_info_apmode_ht_bf_cap(_adapter *padapter, struct sta_info *psta)
 {
 	struct _ADAPTER_LINK *padapter_link = psta->padapter_link;
 	struct link_mlme_priv *pmlmepriv = &(padapter_link->mlmepriv);
@@ -1756,7 +1756,7 @@ void rtw_core_ap_start(_adapter *padapter, struct createbss_parm *parm)
 	}
 #endif
 }
-void rtw_core_ap_chan_decision(_adapter *padapter, struct createbss_parm *parm)
+static void rtw_core_ap_chan_decision(_adapter *padapter, struct createbss_parm *parm)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
@@ -3079,7 +3079,7 @@ int rtw_ap_set_wep_key(_adapter *padapter, struct _ADAPTER_LINK *padapter_link,
 	return rtw_ap_set_key(padapter, padapter_link, key, alg, keyid, set_tx);
 }
 
-u8 rtw_ap_bmc_frames_hdl(_adapter *padapter)
+static u8 rtw_ap_bmc_frames_hdl(_adapter *padapter)
 {
 #define HIQ_XMIT_COUNTS (6)
 	struct sta_info *psta_bmc;
@@ -6640,7 +6640,7 @@ static enum phl_mdl_ret_code _ap_start_req_abort(void *dispr, void *priv)
 	return MDL_RET_SUCCESS;
 }
 
-const char *ap_get_evt_str(u32 evt)
+static const char *ap_get_evt_str(u32 evt)
 {
 	switch (evt) {
 	/* AP */

@@ -52,7 +52,7 @@ bool rtw_mr_is_ecsa_running(struct _ADAPTER *a)
 	return _FALSE;
 }
 
-void rtw_build_csa_ie(struct _ADAPTER *a, struct rtw_phl_ecsa_param *ecsa_param)
+static void rtw_build_csa_ie(struct _ADAPTER *a, struct rtw_phl_ecsa_param *ecsa_param)
 {
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *alink = GET_PRIMARY_LINK(a);
@@ -73,7 +73,7 @@ void rtw_build_csa_ie(struct _ADAPTER *a, struct rtw_phl_ecsa_param *ecsa_param)
 			csa_data[0], csa_data[1], csa_data[2]);
 }
 
-void rtw_build_ecsa_ie(struct _ADAPTER *a, struct rtw_phl_ecsa_param *ecsa_param)
+static void rtw_build_ecsa_ie(struct _ADAPTER *a, struct rtw_phl_ecsa_param *ecsa_param)
 {
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *alink = GET_PRIMARY_LINK(a);
@@ -266,7 +266,7 @@ static void rtw_ecsa_update_sta_chan_info(struct _ADAPTER *a,
 	#endif
 }
 
-void rtw_ap_update_beacon_by_role(void *priv, struct rtw_wifi_role_t *role , struct rtw_wifi_role_link_t *rlink)
+static void rtw_ap_update_beacon_by_role(void *priv, struct rtw_wifi_role_t *role , struct rtw_wifi_role_link_t *rlink)
 {
 	/* TODO */
 }

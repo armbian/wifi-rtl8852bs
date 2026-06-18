@@ -26,7 +26,7 @@ static void rtw_update_link_he_6ghz_cap(_adapter *padapter,
 extern u8 rtw_do_join(_adapter *padapter);
 
 
-void rtw_init_mlme_timer(_adapter *padapter)
+static void rtw_init_mlme_timer(_adapter *padapter)
 {
 	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
 
@@ -42,7 +42,7 @@ void rtw_init_mlme_timer(_adapter *padapter)
 #endif
 }
 
-sint	_rtw_init_mlme_priv(_adapter *padapter)
+static sint	_rtw_init_mlme_priv(_adapter *padapter)
 {
 	sint	i;
 	u8	*pbuf;
@@ -213,7 +213,7 @@ exit:
 	return res;
 }
 
-void rtw_mfree_mlme_priv_lock(struct mlme_priv *pmlmepriv)
+static void rtw_mfree_mlme_priv_lock(struct mlme_priv *pmlmepriv)
 {
 	_rtw_spinlock_free(&pmlmepriv->lock);
 	_rtw_spinlock_free(&(pmlmepriv->free_bss_pool.lock));
@@ -372,7 +372,7 @@ exit:
 }
 #endif /* defined(CONFIG_WFD) && defined(CONFIG_IOCTL_CFG80211) */
 
-void _rtw_free_mlme_priv(struct mlme_priv *pmlmepriv)
+static void _rtw_free_mlme_priv(struct mlme_priv *pmlmepriv)
 {
 	_adapter *adapter = mlme_to_adapter(pmlmepriv);
 	if (NULL == pmlmepriv) {
@@ -409,7 +409,7 @@ int rtw_init_link_mlme_priv(struct _ADAPTER_LINK *padapter_link)
 	return _SUCCESS;
 }
 
-sint	_rtw_enqueue_network(_queue *queue, struct wlan_network *pnetwork)
+static sint	_rtw_enqueue_network(_queue *queue, struct wlan_network *pnetwork)
 {
 
 	if (pnetwork == NULL)
@@ -662,19 +662,19 @@ void rtw_free_mlme_priv(struct mlme_priv *pmlmepriv)
 	_rtw_free_mlme_priv(pmlmepriv);
 }
 
-int rtw_enqueue_network(_queue *queue, struct wlan_network *pnetwork)
+static int rtw_enqueue_network(_queue *queue, struct wlan_network *pnetwork)
 {
 	int	res;
 	res = _rtw_enqueue_network(queue, pnetwork);
 	return res;
 }
 
-void rtw_free_network(struct mlme_priv *pmlmepriv, struct	wlan_network *pnetwork, u8 is_freeall)/* (struct	wlan_network *pnetwork, _queue	*free_queue) */
+static void rtw_free_network(struct mlme_priv *pmlmepriv, struct	wlan_network *pnetwork, u8 is_freeall)/* (struct	wlan_network *pnetwork, _queue	*free_queue) */
 {
 	_rtw_free_network(pmlmepriv, pnetwork, is_freeall);
 }
 
-void rtw_free_network_nolock(_adapter *padapter, struct wlan_network *pnetwork)
+static void rtw_free_network_nolock(_adapter *padapter, struct wlan_network *pnetwork)
 {
 	_rtw_free_network_nolock(&(padapter->mlmepriv), pnetwork);
 #ifdef CONFIG_IOCTL_CFG80211
@@ -835,7 +835,7 @@ void rtw_free_cloned_mld_network(struct wlan_mld_network *mld_network)
 }
 #endif
 
-struct wlan_mld_network *_rtw_alloc_mld_network(struct mlme_priv *pmlmepriv, const u8 *mac_addr)
+static struct wlan_mld_network *_rtw_alloc_mld_network(struct mlme_priv *pmlmepriv, const u8 *mac_addr)
 {
 	struct	wlan_mld_network	*pmld_network;
 	_queue *free_queue = &pmlmepriv->free_mld_bss_pool;
@@ -895,7 +895,7 @@ struct wlan_mld_network *rtw_alloc_mld_network(_adapter *adapter, const u8 *mac_
 	return pmld_network;
 }
 
-void _rtw_free_mld_network(struct mlme_priv *pmlmepriv, struct wlan_mld_network *pmld_network, u8 isfreeall)
+static void _rtw_free_mld_network(struct mlme_priv *pmlmepriv, struct wlan_mld_network *pmld_network, u8 isfreeall)
 {
 	u32 delta_time;
 	u32 lifetime = SCANQUEUE_LIFETIME;
@@ -936,7 +936,8 @@ exit:
 	return;
 }
 
-void _rtw_free_mld_network_nolock(struct mlme_priv *pmlmepriv, struct wlan_mld_network *pmld_network)
+#ifdef CONFIG_80211BE_EHT
+static void _rtw_free_mld_network_nolock(struct mlme_priv *pmlmepriv, struct wlan_mld_network *pmld_network)
 {
 
 	_queue *free_queue = &(pmlmepriv->free_mld_bss_pool);
@@ -957,8 +958,9 @@ void _rtw_free_mld_network_nolock(struct mlme_priv *pmlmepriv, struct wlan_mld_n
 exit:
 	return;
 }
+#endif /* CONFIG_80211BE_EHT */
 
-void _rtw_free_mld_network_queue(_adapter *padapter, u8 isfreeall)
+static void _rtw_free_mld_network_queue(_adapter *padapter, u8 isfreeall)
 {
 
 	_list *phead, *plist;
@@ -991,15 +993,17 @@ void _rtw_free_mld_network_queue(_adapter *padapter, u8 isfreeall)
 
 }
 
-void rtw_free_mld_network(struct mlme_priv *pmlmepriv, struct wlan_mld_network *pmld_network, u8 is_freeall)
+static void rtw_free_mld_network(struct mlme_priv *pmlmepriv, struct wlan_mld_network *pmld_network, u8 is_freeall)
 {
 	_rtw_free_mld_network(pmlmepriv, pmld_network, is_freeall);
 }
 
-void rtw_free_mld_network_nolock(_adapter *padapter, struct wlan_mld_network *pmld_network)
+#ifdef CONFIG_80211BE_EHT
+static void rtw_free_mld_network_nolock(_adapter *padapter, struct wlan_mld_network *pmld_network)
 {
 	_rtw_free_mld_network_nolock(&(padapter->mlmepriv), pmld_network);
 }
+#endif /* CONFIG_80211BE_EHT */
 
 void rtw_free_mld_network_queue(_adapter *dev, u8 isfreeall)
 {
@@ -1810,7 +1814,7 @@ unlock_unassoc_sta_queue:
  *			   (3) WMM
  *			   (4) HT
  * (5) others */
-int rtw_is_desired_network(_adapter *adapter, struct wlan_network *pnetwork)
+static int rtw_is_desired_network(_adapter *adapter, struct wlan_network *pnetwork)
 {
 	struct security_priv *psecuritypriv = &adapter->securitypriv;
 	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
@@ -1918,7 +1922,7 @@ static void free_scanqueue(struct	mlme_priv *pmlmepriv)
 
 }
 
-void rtw_reset_rx_info(_adapter *adapter)
+static void rtw_reset_rx_info(_adapter *adapter)
 {
 	struct recv_info *precvinfo = &adapter->recvinfo;
 

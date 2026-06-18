@@ -519,7 +519,7 @@ static void init_mlme_ext_priv_value(_adapter *padapter)
 	pmlmeext->action_public_dialog_token = 0xff;
 }
 
-void init_mlme_ext_timer(_adapter *padapter)
+static void init_mlme_ext_timer(_adapter *padapter)
 {
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 
@@ -626,7 +626,7 @@ void free_mlme_ext_priv(struct mlme_ext_priv *pmlmeext)
 	}
 }
 
-void init_link_mlme_default_rate_set(struct _ADAPTER_LINK *padapter_link)
+static void init_link_mlme_default_rate_set(struct _ADAPTER_LINK *padapter_link)
 {
 	_adapter *padapter = padapter_link->adapter;
 	struct	link_mlme_ext_priv	*pmlmeext = &padapter_link->mlmeextpriv;
@@ -941,7 +941,7 @@ void mgt_dispatcher(_adapter *padapter, union recv_frame *precv_frame)
 }
 
 #ifdef CONFIG_P2P
-u32 p2p_listen_state_process(_adapter *padapter, unsigned char *da)
+static u32 p2p_listen_state_process(_adapter *padapter, unsigned char *da)
 {
 	bool response = _TRUE;
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
@@ -3857,7 +3857,7 @@ u32 rtw_build_vendor_ie(_adapter *padapter , unsigned char **pframe , u8 mgmt_fr
 #endif
 
 #ifdef CONFIG_ECSA_PHL
-u8 *build_supported_op_class_ie(_adapter *padapter, u8 *pbuf, int *pktlen)
+static u8 *build_supported_op_class_ie(_adapter *padapter, u8 *pbuf, int *pktlen)
 {
 	u8 buf[32];
 	int ie_len = 0;
@@ -3996,7 +3996,7 @@ void issue_probersp_p2p(_adapter *padapter, unsigned char *da)
 
 }
 
-int _issue_probereq_p2p(_adapter *padapter, u8 *da, int wait_ack)
+static int _issue_probereq_p2p(_adapter *padapter, u8 *da, int wait_ack)
 {
 	int ret = _FAIL;
 	struct xmit_frame		*pmgntframe;
@@ -4113,7 +4113,7 @@ inline void issue_probereq_p2p(_adapter *adapter, u8 *da)
 
 #endif /* CONFIG_P2P */
 
-s32 rtw_action_public_decache(union recv_frame *rframe, u8 token_offset)
+static s32 rtw_action_public_decache(union recv_frame *rframe, u8 token_offset)
 {
 	_adapter *adapter = rframe->u.hdr.adapter;
 	struct mlme_ext_priv *mlmeext = &(adapter->mlmeextpriv);
@@ -4138,7 +4138,7 @@ s32 rtw_action_public_decache(union recv_frame *rframe, u8 token_offset)
 	return _SUCCESS;
 }
 
-unsigned int on_action_public_p2p(union recv_frame *precv_frame)
+static unsigned int on_action_public_p2p(union recv_frame *precv_frame)
 {
 	_adapter *padapter = precv_frame->u.hdr.adapter;
 
@@ -4158,7 +4158,7 @@ unsigned int on_action_public_p2p(union recv_frame *precv_frame)
 	return _SUCCESS;
 }
 
-unsigned int on_action_public_vendor(union recv_frame *precv_frame)
+static unsigned int on_action_public_vendor(union recv_frame *precv_frame)
 {
 	unsigned int ret = _FAIL;
 	u8 *pframe = precv_frame->u.hdr.rx_data;
@@ -4190,7 +4190,7 @@ exit:
 	return ret;
 }
 
-unsigned int on_action_public_default(union recv_frame *precv_frame, u8 action)
+static unsigned int on_action_public_default(union recv_frame *precv_frame, u8 action)
 {
 	unsigned int ret = _FAIL;
 	u8 *pframe = precv_frame->u.hdr.rx_data;
@@ -4719,7 +4719,7 @@ unsigned int DoReserved(_adapter *padapter, union recv_frame *precv_frame)
 	return _SUCCESS;
 }
 
-struct xmit_frame *_alloc_mgtxmitframe(struct xmit_priv *pxmitpriv, bool once)
+static struct xmit_frame *_alloc_mgtxmitframe(struct xmit_priv *pxmitpriv, bool once)
 {
 	struct xmit_frame *pmgntframe;
 
@@ -5036,7 +5036,7 @@ s32 dump_mgntframe_and_wait_ack(_adapter *padapter, struct xmit_frame *pmgntfram
 }
 
 #ifdef RTW_PHL_BCN //core ops
-s32 rtw_core_issue_beacon(_adapter *padapter, struct xmit_frame *pmgntframe)
+static s32 rtw_core_issue_beacon(_adapter *padapter, struct xmit_frame *pmgntframe)
 {
 	struct rtw_wifi_role_t *wrole = padapter->phl_role;
 	struct rtw_bcn_info_cmn *bcn_cmn = NULL;
@@ -5107,7 +5107,7 @@ s32 rtw_core_issue_beacon(_adapter *padapter, struct xmit_frame *pmgntframe)
 }
 #endif
 
-int update_hidden_ssid(u8 *ies, u32 ies_len, u8 hidden_ssid_mode)
+static int update_hidden_ssid(u8 *ies, u32 ies_len, u8 hidden_ssid_mode)
 {
 	u8 *ssid_ie;
 	sint ssid_len_ori;
@@ -5142,7 +5142,8 @@ int update_hidden_ssid(u8 *ies, u32 ies_len, u8 hidden_ssid_mode)
 	return len_diff;
 }
 
-u8 *rtw_build_reduced_nb_rpt(_adapter *padapter, struct pkt_attrib *pattrib, u8 *pframe)
+#ifdef CONFIG_80211BE_EHT
+static u8 *rtw_build_reduced_nb_rpt(_adapter *padapter, struct pkt_attrib *pattrib, u8 *pframe)
 {
 	u32 len = 0;
 	len = rtw_phl_build_reduced_nb_rpt(padapter->phl_role, pattrib->adapter_link->wrlink, pframe);
@@ -5150,6 +5151,7 @@ u8 *rtw_build_reduced_nb_rpt(_adapter *padapter, struct pkt_attrib *pattrib, u8 
 
 	return pframe + len;
 }
+#endif /* CONFIG_80211BE_EHT */
 
 void issue_beacon(_adapter *padapter, int timeout_ms)
 {
@@ -5807,7 +5809,7 @@ void issue_ml_probersp(_adapter *padapter, struct _ADAPTER_LINK *padapter_link, 
 }
 #endif
 
-int _issue_probereq(_adapter *padapter, struct _ADAPTER_LINK *padapter_link,
+static int _issue_probereq(_adapter *padapter, struct _ADAPTER_LINK *padapter_link,
 		const NDIS_802_11_SSID *pssid, const u8 *da, u8 ch, bool append_wps, int wait_ack)
 {
 	int ret = _FAIL;
@@ -8130,7 +8132,7 @@ void issue_action_BSSCoexistPacket(_adapter *padapter)
 }
 
 /* Spatial Multiplexing Powersave (SMPS) action frame */
-int _issue_action_SM_PS(_adapter *padapter, unsigned char *raddr, u8 NewMimoPsMode, u8 wait_ack)
+static int _issue_action_SM_PS(_adapter *padapter, unsigned char *raddr, u8 NewMimoPsMode, u8 wait_ack)
 {
 
 	int ret = _FAIL;
@@ -9757,7 +9759,7 @@ void update_sta_info(_adapter *padapter, struct sta_info *psta) {
 
 }
 
-void update_sta_trx_nss(_adapter *adapter, struct sta_info *psta)
+static void update_sta_trx_nss(_adapter *adapter, struct sta_info *psta)
 {
 	s8 tx_nss, rx_nss;
 	struct mlme_ext_priv *mlmeext = &adapter->mlmeextpriv;
@@ -9787,7 +9789,7 @@ void update_sta_trx_nss(_adapter *adapter, struct sta_info *psta)
 			psta->phl_sta->macid, tx_nss, rx_nss);
 }
 
-void update_sta_smps_cap(_adapter *adapter, struct sta_info *psta)
+static void update_sta_smps_cap(_adapter *adapter, struct sta_info *psta)
 {
 	struct _ADAPTER_LINK	*adapter_link = psta->padapter_link;
 	struct mlme_ext_priv	*pmlmeext = &adapter->mlmeextpriv;
@@ -9817,7 +9819,7 @@ void update_sta_smps_cap(_adapter *adapter, struct sta_info *psta)
 			psta->phl_sta->asoc_cap.nss_rx);
 }
 
-void update_sta_rate_mask(_adapter *padapter, struct sta_info *psta)
+static void update_sta_rate_mask(_adapter *padapter, struct sta_info *psta)
 {
 	struct registry_priv *registrypriv = &padapter->registrypriv;
 	struct _ADAPTER_LINK *padapter_link = psta->padapter_link;
@@ -10091,7 +10093,8 @@ When station does not receive any packet in MAX_CONTINUAL_NORXPACKET_COUNT*2 sec
 recipient station will teardown the block ack by issuing DELBA frame.
 
 *********************************************************************/
-void rtw_delba_check(_adapter *padapter, struct sta_info *psta, u8 from_timer)
+#ifdef CONFIG_ISSUE_DELBA_WHEN_NO_TRAFFIC
+static void rtw_delba_check(_adapter *padapter, struct sta_info *psta, u8 from_timer)
 {
 	int	i = 0;
 	int ret = _SUCCESS;
@@ -10128,8 +10131,9 @@ void rtw_delba_check(_adapter *padapter, struct sta_info *psta, u8 from_timer)
 		}
 	}
 }
+#endif /* CONFIG_ISSUE_DELBA_WHEN_NO_TRAFFIC */
 
-u8 chk_ap_is_alive(_adapter *padapter, struct sta_info *psta)
+static u8 chk_ap_is_alive(_adapter *padapter, struct sta_info *psta)
 {
 	u8 ret = _FALSE;
 #ifdef DBG_EXPIRATION_CHK
@@ -10169,7 +10173,7 @@ u8 chk_ap_is_alive(_adapter *padapter, struct sta_info *psta)
 	return ret;
 }
 
-u8 chk_adhoc_peer_is_alive(struct sta_info *psta)
+static u8 chk_adhoc_peer_is_alive(struct sta_info *psta)
 {
 	u8 ret = _TRUE;
 
@@ -10764,7 +10768,7 @@ void addba_timer_hdl(void *ctx)
 }
 
 #ifdef CONFIG_IEEE80211W
-void report_sta_timeout_event(_adapter *padapter, u8 *MacAddr, unsigned short reason)
+static void report_sta_timeout_event(_adapter *padapter, u8 *MacAddr, unsigned short reason)
 {
 	struct cmd_obj *pcmd_obj;
 	u8 *pevtcmd;
@@ -10823,7 +10827,7 @@ void report_sta_timeout_event(_adapter *padapter, u8 *MacAddr, unsigned short re
 	return;
 }
 
-void clnt_sa_query_timeout(_adapter *padapter)
+static void clnt_sa_query_timeout(_adapter *padapter)
 {
 	struct mlme_ext_priv *mlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info *mlmeinfo = &(mlmeext->mlmext_info);
@@ -11959,7 +11963,7 @@ exit:
  *
  * Returns: 0: no ps announcement is doing. 1: ps announcement is doing
  */
-u8 rtw_ps_annc(_adapter *adapter, bool ps)
+static u8 rtw_ps_annc(_adapter *adapter, bool ps)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	_adapter *iface;

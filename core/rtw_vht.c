@@ -38,7 +38,7 @@ const char *const _vht_sup_ch_width_set_str[] = {
 	"BW-RSVD",
 };
 
-void dump_vht_cap_ie_content(void *sel, const u8 *buf, u32 buf_len)
+static void dump_vht_cap_ie_content(void *sel, const u8 *buf, u32 buf_len)
 {
 	if (buf_len != VHT_CAP_IE_LEN) {
 		RTW_PRINT_SEL(sel, "Invalid VHT capability IE len:%d != %d\n", buf_len, VHT_CAP_IE_LEN);
@@ -78,7 +78,7 @@ const char *const _vht_op_ch_width_str[] = {
 	"BW-RSVD",
 };
 
-void dump_vht_op_ie_content(void *sel, const u8 *buf, u32 buf_len)
+static void dump_vht_op_ie_content(void *sel, const u8 *buf, u32 buf_len)
 {
 	if (buf_len != VHT_OP_IE_LEN) {
 		RTW_PRINT_SEL(sel, "Invalid VHT operation IE len:%d != %d\n", buf_len, VHT_OP_IE_LEN);
@@ -703,7 +703,7 @@ u64	rtw_vht_mcs_map_to_bitmap(u8 *mcs_map, u8 nss)
 }
 
 #ifdef CONFIG_BEAMFORMING
-void update_sta_vht_info_apmode_bf_cap(_adapter *padapter, struct sta_info *psta)
+static void update_sta_vht_info_apmode_bf_cap(_adapter *padapter, struct sta_info *psta)
 {
 	struct _ADAPTER_LINK *padapter_link = psta->padapter_link;
 	struct link_mlme_priv	*pmlmepriv = &(padapter_link->mlmepriv);
@@ -1671,7 +1671,7 @@ void rtw_reattach_vht_ies(_adapter *padapter, struct _ADAPTER_LINK *padapter_lin
 }
 
 /* rx_nss: number of rx spatial stream to be used  */
-u8 _issue_op_mode_notify_frame(_adapter *a, struct _ADAPTER_LINK *a_link,
+static u8 _issue_op_mode_notify_frame(_adapter *a, struct _ADAPTER_LINK *a_link,
 		u8 *ra, u8 rx_nss, enum channel_width bw, u8 wait_ack)
 {
 	int ret = _FAIL;

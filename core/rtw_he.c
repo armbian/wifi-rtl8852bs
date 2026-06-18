@@ -1424,7 +1424,8 @@ u32 rtw_build_he_6g_band_cap_ie_by_proto(_adapter *padapter, enum role_type role
 	return HE_6G_BAND_CAP_MAX_LEN + 2;
 }
 
-u32 rtw_build_he_6g_band_cap_ie(_adapter *padapter,
+#if CONFIG_IEEE80211_BAND_6GHZ
+static u32 rtw_build_he_6g_band_cap_ie(_adapter *padapter,
 					struct _ADAPTER_LINK *padapter_link,
 					u8 *pbuf)
 {
@@ -1436,6 +1437,7 @@ u32 rtw_build_he_6g_band_cap_ie(_adapter *padapter,
 
 	return rtw_build_he_6g_band_cap_ie_by_proto(padapter, role_type, proto_cap, pbuf);
 }
+#endif /* CONFIG_IEEE80211_BAND_6GHZ */
 
 u32 rtw_restructure_he_ie(_adapter *padapter,
                                         struct _ADAPTER_LINK *padapter_link,
