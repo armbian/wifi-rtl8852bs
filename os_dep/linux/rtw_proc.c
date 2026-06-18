@@ -785,7 +785,7 @@ ssize_t proc_set_led_config(struct file *file, const char __user *buffer, size_t
 #endif /* CONFIG_RTW_LED */
 
 #ifdef CONFIG_AP_MODE
-int proc_get_aid_status(struct seq_file *m, void *v)
+static int proc_get_aid_status(struct seq_file *m, void *v)
 {
 	struct net_device *dev = m->private;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
@@ -795,7 +795,7 @@ int proc_get_aid_status(struct seq_file *m, void *v)
 	return 0;
 }
 
-ssize_t proc_set_aid_status(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
+static ssize_t proc_set_aid_status(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
@@ -1900,7 +1900,7 @@ static int proc_get_macaddr_acl(struct seq_file *m, void *v)
 	return 0;
 }
 
-ssize_t proc_set_macaddr_acl(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
+static ssize_t proc_set_macaddr_acl(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
@@ -2214,7 +2214,7 @@ static ssize_t proc_set_dfs_test_case(struct file *file, const char __user *buff
 	return count;
 }
 
-ssize_t proc_set_update_non_ocp(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
+static ssize_t proc_set_update_non_ocp(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
@@ -2244,7 +2244,7 @@ exit:
 	return count;
 }
 
-ssize_t proc_set_radar_detect(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
+static ssize_t proc_set_radar_detect(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
@@ -2409,7 +2409,7 @@ exit:
 #endif /* CONFIG_DFS_MASTER */
 
 #ifdef CONFIG_80211N_HT
-int proc_get_rx_ampdu_size_limit(struct seq_file *m, void *v)
+static int proc_get_rx_ampdu_size_limit(struct seq_file *m, void *v)
 {
 	struct net_device *dev = m->private;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
@@ -2419,7 +2419,7 @@ int proc_get_rx_ampdu_size_limit(struct seq_file *m, void *v)
 	return 0;
 }
 
-ssize_t proc_set_rx_ampdu_size_limit(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
+static ssize_t proc_set_rx_ampdu_size_limit(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
@@ -3162,7 +3162,7 @@ static struct seq_operations seq_ops_txpwr_total_dbm = {
 };
 #endif
 
-int proc_get_mac_addr(struct seq_file *m, void *v)
+static int proc_get_mac_addr(struct seq_file *m, void *v)
 {
 	struct net_device *dev = m->private;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
@@ -3536,7 +3536,7 @@ static ssize_t proc_set_napi_th(struct file *file, const char __user *buffer, si
 #endif /* CONFIG_RTW_NAPI_DYNAMIC */
 
 
-ssize_t proc_set_dynamic_agg_enable(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
+static ssize_t proc_set_dynamic_agg_enable(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
@@ -4532,7 +4532,7 @@ exit:
 	return count;
 }
 
-int proc_get_cur_beacon_keys(struct seq_file *m, void *v)
+static int proc_get_cur_beacon_keys(struct seq_file *m, void *v)
 {
 	struct net_device *dev = m->private;
 	_adapter *adapter = rtw_netdev_priv(dev);
@@ -5556,7 +5556,7 @@ static const struct rtw_proc_ops rtw_odm_proc_sseq_fops = {
 #endif
 };
 
-struct proc_dir_entry *rtw_odm_proc_init(struct net_device *dev)
+static struct proc_dir_entry *rtw_odm_proc_init(struct net_device *dev)
 {
 	struct proc_dir_entry *dir_odm = NULL;
 	struct proc_dir_entry *entry = NULL;
@@ -5600,7 +5600,7 @@ exit:
 	return dir_odm;
 }
 
-void rtw_odm_proc_deinit(_adapter  *adapter)
+static void rtw_odm_proc_deinit(_adapter  *adapter)
 {
 	struct proc_dir_entry *dir_odm = NULL;
 	int i;

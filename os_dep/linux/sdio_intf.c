@@ -600,7 +600,7 @@ static void sdio_dvobj_deinit(struct sdio_func *func)
 _adapter * g_test_adapter = NULL;
 #endif /* RTW_SUPPORT_PLATFORM_SHUTDOWN */
 
-_adapter *rtw_sdio_primary_adapter_init(struct dvobj_priv *dvobj)
+static _adapter *rtw_sdio_primary_adapter_init(struct dvobj_priv *dvobj)
 {
 	int status = _FAIL;
 	_adapter *padapter = NULL;

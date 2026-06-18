@@ -1515,7 +1515,7 @@ int rtw_mp_psd(struct net_device *dev,
 	return 0;
 }
 
-int rtw_mp_uuid(struct net_device *dev,
+static int rtw_mp_uuid(struct net_device *dev,
 		struct iw_request_info *info,
 		struct iw_point *wrqu, char *extra)
 {
@@ -3735,7 +3735,7 @@ exit:
 
 }
 
-int rtw_mp_gpio(struct net_device *dev,
+static int rtw_mp_gpio(struct net_device *dev,
 		struct iw_request_info *info,
 		struct iw_point *wrqu, char *extra)
 {
