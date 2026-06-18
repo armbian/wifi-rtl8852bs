@@ -202,7 +202,7 @@ static enum rtw_phl_status phl_mp_rx_get_physts(
 	return RTW_PHL_STATUS_SUCCESS;
 }
 
-enum rtw_phl_status phl_mp_rx_get_rssi_ex(
+static enum rtw_phl_status phl_mp_rx_get_rssi_ex(
 	struct mp_context *mp, struct mp_rx_arg *arg)
 {
 	enum rtw_hal_status hal_status = RTW_HAL_STATUS_FAILURE;

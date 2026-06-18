@@ -20,7 +20,7 @@
 #include "../../hal_g6/test/mp/hal_test_mp_api.h"
 
 #ifdef CONFIG_PHL_TEST_MP
-void mp_notification_complete(void* priv, struct phl_msg* msg)
+static void mp_notification_complete(void* priv, struct phl_msg* msg)
 {
 	struct mp_context *mp_ctx = (struct mp_context *)priv;
 
@@ -30,7 +30,7 @@ void mp_notification_complete(void* priv, struct phl_msg* msg)
 	}
 }
 
-void mp_cmd_done_notification(struct mp_context *mp_ctx, enum mp_class mp_class,
+static void mp_cmd_done_notification(struct mp_context *mp_ctx, enum mp_class mp_class,
 							u8 mp_cmd_id)
 {
 	struct phl_msg msg = {0};
@@ -67,7 +67,7 @@ void mp_cmd_done_notification(struct mp_context *mp_ctx, enum mp_class mp_class,
  * @enum phl_msg_evt_id id: Assign different types of MP related msg event
  *	to pass buffer to another layer for further process
  */
-void mp_buf_notification(struct mp_context *mp_ctx, void *buf, u32 buf_len,
+static void mp_buf_notification(struct mp_context *mp_ctx, void *buf, u32 buf_len,
 			 enum phl_msg_evt_id id)
 {
 	struct phl_msg msg = {0};
@@ -99,7 +99,7 @@ void mp_buf_notification(struct mp_context *mp_ctx, void *buf, u32 buf_len,
 }
 
 
-bool mp_get_rpt_check(struct mp_context *mp_ctx, void *rpt_buf)
+static bool mp_get_rpt_check(struct mp_context *mp_ctx, void *rpt_buf)
 {
 	bool ret = true;
 	struct mp_arg_hdr *rpt_hdr = (struct mp_arg_hdr *)mp_ctx->rpt;
@@ -116,7 +116,7 @@ bool mp_get_rpt_check(struct mp_context *mp_ctx, void *rpt_buf)
 	return ret;
 }
 
-u8 mp_get_class_from_buf(struct mp_context *mp_ctx)
+static u8 mp_get_class_from_buf(struct mp_context *mp_ctx)
 {
 	u8 *buf_tmp = NULL;
 	u8 mp_class = MP_CLASS_MAX;
@@ -127,7 +127,7 @@ u8 mp_get_class_from_buf(struct mp_context *mp_ctx)
 	return mp_class;
 }
 
-u8 mp_bp_handler(void *priv, struct test_bp_info* bp_info)
+static u8 mp_bp_handler(void *priv, struct test_bp_info* bp_info)
 {
 	struct mp_context *mp_ctx = (struct mp_context *)priv;
 	enum rtw_phl_status phl_status = RTW_PHL_STATUS_FAILURE;
@@ -176,20 +176,20 @@ u8 mp_bp_handler(void *priv, struct test_bp_info* bp_info)
 	return phl_status;
 }
 
-u8 mp_get_fail_rsn(void *priv,char* rsn, u32 max_len)
+static u8 mp_get_fail_rsn(void *priv,char* rsn, u32 max_len)
 {
 	//struct mp_context *mp_ctx = (struct mp_context *)priv;
 	return true;
 }
 
-u8 mp_is_test_end(void *priv)
+static u8 mp_is_test_end(void *priv)
 {
 	struct mp_context *mp_ctx = (struct mp_context *)priv;
 
 	return mp_ctx->is_mp_test_end;
 }
 
-u8 mp_is_test_pass(void *priv)
+static u8 mp_is_test_pass(void *priv)
 {
 	//struct mp_context *mp_ctx = (struct mp_context *)priv;
 	return true;
@@ -274,7 +274,7 @@ u8 mp_start(void *priv)
 	return (u8)phl_status;
 }
 
-void mp_change_mode(struct mp_context *mp_ctx, enum rtw_drv_mode driver_mode)
+static void mp_change_mode(struct mp_context *mp_ctx, enum rtw_drv_mode driver_mode)
 {
 	struct phl_info_t *phl_info = mp_ctx->phl;
 	#ifdef RTW_WKARD_AP_MP

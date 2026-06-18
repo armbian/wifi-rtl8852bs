@@ -19,7 +19,7 @@
 
 #ifdef CONFIG_PHL_TEST_FPGA
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _fpga_config_pkt_tx(struct fpga_context *fpga,
                     struct fpga_config_arg *arg)
 {
@@ -33,7 +33,7 @@ _fpga_config_pkt_tx(struct fpga_context *fpga,
 	return RTW_PHL_STATUS_SUCCESS;
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _fpga_config_loopback(struct fpga_context *fpga,
                      struct fpga_config_arg *arg)
 {
@@ -47,7 +47,7 @@ _fpga_config_loopback(struct fpga_context *fpga,
 	return RTW_PHL_STATUS_SUCCESS;
 }
 
-enum rtw_phl_status
+static enum rtw_phl_status
 _fpga_config_normal(struct fpga_context *fpga,
                      struct fpga_config_arg *arg)
 {

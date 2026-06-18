@@ -378,7 +378,7 @@ static enum rtw_phl_status phl_mp_txpwr_get_pwr_ref_cw(
 	return RTW_PHL_STATUS_SUCCESS;
 }
 
-enum rtw_phl_status phl_mp_set_tx_pow_patten_sharp(
+static enum rtw_phl_status phl_mp_set_tx_pow_patten_sharp(
 	struct mp_context *mp, struct mp_txpwr_arg *arg)
 {
 	enum rtw_hal_status hal_status = RTW_HAL_STATUS_SUCCESS;

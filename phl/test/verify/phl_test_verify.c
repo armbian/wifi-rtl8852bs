@@ -25,7 +25,7 @@ static struct s_handler test_handlers[VERIFY_FEATURES_MAX] = {
 	{ rtw_test_dbcc_cmd_process }, /* VERIFY_FEATURES_DBCC */
 };
 
-void verify_cmd_done_notification_complete(void *ctx, struct phl_msg *msg)
+static void verify_cmd_done_notification_complete(void *ctx, struct phl_msg *msg)
 {
 	struct verify_context *ver_ctx = (struct verify_context *)ctx;
 
@@ -35,7 +35,7 @@ void verify_cmd_done_notification_complete(void *ctx, struct phl_msg *msg)
 	}
 }
 
-void verify_cmd_done_notification(struct verify_context *ver_ctx, u8 feature,
+static void verify_cmd_done_notification(struct verify_context *ver_ctx, u8 feature,
 	u8 cmd_id)
 {
 	struct phl_msg msg = { 0 };
@@ -66,7 +66,7 @@ void verify_cmd_done_notification(struct verify_context *ver_ctx, u8 feature,
 	}
 }
 
-bool verify_get_rpt_check(struct verify_context *ver_ctx, void *rpt_buf)
+static bool verify_get_rpt_check(struct verify_context *ver_ctx, void *rpt_buf)
 {
 	bool ret = true;
 	struct verify_cmd_hdr *rpt_hdr = (struct verify_cmd_hdr *)ver_ctx->rpt;
@@ -83,7 +83,7 @@ bool verify_get_rpt_check(struct verify_context *ver_ctx, void *rpt_buf)
 	return ret;
 }
 
-u8 verify_get_feature_from_buf(struct verify_context *ver_ctx)
+static u8 verify_get_feature_from_buf(struct verify_context *ver_ctx)
 {
 	u8 *buf_tmp = NULL;
 	u8 feature = VERIFY_FEATURES_MAX;
@@ -95,7 +95,7 @@ u8 verify_get_feature_from_buf(struct verify_context *ver_ctx)
 	return feature;
 }
 
-u8 verify_bp_handler(void *ctx, struct test_bp_info *bp_info)
+static u8 verify_bp_handler(void *ctx, struct test_bp_info *bp_info)
 {
 	struct verify_context *ver_ctx = (struct verify_context *)ctx;
 	enum rtw_phl_status phl_status = RTW_PHL_STATUS_FAILURE;
@@ -115,26 +115,26 @@ u8 verify_bp_handler(void *ctx, struct test_bp_info *bp_info)
 	return phl_status;
 }
 
-u8 verify_get_fail_rsn(void *ctx, char *rsn, u32 max_len)
+static u8 verify_get_fail_rsn(void *ctx, char *rsn, u32 max_len)
 {
 	//struct verify_context *ver_ctx = (struct verify_context *)ctx;
 	return true;
 }
 
-u8 verify_is_test_end(void *ctx)
+static u8 verify_is_test_end(void *ctx)
 {
 	struct verify_context *ver_ctx = (struct verify_context *)ctx;
 
 	return ver_ctx->is_test_end;
 }
 
-u8 verifyg_is_test_pass(void *ctx)
+static u8 verifyg_is_test_pass(void *ctx)
 {
 	//struct verify_context *ver_ctx = (struct verify_context *)ctx;
 	return true;
 }
 
-u8 verify_start(void *ctx)
+static u8 verify_start(void *ctx)
 {
 	struct verify_context *ver_ctx = (struct verify_context *)ctx;
 	struct rtw_phl_com_t *phl_com = ver_ctx->phl_com;
@@ -188,7 +188,7 @@ u8 verify_start(void *ctx)
 	return (u8)phl_status;
 }
 
-void verify_change_mode(struct verify_context *ver_ctx, enum rtw_drv_mode driver_mode)
+static void verify_change_mode(struct verify_context *ver_ctx, enum rtw_drv_mode driver_mode)
 {
 	struct phl_info_t *phl_info = ver_ctx->phl;
 

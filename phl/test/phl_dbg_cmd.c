@@ -30,7 +30,7 @@ static const struct phl_dbg_cmd_info phl_dbg_core_cmd_i[] = {
 	{"git_info", PHL_DBG_CORE_GIT_INFO}
 };
 
-void phl_dbg_git_info(struct phl_info_t *phl_info, char input[][MAX_ARGV],
+static void phl_dbg_git_info(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 		      u32 input_num, char *output, u32 out_len)
 {
 /* #REMOVE BEGIN */
@@ -68,7 +68,7 @@ void phl_dbg_git_info(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 /* #REMOVE END */
 }
 
-void phl_dbg_core_cmd_parser(void *phl, char input[][MAX_ARGV],
+static void phl_dbg_core_cmd_parser(void *phl, char input[][MAX_ARGV],
 		        u32 input_num, char *output, u32 out_len)
 {
 	struct phl_info_t *phl_info = (struct phl_info_t *)phl;
@@ -122,7 +122,7 @@ void phl_dbg_core_cmd_parser(void *phl, char input[][MAX_ARGV],
 	}
 }
 
-s32
+static s32
 phl_dbg_core_proc_cmd(struct phl_info_t *phl_info,
 		 char *input, char *output, u32 out_len)
 {
@@ -163,7 +163,7 @@ rtw_phl_dbg_core_cmd(struct phl_info_t *phl_info,
 }
 
 #ifdef CONFIG_PHL_TEST_SUITE
-bool
+static bool
 _is_hex_digit(char ch_tmp)
 {
 	if( (ch_tmp >= '0' && ch_tmp <= '9') ||
@@ -176,7 +176,7 @@ _is_hex_digit(char ch_tmp)
 }
 
 
-u32
+static u32
 _map_char_to_hex_digit(char ch_tmp)
 {
 	if(ch_tmp >= '0' && ch_tmp <= '9')
@@ -230,7 +230,7 @@ _get_hex_from_string(char *szstr, u32 *val)
 	return true;
 }
 
-void
+static void
 _phl_dbg_cmd_switch_chbw(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 			 u32 input_num, char *output, u32 out_len)
 {
@@ -301,7 +301,7 @@ _phl_dbg_cmd_switch_chbw(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 	} while (0);
 }
 
-void _dump_wifi_role(struct phl_info_t *phl_info,
+static void _dump_wifi_role(struct phl_info_t *phl_info,
 		char input[][MAX_ARGV], u32 input_num,
 		char *output, u32 out_len)
 {
@@ -431,7 +431,7 @@ void _dump_wifi_role(struct phl_info_t *phl_info,
 	}
 }
 
-void _dump_mr_info(struct phl_info_t *phl_info, char *output, u32 out_len)
+static void _dump_mr_info(struct phl_info_t *phl_info, char *output, u32 out_len)
 {
 	struct rtw_phl_com_t *phl_com = phl_info->phl_com;
 	struct mr_ctl_t *mr_ctl = phlcom_to_mr_ctrl(phl_com);
@@ -535,7 +535,7 @@ void _dump_mr_info(struct phl_info_t *phl_info, char *output, u32 out_len)
 	}
 }
 
-void _dump_rx_rate(struct phl_info_t *phl_info, char input[][MAX_ARGV],
+static void _dump_rx_rate(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 		      u32 input_num, char *output, u32 out_len)
 {
 	u32 ctrl = 0;
@@ -796,7 +796,7 @@ static const char *_get_wow_opmode_str(enum rtw_wow_op_mode mode)
 }
 #endif /* CONFIG_WOWLAN */
 
-void _dump_wow_stats(struct phl_info_t *phl_info, char input[][MAX_ARGV],
+static void _dump_wow_stats(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 	u32 input_num, char *output, u32 out_len)
 {
 #ifdef CONFIG_WOWLAN
@@ -822,7 +822,7 @@ void _dump_wow_stats(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 }
 
 #ifdef CONFIG_MCC_SUPPORT
-void _dump_mcc_info(struct phl_info_t *phl_info, char input[][MAX_ARGV],
+static void _dump_mcc_info(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 	u32 input_num, char *output, u32 out_len)
 {
 	bool get_ok = false;
@@ -940,7 +940,7 @@ exit:
 #endif /*CONFIG_MCC_SUPPORT*/
 
 
-void _rxbcn_dbg_info(struct phl_info_t *phl_info, char input[][MAX_ARGV],
+static void _rxbcn_dbg_info(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 	u32 input_num, char *output, u32 out_len)
 {
 	u32 used = 0;
@@ -1024,7 +1024,7 @@ _exit:
 }
 
 
-void _bcn_cmd_parser(struct phl_info_t *phl_info, char input[][MAX_ARGV],
+static void _bcn_cmd_parser(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 			u32 input_num, char *output, u32 out_len)
 {
 	u32 used = 0;
@@ -1043,7 +1043,7 @@ void _bcn_cmd_parser(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 	}
 }
 
-void phl_dbg_cmd_snd(struct phl_info_t *phl_info, char input[][MAX_ARGV],
+static void phl_dbg_cmd_snd(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 		      u32 input_num, char *output, u32 out_len)
 {
 #ifdef CONFIG_PHL_CMD_BF
@@ -1109,7 +1109,7 @@ void phl_dbg_cmd_snd(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 #endif
 }
 
-void _convert_tx_rate(enum hal_rate_mode mode, u8 mcs_ss_idx, char *str, u32 str_len)
+static void _convert_tx_rate(enum hal_rate_mode mode, u8 mcs_ss_idx, char *str, u32 str_len)
 {
 	switch (mode) {
 	case HAL_LEGACY_MODE:
@@ -1146,7 +1146,7 @@ void _convert_tx_rate(enum hal_rate_mode mode, u8 mcs_ss_idx, char *str, u32 str
 	}
 }
 
-void _convert_rx_rate(u32 rx_rate, char *str, u32 str_len)
+static void _convert_rx_rate(u32 rx_rate, char *str, u32 str_len)
 {
 	switch(rx_rate) {
 	case RTW_DATA_RATE_CCK1:	_os_snprintf(str, str_len,"CCK 1"); break;
@@ -1296,7 +1296,7 @@ void _convert_rx_rate(u32 rx_rate, char *str, u32 str_len)
 	}
 }
 
-void phl_dbg_cmd_asoc_sta(struct phl_info_t *phl_info, char input[][MAX_ARGV],
+static void phl_dbg_cmd_asoc_sta(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 		      u32 input_num, char *output, u32 out_len)
 {
 	u32 ctrl = 0, wrole_idx = 0;
@@ -1450,7 +1450,7 @@ void phl_dbg_cmd_asoc_sta(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 	}
 }
 
-void phl_dbg_cmd_phy_stats(struct phl_info_t *phl_info, char input[][MAX_ARGV],
+static void phl_dbg_cmd_phy_stats(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 		      u32 input_num, char *output, u32 out_len)
 {
 	struct rtw_hal_com_t *hal_com = rtw_hal_get_halcom(phl_info->hal);
@@ -1551,7 +1551,7 @@ void _dbg_tx_stats_pcie(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 }
 #endif
 
-void phl_dbg_ltr_stats(struct phl_info_t *phl_info, char input[][MAX_ARGV],
+static void phl_dbg_ltr_stats(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 		       u32 input_num, char *output, u32 out_len)
 {
 	#ifdef CONFIG_PCI_HCI
@@ -1597,7 +1597,7 @@ void phl_dbg_ltr_stats(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 	#endif
 }
 
-void phl_dbg_trx_stats(struct phl_info_t *phl_info, char input[][MAX_ARGV],
+static void phl_dbg_trx_stats(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 		       u32 input_num, char *output, u32 out_len)
 {
  	struct rtw_phl_com_t *phl_com = phl_info->phl_com;
@@ -1649,7 +1649,7 @@ void phl_dbg_trx_stats(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 			 (int)phl_stats->last_rx_time_ms);
 }
 
-void phl_dbg_cmd_show_rssi(struct phl_info_t *phl_info, char input[][MAX_ARGV],
+static void phl_dbg_cmd_show_rssi(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 		 	   u32 input_num, char *output, u32 out_len)
 {
 	u32 used = 0;
@@ -2016,7 +2016,7 @@ static void _phl_dump_cccr(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 }
 #endif /*CONFIG_RTW_DEBUG_CCCR*/
 
-void phl_dbg_cmd_parser(struct phl_info_t *phl_info, char input[][MAX_ARGV],
+static void phl_dbg_cmd_parser(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 		        u32 input_num, char *output, u32 out_len)
 {
 	u8 id = 0;
@@ -2295,7 +2295,7 @@ void phl_dbg_cmd_parser(struct phl_info_t *phl_info, char input[][MAX_ARGV],
 	}
 }
 
-s32
+static s32
 phl_dbg_proc_cmd(struct phl_info_t *phl_info,
 		 char *input, char *output, u32 out_len)
 {

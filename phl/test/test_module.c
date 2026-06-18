@@ -127,7 +127,7 @@ static u8 _dequeue_head_obj(void *d,
 		(false) : (true);
 }
 
-int run_test(void *testobj)
+static int run_test(void *testobj)
 {
 	struct test_object_ex *obj = (struct test_object_ex *)testobj;
 	struct test_mgnt_info *test_mgnt = obj->test_mgnt;
@@ -186,7 +186,7 @@ int run_test(void *testobj)
 	return 0;
 }
 
-int test_thread(void *param)
+static int test_thread(void *param)
 {
 	struct test_mgnt_info *test_mgnt
 		= (struct test_mgnt_info *)phl_container_of(param,
@@ -430,7 +430,7 @@ rtw_phl_test_set_max_run_time(struct rtw_phl_com_t* phl_com,
 	return true;
 }
 
-void setup_test_rpt(void *d, struct test_rpt* rpt,struct test_object_ex *obj)
+static void setup_test_rpt(void *d, struct test_rpt* rpt,struct test_object_ex *obj)
 {
 	char str[] = "Exceed Time Limit";
 	char str2[] = "Test not run";
@@ -536,7 +536,7 @@ static void _test_obj_thread_callback(void *context)
 	obj->test_obj.ctrl.start_test(obj->test_obj.priv);
 }
 
-u8 init_obj_thread(struct test_mgnt_info *test_mgnt,
+static u8 init_obj_thread(struct test_mgnt_info *test_mgnt,
                    struct test_object_ex *obj,
                    enum TEST_RUN_LVL lvl)
 {
