@@ -3731,7 +3731,7 @@ ssize_t proc_set_txbf_cap(struct file *file, const char __user *buffer, size_t c
 */
 #ifdef CONFIG_AP_MODE
 
-void dump_phl_tring_status(struct seq_file *m, _adapter *padapter, struct sta_info *psta)
+static void dump_phl_tring_status(struct seq_file *m, _adapter *padapter, struct sta_info *psta)
 {
 	int i = 0;
 	u16 tring_len = 0;

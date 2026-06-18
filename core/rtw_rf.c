@@ -938,7 +938,7 @@ RTW_FUNC_2G_5G_ONLY u8 rtw_get_center_ch(u8 ch, u8 bw, u8 offset)
  * @bw_b: bw of set b
  * @offset_b: offset of set b
  */
-bool _rtw_is_bchbw_grouped(enum band_type band_a, u8 ch_a, u8 bw_a, u8 offset_a
+static bool _rtw_is_bchbw_grouped(enum band_type band_a, u8 ch_a, u8 bw_a, u8 offset_a
 	, enum band_type band_b, u8 ch_b, u8 bw_b, u8 offset_b)
 {
 	bool is_grouped = _FALSE;
@@ -987,7 +987,7 @@ bool rtw_is_bchbw_grouped(enum band_type band_a, u8 ch_a, u8 bw_a, u8 offset_a
  * @g_bw: pointer of the ongoing group bw, may be modified further
  * @g_offset: pointer of the ongoing group offset, may be modified further
  */
-void _rtw_sync_bchbw(enum band_type *req_band, u8 *req_ch, u8 *req_bw, u8 *req_offset
+static void _rtw_sync_bchbw(enum band_type *req_band, u8 *req_ch, u8 *req_bw, u8 *req_offset
 	, enum band_type *g_band, u8 *g_ch, u8 *g_bw, u8 *g_offset)
 {
 	*req_band = *g_band;
@@ -1540,7 +1540,7 @@ void dump_global_op_class(void *sel)
 		dump_global_op_class_ch_single(sel, i);
 }
 
-u8 _rtw_get_op_class_by_bchbw(enum band_type band, u8 ch, u8 bw, u8 offset)
+static u8 _rtw_get_op_class_by_bchbw(enum band_type band, u8 ch, u8 bw, u8 offset)
 {
 	int i;
 	u8 gid = 0; /* invalid */

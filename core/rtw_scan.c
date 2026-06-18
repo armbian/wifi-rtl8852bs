@@ -1192,7 +1192,7 @@ static inline void rtw_gen_new_bssid(const u8 *bssid, u8 max_bssid_ind,
 	/*RTW_INFO("%s, %02x,%02x,%02x,%02x,%02x,%02x \n", __func__, new_bssid[0], new_bssid[1], new_bssid[2], new_bssid[3], new_bssid[4], new_bssid[5]);*/
 }
 
-void add_mbssid_network(_adapter *padapter, WLAN_BSSID_EX *ref_bss)
+static void add_mbssid_network(_adapter *padapter, WLAN_BSSID_EX *ref_bss)
 {
 	WLAN_BSSID_EX *pbss;
 	u32 sub_ies_len;
@@ -1897,7 +1897,7 @@ static int rtw_scan_ch_decision(_adapter *padapter, struct rtw_ieee80211_channel
 	return j;
 }
 #ifdef CONFIG_SCAN_BACKOP
-u8 rtw_scan_backop_decision(_adapter *adapter)
+static u8 rtw_scan_backop_decision(_adapter *adapter)
 {
 	struct mlme_ext_priv *mlmeext = &adapter->mlmeextpriv;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);

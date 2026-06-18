@@ -248,7 +248,7 @@ static void PHY_SetRFPathSwitch_default(
 }
 #endif
 
-void mpt_InitHWConfig(_adapter *adapter)
+static void mpt_InitHWConfig(_adapter *adapter)
 {
 #ifdef CONFIG_RTL8822B
 	if (IS_HARDWARE_TYPE_8822B(adapter)) {
@@ -515,17 +515,17 @@ void rtw_mp_trigger_dpk(_adapter *padapter)
 	rtw_mp_cal_trigger(padapter, RTW_MP_CAL_DPK);
 }
 
-void rtw_mp_trigger_tssi(_adapter *padapter)
+static void rtw_mp_trigger_tssi(_adapter *padapter)
 {
 	rtw_mp_cal_trigger(padapter, RTW_MP_CAL_TSSI);
 }
 
-void rtw_mp_trigger_ch_rfk(_adapter *padapter)
+static void rtw_mp_trigger_ch_rfk(_adapter *padapter)
 {
 	rtw_mp_cal_trigger(padapter, RTW_MP_CAL_CHL_RFK);
 }
 
-void rtw_mp_trigger_dack(_adapter *padapter)
+static void rtw_mp_trigger_dack(_adapter *padapter)
 {
 	rtw_mp_cal_trigger(padapter, RTW_MP_CAL_DACK);
 }
@@ -878,7 +878,7 @@ int rtw_mp_txpoweridx(_adapter *adapter)
 	return _TRUE;
 }
 
-s16 rtw_mp_get_pwr_refcw(_adapter *adapter, u8 rfpath, u8 is_cck)
+static s16 rtw_mp_get_pwr_refcw(_adapter *adapter, u8 rfpath, u8 is_cck)
 {
 	struct rtw_mp_txpwr_arg	ptxpwr_arg;
 	struct mp_priv *pmppriv = &adapter->mppriv;
@@ -895,7 +895,7 @@ s16 rtw_mp_get_pwr_refcw(_adapter *adapter, u8 rfpath, u8 is_cck)
 	return txpwr_refcw_idx;
 }
 
-u16 rtw_mp_get_pwr_ref(_adapter *adapter, u8 rfpath)
+static u16 rtw_mp_get_pwr_ref(_adapter *adapter, u8 rfpath)
 {
 	struct rtw_mp_txpwr_arg	ptxpwr_arg;
 	struct mp_priv *pmppriv = &adapter->mppriv;
@@ -989,7 +989,7 @@ void SetDataRate(_adapter *padapter)
 	return;
 }
 
-void SetTxAGCOffset(_adapter *adapter, u32 ulTxAGCOffset)
+static void SetTxAGCOffset(_adapter *adapter, u32 ulTxAGCOffset)
 {
 	u32 TxAGCOffset_B, TxAGCOffset_C, TxAGCOffset_D, tmpAGC;
 
@@ -2135,7 +2135,7 @@ static u32 rtw_GetPSDData(_adapter *adapter, u32 point)
 	return psd_val;
 }
 
-u8 rtw_mp_phl_psd_cmd(_adapter *padapter, struct rtw_mp_cal_arg	*psd_arg, u8 cmdid)
+static u8 rtw_mp_phl_psd_cmd(_adapter *padapter, struct rtw_mp_cal_arg	*psd_arg, u8 cmdid)
 {
 	struct mp_priv	*pmppriv = &padapter->mppriv;
 	u16 i = 0;

@@ -110,7 +110,7 @@ bool sreset_inprogress(_adapter *padapter)
 #endif
 }
 
-void sreset_restore_security_station(_adapter *padapter, struct _ADAPTER_LINK *padapter_link)
+static void sreset_restore_security_station(_adapter *padapter, struct _ADAPTER_LINK *padapter_link)
 {
 	struct mlme_priv *mlmepriv = &padapter->mlmepriv;
 	struct sta_priv *pstapriv = &padapter->stapriv;
@@ -133,7 +133,7 @@ void sreset_restore_security_station(_adapter *padapter, struct _ADAPTER_LINK *p
 	}
 }
 
-void sreset_restore_network_station(_adapter *padapter)
+static void sreset_restore_network_station(_adapter *padapter)
 {
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
@@ -186,7 +186,7 @@ void sreset_restore_network_station(_adapter *padapter)
 }
 
 
-void sreset_restore_network_status(_adapter *padapter)
+static void sreset_restore_network_status(_adapter *padapter)
 {
 	struct mlme_priv *mlmepriv = &padapter->mlmepriv;
 

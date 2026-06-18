@@ -197,7 +197,7 @@ s8 rtw_get_sta_tx_nss(_adapter *adapter, struct sta_info *psta)
 	return nss;
 }
 
-unsigned char ratetbl_val_2wifirate(unsigned char rate)
+static unsigned char ratetbl_val_2wifirate(unsigned char rate)
 {
 	unsigned char val = 0;
 
@@ -256,7 +256,7 @@ unsigned char ratetbl_val_2wifirate(unsigned char rate)
 
 }
 
-int is_basicrate(_adapter *padapter, struct _ADAPTER_LINK *padapter_link, unsigned char rate)
+static int is_basicrate(_adapter *padapter, struct _ADAPTER_LINK *padapter_link, unsigned char rate)
 {
 	int i;
 	unsigned char val;
@@ -274,7 +274,7 @@ int is_basicrate(_adapter *padapter, struct _ADAPTER_LINK *padapter_link, unsign
 	return _FALSE;
 }
 
-unsigned int ratetbl2rateset(_adapter *padapter, struct _ADAPTER_LINK *padapter_link,
+static unsigned int ratetbl2rateset(_adapter *padapter, struct _ADAPTER_LINK *padapter_link,
 				unsigned char *rateset)
 {
 	int i;
@@ -1380,7 +1380,7 @@ void	update_ldpc_stbc_cap(struct sta_info *psta)
 #endif /* CONFIG_80211N_HT */
 }
 
-int check_ielen(u8 *start, uint len)
+static int check_ielen(u8 *start, uint len)
 {
 	int left = len;
 	u8 *pos = start;
@@ -1620,7 +1620,7 @@ void rtw_debug_rx_bcn(_adapter *adapter, u8 *pframe, u32 packet_len)
  *	WLAN_EID_CHANNEL_SWITCH
  *	WLAN_EID_PWR_CONSTRAINT
  */
-int _rtw_get_bcn_keys(u8 *cap_info, u32 buf_len, u8 def_ch
+static int _rtw_get_bcn_keys(u8 *cap_info, u32 buf_len, u8 def_ch
 	, struct _ADAPTER_LINK *adapter_link
 	, struct beacon_keys *recv_beacon)
 {
