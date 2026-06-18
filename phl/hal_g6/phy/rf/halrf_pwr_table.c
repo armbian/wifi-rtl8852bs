@@ -84,7 +84,7 @@ bool halrf_reg_tbl_exist(struct rf_info *rf, u8 band, u8 reg)
 	return pwr->regulation[band][reg];
 }
 
-u8 halrf_get_regulation_info_force(struct rf_info *rf, u8 band)
+static u8 halrf_get_regulation_info_force(struct rf_info *rf, u8 band)
 {
 	struct halrf_pwr_info *pwr = &rf->pwr_info;
 	enum halrf_pw_lmt_regulation_type pw_lmt_type = PW_LMT_REGU_NULL;
@@ -177,7 +177,7 @@ reg_tbl_chk:
 	return pw_lmt_type;
 }
 
-void _halrf_calc_intersect_pwr_limit_tbl(struct rf_info *rf,
+static void _halrf_calc_intersect_pwr_limit_tbl(struct rf_info *rf,
 	u8 reg_2g[], u8 reg_2g_len, u8 reg_5g[], u8 reg_5g_len, u8 reg_6g[], u8 reg_6g_len)
 {
 	struct halrf_pwr_info *pwr = &rf->pwr_info;
@@ -575,7 +575,7 @@ void halrf_power_by_rate_store_to_array(struct rf_info *rf,
 	}
 }
 
-u8 halrf_get_ch_idx_to_limit_array(struct rf_info *rf, u8 channel)
+static u8 halrf_get_ch_idx_to_limit_array(struct rf_info *rf, u8 channel)
 {
 	u8	channelIndex;
 
@@ -593,7 +593,7 @@ u8 halrf_get_ch_idx_to_limit_array(struct rf_info *rf, u8 channel)
 	return channelIndex;
 }
 
-u8 halrf_get_ch_idx_to_6g_limit_array(struct rf_info *rf, u8 channel)
+static u8 halrf_get_ch_idx_to_6g_limit_array(struct rf_info *rf, u8 channel)
 {
 	u8	channelIndex;
 
@@ -661,7 +661,7 @@ u8 halrf_get_limit_ch_idx_to_ch_idx(struct rf_info *rf, u8 band, u8 channel)
 	return channelIndex;
 }
 
-u16 halrf_hw_rate_to_pwr_by_rate(struct rf_info *rf, u16 rate)
+static u16 halrf_hw_rate_to_pwr_by_rate(struct rf_info *rf, u16 rate)
 {
 	u16 ret_rate = HALRF_DATA_RATE_OFDM6;
 
@@ -807,7 +807,7 @@ u16 halrf_hw_rate_to_pwr_by_rate(struct rf_info *rf, u16 rate)
 	return ret_rate;
 }
 
-u16 halrf_get_dcm_offset_pwr_by_rate(struct rf_info *rf, u16 rate,
+static u16 halrf_get_dcm_offset_pwr_by_rate(struct rf_info *rf, u16 rate,
 						u8 dcm, u8 offset)
 {
 	u16 rate_tmp = 0;
@@ -852,7 +852,7 @@ u16 halrf_get_dcm_offset_pwr_by_rate(struct rf_info *rf, u16 rate,
 
 }
 
-u8 halrf_hw_rate_to_limit_rate_tx_num(struct rf_info *rf, u16 rate)
+static u8 halrf_hw_rate_to_limit_rate_tx_num(struct rf_info *rf, u16 rate)
 {
 	if (rate >= RTW_DATA_RATE_CCK1 && rate <= RTW_DATA_RATE_CCK11)
 		return PW_LMT_RS_CCK;
@@ -1134,7 +1134,8 @@ void halrf_power_limit_ru_set_worldwide(struct rf_info *rf)
 
 }
 
-void halrf_set_ext_power_limit_table(struct rf_info *rf,
+#ifdef SPF_PHL_RF_019_SAR
+static void halrf_set_ext_power_limit_table(struct rf_info *rf,
 							enum phl_phy_idx phy)
 {
 #ifdef SPF_PHL_RF_019_SAR
@@ -1470,7 +1471,7 @@ void halrf_set_ext_power_limit_table(struct rf_info *rf,
 #endif
 }
 
-void halrf_set_ext_power_limit_ru_table(struct rf_info *rf,
+static void halrf_set_ext_power_limit_ru_table(struct rf_info *rf,
 							enum phl_phy_idx phy)
 {
 #ifdef SPF_PHL_RF_019_SAR
@@ -1793,6 +1794,7 @@ void halrf_set_ext_power_limit_ru_table(struct rf_info *rf,
 	RF_DBG(rf, DBG_RF_INIT, "<======%s finish!!!\n", __func__);
 #endif
 }
+#endif /* SPF_PHL_RF_019_SAR */
 
 void halrf_power_limit_set_ext_pwr_limit_table(struct rf_info *rf,
 							enum phl_phy_idx phy)
@@ -2591,14 +2593,14 @@ bool halrf_control_tx_rate_power (void *rf_void, enum phl_phy_idx phy_idx, s32 m
 	return true;
 }
 
-void halrf_set_tpe_default_control(struct rf_info *rf, enum phl_phy_idx phy)
+static void halrf_set_tpe_default_control(struct rf_info *rf, enum phl_phy_idx phy)
 {
 	RF_DBG(rf, DBG_RF_POWER, "[TPE] ======>%s\n", __func__);
 
 	halrf_set_power(rf, phy, PWR_LIMIT | PWR_LIMIT_RU);
 }
 
-void halrf_set_eirp_tpe_control(struct rf_info *rf, enum phl_phy_idx phy, s8 *power, u8 valid_tpe_cnt)
+static void halrf_set_eirp_tpe_control(struct rf_info *rf, enum phl_phy_idx phy, s8 *power, u8 valid_tpe_cnt)
 {
 	struct rtw_tpu_pwr_imt_info *lmt = &rf->hal_com->band[phy].rtw_tpu_i.rtw_tpu_pwr_imt_i;
 	struct rtw_hal_com_t *hal = rf->hal_com;
@@ -2741,7 +2743,7 @@ void halrf_set_eirp_tpe_control(struct rf_info *rf, enum phl_phy_idx phy, s8 *po
 	}
 }
 
-void halrf_set_eirp_psd_special_tpe_control(struct rf_info *rf, enum phl_phy_idx phy, s8 power)
+static void halrf_set_eirp_psd_special_tpe_control(struct rf_info *rf, enum phl_phy_idx phy, s8 power)
 {
 	struct rtw_tpu_pwr_imt_info *lmt = &rf->hal_com->band[phy].rtw_tpu_i.rtw_tpu_pwr_imt_i;
 	struct rtw_hal_com_t *hal = rf->hal_com;
@@ -2846,7 +2848,7 @@ void halrf_set_eirp_psd_special_tpe_control(struct rf_info *rf, enum phl_phy_idx
 	}
 }
 
-void halrf_set_eirp_psd_tpe_control(struct rf_info *rf, enum phl_phy_idx phy, s8* power, u8 valid_tpe_cnt)
+static void halrf_set_eirp_psd_tpe_control(struct rf_info *rf, enum phl_phy_idx phy, s8* power, u8 valid_tpe_cnt)
 {
 	struct rtw_tpu_pwr_imt_info *lmt = &rf->hal_com->band[phy].rtw_tpu_i.rtw_tpu_pwr_imt_i;
 	struct rtw_hal_com_t *hal = rf->hal_com;

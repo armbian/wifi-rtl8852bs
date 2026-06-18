@@ -27,7 +27,7 @@
 
 /*8852B DPK ver:0xf 2022902*/
 
-void _dpk_bkup_kip_8852b(
+static void _dpk_bkup_kip_8852b(
 	struct rf_info *rf,
 	u32 *reg,
 	u32 reg_bkup[][DPK_KIP_REG_NUM_8852B],
@@ -42,7 +42,7 @@ void _dpk_bkup_kip_8852b(
 	}
 }
 
-void _dpk_bkup_bb_8852b(
+static void _dpk_bkup_bb_8852b(
 	struct rf_info *rf,
 	u32 *reg,
 	u32 reg_bkup[DPK_BB_REG_NUM_8852B])
@@ -56,7 +56,7 @@ void _dpk_bkup_bb_8852b(
 	}
 }
 
-void _dpk_bkup_rf_8852b(
+static void _dpk_bkup_rf_8852b(
 	struct rf_info *rf,
 	u32 *rf_reg,
 	u32 rf_bkup[][DPK_RF_REG_NUM_8852B],
@@ -72,7 +72,7 @@ void _dpk_bkup_rf_8852b(
 	}
 }
 
-void _dpk_reload_kip_8852b(
+static void _dpk_reload_kip_8852b(
 	struct rf_info *rf,
 	u32 *reg,
 	u32 reg_bkup[][DPK_KIP_REG_NUM_8852B],
@@ -88,7 +88,7 @@ void _dpk_reload_kip_8852b(
 	}
 }
 
-void _dpk_reload_bb_8852b(
+static void _dpk_reload_bb_8852b(
 	struct rf_info *rf,
 	u32 *reg,
 	u32 reg_bkup[DPK_BB_REG_NUM_8852B]) 
@@ -103,7 +103,7 @@ void _dpk_reload_bb_8852b(
 	}
 }
 
-void _dpk_reload_rf_8852b(
+static void _dpk_reload_rf_8852b(
 	struct rf_info *rf,
 	u32 *rf_reg,
 	u32 rf_bkup[][DPK_RF_REG_NUM_8852B],
@@ -119,7 +119,7 @@ void _dpk_reload_rf_8852b(
 	}
 }
 
-u8 _dpk_one_shot_8852b(
+static u8 _dpk_one_shot_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	enum rf_path path,
@@ -186,7 +186,7 @@ u8 _dpk_one_shot_8852b(
 		return 0;
 }
 
-void _dpk_information_8852b(
+static void _dpk_information_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	enum rf_path path)
@@ -209,7 +209,7 @@ void _dpk_information_8852b(
 	        (rf->hal_com->dev_hw_cap.nb_config == CHANNEL_WIDTH_5 ? "5M" : "20M"))));
 }
 
-void _dpk_bb_afe_setting_8852b(
+static void _dpk_bb_afe_setting_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	enum rf_path path,
@@ -264,7 +264,7 @@ void _dpk_bb_afe_setting_8852b(
 	//halrf_write_fwofld_end(rf);		/*FW Offload End*/
 }
 
-void _dpk_bb_afe_restore_8852b(
+static void _dpk_bb_afe_restore_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	enum rf_path path,
@@ -304,7 +304,7 @@ void _dpk_bb_afe_restore_8852b(
 	}
 }
 
-void _dpk_tssi_pause_8852b(
+static void _dpk_tssi_pause_8852b(
 	struct rf_info *rf,
 	enum rf_path path,
 	bool is_pause)
@@ -315,7 +315,7 @@ void _dpk_tssi_pause_8852b(
 	       is_pause ? "pause" : "resume");
 }
 
-void _dpk_rx_dck_8852b(
+static void _dpk_rx_dck_8852b(
 	struct rf_info *rf,
 	enum rf_path path)
 {
@@ -330,7 +330,7 @@ void _dpk_rx_dck_8852b(
 	RF_DBG(rf, DBG_RF_DPK, "[DPK] S%d RXDCK\n", path);
 }
 
-void _dpk_tpg_sel_8852b(
+static void _dpk_tpg_sel_8852b(
 	struct rf_info *rf,
 	enum rf_path path,
 	u8 kidx)
@@ -349,7 +349,7 @@ void _dpk_tpg_sel_8852b(
 	       (dpk->bp[path][kidx].bw == CHANNEL_WIDTH_40 ? "40M" : "20M"));
 }
 
-void _dpk_kip_pwr_clk_on_8852b(
+static void _dpk_kip_pwr_clk_on_8852b(
 	struct rf_info *rf,
 	enum rf_path path)
 {
@@ -362,7 +362,7 @@ void _dpk_kip_pwr_clk_on_8852b(
 	//RF_DBG(rf, DBG_RF_DPK, "[DPK] KIP Power/CLK on\n");
 }
 
-void _dpk_kip_preset_8852b(
+static void _dpk_kip_preset_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	enum rf_path path,
@@ -372,7 +372,7 @@ void _dpk_kip_preset_8852b(
 	_dpk_one_shot_8852b(rf, phy, path, KIP_PRESET);
 }
 
-void _dpk_kip_restore_8852b(
+static void _dpk_kip_restore_8852b(
 	struct rf_info *rf,
 	enum rf_path path)
 {
@@ -391,7 +391,7 @@ void _dpk_kip_restore_8852b(
 	RF_DBG(rf, DBG_RF_DPK, "[DPK] S%d restore KIP\n", path);
 }
 
-void _dpk_kip_set_txagc_8852b(
+static void _dpk_kip_set_txagc_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	enum rf_path path,
@@ -409,7 +409,7 @@ void _dpk_kip_set_txagc_8852b(
 	RF_DBG(rf, DBG_RF_DPK, "[DPK] set TXAGC = 0x%x\n", txagc);
 }
 
-void _dpk_kip_set_rxagc_8852b(
+static void _dpk_kip_set_rxagc_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	enum rf_path path)
@@ -428,7 +428,7 @@ void _dpk_kip_set_rxagc_8852b(
 #endif
 }
 
-void _dpk_read_rxsram_8852b(
+static void _dpk_read_rxsram_8852b(
 	struct rf_info *rf)
 {
 	u32 addr;
@@ -446,7 +446,7 @@ void _dpk_read_rxsram_8852b(
 	halrf_wreg(rf, 0x8074, BIT(31), 0x0);	/*rxsram_ctrl_sel*/
 }
 
-void _dpk_lbk_rxiqk_8852b(
+static void _dpk_lbk_rxiqk_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	enum rf_path path,
@@ -507,7 +507,7 @@ void _dpk_lbk_rxiqk_8852b(
 //	halrf_write_fwofld_end(rf);		/*FW Offload End*/
 }
 
-void _dpk_get_thermal_8852b(struct rf_info *rf, u8 kidx, enum rf_path path)
+static void _dpk_get_thermal_8852b(struct rf_info *rf, u8 kidx, enum rf_path path)
 {
 	struct halrf_dpk_info *dpk = &rf->dpk;
 
@@ -520,7 +520,7 @@ void _dpk_get_thermal_8852b(struct rf_info *rf, u8 kidx, enum rf_path path)
 	RF_DBG(rf, DBG_RF_DPK, "[DPK] thermal@DPK (by RFC)= 0x%x\n", dpk->bp[path][kidx].ther_dpk);
 }
 
-void _dpk_tx_mapping_8852b(
+static void _dpk_tx_mapping_8852b(
 	struct rf_info *rf,
 	enum rf_path path,
 	u8 kidx,
@@ -546,7 +546,7 @@ void _dpk_tx_mapping_8852b(
 	halrf_wrf(rf, path, 0x11, MASKRF, tx_gain);
 }
 
-void _dpk_rf_setting_8852b(
+static void _dpk_rf_setting_8852b(
 	struct rf_info *rf,
 	u8 gain,
 	enum rf_path path,
@@ -589,7 +589,7 @@ void _dpk_rf_setting_8852b(
 #endif
 }
 
-void _dpk_manual_txcfir_8852b(
+static void _dpk_manual_txcfir_8852b(
 	struct rf_info *rf,
 	enum rf_path path,
 	bool is_manual)
@@ -620,7 +620,7 @@ void _dpk_manual_txcfir_8852b(
 	}
 }
 
-void _dpk_bypass_rxcfir_8852b(
+static void _dpk_bypass_rxcfir_8852b(
 	struct rf_info *rf,
 	enum rf_path path,
 	bool is_bypass)
@@ -647,7 +647,7 @@ void _dpk_bypass_rxcfir_8852b(
 //	halrf_write_fwofld_end(rf);		/*FW Offload End*/
 }
 
-void _dpk_table_select_8852b(
+static void _dpk_table_select_8852b(
 	struct rf_info *rf,
 	enum rf_path path,
 	u8 kidx,
@@ -663,7 +663,7 @@ void _dpk_table_select_8852b(
 		kidx, gain, val);
 }
 
-bool _dpk_sync_check_8852b(
+static bool _dpk_sync_check_8852b(
 	struct rf_info *rf,
 	enum rf_path path,
 	u8 kidx)
@@ -708,7 +708,7 @@ bool _dpk_sync_check_8852b(
 		return false;
 }
 
-void _dpk_sync_8852b(
+static void _dpk_sync_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	enum rf_path path,
@@ -723,7 +723,7 @@ void _dpk_sync_8852b(
 //	return _dpk_sync_check_8852b(rf, path, kidx); /*1= fail*/
 }
 
-u16 _dpk_dgain_read_8852b(
+static u16 _dpk_dgain_read_8852b(
 	struct rf_info *rf)
 {
 	u16 dgain = 0x0;
@@ -737,7 +737,7 @@ u16 _dpk_dgain_read_8852b(
 	return dgain;
 }
 
-s8 _dpk_dgain_mapping_8852b(
+static s8 _dpk_dgain_mapping_8852b(
 	struct rf_info *rf,
 	u16 dgain)
 {
@@ -786,7 +786,7 @@ s8 _dpk_dgain_mapping_8852b(
 	return offset;
 }
 
-u8 _dpk_pas_check_8852b(
+static u8 _dpk_pas_check_8852b(
 	struct rf_info *rf)
 {
 	u8 fail = 0;
@@ -804,7 +804,7 @@ u8 _dpk_pas_check_8852b(
 	return fail;
 }
 
-u8 _dpk_gainloss_read_8852b(
+static u8 _dpk_gainloss_read_8852b(
 	struct rf_info *rf)
 {
 	u8 result;
@@ -819,7 +819,7 @@ u8 _dpk_gainloss_read_8852b(
 	return result;
 }
 
-void _dpk_gainloss_8852b(
+static void _dpk_gainloss_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	enum rf_path path,
@@ -838,7 +838,7 @@ void _dpk_gainloss_8852b(
 //	halrf_write_fwofld_end(rf);		/*FW Offload End*/
 }
 
-u8 _dpk_set_offset_8852b(
+static u8 _dpk_set_offset_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	enum rf_path path,
@@ -867,7 +867,7 @@ u8 _dpk_set_offset_8852b(
 	return txagc;
 }
 
-u8 _dpk_pas_read_8852b(
+static u8 _dpk_pas_read_8852b(
 	struct rf_info *rf,
 	u8 is_check)
 {
@@ -914,7 +914,7 @@ u8 _dpk_pas_read_8852b(
 		return 0;
 }
 
-u8 _dpk_agc_8852b(
+static u8 _dpk_agc_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	enum rf_path path,
@@ -1079,7 +1079,7 @@ u8 _dpk_agc_8852b(
 	return tmp_txagc;
 }
 
-void _dpk_set_mdpd_para_8852b(
+static void _dpk_set_mdpd_para_8852b(
 	struct rf_info *rf,
 	enum rf_path path,
 	u8 order)
@@ -1116,7 +1116,7 @@ void _dpk_set_mdpd_para_8852b(
 		(order == 0x1 ? "(5,3,0)" : "(5,0,0)"));
 }
 
-void _dpk_idl_mpa_8852b(
+static void _dpk_idl_mpa_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	enum rf_path path,
@@ -1140,7 +1140,7 @@ void _dpk_idl_mpa_8852b(
 	//halrf_write_fwofld_end(rf);		/*FW Offload End*/
 }
 
-u8 _dpk_order_convert_8852b(
+static u8 _dpk_order_convert_8852b(
 	struct rf_info *rf)
 {
 	u8 val;
@@ -1158,7 +1158,7 @@ u8 _dpk_order_convert_8852b(
 	return val;
 }
 
-u8 _dpk_pwsf_addr_cal_8852b(
+static u8 _dpk_pwsf_addr_cal_8852b(
 	struct rf_info *rf,
 	u8 t1,
 	u8 t2)
@@ -1173,7 +1173,7 @@ u8 _dpk_pwsf_addr_cal_8852b(
 	return addr;
 }
 
-void _dpk_gs_normalize_8852b(
+static void _dpk_gs_normalize_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	enum rf_path path,
@@ -1218,7 +1218,7 @@ void _dpk_gs_normalize_8852b(
 
 }
 
-void _dpk_fill_result_8852b(
+static void _dpk_fill_result_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	enum rf_path path,
@@ -1331,7 +1331,7 @@ void _dpk_fill_result_8852b(
 	//_dpk_gs_normalize_8852b(rf, path, txagc, gs, pwsf);
 }
 
-void _dpk_coef_read_8852b(
+static void _dpk_coef_read_8852b(
 	struct rf_info *rf,
 	enum rf_path path,
 	u8 kidx,
@@ -1355,7 +1355,7 @@ void _dpk_coef_read_8852b(
 	halrf_wreg(rf, 0x81d8 + (path << 8), MASKDWORD, 0x00000000);
 }
 
-bool _dpk_reload_check_8852b(
+static bool _dpk_reload_check_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	enum rf_path path)
@@ -1380,7 +1380,7 @@ bool _dpk_reload_check_8852b(
 	return is_reload;
 }
 
-void _dpk_main_8852b(
+static void _dpk_main_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	enum rf_path path,
@@ -1454,7 +1454,7 @@ _error:
 //	halrf_write_fwofld_end(rf);		/*FW Offload End*/
 }
 
-void _dpk_cal_select_8852b(
+static void _dpk_cal_select_8852b(
 	struct rf_info *rf,
 	bool force,
 	enum phl_phy_idx phy,
@@ -1520,7 +1520,7 @@ void _dpk_cal_select_8852b(
 	halrf_write_fwofld_end(rf);		/*FW Offload End*/
 }
 
-u8 _dpk_bypass_check_8852b(
+static u8 _dpk_bypass_check_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy)
 {
@@ -1543,7 +1543,7 @@ u8 _dpk_bypass_check_8852b(
 	return result;
 }
 
-void _dpk_force_bypass_8852b(
+static void _dpk_force_bypass_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy)
 {

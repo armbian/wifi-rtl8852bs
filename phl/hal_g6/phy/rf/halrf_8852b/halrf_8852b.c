@@ -31,7 +31,7 @@ void halrf_adc_fifo_rst_8852b(struct rf_info *rf, enum phl_phy_idx phy_idx, u8 p
 	halrf_wreg(rf, 0x20fc, 0xffff0000, 0x3333);
 }
 
-bool halrf_bw_setting_8852b(struct rf_info *rf, enum rf_path path, enum channel_width bw, bool is_dav)
+static bool halrf_bw_setting_8852b(struct rf_info *rf, enum rf_path path, enum channel_width bw, bool is_dav)
 {
 	u32 rf_reg18 = 0;
 	u32 reg_reg18_addr = 0x0;
@@ -142,7 +142,7 @@ void halrf_lck_check_8852b(struct rf_info *rf)
 }
 #endif
 	
-bool halrf_set_s0_arfc18_8852b(struct rf_info *rf, u32 val)
+static bool halrf_set_s0_arfc18_8852b(struct rf_info *rf, u32 val)
 {
 	u32 temp, c = 1000;
 	bool timeout = false;
@@ -180,7 +180,7 @@ bool halrf_set_s0_arfc18_8852b(struct rf_info *rf, u32 val)
 	return timeout;
 }
 
-void halrf_lck_check_8852b(struct rf_info *rf)
+static void halrf_lck_check_8852b(struct rf_info *rf)
 {
 	u32 temp;
 
@@ -237,7 +237,7 @@ void halrf_lck_check_8852b(struct rf_info *rf)
 }
 
 
-void halrf_set_ch_8852b(struct rf_info *rf, u32 val) {
+static void halrf_set_ch_8852b(struct rf_info *rf, u32 val) {
 	bool timeout;
 	
 	timeout = halrf_set_s0_arfc18_8852b(rf, val);
@@ -245,7 +245,7 @@ void halrf_set_ch_8852b(struct rf_info *rf, u32 val) {
 		halrf_lck_check_8852b(rf);
 }
 
-bool halrf_ch_setting_8852b(struct rf_info *rf,   enum rf_path path, u8 central_ch,
+static bool halrf_ch_setting_8852b(struct rf_info *rf,   enum rf_path path, u8 central_ch,
 			    bool *is_2g_ch, bool is_dav)
 {
 	u32 rf_reg18 = 0;	
@@ -312,7 +312,7 @@ bool halrf_ctrl_ch_8852b(struct rf_info *rf,  u8 central_ch)
 	return true;
 }
 
-void halrf_set_lo_8852b(struct rf_info *rf, bool is_on, enum rf_path path)
+static void halrf_set_lo_8852b(struct rf_info *rf, bool is_on, enum rf_path path)
 {
 	if (is_on) {
 		halrf_rf_direct_cntrl_8852b(rf, path, false);
@@ -379,7 +379,7 @@ u8 halrf_kpath_8852b(struct rf_info *rf, enum phl_phy_idx phy_idx) {
 	}
 }
 
-void _rx_dck_info_8852b(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path, bool is_afe)
+static void _rx_dck_info_8852b(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path, bool is_afe)
 {
 	struct halrf_rx_dck_info *rx_dck = &rf->rx_dck;
 
@@ -486,7 +486,7 @@ void halrf_set_rx_dck_8852b(struct rf_info *rf, enum phl_phy_idx phy, enum rf_pa
 #endif
 }
 
-bool halrf_rx_dck_check_8852b(struct rf_info *rf, enum rf_path path)
+static bool halrf_rx_dck_check_8852b(struct rf_info *rf, enum rf_path path)
 {
 	u8 addr;
 	bool is_fail = false;
@@ -624,7 +624,7 @@ void halrf_rck_8852b(struct rf_info *rf, enum rf_path path)
 	       halrf_rrf(rf, path, 0x1b, MASKRF));
 }
 
-void iqk_backup_8852b(struct rf_info *rf, enum rf_path path) 
+static void iqk_backup_8852b(struct rf_info *rf, enum rf_path path) 
 {
 	return;
 }
@@ -662,7 +662,7 @@ void halrf_bf_config_rf_8852b(struct rf_info *rf)
 	halrf_wrf(rf, RF_PATH_B, 0xef, BIT(19), 0x0);
 }
 
-void halrf_set_dpd_backoff_8852b(struct rf_info *rf, enum phl_phy_idx phy)
+static void halrf_set_dpd_backoff_8852b(struct rf_info *rf, enum phl_phy_idx phy)
 {
 	struct halrf_dpk_info *dpk = &rf->dpk;
 	u8 tx_scale, ofdm_bkof, path, kpath;
@@ -689,7 +689,7 @@ void halrf_dpk_init_8852b(struct rf_info *rf)
 	halrf_set_dpd_backoff_8852b(rf, HW_PHY_0);
 }
 
-void halrf_set_rxbb_bw_8852b(struct rf_info *rf, enum channel_width bw, enum rf_path path)
+static void halrf_set_rxbb_bw_8852b(struct rf_info *rf, enum channel_width bw, enum rf_path path)
 {
 	halrf_write_fwofld_start(rf);
 

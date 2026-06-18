@@ -128,7 +128,7 @@ void halrf_cmn_info_self_init(struct rf_info *rf)
 	}
 }
 
-void halrf_rfk_self_init(struct rf_info *rf)
+static void halrf_rfk_self_init(struct rf_info *rf)
 {
 	struct halrf_iqk_info *iqk_info = &rf->iqk;
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -536,7 +536,7 @@ void halrf_set_rfability(struct rf_info *rf)
 	       rf->ic_type, rf->phl_com->drv_mode, rf->hw_rf_ability);
 }
 
-void halrf_set_final_rfability(struct rf_info *rf)
+static void halrf_set_final_rfability(struct rf_info *rf)
 {
 
 #if 0
@@ -559,7 +559,7 @@ void halrf_set_final_rfability(struct rf_info *rf)
 	       rf->ic_type, rf->phl_com->drv_mode, rf->support_ability);
 }
 
-void halrf_rfe_init(struct rf_info *rf)
+static void halrf_rfe_init(struct rf_info *rf)
 {
 	u8 rfe_type = rf->phl_com->dev_cap.rfe_type;
 
@@ -598,7 +598,7 @@ void halrf_rfe_init(struct rf_info *rf)
 	}
 }
 
-void halrf_rfe_type_gpio_setting(struct rf_info *rf)
+static void halrf_rfe_type_gpio_setting(struct rf_info *rf)
 {
 	u32 band = rf->hal_com->band[HW_PHY_0].cur_chandef.band;
 

@@ -16,7 +16,7 @@
 
 #ifdef RF_8852B_SUPPORT
 
-void _tssi_backup_bb_registers_8852b(
+static void _tssi_backup_bb_registers_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	u32 *reg,
@@ -33,7 +33,7 @@ void _tssi_backup_bb_registers_8852b(
 	}
 }
 
-void _tssi_reload_bb_registers_8852b(
+static void _tssi_reload_bb_registers_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	u32 *reg,
@@ -51,7 +51,7 @@ void _tssi_reload_bb_registers_8852b(
 	}
 }
 
-u8 _halrf_ch_to_idx_8852b(struct rf_info *rf, u8 channel)
+static u8 _halrf_ch_to_idx_8852b(struct rf_info *rf, u8 channel)
 {
 	u8	channelIndex;
 
@@ -69,7 +69,7 @@ u8 _halrf_ch_to_idx_8852b(struct rf_info *rf, u8 channel)
 	return channelIndex;
 }
 
-u8 _halrf_idx_to_ch_8852b(struct rf_info *rf, u8 idx)
+static u8 _halrf_idx_to_ch_8852b(struct rf_info *rf, u8 idx)
 {
 	u8 channelIndex;
 
@@ -110,7 +110,7 @@ void _halrf_tssi_hw_tx_8852b(struct rf_info *rf,
 	halrf_set_pmac_tx(rf, phy, path, &tx_info, enable, false);
 }
 
-void _halrf_tssi_rf_setting_8852b(struct rf_info *rf,
+static void _halrf_tssi_rf_setting_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
 	u8 channel = rf->hal_com->band[phy].cur_chandef.center_ch;
@@ -123,7 +123,7 @@ void _halrf_tssi_rf_setting_8852b(struct rf_info *rf,
 		halrf_wrf(rf, path, 0x7f, 0x00100, 0x1);
 }
 
-void _halrf_tssi_set_sys_8852b(struct rf_info *rf,
+static void _halrf_tssi_set_sys_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
 	u8 channel = rf->hal_com->band[phy].cur_chandef.center_ch;
@@ -175,7 +175,7 @@ void _halrf_tssi_set_sys_8852b(struct rf_info *rf,
 	}
 }
 
-void _halrf_tssi_ini_txpwr_ctrl_bb_8852b(struct rf_info *rf,
+static void _halrf_tssi_ini_txpwr_ctrl_bb_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
 	RF_DBG(rf, DBG_RF_TX_PWR_TRACK, "======>%s   path=%d\n", __func__, path);
@@ -308,7 +308,7 @@ void _halrf_tssi_ini_txpwr_ctrl_bb_8852b(struct rf_info *rf,
 
 }
 
-void _halrf_tssi_ini_txpwr_ctrl_bb_he_tb_8852b(struct rf_info *rf,
+static void _halrf_tssi_ini_txpwr_ctrl_bb_he_tb_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
 	RF_DBG(rf, DBG_RF_TX_PWR_TRACK, "======>%s   path=%d\n", __func__, path);
@@ -322,7 +322,7 @@ void _halrf_tssi_ini_txpwr_ctrl_bb_he_tb_8852b(struct rf_info *rf,
 	}
 }
 
-void _halrf_tssi_set_dck_8852b(struct rf_info *rf,
+static void _halrf_tssi_set_dck_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
 	RF_DBG(rf, DBG_RF_TX_PWR_TRACK, "======>%s   path=%d\n", __func__, path);
@@ -338,7 +338,7 @@ void _halrf_tssi_set_dck_8852b(struct rf_info *rf,
 	}
 }
 
-void _halrf_tssi_set_bbgain_split_8852b(struct rf_info *rf,
+static void _halrf_tssi_set_bbgain_split_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
 	RF_DBG(rf, DBG_RF_TX_PWR_TRACK, "======>%s   path=%d\n", __func__, path);
@@ -356,7 +356,7 @@ void _halrf_tssi_set_bbgain_split_8852b(struct rf_info *rf,
 	}
 }
 
-void _halrf_tssi_set_tmeter_tbl_8852b(struct rf_info *rf,
+static void _halrf_tssi_set_tmeter_tbl_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_pwr_track_info *pwr_trk = &rf->pwr_track;
@@ -593,7 +593,7 @@ void _halrf_tssi_set_tmeter_tbl_8852b(struct rf_info *rf,
 
 }
 
-void _halrf_tssi_set_tmeter_tbl_zere_8852b(struct rf_info *rf,
+static void _halrf_tssi_set_tmeter_tbl_zere_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
 	u8 i;
@@ -629,7 +629,7 @@ void _halrf_tssi_set_tmeter_tbl_zere_8852b(struct rf_info *rf,
 
 }
 
-void _halrf_tssi_set_dac_gain_tbl_8852b(struct rf_info *rf,
+static void _halrf_tssi_set_dac_gain_tbl_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
 	RF_DBG(rf, DBG_RF_TX_PWR_TRACK, "======>%s   path=%d\n", __func__, path);
@@ -743,7 +743,7 @@ void _halrf_tssi_set_dac_gain_tbl_8852b(struct rf_info *rf,
 
 }
 
-void _halrf_tssi_slope_cal_org_8852b(struct rf_info *rf,
+static void _halrf_tssi_slope_cal_org_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
 	u8 channel = rf->hal_com->band[phy].cur_chandef.center_ch;
@@ -811,7 +811,7 @@ void _halrf_tssi_slope_cal_org_8852b(struct rf_info *rf,
 }
 
 
-void _halrf_tssi_slope_cal_8852b(struct rf_info *rf,
+static void _halrf_tssi_slope_cal_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
 	u8 channel = rf->hal_com->band[phy].cur_chandef.center_ch;
@@ -941,7 +941,7 @@ void _halrf_tssi_slope_cal_8852b(struct rf_info *rf,
 	}
 }
 
-void _halrf_tssi_alignment_default_8852b(struct rf_info *rf,
+static void _halrf_tssi_alignment_default_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path, bool all)
 {
 	u8 channel = rf->hal_com->band[phy].cur_chandef.center_ch;
@@ -1104,7 +1104,7 @@ void _halrf_tssi_alignment_default_8852b(struct rf_info *rf,
 		0x5644 + (path << 13), halrf_rreg(rf, 0x5644 + (path << 13), 0xffffffff));
 }
 
-void _halrf_tssi_run_slope_8852b(struct rf_info *rf,
+static void _halrf_tssi_run_slope_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
 	RF_DBG(rf, DBG_RF_TX_PWR_TRACK, "======>%s   path=%d\n", __func__, path);
@@ -1118,7 +1118,7 @@ void _halrf_tssi_run_slope_8852b(struct rf_info *rf,
 	}
 }
 
-void _halrf_tssi_set_tssi_slope_8852b(struct rf_info *rf,
+static void _halrf_tssi_set_tssi_slope_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
 	RF_DBG(rf, DBG_RF_TX_PWR_TRACK, "======>%s   path=%d\n", __func__, path);
@@ -1134,7 +1134,7 @@ void _halrf_tssi_set_tssi_slope_8852b(struct rf_info *rf,
 	}
 }
 
-void _halrf_tssi_set_tssi_track_8852b(struct rf_info *rf,
+static void _halrf_tssi_set_tssi_track_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
 	RF_DBG(rf, DBG_RF_TX_PWR_TRACK, "======>%s   path=%d\n", __func__, path);
@@ -1146,7 +1146,7 @@ void _halrf_tssi_set_tssi_track_8852b(struct rf_info *rf,
 	}
 }
 
-void _halrf_tssi_set_txagc_offset_mv_avg_8852b(struct rf_info *rf,
+static void _halrf_tssi_set_txagc_offset_mv_avg_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
 	RF_DBG(rf, DBG_RF_TX_PWR_TRACK, "======>%s   path=%d\n", __func__, path);
@@ -1158,7 +1158,7 @@ void _halrf_tssi_set_txagc_offset_mv_avg_8852b(struct rf_info *rf,
 	}
 }
 
-u32 _halrf_tssi_get_cck_efuse_group_8852b(struct rf_info *rf,
+static u32 _halrf_tssi_get_cck_efuse_group_8852b(struct rf_info *rf,
 						enum phl_phy_idx phy)
 {
 	u8 channel = rf->hal_com->band[phy].cur_chandef.center_ch;
@@ -1180,7 +1180,7 @@ u32 _halrf_tssi_get_cck_efuse_group_8852b(struct rf_info *rf,
 	return offset_index;
 }
 
-u32 _halrf_tssi_get_ofdm_efuse_group_8852b(struct rf_info *rf,
+static u32 _halrf_tssi_get_ofdm_efuse_group_8852b(struct rf_info *rf,
 						enum phl_phy_idx phy)
 {
 	u8 channel = rf->hal_com->band[phy].cur_chandef.center_ch;
@@ -1253,7 +1253,7 @@ u32 _halrf_tssi_get_ofdm_efuse_group_8852b(struct rf_info *rf,
 	return offset_index;
 }
 
-s8 _halrf_tssi_get_ofdm_efuse_tssi_de_8852b(struct rf_info *rf,
+static s8 _halrf_tssi_get_ofdm_efuse_tssi_de_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_tssi_info *tssi_info = &rf->tssi;
@@ -1293,7 +1293,7 @@ s8 _halrf_tssi_get_ofdm_efuse_tssi_de_8852b(struct rf_info *rf,
 }
 
 
-u32 _halrf_tssi_get_tssi_trim_efuse_group_8852b(struct rf_info *rf,
+static u32 _halrf_tssi_get_tssi_trim_efuse_group_8852b(struct rf_info *rf,
 						enum phl_phy_idx phy)
 {
 	u8 channel = rf->hal_com->band[phy].cur_chandef.center_ch;
@@ -1328,7 +1328,7 @@ u32 _halrf_tssi_get_tssi_trim_efuse_group_8852b(struct rf_info *rf,
 	return group_index;
 }
 
-s8 _halrf_tssi_get_ofdm_tssi_trim_de_8852b(struct rf_info *rf,
+static s8 _halrf_tssi_get_ofdm_tssi_trim_de_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_tssi_info *tssi_info = &rf->tssi;
@@ -1368,7 +1368,7 @@ s8 _halrf_tssi_get_ofdm_tssi_trim_de_8852b(struct rf_info *rf,
 	return final_de;
 }
 
-void _halrf_tssi_alimentk_8852b(struct rf_info *rf,
+static void _halrf_tssi_alimentk_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_tssi_info *tssi_info = &rf->tssi;
@@ -1767,7 +1767,7 @@ void _halrf_tssi_alimentk_8852b(struct rf_info *rf,
 		HALRF_ABS(finish_time, start_time) % 1000);
 }
 
-void _halrf_tssi_alimentk_done_8852b(struct rf_info *rf,
+static void _halrf_tssi_alimentk_done_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_tssi_info *tssi_info = &rf->tssi;

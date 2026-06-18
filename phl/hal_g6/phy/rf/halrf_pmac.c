@@ -33,7 +33,7 @@ void halrf_set_pseudo_cw(struct rf_info *rf, enum rf_path path,
 		       "[RFK] Set S%d Pseudo_CW off!!\n", path);
 }
 
-void halrf_set_plcp_usr_info(struct rf_info *rf, struct halbb_plcp_info *plcp,
+static void halrf_set_plcp_usr_info(struct rf_info *rf, struct halbb_plcp_info *plcp,
 				struct rf_pmac_tx_info *tx_info)
 {
 	plcp->usr[0].mcs = tx_info->mcs;
@@ -55,7 +55,7 @@ void halrf_set_plcp_usr_info(struct rf_info *rf, struct halbb_plcp_info *plcp,
 	       tx_info->mcs, tx_info->length, tx_info->nss);
 }
 
-void halrf_set_plcp_para_info(struct rf_info *rf, struct halbb_plcp_info *plcp,
+static void halrf_set_plcp_para_info(struct rf_info *rf, struct halbb_plcp_info *plcp,
 				struct rf_pmac_tx_info *tx_info)
 {
 	plcp->dbw = tx_info->bw; /*0:BW20, 1:BW40, 2:BW80, 3:BW160/BW80+80*/
@@ -109,7 +109,7 @@ void halrf_set_plcp_para_info(struct rf_info *rf, struct halbb_plcp_info *plcp,
 	       tx_info->bw, tx_info->long_preamble_en, tx_info->gi ,tx_info->ppdu);
 }
 
-void halrf_set_pmac_plcp_gen(struct rf_info *rf, enum phl_phy_idx phy_idx,
+static void halrf_set_pmac_plcp_gen(struct rf_info *rf, enum phl_phy_idx phy_idx,
 			struct rf_pmac_tx_info *tx_info)
 {
 	struct halbb_plcp_info plcp = {0};

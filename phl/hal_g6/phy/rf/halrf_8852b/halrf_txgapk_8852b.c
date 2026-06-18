@@ -25,7 +25,7 @@
 #include "../halrf_precomp.h"
 #ifdef RF_8852B_SUPPORT
 
-void _txgapk_backup_bb_registers_8852b(
+static void _txgapk_backup_bb_registers_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	u32 *reg,
@@ -42,7 +42,7 @@ void _txgapk_backup_bb_registers_8852b(
 	}
 }
 
-void _txgapk_reload_bb_registers_8852b(
+static void _txgapk_reload_bb_registers_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
 	u32 *reg,
@@ -60,7 +60,7 @@ void _txgapk_reload_bb_registers_8852b(
 	}
 }
 
-void _halrf_txgapk_bkup_rf_8852b(
+static void _halrf_txgapk_bkup_rf_8852b(
 	struct rf_info *rf,
 	u32 *rf_reg,
 	u32 rf_bkup[][TXGAPK_RF_REG_NUM_8852B],
@@ -76,7 +76,7 @@ void _halrf_txgapk_bkup_rf_8852b(
 	}
 }
 
-void _halrf_txgapk_reload_rf_8852b(
+static void _halrf_txgapk_reload_rf_8852b(
 	struct rf_info *rf,
 	u32 *rf_reg,
 	u32 rf_bkup[][TXGAPK_RF_REG_NUM_8852B],
@@ -93,7 +93,7 @@ void _halrf_txgapk_reload_rf_8852b(
 }
 
 
-void _halrf_txgapk_bb_afe_by_mode_8852b(struct rf_info *rf,
+static void _halrf_txgapk_bb_afe_by_mode_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path, bool is_dbcc)
 {
 	RF_DBG(rf, DBG_RF_TXGAPK, "[TXGAPK]======> %s\n", __func__);
@@ -261,7 +261,7 @@ void _halrf_txgapk_bb_afe_by_mode_8852b(struct rf_info *rf,
 
 
 
-void _halrf_txgapk_iqk_preset_by_mode_8852b(struct rf_info *rf,
+static void _halrf_txgapk_iqk_preset_by_mode_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path, bool is_dbcc)
 {
 	RF_DBG(rf, DBG_RF_TXGAPK, "[TXGAPK]======> %s\n", __func__);
@@ -302,7 +302,7 @@ void _halrf_txgapk_iqk_preset_by_mode_8852b(struct rf_info *rf,
 
 
 
-void _halrf_txgapk_clk_setting_dac960mhz_by_mode_8852b
+static void _halrf_txgapk_clk_setting_dac960mhz_by_mode_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path, bool is_dbcc)
 {
 	RF_DBG(rf, DBG_RF_TXGAPK, "[TXGAPK]======> %s\n", __func__);
@@ -333,7 +333,7 @@ void _halrf_txgapk_clk_setting_dac960mhz_by_mode_8852b
 	
 }
 
-void _halrf_txgapk_before_one_shot_enable_8852b
+static void _halrf_txgapk_before_one_shot_enable_8852b
 	(struct rf_info *rf)
 {
 	RF_DBG(rf, DBG_RF_TXGAPK, "[TXGAPK]======> %s\n", __func__);
@@ -345,7 +345,7 @@ void _halrf_txgapk_before_one_shot_enable_8852b
 	RF_DBG(rf, DBG_RF_TXGAPK, "[TXGAPK]======> before set one-shot bit, 0x%x= 0x%x\n", 0x8010, halrf_rreg(rf, 0x8010, MASKDWORD));
 }
 
-void _halrf_txgapk_one_shot_nctl_done_check_8852b
+static void _halrf_txgapk_one_shot_nctl_done_check_8852b
 	(struct rf_info *rf, enum txgapk_id id, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -424,7 +424,7 @@ void _halrf_txgapk_one_shot_nctl_done_check_8852b
 }
 
 
-void _halrf_txgapk_track_table_nctl_2g_8852b
+static void _halrf_txgapk_track_table_nctl_2g_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -735,7 +735,7 @@ void _halrf_txgapk_track_table_nctl_2g_8852b
 }
 
 
-void _halrf_txgapk_track_table_nctl_5g_8852b
+static void _halrf_txgapk_track_table_nctl_5g_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -1043,7 +1043,7 @@ void _halrf_txgapk_track_table_nctl_5g_8852b
 }
 
 
-void _halrf_txgapk_track_table_nctl_8852b
+static void _halrf_txgapk_track_table_nctl_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	u8 channel = rf->hal_com->band[phy].cur_chandef.center_ch;
@@ -1054,7 +1054,7 @@ void _halrf_txgapk_track_table_nctl_8852b
 		_halrf_txgapk_track_table_nctl_5g_8852b(rf, phy, path);
 }
 
-void _halrf_txgapk_write_track_table_default_2g_8852b
+static void _halrf_txgapk_write_track_table_default_2g_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -1093,7 +1093,7 @@ void _halrf_txgapk_write_track_table_default_2g_8852b
 	halrf_wrf(rf, path, TXGAPK_DEBUGMASK_8852B, 0x08000, 0x0); /* exit debug mode after write */
 }
 
-void _halrf_txgapk_write_track_table_default_5gl_8852b
+static void _halrf_txgapk_write_track_table_default_5gl_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -1131,7 +1131,7 @@ void _halrf_txgapk_write_track_table_default_5gl_8852b
 	halrf_wrf(rf, path, TXGAPK_DEBUGMASK_8852B, 0x08000, 0x0); /* exit debug mode after write */
 }
 
-void _halrf_txgapk_write_track_table_default_5gm_8852b
+static void _halrf_txgapk_write_track_table_default_5gm_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -1169,7 +1169,7 @@ void _halrf_txgapk_write_track_table_default_5gm_8852b
 	halrf_wrf(rf, path, TXGAPK_DEBUGMASK_8852B, 0x08000, 0x0); /* exit debug mode after write */
 }
 
-void _halrf_txgapk_write_track_table_default_5gh_8852b
+static void _halrf_txgapk_write_track_table_default_5gh_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -1207,7 +1207,7 @@ void _halrf_txgapk_write_track_table_default_5gh_8852b
 	halrf_wrf(rf, path, TXGAPK_DEBUGMASK_8852B, 0x08000, 0x0); /* exit debug mode after write */
 }
 
-void _halrf_txgapk_write_track_table_default_8852b
+static void _halrf_txgapk_write_track_table_default_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	u8 channel = rf->hal_com->band[phy].cur_chandef.center_ch;
@@ -1222,7 +1222,7 @@ void _halrf_txgapk_write_track_table_default_8852b
 		_halrf_txgapk_write_track_table_default_5gh_8852b(rf, phy, path);
 }
 
-void _halrf_txgapk_write_track_table_2g_8852b
+static void _halrf_txgapk_write_track_table_2g_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -1280,7 +1280,7 @@ void _halrf_txgapk_write_track_table_2g_8852b
 	halrf_wrf(rf, path, TXGAPK_DEBUGMASK_8852B, 0x08000, 0x0); /* exit debug mode after write */
 }
 
-void _halrf_txgapk_write_track_table_5gl_8852b
+static void _halrf_txgapk_write_track_table_5gl_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -1327,7 +1327,7 @@ void _halrf_txgapk_write_track_table_5gl_8852b
 
 }
 
-void _halrf_txgapk_write_track_table_5gm_8852b
+static void _halrf_txgapk_write_track_table_5gm_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -1374,7 +1374,7 @@ void _halrf_txgapk_write_track_table_5gm_8852b
 
 }
 
-void _halrf_txgapk_write_track_table_5gh_8852b
+static void _halrf_txgapk_write_track_table_5gh_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -1421,7 +1421,7 @@ void _halrf_txgapk_write_track_table_5gh_8852b
 	halrf_wrf(rf, path, TXGAPK_DEBUGMASK_8852B, 0x08000, 0x0); /* exit debug mode after write */
 }
 
-void _halrf_txgapk_write_track_table_8852b
+static void _halrf_txgapk_write_track_table_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	u8 channel = rf->hal_com->band[phy].cur_chandef.center_ch;
@@ -1436,7 +1436,7 @@ void _halrf_txgapk_write_track_table_8852b
 		_halrf_txgapk_write_track_table_5gh_8852b(rf, phy, path);
 }
 
-void _halrf_txgapk_power_table_nctl_2g_8852b
+static void _halrf_txgapk_power_table_nctl_2g_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -1716,7 +1716,7 @@ void _halrf_txgapk_power_table_nctl_2g_8852b
 }
 
 
-void _halrf_txgapk_power_table_nctl_5g_8852b
+static void _halrf_txgapk_power_table_nctl_5g_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -1994,7 +1994,7 @@ void _halrf_txgapk_power_table_nctl_5g_8852b
 }
 
 
-void _halrf_txgapk_power_table_nctl_8852b
+static void _halrf_txgapk_power_table_nctl_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	u8 channel = rf->hal_com->band[phy].cur_chandef.center_ch;
@@ -2006,7 +2006,7 @@ void _halrf_txgapk_power_table_nctl_8852b
 
 }
 
-void _halrf_txgapk_write_power_table_default_2g_8852b
+static void _halrf_txgapk_write_power_table_default_2g_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -2036,7 +2036,7 @@ void _halrf_txgapk_write_power_table_default_2g_8852b
 	halrf_wrf(rf, path, TXGAPK_DEBUGMASK_8852B, 0x40000, 0x0); /* exit debug mode after write */
 }
 
-void _halrf_txgapk_write_power_table_default_5gl_8852b
+static void _halrf_txgapk_write_power_table_default_5gl_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -2065,7 +2065,7 @@ void _halrf_txgapk_write_power_table_default_5gl_8852b
 	halrf_wrf(rf, path, TXGAPK_DEBUGMASK_8852B, 0x40000, 0x0); /* exit debug mode after write */
 }
 
-void _halrf_txgapk_write_power_table_default_5gm_8852b
+static void _halrf_txgapk_write_power_table_default_5gm_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -2095,7 +2095,7 @@ void _halrf_txgapk_write_power_table_default_5gm_8852b
 	halrf_wrf(rf, path, TXGAPK_DEBUGMASK_8852B, 0x40000, 0x0); /* exit debug mode after write */
 }
 
-void _halrf_txgapk_write_power_table_default_5gh_8852b
+static void _halrf_txgapk_write_power_table_default_5gh_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -2124,7 +2124,7 @@ void _halrf_txgapk_write_power_table_default_5gh_8852b
 	halrf_wrf(rf, path, TXGAPK_DEBUGMASK_8852B, 0x40000, 0x0); /* exit debug mode after write */
 }
 
-void _halrf_txgapk_write_power_table_default_8852b
+static void _halrf_txgapk_write_power_table_default_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	u8 channel = rf->hal_com->band[phy].cur_chandef.center_ch;
@@ -2139,7 +2139,7 @@ void _halrf_txgapk_write_power_table_default_8852b
 		_halrf_txgapk_write_power_table_default_5gh_8852b(rf, phy, path);
 }
 
-void _halrf_txgapk_write_power_table_2g_8852b
+static void _halrf_txgapk_write_power_table_2g_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -2185,7 +2185,7 @@ void _halrf_txgapk_write_power_table_2g_8852b
 	halrf_wrf(rf, path, TXGAPK_DEBUGMASK_8852B, 0x40000, 0x0); /* exit debug mode after write */
 }
 
-void _halrf_txgapk_write_power_table_5gl_8852b
+static void _halrf_txgapk_write_power_table_5gl_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -2239,7 +2239,7 @@ void _halrf_txgapk_write_power_table_5gl_8852b
 	halrf_wrf(rf, path, TXGAPK_DEBUGMASK_8852B, 0x40000, 0x0); /* exit debug mode after write */
 }
 
-void _halrf_txgapk_write_power_table_5gm_8852b
+static void _halrf_txgapk_write_power_table_5gm_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -2294,7 +2294,7 @@ void _halrf_txgapk_write_power_table_5gm_8852b
 	halrf_wrf(rf, path, TXGAPK_DEBUGMASK_8852B, 0x40000, 0x0); /* exit debug mode after write */
 }
 
-void _halrf_txgapk_write_power_table_5gh_8852b
+static void _halrf_txgapk_write_power_table_5gh_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
@@ -2349,7 +2349,7 @@ void _halrf_txgapk_write_power_table_5gh_8852b
 	halrf_wrf(rf, path, TXGAPK_DEBUGMASK_8852B, 0x40000, 0x0); /* exit debug mode after write */
 }
 
-void _halrf_txgapk_write_power_table_8852b
+static void _halrf_txgapk_write_power_table_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path)
 {
 	u8 channel = rf->hal_com->band[phy].cur_chandef.center_ch;
@@ -2364,7 +2364,7 @@ void _halrf_txgapk_write_power_table_8852b
 		_halrf_txgapk_write_power_table_5gh_8852b(rf, phy, path);
 }
 
-void _halrf_txgapk_iqk_bk_reg_by_mode_8852b
+static void _halrf_txgapk_iqk_bk_reg_by_mode_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path, bool is_dbcc)
 {
 	u32 path_setting[2] = {0x0e19, 0x0e29};
@@ -2416,7 +2416,7 @@ void _halrf_txgapk_iqk_bk_reg_by_mode_8852b
 
 
 
-void _halrf_txgapk_afe_bk_reg_by_mode_8852b
+static void _halrf_txgapk_afe_bk_reg_by_mode_8852b
 	(struct rf_info *rf, enum phl_phy_idx phy, enum rf_path path, bool is_dbcc)
 {
 	RF_DBG(rf, DBG_RF_TXGAPK, "[TXGAPK]======> %s\n", __func__);
@@ -2490,7 +2490,7 @@ void _halrf_txgapk_afe_bk_reg_by_mode_8852b
 
 
 
-void _halrf_do_non_dbcc_txgapk_8852b(struct rf_info *rf,
+static void _halrf_do_non_dbcc_txgapk_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy)
 {
 	u8 i;
@@ -2613,7 +2613,7 @@ void _halrf_do_non_dbcc_txgapk_8852b(struct rf_info *rf,
 					backup_num);
 	halrf_write_fwofld_end(rf); 	/*FW Offload End*/
 }
-void _halrf_do_dbcc_txgapk_8852b(struct rf_info *rf,
+static void _halrf_do_dbcc_txgapk_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy)
 {
 	u32 bb_reg[1] = {0x2344};
@@ -2715,7 +2715,7 @@ void _halrf_do_dbcc_txgapk_8852b(struct rf_info *rf,
 #endif
 	
 }
-void _halrf_txgapk_get_ch_info_8852b(struct rf_info *rf, enum phl_phy_idx phy)
+static void _halrf_txgapk_get_ch_info_8852b(struct rf_info *rf, enum phl_phy_idx phy)
 {
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
 	

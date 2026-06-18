@@ -90,7 +90,7 @@ const u32 array_restore_nondbcc_path01_8852b[] = {
 };
 
 __iram_func__
-void iqk_backup_rf0_8852b(
+static void iqk_backup_rf0_8852b(
 	struct rf_info *rf, u8 path,
 	u32 backup_rf0[rf_reg_num_8852b],
 	u32 backup_rf_reg0[rf_reg_num_8852b])
@@ -108,7 +108,7 @@ void iqk_backup_rf0_8852b(
 }
 
 __iram_func__
-void iqk_backup_rf1_8852b(
+static void iqk_backup_rf1_8852b(
 	struct rf_info *rf, u8 path,
 	u32 backup_rf1[rf_reg_num_8852b],
 	u32 backup_rf_reg1[rf_reg_num_8852b])
@@ -127,7 +127,7 @@ void iqk_backup_rf1_8852b(
 }
 
 __iram_func__
-void iqk_restore_rf0_8852b(
+static void iqk_restore_rf0_8852b(
 	struct rf_info *rf, u8 path,
 	u32 backup_rf0[rf_reg_num_8852b],
 	u32 backup_rf_reg0[rf_reg_num_8852b])
@@ -147,7 +147,7 @@ void iqk_restore_rf0_8852b(
 }
 
 __iram_func__
-void iqk_restore_rf1_8852b(
+static void iqk_restore_rf1_8852b(
 	struct rf_info *rf, u8 path,
 	u32 backup_rf1[rf_reg_num_8852b],
 	u32 backup_rf_reg1[rf_reg_num_8852b])

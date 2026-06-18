@@ -16,7 +16,7 @@
 
 #ifdef RF_8852B_SUPPORT
 
-s8 _halrf_avg_power_8852b(struct rf_info *rf, enum phl_phy_idx phy, s8 *value, s8 n)
+static s8 _halrf_avg_power_8852b(struct rf_info *rf, enum phl_phy_idx phy, s8 *value, s8 n)
 {
 	u8 i;
 	s16 total = 0;
@@ -33,7 +33,7 @@ s8 _halrf_avg_power_8852b(struct rf_info *rf, enum phl_phy_idx phy, s8 *value, s
 	return (s8)total;
 }
 
-void _halrf_bub_sort_8852b(struct rf_info *rf, enum phl_phy_idx phy, s8 *data, u32 n)
+static void _halrf_bub_sort_8852b(struct rf_info *rf, enum phl_phy_idx phy, s8 *data, u32 n)
 {
 	s32 i, j, sp;
 	s8 temp;
@@ -60,7 +60,7 @@ void _halrf_bub_sort_8852b(struct rf_info *rf, enum phl_phy_idx phy, s8 *data, u
 		RF_DBG(rf, DBG_RF_POWER, "<=== %s  After data[%d]=%d\n", __func__, k, data[k]);
 }
 
-bool halrf_set_power_by_rate_to_struct_8852b(struct rf_info *rf, enum phl_phy_idx phy)
+static bool halrf_set_power_by_rate_to_struct_8852b(struct rf_info *rf, enum phl_phy_idx phy)
 {
 	struct rtw_tpu_info *tpu = &rf->hal_com->band[phy].rtw_tpu_i;
 	struct rtw_tpu_pwr_by_rate_info *rate = &tpu->rtw_tpu_pwr_by_rate_i;
@@ -179,7 +179,7 @@ void halrf_set_fix_power_to_struct_8852b(struct rf_info *rf, enum phl_phy_idx ph
 	halrf_mac_write_pwr_limit_rua_reg(rf, phy);
 }
 
-void halrf_get_power_limit_to_struct_20m_8852b(struct rf_info *rf, enum phl_phy_idx phy)
+static void halrf_get_power_limit_to_struct_20m_8852b(struct rf_info *rf, enum phl_phy_idx phy)
 {
 	struct rtw_tpu_pwr_imt_info *lmt = &rf->hal_com->band[phy].rtw_tpu_i.rtw_tpu_pwr_imt_i;
 	struct rtw_hal_com_t *hal = rf->hal_com;
@@ -254,7 +254,7 @@ void halrf_get_power_limit_to_struct_20m_8852b(struct rf_info *rf, enum phl_phy_
 		halrf_get_power_limit(rf, phy, RF_PATH_A, RTW_DATA_RATE_HE_NSS1_MCS7, PW_LMT_BW_20M, PW_LMT_BF, PW_LMT_PH_2T, ch) / 2;
 }
 
-void halrf_get_power_limit_to_struct_40m_8852b(struct rf_info *rf, enum phl_phy_idx phy)
+static void halrf_get_power_limit_to_struct_40m_8852b(struct rf_info *rf, enum phl_phy_idx phy)
 {
 	struct rtw_tpu_pwr_imt_info *lmt = &rf->hal_com->band[phy].rtw_tpu_i.rtw_tpu_pwr_imt_i;
 	struct rtw_hal_com_t *hal = rf->hal_com;
@@ -358,7 +358,7 @@ void halrf_get_power_limit_to_struct_40m_8852b(struct rf_info *rf, enum phl_phy_
 		halrf_get_power_limit(rf, phy, RF_PATH_A, RTW_DATA_RATE_HE_NSS1_MCS7, PW_LMT_BW_40M, PW_LMT_BF, PW_LMT_PH_2T, ch) / 2;
 }
 
-void halrf_get_power_limit_to_struct_80m_8852b(struct rf_info *rf, enum phl_phy_idx phy)
+static void halrf_get_power_limit_to_struct_80m_8852b(struct rf_info *rf, enum phl_phy_idx phy)
 {
 	struct rtw_tpu_pwr_imt_info *lmt = &rf->hal_com->band[phy].rtw_tpu_i.rtw_tpu_pwr_imt_i;
 	struct rtw_hal_com_t *hal = rf->hal_com;
@@ -523,7 +523,7 @@ void halrf_get_power_limit_to_struct_80m_8852b(struct rf_info *rf, enum phl_phy_
 	lmt->pwr_lmt_40m_0p5[PW_LMT_PH_2T][PW_LMT_BF] = tmp;
 }
 
-bool halrf_set_power_limit_to_struct_8852b(struct rf_info *rf, enum phl_phy_idx phy)
+static bool halrf_set_power_limit_to_struct_8852b(struct rf_info *rf, enum phl_phy_idx phy)
 {
 	struct rtw_tpu_pwr_imt_info *lmt = &rf->hal_com->band[phy].rtw_tpu_i.rtw_tpu_pwr_imt_i;
 	u8 bw = rf->hal_com->band[phy].cur_chandef.bw;
@@ -588,7 +588,7 @@ bool halrf_set_power_limit_to_struct_8852b(struct rf_info *rf, enum phl_phy_idx 
 	return true;
 }
 
-void halrf_get_power_limit_ru_to_struct_20m_8852b(struct rf_info *rf, enum phl_phy_idx phy)
+static void halrf_get_power_limit_ru_to_struct_20m_8852b(struct rf_info *rf, enum phl_phy_idx phy)
 {
 	struct rtw_tpu_info *tpu = &rf->hal_com->band[phy].rtw_tpu_i;
 	struct rtw_hal_com_t *hal = rf->hal_com;
@@ -623,7 +623,7 @@ void halrf_get_power_limit_ru_to_struct_20m_8852b(struct rf_info *rf, enum phl_p
 		halrf_get_power_limit_ru(rf, phy, RF_PATH_A, RTW_DATA_RATE_HE_NSS1_MCS7, PW_LMT_RU_BW_RU106, PW_LMT_PH_2T, ch) / 2;
 }
 
-void halrf_get_power_limit_ru_to_struct_40m_8852b(struct rf_info *rf, enum phl_phy_idx phy)
+static void halrf_get_power_limit_ru_to_struct_40m_8852b(struct rf_info *rf, enum phl_phy_idx phy)
 {
 	struct rtw_tpu_info *tpu = &rf->hal_com->band[phy].rtw_tpu_i;
 	struct rtw_hal_com_t *hal = rf->hal_com;
@@ -676,7 +676,7 @@ void halrf_get_power_limit_ru_to_struct_40m_8852b(struct rf_info *rf, enum phl_p
 		halrf_get_power_limit_ru(rf, phy, RF_PATH_A, RTW_DATA_RATE_HE_NSS1_MCS7, PW_LMT_RU_BW_RU106, PW_LMT_PH_2T, ch + 2) / 2;
 }
 
-void halrf_get_power_limit_ru_to_struct_80m_8852b(struct rf_info *rf, enum phl_phy_idx phy)
+static void halrf_get_power_limit_ru_to_struct_80m_8852b(struct rf_info *rf, enum phl_phy_idx phy)
 {
 	struct rtw_tpu_info *tpu = &rf->hal_com->band[phy].rtw_tpu_i;
 	struct rtw_hal_com_t *hal = rf->hal_com;
@@ -765,7 +765,7 @@ void halrf_get_power_limit_ru_to_struct_80m_8852b(struct rf_info *rf, enum phl_p
 		halrf_get_power_limit_ru(rf, phy, RF_PATH_A, RTW_DATA_RATE_HE_NSS1_MCS7, PW_LMT_RU_BW_RU106, PW_LMT_PH_2T, ch + 6) / 2;
 }
 
-bool halrf_set_power_limit_ru_to_struct_8852b(struct rf_info *rf, enum phl_phy_idx phy)
+static bool halrf_set_power_limit_ru_to_struct_8852b(struct rf_info *rf, enum phl_phy_idx phy)
 {
 	struct rtw_tpu_info *tpu = &rf->hal_com->band[phy].rtw_tpu_i;
 	u8 bw = rf->hal_com->band[phy].cur_chandef.bw;
@@ -800,7 +800,7 @@ bool halrf_set_power_limit_ru_to_struct_8852b(struct rf_info *rf, enum phl_phy_i
 	return true;
 }
 
-void _halrf_set_tx_shape_8852b(struct rf_info *rf, enum phl_phy_idx phy)
+static void _halrf_set_tx_shape_8852b(struct rf_info *rf, enum phl_phy_idx phy)
 {
 	struct halrf_pwr_info *pwr = &rf->pwr_info;
 	struct rtw_tpu_info *tpu = &rf->hal_com->band[phy].rtw_tpu_i;
@@ -881,7 +881,7 @@ void _halrf_set_tx_shape_8852b(struct rf_info *rf, enum phl_phy_idx phy)
 	}
 }
 
-bool _halrf_set_power_8852b(struct rf_info *rf, enum phl_phy_idx phy,
+static bool _halrf_set_power_8852b(struct rf_info *rf, enum phl_phy_idx phy,
 	enum phl_pwr_table pwr_table)
 {
 	struct halrf_pwr_info *pwr = &rf->pwr_info;
@@ -967,7 +967,7 @@ bool _halrf_set_power_8852b(struct rf_info *rf, enum phl_phy_idx phy,
 	return true;
 }
 
-void _halrf_set_ext_power_diff_8852b(struct rf_info *rf, enum phl_phy_idx phy)
+static void _halrf_set_ext_power_diff_8852b(struct rf_info *rf, enum phl_phy_idx phy)
 {
 #ifdef SPF_PHL_RF_019_SAR
 	struct rtw_tpu_info *tpu = &rf->hal_com->band[phy].rtw_tpu_i;

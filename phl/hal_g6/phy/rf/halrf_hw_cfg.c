@@ -522,7 +522,7 @@ bool halrf_config_radio(void *rf_void, enum phl_phy_idx phy)
 	return result;
 }
 
-bool halrf_config_power_by_rate(void *rf_void, enum phl_phy_idx phy)
+static bool halrf_config_power_by_rate(void *rf_void, enum phl_phy_idx phy)
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_com = rf->hal_com;
@@ -757,7 +757,7 @@ bool halrf_config_power_limit_ru_6g(void *rf_void, enum phl_phy_idx phy)
 	return result;
 }
 
-bool halrf_config_power_track(void *rf_void, enum phl_phy_idx phy)
+static bool halrf_config_power_track(void *rf_void, enum phl_phy_idx phy)
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_com = rf->hal_com;
@@ -813,7 +813,7 @@ bool halrf_config_power_track(void *rf_void, enum phl_phy_idx phy)
 	return result;
 }
 
-bool halrf_config_xtal_track(void *rf_void, enum phl_phy_idx phy)
+static bool halrf_config_xtal_track(void *rf_void, enum phl_phy_idx phy)
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_com = rf->hal_com;
@@ -857,7 +857,7 @@ bool halrf_config_xtal_track(void *rf_void, enum phl_phy_idx phy)
 	return result;
 }
 
-void halrf_config_limit_default(void *rf_void)
+static void halrf_config_limit_default(void *rf_void)
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct halrf_pwr_info *pwr = &rf->pwr_info;

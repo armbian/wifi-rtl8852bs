@@ -26,7 +26,7 @@
 #include "halrf_hwimg_raw_data_8852b.h"
 #include "halrf_hwimg_nctl_raw_data_8852b.h"
 
-bool halrf_check_cond_8852b(struct rf_info *rf, u32 para_opt)
+static bool halrf_check_cond_8852b(struct rf_info *rf, u32 para_opt)
 {
 	struct rtw_hal_com_t *hal = rf->hal_com;
 	u32 cv_ver = (hal->cv == CAV) ? 15 : hal->cv;
@@ -67,7 +67,7 @@ halrf_get_8852b_radio_reg_ver(void)
 	return RF_RELEASE_VERSION_8852B;
 }
 
-void halrf_config_8852b_store_radio_a_reg(struct rf_info *rf,
+static void halrf_config_8852b_store_radio_a_reg(struct rf_info *rf,
 					u32 addr, u32 data)
 {
 	struct halrf_radio_info *radio = &rf->radio_info;
@@ -100,7 +100,7 @@ void halrf_config_8852b_store_radio_a_reg(struct rf_info *rf,
 	radio->write_times_a++;
 }
 
-void halrf_config_8852b_store_radio_b_reg(struct rf_info *rf,
+static void halrf_config_8852b_store_radio_b_reg(struct rf_info *rf,
 					u32 addr, u32 data)
 {
 	struct halrf_radio_info *radio = &rf->radio_info;
@@ -135,7 +135,7 @@ void halrf_config_8852b_store_radio_b_reg(struct rf_info *rf,
 }
 
 
-void halrf_config_8852b_write_radio_a_reg_to_fw(struct rf_info *rf)
+static void halrf_config_8852b_write_radio_a_reg_to_fw(struct rf_info *rf)
 {
 	struct halrf_radio_info *radio = &rf->radio_info;
 	u8 page = (u8)(radio->write_times_a / RADIO_TO_FW_DATA_SIZE);
@@ -155,7 +155,7 @@ void halrf_config_8852b_write_radio_a_reg_to_fw(struct rf_info *rf)
 	RF_DBG(rf, DBG_RF_INIT, "page=%d   len=%d\n", i, len / 4);
 }
 
-void halrf_config_8852b_write_radio_b_reg_to_fw(struct rf_info *rf)
+static void halrf_config_8852b_write_radio_b_reg_to_fw(struct rf_info *rf)
 {
 	struct halrf_radio_info *radio = &rf->radio_info;
 	u8 page = (u8)(radio->write_times_b / RADIO_TO_FW_DATA_SIZE);
@@ -220,7 +220,7 @@ void halrf_config_8852b_nctl_reg(struct rf_info *rf)
 
 }
 
-bool halrf_sel_headline_8852b(struct rf_info *rf, u32 *array, u32 array_len,
+static bool halrf_sel_headline_8852b(struct rf_info *rf, u32 *array, u32 array_len,
 			      u8 *headline_size, u8 *headline_idx)
 {
 	bool case_match = false;
@@ -330,7 +330,7 @@ bool halrf_sel_headline_8852b(struct rf_info *rf, u32 *array, u32 array_len,
 	return false;
 }
 
-void halrf_flag_2_default_8852b(bool *is_matched, bool *find_target)
+static void halrf_flag_2_default_8852b(bool *is_matched, bool *find_target)
 {
 	*is_matched = true;
 	*find_target = false;
@@ -1190,7 +1190,7 @@ halrf_config_8852b_store_pwr_track(struct rf_info *rf,
 	}
 }
 
-void
+static void
 _halrf_config_rfe_xtal_track_table_8852b(struct rf_info *rf)
 {
 #if 0

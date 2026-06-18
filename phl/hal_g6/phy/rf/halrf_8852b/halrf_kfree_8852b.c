@@ -16,7 +16,7 @@
 
 #ifdef RF_8852B_SUPPORT
 
-void _halrf_get_total_efuse_8852b(struct rf_info *rf,
+static void _halrf_get_total_efuse_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy)
 {
 	struct halrf_kfree_info *kfree = &rf->kfree_info;
@@ -36,7 +36,7 @@ void _halrf_get_total_efuse_8852b(struct rf_info *rf,
 			__func__, i + HIDE_EFUSE_START_ADDR_8852B, kfree->efuse_content[i]);
 }
 
-u8 _halrf_get_1byte_efuse_8852b(struct rf_info *rf, u32 addr, u8 *value)
+static u8 _halrf_get_1byte_efuse_8852b(struct rf_info *rf, u32 addr, u8 *value)
 {
 	struct halrf_kfree_info *kfree = &rf->kfree_info;
 
@@ -51,7 +51,7 @@ u8 _halrf_get_1byte_efuse_8852b(struct rf_info *rf, u32 addr, u8 *value)
 	return *value;
 }
 
-s8 _halrf_efuse_exchange_8852b(struct rf_info *rf, u8 value, u8 mask)
+static s8 _halrf_efuse_exchange_8852b(struct rf_info *rf, u8 value, u8 mask)
 {
 	s8 tmp = 0;
 
@@ -70,7 +70,7 @@ s8 _halrf_efuse_exchange_8852b(struct rf_info *rf, u8 value, u8 mask)
 	return tmp;
 }
 
-void _halrf_set_thermal_trim_8852b(struct rf_info *rf,
+static void _halrf_set_thermal_trim_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy)
 {
 	u8 thermal_a = 0xff, thermal_b = 0xff, tmp = 0;
@@ -108,7 +108,7 @@ void _halrf_set_thermal_trim_8852b(struct rf_info *rf,
 	halrf_wrf(rf, RF_PATH_B, 0x43, 0x000f0000, thermal_b & 0xf);
 }
 
-void _halrf_set_pa_bias_trim_8852b(struct rf_info *rf,
+static void _halrf_set_pa_bias_trim_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy)
 {
 	u8 pa_bias_a = 0xff, pa_bias_b = 0xff, tmp = 0;
@@ -153,7 +153,7 @@ void _halrf_set_pa_bias_trim_8852b(struct rf_info *rf,
 	halrf_wrf(rf, RF_PATH_B, 0x60, 0x000f0000, pa_bias_b_5g);
 }
 
-void _halrf_get_tssi_trim_8852b(struct rf_info *rf,
+static void _halrf_get_tssi_trim_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy)
 {
 	struct halrf_tssi_info *tssi = &rf->tssi;

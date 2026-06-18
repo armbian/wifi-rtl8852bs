@@ -389,7 +389,7 @@ enum rtw_hal_status halrf_scan_rx_dck_trigger(void *rf_void,
 	return RTW_HAL_STATUS_SUCCESS;
 }
 
-enum rtw_hal_status halrf_rx_dck_tracking(void *rf_void)
+static enum rtw_hal_status halrf_rx_dck_tracking(void *rf_void)
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
@@ -523,7 +523,7 @@ void halrf_lck_trigger(void *rf_void)
 		}
 }
 
-void halrf_lck_tracking(void *rf_void)
+static void halrf_lck_tracking(void *rf_void)
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
@@ -635,7 +635,7 @@ void halrf_op5k_trigger_by_bw(void *rf_void, enum channel_width bw)
 #endif
 }
 
-void halrf_op5k_tracking(void *rf_void)
+static void halrf_op5k_tracking(void *rf_void)
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
@@ -878,7 +878,7 @@ enum rtw_hal_status halrf_tssi_tracking_clean(void *rf_void, s16 power_dbm)
 	return RTW_HAL_STATUS_SUCCESS;
 }
 
-enum rtw_hal_status halrf_tssi_ant_open(void *rf_void)
+static enum rtw_hal_status halrf_tssi_ant_open(void *rf_void)
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
@@ -1559,7 +1559,7 @@ void halrf_kfree_get_info(void *rf_void, char input[][16], u32 *_used,
 	}
 }
 
-void halrf_txgapk_init(void *rf_void)
+static void halrf_txgapk_init(void *rf_void)
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
