@@ -37,6 +37,10 @@ extern struct iw_handler_def  rtw_handlers_def;
 
 extern void rtw_request_wps_pbc_event(_adapter *padapter);
 
+void indicate_wx_scan_complete_event(_adapter *padapter);
+void rtw_indicate_wx_assoc_event(_adapter *padapter);
+void rtw_indicate_wx_disassoc_event(_adapter *padapter);
+
 #ifdef CONFIG_APPEND_VENDOR_IE_ENABLE
 extern int rtw_vendor_ie_get_raw_data(struct net_device *, u32, char *, u32);
 extern int rtw_vendor_ie_get_data(struct net_device*, int , char*);

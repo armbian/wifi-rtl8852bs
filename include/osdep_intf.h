@@ -72,6 +72,7 @@ void rtw_inetaddr_notifier_unregister(void);
 
 u8 rtw_rtnl_lock_needed(struct dvobj_priv *dvobj);
 void rtw_set_rtnl_lock_holder(struct dvobj_priv *dvobj, _thread_hdl_ thd_hdl);
+int rtw_change_ifname(_adapter *padapter, const char *ifname);
 
 #endif /* PLATFORM_LINUX */
 
