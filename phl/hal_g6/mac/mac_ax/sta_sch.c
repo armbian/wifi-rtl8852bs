@@ -360,7 +360,7 @@ u32 sta_link_cfg(struct mac_ax_adapter *adapter,
 	return ret;
 }
 
-void set_ss_wmm_tbl(struct mac_ax_adapter *adapter,
+static void set_ss_wmm_tbl(struct mac_ax_adapter *adapter,
 		    struct mac_ax_ss_wmm_tbl_ctrl *ctrl)
 {
 	u32 val32;
@@ -397,7 +397,7 @@ void ss_wmm_tbl_cfg(struct mac_ax_adapter *adapter,
 	set_ss_wmm_tbl(adapter, ctrl);
 }
 
-u32 switch_wmm_macid(struct mac_ax_adapter *adapter,
+static u32 switch_wmm_macid(struct mac_ax_adapter *adapter,
 		     struct mac_ax_ss_link_info *link,
 		     enum mac_ax_ss_wmm_tbl src_link,
 		     enum mac_ax_ss_wmm_tbl dst_link)

@@ -841,7 +841,7 @@ fail:
 	return ret;
 }
 
-void _set_role_cctrl(struct mac_ax_adapter *adapter,
+static void _set_role_cctrl(struct mac_ax_adapter *adapter,
 		     struct rtw_hal_mac_ax_cctl_info *info,
 		     struct rtw_hal_mac_ax_cctl_info *mask,
 		     struct rtw_hal_mac_ax_cctl_info *cctrl)
@@ -1068,7 +1068,7 @@ void _set_role_cctrl(struct mac_ax_adapter *adapter,
 			(mask->csi_bw & info->csi_bw);
 }
 
-void mac_upd_role_cctrl(struct mac_ax_adapter *adapter,
+static void mac_upd_role_cctrl(struct mac_ax_adapter *adapter,
 			struct rtw_hal_mac_ax_cctl_info *info,
 			struct rtw_hal_mac_ax_cctl_info *mask, u8 macid)
 {

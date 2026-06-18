@@ -38,7 +38,7 @@ static u8 get_set_bits_of_msk(u8 msk)
 	return get_set_bits_of_msk(set_bits) + 1;
 }
 
-u32 find_avail_addr_cam_entry(struct mac_ax_adapter *adapter,
+static u32 find_avail_addr_cam_entry(struct mac_ax_adapter *adapter,
 			      struct mac_ax_role_info *info)
 {
 	u16 i;
@@ -54,7 +54,7 @@ u32 find_avail_addr_cam_entry(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-u32 find_avail_bssid_cam_entry(struct mac_ax_adapter *adapter,
+static u32 find_avail_bssid_cam_entry(struct mac_ax_adapter *adapter,
 			       struct mac_ax_role_info *info)
 {
 	u8 i;

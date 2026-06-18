@@ -198,7 +198,7 @@ u32 mac_trigger_dmac_err(struct mac_ax_adapter *adapter)
 	return MACSUCCESS;
 }
 
-u32 mac_dump_qta_lost(struct mac_ax_adapter *adapter)
+static u32 mac_dump_qta_lost(struct mac_ax_adapter *adapter)
 {
 	struct dle_dfi_qempty_t qempty;
 	struct dle_dfi_quota_t quota;
@@ -314,7 +314,7 @@ u32 mac_dump_qta_lost(struct mac_ax_adapter *adapter)
 	return MACSUCCESS;
 }
 
-u32 mac_dump_l0_to_l1(struct mac_ax_adapter *adapter,
+static u32 mac_dump_l0_to_l1(struct mac_ax_adapter *adapter,
 		      enum mac_ax_err_info err)
 {
 	u32 dbg, event;

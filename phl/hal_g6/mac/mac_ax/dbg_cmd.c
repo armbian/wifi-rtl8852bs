@@ -259,14 +259,14 @@ u32 cmd_mac_error_dump(struct mac_ax_adapter *adapter, char input[][MAC_MAX_ARGV
 	return ret;
 }
 
-void cmd_mac_get_version(struct mac_ax_adapter *adapter, char *ver_str, u16 len)
+static void cmd_mac_get_version(struct mac_ax_adapter *adapter, char *ver_str, u16 len)
 {
 	PLTFM_SNPRINTF(ver_str, len, "V%u.%u.%u.%u",
 		       MAC_AX_MAJOR_VER, MAC_AX_PROTOTYPE_VER,
 		       MAC_AX_SUB_VER, MAC_AX_SUB_INDEX);
 }
 
-void cmd_mac_get_fw_ver(struct mac_ax_adapter *adapter, char *ver_str, u16 len)
+static void cmd_mac_get_fw_ver(struct mac_ax_adapter *adapter, char *ver_str, u16 len)
 {
 	PLTFM_SNPRINTF(ver_str, len, "V%u.%u.%u.%u",
 		       adapter->fw_info.major_ver, adapter->fw_info.minor_ver,
@@ -644,7 +644,7 @@ u32 cmd_mac_ser_level_dump(struct mac_ax_adapter *adapter,  char input[][MAC_MAX
 	return MACSUCCESS;
 }
 
-u32 cmd_mac_fw_log_cfg_set(struct mac_ax_adapter *adapter,
+static u32 cmd_mac_fw_log_cfg_set(struct mac_ax_adapter *adapter,
 			   struct mac_ax_fw_log *log_cfg, char *output, u32 out_len, u32 *used)
 {
 	//struct hal_info_t *hal = hal_com->hal_priv;

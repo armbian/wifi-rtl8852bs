@@ -601,7 +601,7 @@ u32 mac_ps_pwr_state(struct mac_ax_adapter *adapter,
 	return ret;
 }
 
-void show_rx_bcn_info(struct mac_ax_adapter *adapter)
+static void show_rx_bcn_info(struct mac_ax_adapter *adapter)
 {
 	u8 role_idx, bcn_rate, hit_rate, no_hit_rate;
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
@@ -1067,7 +1067,7 @@ u32 mac_periodic_wake_cfg(struct mac_ax_adapter *adapter,
 	return ret;
 }
 
-u32 send_h2c_req_pwr_state(struct mac_ax_adapter *adapter,
+static u32 send_h2c_req_pwr_state(struct mac_ax_adapter *adapter,
 			   struct req_pwr_state_cfg *parm)
 {
 	u8 *buf;
@@ -1129,7 +1129,7 @@ fail:
 	return ret;
 }
 
-u32 set_pwr_st_cfg(struct mac_ax_adapter *adapter,
+static u32 set_pwr_st_cfg(struct mac_ax_adapter *adapter,
 		   struct req_pwr_state_cfg *parm)
 {
 	u32 ret = MACSUCCESS;
@@ -1266,7 +1266,7 @@ u32 mac_req_pwr_state_cfg(struct mac_ax_adapter *adapter,
 	return ret;
 }
 
-u32 send_h2c_req_pwr_lvl(struct mac_ax_adapter *adapter,
+static u32 send_h2c_req_pwr_lvl(struct mac_ax_adapter *adapter,
 			 struct req_pwr_lvl_cfg *parm)
 {
 	u8 *buf;
@@ -1362,7 +1362,8 @@ u32 mac_req_pwr_lvl_cfg(struct mac_ax_adapter *adapter,
 	return ret;
 }
 
-u32 send_h2c_lps_option_cfg(struct mac_ax_adapter *adapter,
+#if MAC_AX_USB_SUPPORT
+static u32 send_h2c_lps_option_cfg(struct mac_ax_adapter *adapter,
 			    struct lps_option_cfg *parm)
 {
 	u8 *buf;
@@ -1423,6 +1424,7 @@ fail:
 
 	return ret;
 }
+#endif /* MAC_AX_USB_SUPPORT */
 
 u32 mac_lps_option_cfg(struct mac_ax_adapter *adapter,
 		       struct mac_lps_option *lps_opt)
@@ -1441,7 +1443,7 @@ u32 mac_lps_option_cfg(struct mac_ax_adapter *adapter,
 	return ret;
 }
 
-u32 send_h2c_tbtt_tuning(struct mac_ax_adapter *adapter,
+static u32 send_h2c_tbtt_tuning(struct mac_ax_adapter *adapter,
 			 struct tbtt_tuning_cfg *parm)
 {
 	u8 *buf;

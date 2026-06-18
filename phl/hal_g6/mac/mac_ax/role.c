@@ -394,7 +394,7 @@ u32 role_tbl_exit(struct mac_ax_adapter *adapter)
 	return ret;
 }
 
-u32 role_info_init(struct mac_ax_adapter *adapter,
+static u32 role_info_init(struct mac_ax_adapter *adapter,
 		   struct mac_ax_role_info *info)
 {
 	u8 i;
@@ -439,7 +439,7 @@ u32 role_info_init(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-u32 sec_info_init(struct mac_ax_adapter *adapter,
+static u32 sec_info_init(struct mac_ax_adapter *adapter,
 		  struct mac_ax_role_info *info)
 {
 	u8 i;
@@ -453,7 +453,7 @@ u32 sec_info_init(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-u32 sec_info_deinit(struct mac_ax_adapter *adapter,
+static u32 sec_info_deinit(struct mac_ax_adapter *adapter,
 		    struct mac_ax_role_info *info,
 		    struct mac_role_tbl *role)
 {
@@ -487,7 +487,7 @@ u32 sec_info_deinit(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-u32 role_init(struct mac_ax_adapter *adapter,
+static u32 role_init(struct mac_ax_adapter *adapter,
 	      struct mac_role_tbl *role,
 	      struct mac_ax_role_info *info)
 {
@@ -526,7 +526,7 @@ u32 role_init(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-u32 set_role_bss_clr(struct mac_ax_adapter *adapter,
+static u32 set_role_bss_clr(struct mac_ax_adapter *adapter,
 		     struct mac_ax_role_info *info)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);

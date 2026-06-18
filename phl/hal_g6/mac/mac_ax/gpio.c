@@ -353,7 +353,7 @@ u32 mac_pinmux_free_func(struct mac_ax_adapter *adapter,
 	return mac_pinmux_record(adapter, func, 0);
 }
 
-u8 get_led_gpio(u8 led_id)
+static u8 get_led_gpio(u8 led_id)
 {
 /* LED 0 -> GPIO8 */
 	switch (led_id) {
@@ -454,7 +454,7 @@ END:
 	return ret;
 }
 
-u32 _mac_set_sw_gpio_mode(struct mac_ax_adapter *adapter,
+static u32 _mac_set_sw_gpio_mode(struct mac_ax_adapter *adapter,
 			  u8 output, u8 gpio)
 {
 	struct mac_ax_intf_ops *ops = adapter->ops->intf_ops;
@@ -707,7 +707,7 @@ u32 mac_get_gpio_val(struct mac_ax_adapter *adapter, u8 gpio, u8 *val)
 	return MACSUCCESS;
 }
 
-u32 mac_get_wl_dis_gpio(struct mac_ax_adapter *adapter, u8 *gpio)
+static u32 mac_get_wl_dis_gpio(struct mac_ax_adapter *adapter, u8 *gpio)
 {
 #define MAC_AX_HCI_SEL_SDIO_UART 0
 #define MAC_AX_HCI_SEL_USB_MULT 1

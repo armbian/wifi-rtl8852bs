@@ -15,7 +15,7 @@
 
 #include "beacon.h"
 
-u8 _byte_rev(u8 in)
+static u8 _byte_rev(u8 in)
 {
 	u8 data = 0;
 	u8 i;
@@ -25,7 +25,7 @@ u8 _byte_rev(u8 in)
 	return data;
 }
 
-u8 _crc8_htsig(u8 *mem, u32 len)
+static u8 _crc8_htsig(u8 *mem, u32 len)
 {
 	u8 crc = 0xFF;
 	u8 key = 0x07;

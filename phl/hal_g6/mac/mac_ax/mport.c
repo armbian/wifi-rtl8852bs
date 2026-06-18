@@ -320,7 +320,7 @@ u32 get_bp_idx(u8 band, u8 port)
 	return (band * MAC_AX_BAND_NUM + port);
 }
 
-u32 _get_port_cfg(struct mac_ax_adapter *adapter,
+static u32 _get_port_cfg(struct mac_ax_adapter *adapter,
 		  enum mac_ax_port_cfg_type type,
 		  struct mac_ax_port_cfg_para *para)
 {
@@ -1281,7 +1281,7 @@ static u32 fast_bcn_drop(struct mac_ax_adapter *adapter, u8 band, u8 port,
 	return MACSUCCESS;
 }
 
-u32 _patch_port_dis_flow(struct mac_ax_adapter *adapter, u8 band, u8 port,
+static u32 _patch_port_dis_flow(struct mac_ax_adapter *adapter, u8 band, u8 port,
 			 struct mac_ax_port_info *pinfo)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
@@ -1373,7 +1373,7 @@ end:
 	return ret;
 }
 
-u32 _patch_tbtt_shift_setval(struct mac_ax_adapter *adapter, u32 bcnspc,
+static u32 _patch_tbtt_shift_setval(struct mac_ax_adapter *adapter, u32 bcnspc,
 			     u32 *shift_val)
 {
 	if (!chk_patch_tbtt_shift_setval(adapter))

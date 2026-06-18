@@ -1611,7 +1611,7 @@ u32 mac_get_wow_fw_status(struct mac_ax_adapter *adapter, u8 *status,
 	return MACSUCCESS;
 }
 
-u32 _mac_request_aoac_report_rx_rdy(struct mac_ax_adapter *adapter)
+static u32 _mac_request_aoac_report_rx_rdy(struct mac_ax_adapter *adapter)
 {
 	u32 ret;
 	#if MAC_AX_PHL_H2C
@@ -1686,7 +1686,7 @@ fail:
 	return ret;
 }
 
-u32 _mac_request_aoac_report_rx_not_rdy(struct mac_ax_adapter *adapter)
+static u32 _mac_request_aoac_report_rx_not_rdy(struct mac_ax_adapter *adapter)
 {
 	struct mac_ax_wowlan_info *wow_info = &adapter->wowlan_info;
 	struct mac_ax_aoac_report *aoac_rpt = (struct mac_ax_aoac_report *)wow_info->aoac_report;
