@@ -56,7 +56,18 @@ static inline char *_os_strcpy(char *dest, const char *src)
 static inline char *_os_strncpy(char *dest, const char *src, size_t n)
 {
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(7, 2, 0)
-	return strscpy_pad(dest, src, n);
+	/* strncpy() is gone; strscpy_pad() is not a drop-in replacement: it
+	 * copies at most n-1 bytes and returns ssize_t. Callers here rely on
+	 * strncpy() semantics (exactly n bytes, zero padding, no NUL forced),
+	 * so open-code it.
+	 */
+	size_t len = strnlen(src, n);
+
+	memcpy(dest, src, len);
+	if (len < n)
+		memset(dest + len, 0, n - len);
+
+	return dest;
 #else
 	return strncpy(dest, src, n);
 #endif
