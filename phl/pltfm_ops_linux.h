@@ -14,6 +14,7 @@
  *****************************************************************************/
 #ifndef _PLTFM_OPS_LINUX_H_
 #define _PLTFM_OPS_LINUX_H_
+#include <linux/string.h>
 #include "drv_types.h"
 
 static inline char *_os_strpbrk(const char *s, const char *ct)
@@ -54,7 +55,11 @@ static inline char *_os_strcpy(char *dest, const char *src)
 }
 static inline char *_os_strncpy(char *dest, const char *src, size_t n)
 {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(7, 2, 0)
+	return strscpy_pad(dest, src, n);
+#else
 	return strncpy(dest, src, n);
+#endif
 }
 #if 1
 #define _os_strchr(s, c) strchr(s, c)
