@@ -1618,9 +1618,17 @@ static void hal_phy_store_tx_power_track(
 	 (_os_strcmp(rate, _rate) == 0)\
 	)
 
+/* Every delta-swing row is DELTA_SWINGIDX_SIZE entries; the file supplies the
+ * count, so stop at the row boundary instead of writing past the table.
+ */
 #define STORE_SWING_TABLE(_array, _iteratedIdx) \
 	do {	\
 	for (token = (char *)_os_strsep(&data, delim); token != (char *)NULL; token = (char *)_os_strsep(&data, delim)) {\
+		if (_iteratedIdx >= DELTA_SWINGIDX_SIZE) {\
+			PHL_ERR("%s: more than %d delta swing entries, ignoring the rest\n",\
+				__func__, DELTA_SWINGIDX_SIZE);\
+			break;\
+		} \
 		_os_sscanf(token, "%d", &idx);\
 		_array[_iteratedIdx++] = (s8)idx;\
 	} } while (0)\
