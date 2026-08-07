@@ -35,7 +35,7 @@ bool hal_is_allspace_tab(char	*data, u8	size);
 
 u32 hal_mapchar_tohexdigit(char 		chTmp);
 
-bool hal_parse_fiedstring(char	*in_str, u32	*start, char	*out_str, char lqualifier, char rqualifier);
+bool hal_parse_fiedstring(char	*in_str, u32	*start, char	*out_str, u32 out_sz, char lqualifier, char rqualifier);
 
 bool hal_get_u1bint_fromstr_indec(char	*str, u8	*pint);
 
