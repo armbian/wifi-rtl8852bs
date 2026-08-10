@@ -179,10 +179,15 @@ u32 hal_mapchar_tohexdigit(
 }
 
 
-bool hal_parse_fiedstring(char	*in_str, u32	*start, char	*out_str, char lqualifier, char rqualifier)
+bool hal_parse_fiedstring(char	*in_str, u32	*start, char	*out_str, u32 out_sz, char lqualifier, char rqualifier)
 {
-	u32	i = 0, j = 0;
-	char	c = in_str[(*start)++];
+	u32	i = 0, j = 0, len = 0;
+	char	c;
+
+	if (out_sz == 0)
+		return false;
+
+	c = in_str[(*start)++];
 
 	if (c != lqualifier)
 		return false;
@@ -197,7 +202,28 @@ bool hal_parse_fiedstring(char	*in_str, u32	*start, char	*out_str, char lqualifi
 		return false;
 
 	j = (*start) - 2;
-	_os_strncpy((char *)out_str, (const char *)(in_str + i), j - i + 1);
+	len = j - i + 1;
+
+	/* Column-aligned files pad the field up to the delimiter. None of the
+	 * values these fields are matched against carry padding, so dropping it
+	 * cannot break a match, while counting it would push a well-formed
+	 * field over the destination.
+	 */
+	while (len > 0 && (in_str[i + len - 1] == ' ' || in_str[i + len - 1] == '\t'))
+		len--;
+
+	/* The field may still be longer than the caller's buffer: copy what
+	 * fits, always terminate, and report the truncation so the caller can
+	 * tell a complete value apart from a partial one.
+	 */
+	if (len >= out_sz) {
+		_os_strncpy(out_str, in_str + i, out_sz - 1);
+		out_str[out_sz - 1] = '\0';
+		return false;
+	}
+
+	_os_strncpy(out_str, in_str + i, len);
+	out_str[len] = '\0';
 
 	return true;
 }

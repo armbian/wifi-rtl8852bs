@@ -766,27 +766,27 @@ line_start:
 			_os_mem_set(drv_priv, (void *) ratesection, 0, 10);
 			_os_mem_set(drv_priv, (void *) bf_type, 0, 10);
 
-			if (!hal_parse_fiedstring(sz_line, &i, band, ' ', ',')) {
+			if (!hal_parse_fiedstring(sz_line, &i, band, sizeof(band), ' ', ',')) {
 				PHL_ERR("Fail to parse band!\n");
 				struct_idx = 0;
 				goto exit;
 			}
-			if (!hal_parse_fiedstring(sz_line, &i, bandwidth, ' ', ',')) {
+			if (!hal_parse_fiedstring(sz_line, &i, bandwidth, sizeof(bandwidth), ' ', ',')) {
 				PHL_ERR("Fail to parse bandwidth!\n");
 				struct_idx = 0;
 				goto exit;
 			}
-			if (!hal_parse_fiedstring(sz_line, &i, ntx, ' ', ',')) {
+			if (!hal_parse_fiedstring(sz_line, &i, ntx, sizeof(ntx), ' ', ',')) {
 				PHL_ERR("Fail to parse ntx!\n");
 				struct_idx = 0;
 				goto exit;
 			}
-			if (!hal_parse_fiedstring(sz_line, &i, ratesection, ' ', ',')) {
+			if (!hal_parse_fiedstring(sz_line, &i, ratesection, sizeof(ratesection), ' ', ',')) {
 				PHL_ERR("Fail to parse rate!\n");
 				struct_idx = 0;
 				goto exit;
 			}
-			if (!hal_parse_fiedstring(sz_line, &i, bf_type, ' ', '/')) {
+			if (!hal_parse_fiedstring(sz_line, &i, bf_type, sizeof(bf_type), ' ', '/')) {
 				PHL_ERR("Fail to parse BF!\n");
 				struct_idx = 0;
 				goto exit;
@@ -819,7 +819,7 @@ line_start:
 				++i;
 
 			_os_mem_set(drv_priv, (void *) colnumbuf, 0, 10);
-			if (!hal_parse_fiedstring(sz_line, &i, colnumbuf, '#', '#')) {
+			if (!hal_parse_fiedstring(sz_line, &i, colnumbuf, sizeof(colnumbuf), '#', '#')) {
 				PHL_ERR("Fail to parse column number!\n");
 				struct_idx = 0;
 				goto exit;
@@ -1271,22 +1271,22 @@ line_start:
 			_os_mem_set(drv_priv, (void *) ntx, 0, 10);
 			_os_mem_set(drv_priv, (void *) ratesection, 0, 10);
 
-			if (!hal_parse_fiedstring(sz_line, &i, band, ' ', ',')) {
+			if (!hal_parse_fiedstring(sz_line, &i, band, sizeof(band), ' ', ',')) {
 				PHL_ERR("Fail to parse band!\n");
 				struct_idx = 0;
 				goto exit;
 			}
-			if (!hal_parse_fiedstring(sz_line, &i, bandwidth, ' ', ',')) {
+			if (!hal_parse_fiedstring(sz_line, &i, bandwidth, sizeof(bandwidth), ' ', ',')) {
 				PHL_ERR("Fail to parse bandwidth!\n");
 				struct_idx = 0;
 				goto exit;
 			}
-			if (!hal_parse_fiedstring(sz_line, &i, ntx, ' ', ',')) {
+			if (!hal_parse_fiedstring(sz_line, &i, ntx, sizeof(ntx), ' ', ',')) {
 				PHL_ERR("Fail to parse ntx!\n");
 				struct_idx = 0;
 				goto exit;
 			}
-			if (!hal_parse_fiedstring(sz_line, &i, ratesection, ' ', ' ')) {
+			if (!hal_parse_fiedstring(sz_line, &i, ratesection, sizeof(ratesection), ' ', ' ')) {
 				PHL_ERR("Fail to parse rate!\n");
 				struct_idx = 0;
 				goto exit;
@@ -1319,7 +1319,7 @@ line_start:
 				++i;
 
 			_os_mem_set(drv_priv, (void *) col_num_buf, 0, 10);
-			if (!hal_parse_fiedstring(sz_line, &i, col_num_buf, '#', '#')) {
+			if (!hal_parse_fiedstring(sz_line, &i, col_num_buf, sizeof(col_num_buf), '#', '#')) {
 				PHL_ERR("Fail to parse column number!\n");
 				struct_idx = 0;
 				goto exit;
@@ -1618,9 +1618,17 @@ static void hal_phy_store_tx_power_track(
 	 (_os_strcmp(rate, _rate) == 0)\
 	)
 
+/* Every delta-swing row is DELTA_SWINGIDX_SIZE entries; the file supplies the
+ * count, so stop at the row boundary instead of writing past the table.
+ */
 #define STORE_SWING_TABLE(_array, _iteratedIdx) \
 	do {	\
 	for (token = (char *)_os_strsep(&data, delim); token != (char *)NULL; token = (char *)_os_strsep(&data, delim)) {\
+		if (_iteratedIdx >= DELTA_SWINGIDX_SIZE) {\
+			PHL_ERR("%s: more than %d delta swing entries, ignoring the rest\n",\
+				__func__, DELTA_SWINGIDX_SIZE);\
+			break;\
+		} \
 		_os_sscanf(token, "%d", &idx);\
 		_array[_iteratedIdx++] = (s8)idx;\
 	} } while (0)\
@@ -1759,16 +1767,16 @@ _hal_parse_txpwrtrack(void *drv_priv, void *para_info_t, u8 *psrc_buf, u32 bufle
 			_os_strncpy(sign, sz_line + 8, 1);
 
 			i = 10; /* sz_line+10 */
-			if (!hal_parse_fiedstring(sz_line, &i, rate, '[', ']')) {
+			if (!hal_parse_fiedstring(sz_line, &i, rate, sizeof(rate), '[', ']')) {
 				PHL_ERR("Fail to parse rate!\n");
 			}
-			if (!hal_parse_fiedstring(sz_line, &i, chnl, '[', ']')) {
+			if (!hal_parse_fiedstring(sz_line, &i, chnl, sizeof(chnl), '[', ']')) {
 				if (!_os_strcmp("5G",band))
 					PHL_ERR("Fail to parse channel group!\n");
 			}
 			while ('{' != sz_line[i] && i < _os_strlen((u8 *)sz_line))
 				i++;
-			if (!hal_parse_fiedstring(sz_line, &i, data, '{', '}')) {
+			if (!hal_parse_fiedstring(sz_line, &i, data, sizeof(data), '{', '}')) {
 				PHL_ERR("Fail to parse data!\n");
 			}
 			hal_phy_store_tx_power_track(drv_priv,
