@@ -41,6 +41,17 @@ enum {
 #define _RTW_DBG(x,...) do {} while (0)
 #define _RTW_PRINT_SEL(x,...) do {} while (0)
 
+#define RTW_PRINT_LMT(x, ...) do {} while (0)
+#define RTW_ERR_LMT(x, ...) do {} while (0)
+#define RTW_WARN_LMT(x,...) do {} while (0)
+#define RTW_INFO_LMT(x,...) do {} while (0)
+#define RTW_DBG_LMT(x,...) do {} while (0)
+#define _RTW_PRINT_LMT(x, ...) do {} while (0)
+#define _RTW_ERR_LMT(x, ...) do {} while (0)
+#define _RTW_WARN_LMT(x,...) do {} while (0)
+#define _RTW_INFO_LMT(x,...) do {} while (0)
+#define _RTW_DBG_LMT(x,...) do {} while (0)
+
 #define RTW_INFO_DUMP(_TitleString, _HexData, _HexDataLen) do {} while (0)
 #define RTW_DBG_DUMP(_TitleString, _HexData, _HexDataLen) do {} while (0)
 #define RTW_PRINT_DUMP(_TitleString, _HexData, _HexDataLen) do {} while (0)
