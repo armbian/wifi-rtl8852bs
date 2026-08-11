@@ -246,6 +246,7 @@ void debug_dump_mac_address(u8 *mac_addr);
 #define PHL_DBG(fmt, ...) do {} while (0)
 #define PHL_DBG_LMT(fmt, ...) do {} while (0)
 #define PHL_DATA(fmt, ...) do {} while (0)
+#define PHL_DATA_LMT(comp, level, fmt, ...) do {} while (0)
 #define PHL_ASSERT(fmt, ...) do {} while (0)
 #define FUNCIN() do {} while (0)
 #define FUNCOUT() do {} while (0)
