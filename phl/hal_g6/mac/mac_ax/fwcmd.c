@@ -399,7 +399,7 @@ fail:
 
 #if MAC_AX_PHL_H2C
 struct rtw_h2c_pkt *h2cb_alloc(struct mac_ax_adapter *adapter,
-			       enum rtw_h2c_pkt_type buf_class)
+			       enum h2c_buf_class buf_class)
 {
 	struct rtw_h2c_pkt *h2cb;
 #if MAC_AX_H2C_LMT_EN
@@ -408,7 +408,7 @@ struct rtw_h2c_pkt *h2cb_alloc(struct mac_ax_adapter *adapter,
 	u8 cnt = 100;
 #endif
 
-	if (buf_class >= H2CB_TYPE_MAX) {
+	if (buf_class >= H2CB_CLASS_MAX) {
 		PLTFM_MSG_ERR("[ERR]unknown class\n");
 		return NULL;
 	}
