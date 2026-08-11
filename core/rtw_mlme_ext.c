@@ -2059,13 +2059,15 @@ unsigned int OnAuth(_adapter *padapter, union recv_frame *precv_frame)
 				if (pstat->tbtx_enable)
 					pstapriv->tbtx_asoc_list_cnt--;
 				#endif
-				if (pstat->expire_to > 0)
-					;/* TODO: STA re_auth within expire_to */
+				if (pstat->expire_to > 0) {
+					/* TODO: STA re_auth within expire_to */
+				}
 			}
 			_rtw_spinunlock_bh(&pstapriv->asoc_list_lock);
 
-			if (seq == 1)
-				; /* TODO: STA re_auth and auth timeout */
+			if (seq == 1) {
+				/* TODO: STA re_auth and auth timeout */
+			}
 
 		}
 	}

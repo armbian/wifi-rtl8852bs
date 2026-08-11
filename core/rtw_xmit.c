@@ -5098,8 +5098,9 @@ s32 core_tx_free_xmitframe(_adapter *padapter, struct xmit_frame *pxframe)
 		padapter->free_txreq_cnt++;
 		_rtw_spinunlock_bh(&queue->lock);
 	} else {
-		if (pxframe->ext_tag == 0)
-			;//printk("%s:tx recyele: ptxreq_buf=NULL\n", __FUNCTION__);
+		if (pxframe->ext_tag == 0) {
+			//printk("%s:tx recyele: ptxreq_buf=NULL\n", __FUNCTION__);
+		}
 	}
 
 	rtw_os_xmit_complete(padapter, pxframe);
