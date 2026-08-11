@@ -6237,7 +6237,7 @@ fwd_chk:
 			goto exit;
 	} else
 #endif
-	;
+	{ }
 
 	if (core_tx_alloc_xmitframe(adapter, &xframe, os_qid) == FAIL) {
 		#ifdef DBG_TX_DROP_FRAME
