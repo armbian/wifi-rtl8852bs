@@ -285,7 +285,7 @@ u32 h2cb_exit(struct mac_ax_adapter *adapter);
  */
 #if MAC_AX_PHL_H2C
 struct rtw_h2c_pkt *h2cb_alloc(struct mac_ax_adapter *adapter,
-			       enum rtw_h2c_pkt_type buf_class);
+			       enum h2c_buf_class buf_class);
 /**
  * @}
  * @}
