@@ -7294,13 +7294,13 @@ static enum phl_mdl_ret_code _ap_add_del_sta_req_acquired(void *dispr, void *pri
 	if (!add_del_sta_obj) {
 		RTW_ERR(FUNC_ADPT_FMT": add_del_sta_obj is null\n",
 			FUNC_ADPT_ARG(padapter));
-			return status;
+			return MDL_RET_FAIL;
 	}
 
 	psta = add_del_sta_obj->sta;
 	if (!psta) {
 		RTW_ERR(FUNC_ADPT_FMT": psta is null\n", FUNC_ADPT_ARG(padapter));
-		return status;
+		return MDL_RET_FAIL;
 	}
 
 	RTW_INFO(FUNC_ADPT_FMT ": %s STA\n",
@@ -7317,7 +7317,7 @@ static enum phl_mdl_ret_code _ap_add_del_sta_req_acquired(void *dispr, void *pri
 
 	RTW_DBG(FUNC_ADPT_FMT ": -\n", FUNC_ADPT_ARG(padapter));
 
-	return status;
+	return status == RTW_PHL_STATUS_SUCCESS ? MDL_RET_SUCCESS : MDL_RET_FAIL;
 
 }
 
@@ -7520,7 +7520,7 @@ free_token:
 
 	_ap_add_del_sta_cmd_done(padapter); /* free token */
 	_rtw_spinunlock_bh(&padapter->ap_add_del_sta_lock);
-	return status;
+	return status == RTW_PHL_STATUS_SUCCESS ? MDL_RET_SUCCESS : MDL_RET_FAIL;
 }
 
 static enum phl_mdl_ret_code _ap_add_del_sta_req_set_info(void *dispr, void *priv, struct phl_module_op_info* info)

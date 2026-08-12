@@ -608,7 +608,7 @@ exit:
 	return buf;
 }
 
-static enum rtw_edcca_mode rtw_edcca_mode_get_strictest(enum rtw_edcca_mode_t a, enum rtw_edcca_mode_t b)
+static enum rtw_edcca_mode_t rtw_edcca_mode_get_strictest(enum rtw_edcca_mode_t a, enum rtw_edcca_mode_t b)
 {
 	if (a >= RTW_EDCCA_MODE_NUM)
 		return b < RTW_EDCCA_MODE_NUM ? b : RTW_EDCCA_MODE_NUM;

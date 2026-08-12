@@ -2993,7 +2993,8 @@ phl_cmd_cfg_hw_seq_hdl(struct phl_info_t *phl_info, u8 *param)
 
 	PHL_INFO(" %s(), sta = %p !\n", __func__, sta);
 
-	return rtw_hal_set_dctrl_tbl_seq((void *)phl_info->hal, sta, sta->hw_seq);
+	return rtw_hal_set_dctrl_tbl_seq((void *)phl_info->hal, sta, sta->hw_seq) ==
+	       RTW_HAL_STATUS_SUCCESS ? RTW_PHL_STATUS_SUCCESS : RTW_PHL_STATUS_FAILURE;
 }
 #endif
 

@@ -125,6 +125,7 @@ void halbb_set_tx_path_by_cmac_tbl(struct bb_info *bb, u8 macid, enum bb_path tx
 {
 	struct bb_pathdiv_info *bb_path_div = &bb->bb_path_div_i;
 	enum bb_path tx_path_sel = tx_path_sel_1ss;
+	enum rf_path tx_rf_path;
 	enum rtw_hal_status hal_status = RTW_HAL_STATUS_FAILURE;
 	u16 cfg = 0;
 
@@ -143,8 +144,8 @@ void halbb_set_tx_path_by_cmac_tbl(struct bb_info *bb, u8 macid, enum bb_path tx
 	BB_DBG(bb, DBG_PATH_DIV, "STA[%d] : path_sel= [%s]\n", macid,
 	       (tx_path_sel == BB_PATH_A) ? "A" : "B");
 	/*BB_PATH != RF_PATH*/
-	tx_path_sel = (tx_path_sel == BB_PATH_A) ? RF_PATH_A : RF_PATH_B;
-	cfg = halbb_cfg_cmac_tx_ant(bb, (enum rf_path)tx_path_sel);
+	tx_rf_path = (tx_path_sel == BB_PATH_A) ? RF_PATH_A : RF_PATH_B;
+	cfg = halbb_cfg_cmac_tx_ant(bb, tx_rf_path);
 
 	halbb_set_cctrl_tbl(bb, macid, cfg);
 
