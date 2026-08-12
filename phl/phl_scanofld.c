@@ -369,25 +369,6 @@ _cmd_scanofld_start(struct phl_info_t *phl_info,
                              band_idx);
 }
 
-static void
-_scanofld_get_scan_ch_info(struct phl_info_t *phl_info,
-			   struct rtw_phl_scan_param *param,
-			   enum band_type band,
-			   u8 chnl,
-			   struct phl_scan_channel *scan_ch)
-{
-	u8 i = 0;
-
-	for (i = 0; i < param->ch_num; i++) {
-		if (param->ch[i].band == band && param->ch[i].channel == chnl) {
-			scan_ch = &param->ch[i];
-			return;
-		}
-	}
-
-	scan_ch = NULL;
-}
-
 enum phl_mdl_ret_code
 phl_cmd_scanofld_hdl_internal_evt(void* dispr,
 			       void* priv,

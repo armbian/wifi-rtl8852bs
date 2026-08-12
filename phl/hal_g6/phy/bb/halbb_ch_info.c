@@ -123,21 +123,6 @@ static void halbb_ch_info_cr_dump(struct bb_info *bb)
 		 cur_cfg->ch_i_ele_bitmap, cur_cfg->ch_i_type, cur_cfg->ch_i_seg_len);
 }
 
-static void halbb_ch_info_physts_get_buf(struct bb_info *bb, u8 *rpt_buf,
-				 struct bb_ch_rpt_hdr_info *hdr,
-				 struct bb_phy_info_rpt *phy_info,
-				 struct bb_ch_info_drv_rpt *drv)
-{
-	struct bb_ch_rpt_info *ch_rpt = &bb->bb_ch_rpt_i;
-	struct bb_ch_info_physts_info *ch_physts = &ch_rpt->bb_ch_info_physts_i;
-	struct bb_ch_info_raw_info *buf = &ch_rpt->bb_ch_info_raw_i;
-
-	drv->get_ch_rpt_success = ch_physts->get_ch_rpt_success;
-	drv->seg_idx_curr = 0;
-	drv->raw_data_len = ch_physts->ch_info_len;
-	rpt_buf = (u8*)buf->octet;
-}
-
 static void halbb_ch_info_print(struct bb_info *bb, char input[][16], u32 *_used,
 			 char *output, u32 *_out_len)
 {

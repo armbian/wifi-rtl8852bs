@@ -109,7 +109,7 @@ void halbb_psd_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 		   char *output, u32 *_out_len);
 void halbb_psd_init(struct bb_info *bb);
 void halbb_psd_deinit(struct bb_info *bb);
-bool halbb_get_psd_result(struct bb_info *bb, u32 *psd_data, u16 *psd_len);
+bool halbb_get_psd_result(struct bb_info *bb, u32 **psd_data, u16 *psd_len);
 void halbb_cr_cfg_psd_init(struct bb_info *bb);
 #endif
 

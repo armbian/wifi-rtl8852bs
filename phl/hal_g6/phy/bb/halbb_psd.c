@@ -500,14 +500,14 @@ void halbb_psd_deinit(struct bb_info *bb)
 		halbb_mem_free(bb, psd->rpt, sizeof(psd->rpt));
 }
 
-bool halbb_get_psd_result(struct bb_info *bb, u32 *psd_data, u16 *psd_len)
+bool halbb_get_psd_result(struct bb_info *bb, u32 **psd_data, u16 *psd_len)
 {
 	struct bb_psd_info *psd = &bb->bb_cmn_hooker->bb_psd_i;
 
 	if (!psd->rpt)
 		return false;
 
-	psd_data = psd->rpt;
+	*psd_data = psd->rpt;
 	*psd_len = psd->fft_point;
 	return true;
 }

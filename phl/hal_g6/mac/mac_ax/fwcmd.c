@@ -3748,8 +3748,6 @@ static u32 get_usr_txrpt_info_event(struct mac_ax_adapter *adapter,
 {
 	*id = MSG_EVT_USR_TX_RPT;
 
-	c2h_info = c2h->content;
-
 	return MACSUCCESS;
 }
 
