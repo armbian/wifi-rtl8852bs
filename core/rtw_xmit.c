@@ -7029,7 +7029,6 @@ static u8 fill_txreq_pkt_mgmt(_adapter *padapter, struct xmit_frame *pxframe)
 }
 #endif
 
-exit:
 	return _SUCCESS;
 
 fail:

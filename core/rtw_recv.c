@@ -2686,7 +2686,6 @@ static sint mp_recv_frame(_adapter *adapter, union recv_frame *precv_frame)
 			pmppriv->rx_pktcount_filter_out++;
 	}
 
-exit:
 	ret = _SUCCESS;
 	return ret;
 

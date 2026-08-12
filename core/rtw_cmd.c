@@ -1100,7 +1100,7 @@ u8 rtw_setstakey_cmd(_adapter *padapter, struct sta_info *sta, u8 key_type, bool
 	} else {
 		set_stakey_hdl(padapter, &setstakey_para, PHL_CMD_DIRECTLY, 0);
 	}
-exit:
+
 	return res;
 }
 

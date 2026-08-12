@@ -7067,7 +7067,6 @@ static bool _disconnect_wait(struct _ADAPTER *a, u32 timeout)
 	RTW_DBG(FUNC_ADPT_FMT ": Stop waiting disconnect FG, cost %u ms\n",
 		FUNC_ADPT_ARG(a), pass_t);
 
-exit:
 	RTW_DBG(FUNC_ADPT_FMT ": - %s\n", FUNC_ADPT_ARG(a), terminated?"OK":"Fail!");
 	return terminated;
 }
