@@ -2514,8 +2514,8 @@ u32 mac_fwc2h_ofdma_sts_parse(struct mac_ax_adapter *adapter,
 			GET_FIELD(val, FWCMD_C2H_OFDMA_STS_TFSTS_AVG_UPH);
 		fw_c2h_sts->tfsts.tf_user_sts[i].minflag_per =
 			GET_FIELD(val, FWCMD_C2H_OFDMA_STS_TFSTS_MINFLAG_PER);
-		fw_c2h_sts->tfsts.tf_user_sts[i].avg_tb_evm =
 		val = le32_to_cpu(*(content++));
+		fw_c2h_sts->tfsts.tf_user_sts[i].avg_tb_evm =
 			GET_FIELD(val, FWCMD_C2H_OFDMA_STS_TFSTS_AVG_TB_EVM);
 		fw_c2h_sts->tfsts.tf_user_sts[i].tf_num =
 			GET_FIELD(val, FWCMD_C2H_OFDMA_STS_TFSTS_TF_NUM);

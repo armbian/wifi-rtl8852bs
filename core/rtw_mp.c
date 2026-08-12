@@ -2178,6 +2178,7 @@ u32 mp_query_psd(_adapter *adapter, u8 *data)
 	u32 i, psd_pts = 0, psd_start = 0, psd_stop = 0;
 	u32 fft = 0, avg = 0, iq_path = 0;
 	u32 psd_data = 0;
+	int len;
 
 	my_psd_arg = _rtw_malloc(sizeof(struct rtw_mp_cal_arg));
 
@@ -2229,9 +2230,10 @@ u32 mp_query_psd(_adapter *adapter, u8 *data)
 			RTW_INFO("PSD_QUERY CMD FAIL!\n");
 
 		data[0] = '\0';
+		len = 0;
 		i = 0;
 		while (i < 320) {
-			sprintf(data, "%s%x ", data, (my_psd_arg->outbuf[i]));
+			len += sprintf(data + len, "%x ", (my_psd_arg->outbuf[i]));
 			i++;
 		}
 	}
@@ -3513,7 +3515,7 @@ void rtw_mp_set_crystal_cap(_adapter *padapter, u32 xcapvalue)
 	cfg_arg.mp_class = RTW_MP_CLASS_REG;
 	cfg_arg.cmd = RTW_MP_REG_CMD_SET_XCAP;
 
-	for (i <=0 ; i <= sc_xo_idx; i++) {
+	for (i = 0; i <= sc_xo_idx; i++) {
 		cfg_arg.cmd_ok = 0;
 		cfg_arg.sc_xo = i;
 		cfg_arg.io_value = xcapvalue;

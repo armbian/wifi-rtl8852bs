@@ -882,7 +882,7 @@ static void set_delay_tx_cfg(struct mac_ax_adapter *adapter,
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
 
 	val32 = MAC_REG_R32(R_AX_SS_CTRL);
-	SET_CLR_WORD(val32, cfg->en, B_AX_SS_DELAY_TX_BAND_SEL);
+	val32 = SET_CLR_WORD(val32, cfg->en, B_AX_SS_DELAY_TX_BAND_SEL);
 	MAC_REG_W32(R_AX_SS_CTRL, val32);
 
 	val32 = SET_WORD(cfg->vovi_to_b0, B_AX_SS_VOVI_TO_0) |

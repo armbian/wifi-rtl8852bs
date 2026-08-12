@@ -450,10 +450,10 @@ static u8 rtw_efuse_mask_file_load(_adapter *padapter, u8 *filepath, u8 efuse_ty
 	if (filepath) {
 		RTW_INFO("efuse file path %s len %zu", filepath, strlen(filepath));
 		efuse_arg = _rtw_malloc(sizeof(struct rtw_efuse_phl_arg));
-		efuse_arg->status == RTW_PHL_STATUS_FAILURE;
 
 		if (efuse_arg) {
 			_rtw_memset((void *)efuse_arg, 0, sizeof(struct rtw_efuse_phl_arg));
+			efuse_arg->status = RTW_PHL_STATUS_FAILURE;
 			_rtw_memcpy(efuse_arg->pfile_path, filepath, strlen(filepath));
 			if (efuse_type == RTW_EFUSE_WIFI)
 				rtw_efuse_cmd(padapter, efuse_arg, RTW_EFUSE_CMD_FILE_MASK_LOAD);
