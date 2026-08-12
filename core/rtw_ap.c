@@ -1964,7 +1964,6 @@ chbw_decision:
 			rtw_warn_on(1);
 	}
 
-_exit:
 	parm->ifbmp_ch_changed = ifbmp_ch_changed;
 	parm->req_band = new_chdef.band;
 	parm->ch_to_set = new_chdef.chan;
@@ -2872,7 +2871,7 @@ u8 rtw_ap_set_sta_key(_adapter *adapter, const u8 *addr, u8 alg, const u8 *key, 
 	param.gk = gk;
 
 	set_stakey_hdl(adapter, &param, PHL_CMD_NO_WAIT, 0);
-exit:
+
 	return res;
 }
 
@@ -2931,7 +2930,6 @@ static int rtw_ap_set_key(_adapter *padapter, struct _ADAPTER_LINK *padapter_lin
 	_rtw_memcpy(&(setkeyparm.key[0]), key, keylen);
 	setkey_hdl(padapter, padapter_link, &setkeyparm, PHL_CMD_NO_WAIT, 0);
 
-exit:
 	return res;
 }
 #else /* CONFIG_FSM */

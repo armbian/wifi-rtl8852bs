@@ -3255,7 +3255,6 @@ int rtw_p2p_enable(_adapter *padapter, enum P2P_ROLE role)
 		update_tx_basic_rate(padapter, padapter_link, padapter->registrypriv.wireless_mode);
 	}
 
-exit:
 	return ret;
 }
 

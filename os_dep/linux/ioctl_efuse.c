@@ -1591,7 +1591,7 @@ u8 rtw_efuse_bt_write_raw_hidden(_adapter * adapter, u16 addr, u16 cnts, u8 *dat
 		}
 		i++;
 	}
-exit :
+
 	if (efuse_arg)
 		_rtw_mfree(efuse_arg, sizeof(struct rtw_efuse_phl_arg));
 

@@ -1166,7 +1166,9 @@ unsigned int OnProbeReq(_adapter *padapter, union recv_frame *precv_frame)
 #endif
 #endif /* CONFIG_IOCTL_CFG80211 */
 
+#ifdef CONFIG_80211BE_EHT
 _skip_cfg80211_rx:
+#endif
 
 #ifdef CONFIG_P2P
 	if (rtw_p2p_chk_role(pwdinfo, P2P_ROLE_DEVICE) ||
@@ -8777,7 +8779,9 @@ u8 collect_bss_info(_adapter *padapter, union recv_frame *precv_frame, WLAN_BSSI
 			bssid->Configuration.DSConfig = rtw_get_oper_ch(padapter, padapter_link);
 		}
 	}
+#if CONFIG_IEEE80211_BAND_6GHZ
 dsconfig_done:
+#endif
 
 	_rtw_memcpy(&bssid->Configuration.BeaconPeriod, rtw_get_beacon_interval_from_ie(bssid->IEs), 2);
 	bssid->Configuration.BeaconPeriod = le32_to_cpu(bssid->Configuration.BeaconPeriod);
