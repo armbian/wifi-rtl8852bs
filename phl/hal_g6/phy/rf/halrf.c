@@ -635,37 +635,6 @@ void halrf_op5k_trigger_by_bw(void *rf_void, enum channel_width bw)
 #endif
 }
 
-static void halrf_op5k_tracking(void *rf_void)
-{
-	struct rf_info *rf = (struct rf_info *)rf_void;
-	struct rtw_hal_com_t *hal_i = rf->hal_com;
-
-	if (rf->rfk_is_processing || rf->is_watchdog_stop)
-		return;
-
-	if (!(rf->support_ability & HAL_RF_OP5K_TRACK))
-		return;
-
-	rf->is_watchdog_stop = true; /*avoid race condition*/
-	
-	switch (hal_i->chip_id) {
-#ifdef RF_8832BR_SUPPORT
-		case CHIP_WIFI6_8832BR:
-			halrf_op5k_tracking_8832br(rf);
-		break;
-#endif
-#ifdef RF_8192XB_SUPPORT
-		case CHIP_WIFI6_8192XB:
-			halrf_op5k_tracking_8192xb(rf);
-		break;
-#endif
-		default:
-			break;
-	}
-
-	rf->is_watchdog_stop = false;
-}
-
 enum rtw_hal_status halrf_dpk_trigger(void *rf_void,
 		       enum phl_phy_idx phy_idx,
 		       bool force)
@@ -3357,7 +3326,6 @@ void halrf_watchdog(void *rf_void)
 	halrf_iqk_tracking(rf);
 	halrf_lck_tracking(rf);
 	halrf_rx_dck_tracking(rf);
-	/*halrf_op5k_tracking(rf);*/
 	/*halrf_set_tpe_control(rf);*/
 	if (lock)
 		halrf_mutex_unlock(rf, &rf->rf_lock);
