@@ -98,19 +98,6 @@ static u32 _cal_he_csi_size(u8 mu, enum channel_width bw, u8 nr, u8 nc, u8 ng, u
 	return csi_size;
 }
 
-static u32 _cal_he_cqi_only_rpt_size(enum channel_width bw, u8 nc)
-{
-	u32 ret = 0;
-	if (CHANNEL_WIDTH_80 == bw)
-		ret = (u32)nc * 37;
-	else if(CHANNEL_WIDTH_40 == bw)
-		ret = (u32)nc * 18;
-	else if(CHANNEL_WIDTH_20 == bw)
-		ret = (u32)nc * 9;
-
-	return ret;
-}
-
 /*1. BF Resource Related*/
 static u8 _get_bw_ru_end_idx(enum channel_width bw) {
 	u8 ru_end_idx = 0;

@@ -15,32 +15,6 @@
 #include "hal_headers.h"
 
 /**
- * _dump_csi_buf_status
- * 	Dump all of the csi buffer status;
- * @csi_obj: (struct hal_csi_obj *)
- **/
-static void _dump_csi_buf_status(struct hal_csi_obj *csi_obj)
-{
-	struct hal_csi_buf *csi_buf = NULL;
-	u8 i = 0;
-	PHL_TRACE(COMP_PHL_DBG, _PHL_INFO_, "===> DUMP HAL CSI Buffer Status\n");
-	for (i = 0; i < csi_obj->max_csi_buf_nr; i++) {
-		csi_buf = &csi_obj->csi_buf[i];
-		PHL_TRACE(COMP_PHL_DBG, _PHL_INFO_, "[CSI BUF][%d] status 0x%x \n",
-				csi_buf->idx, csi_buf->sub_idx);
-		PHL_TRACE(COMP_PHL_DBG, _PHL_INFO_, "[CSI BUF] 20UU (%d) \n",
-				IS_SUB20_BUSY(csi_buf, 3));
-		PHL_TRACE(COMP_PHL_DBG, _PHL_INFO_, "[CSI BUF] 20UL (%d) \n",
-				IS_SUB20_BUSY(csi_buf, 2));
-		PHL_TRACE(COMP_PHL_DBG, _PHL_INFO_, "[CSI BUF] 20LU (%d) \n",
-				IS_SUB20_BUSY(csi_buf, 1));
-		PHL_TRACE(COMP_PHL_DBG, _PHL_INFO_, "[CSI BUF] 20LL (%d) \n",
-				IS_SUB20_BUSY(csi_buf, 0));
-	}
-	PHL_TRACE(COMP_PHL_DBG, _PHL_INFO_, "<=== DUMP HAL CSI Buffer Status\n");
-}
-
-/**
  * __query_avl_buf_idx_20
  * 	Get available sub 20MHz csi buffer
  * input :

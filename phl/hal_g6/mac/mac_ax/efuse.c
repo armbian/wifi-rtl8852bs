@@ -140,7 +140,9 @@ static struct efuse_info efuse_info_sdio = {
 
 static u32 efuse_map_init(struct mac_ax_adapter *adapter,
 			  enum efuse_map_sel map_sel);
+#ifdef NEVER
 static u32 efuse_fwcmd_ck(struct mac_ax_adapter *adapter);
+#endif /* NEVER */
 static u32 efuse_proc_ck(struct mac_ax_adapter *adapter);
 static u32 cnv_efuse_state(struct mac_ax_adapter *adapter, u8 dest_state);
 static u32 proc_dump_efuse(struct mac_ax_adapter *adapter,
@@ -2772,10 +2774,10 @@ static u32 efuse_map_init(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-static u32 efuse_fwcmd_ck(struct mac_ax_adapter *adapter)
-{
 /*Soar TBD*/
 #ifdef NEVER
+static u32 efuse_fwcmd_ck(struct mac_ax_adapter *adapter)
+{
 	u32 ret;
 
 	ret = fwcmd_wq_idle(adapter,
@@ -2787,9 +2789,10 @@ static u32 efuse_fwcmd_ck(struct mac_ax_adapter *adapter)
 		PLTFM_MSG_WARN("[WARN]H2C not idle(efuse)\n");
 		return ret;
 	}
-#endif /* NEVER */
+
 	return MACSUCCESS;
 }
+#endif /* NEVER */
 
 static u32 efuse_proc_ck(struct mac_ax_adapter *adapter)
 {

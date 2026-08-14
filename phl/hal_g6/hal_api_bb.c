@@ -549,39 +549,6 @@ rtw_hal_bb_get_efuse_info(struct rtw_hal_com_t *hal_com,
 	return RTW_HAL_STATUS_SUCCESS;
 }
 
-static u8 hal_get_primary_channel_idx(u8 pri_ch,
-				u8 central_ch, enum channel_width bw,
-				enum chan_offset bw_offset)
-{
-	u8 idx = 255;
-
-	if(bw == CHANNEL_WIDTH_80) {
-		if(bw_offset == CHAN_OFFSET_NO_EXT ||
-		   bw_offset == CHAN_OFFSET_NO_DEF) {
-		   PHL_ERR("%s invalid bw offset\n",__FUNCTION__);
-		   return idx;
-		}
-		if (central_ch > pri_ch)
-			idx = (bw_offset == CHAN_OFFSET_UPPER) ? (4) : (2);
-		else
-			idx = (bw_offset == CHAN_OFFSET_UPPER) ? (1) : (3);
-	}
-	else if(bw == CHANNEL_WIDTH_40) {
-		if(bw_offset == CHAN_OFFSET_NO_EXT ||
-		   bw_offset == CHAN_OFFSET_NO_DEF) {
-		   PHL_ERR("%s invalid bw offset\n",__FUNCTION__);
-		   return idx;
-		}
-		idx = (bw_offset == CHAN_OFFSET_UPPER) ? (2) : (1);
-	}
-	else {
-		idx = 0;
-	}
-	PHL_INFO("Using SC index %u for P%u C%u B%u O%u\n",
-		 idx, pri_ch, central_ch, bw, bw_offset);
-	return idx;
-}
-
 enum rtw_hal_status rtw_hal_bb_set_ch_bw(struct hal_info_t *hal_info,
 					enum phl_phy_idx phy_idx,
 					u8 pri_ch,
@@ -1632,73 +1599,6 @@ u32 rtw_hal_bb_process_c2h(void *hal, struct rtw_c2h_info *c2h, struct c2h_evt_m
 #endif
 }
 
-static u16 rtw_hal_bb_get_su_rx_rate(struct rtw_hal_com_t *hal_com,
-				enum phl_band_idx band_idx)
-{
-	struct hal_info_t *hal_info = (struct hal_info_t *)(hal_com->hal_priv);
-	struct bb_pkt_cnt_su_info rpt;
-	u16 max_num_tmp = 0;
-	u16 rx_rate = 0;
-	u16 i = 0;
-	u16 *pkt_cnt_tmp;
-	u8 rate_num_tmp;
-	u16 ofst_mode = 0;
-	u16 ofst_ss = 0;
-	u16 idx = 0;
-	bool is_ht_mode = false;
-	bool is_legacy_rate = true;
-	enum phl_phy_idx p_idx = rtw_hal_hw_band_to_phy_idx(band_idx);
-
-	halbb_get_rx_pkt_cnt_rpt_su(hal_info->bb, &rpt, p_idx);
-
-	/*Legacy rate*/
-	if (rpt.pkt_cnt_cck || rpt.pkt_cnt_ofdm) {
-		for (i = 0; i < 12; i++) {
-			if (rpt.pkt_cnt_legacy[i] >= max_num_tmp) {
-				max_num_tmp = rpt.pkt_cnt_legacy[i];
-				rx_rate = i;
-			}
-		}
-	}
-	if (rpt.pkt_cnt_t == 0) {
-		return rx_rate;
-	}
-	/*HT, VHT, HE*/
-	if (rpt.he_pkt_not_zero) {
-		pkt_cnt_tmp = rpt.pkt_cnt_he;
-		rate_num_tmp = 24;
-		ofst_mode = 0x180;
-	} else if (rpt.vht_pkt_not_zero) {
-		pkt_cnt_tmp = rpt.pkt_cnt_vht;
-		rate_num_tmp = 24;
-		ofst_mode = 0x100;
-	} else if (rpt.ht_pkt_not_zero) {
-		pkt_cnt_tmp = rpt.pkt_cnt_ht;
-		rate_num_tmp = 16;
-		ofst_mode = 0x80;
-		is_ht_mode = true;
-	} else {
-		return rx_rate;
-	}
-	for (i = 0; i < rate_num_tmp; i++) {
-		if (pkt_cnt_tmp[i] >= max_num_tmp) {
-			max_num_tmp = pkt_cnt_tmp[i];
-			idx = i;
-			is_legacy_rate = false;
-		}
-	}
-	if (is_legacy_rate)
-		return rx_rate;
-	if (!is_ht_mode) {
-		ofst_ss = idx / HE_VHT_NUM_MCS;
-
-		if (ofst_ss >= 0) /*>=2SS*/
-			idx -= (ofst_ss * HE_VHT_NUM_MCS);
-	}
-	rx_rate = ofst_mode + (ofst_ss << 4) + idx;
-	return rx_rate;
-}
-
 
 enum rtw_hal_status
 rtw_hal_bb_get_txinfo_power(struct hal_info_t *hal_info,
@@ -2554,12 +2454,6 @@ rtw_hal_bb_get_efuse_info(struct rtw_hal_com_t *hal_com, u8 *efuse_map,
 			  u8 size, u8 map_valid)
 {
 	return RTW_HAL_STATUS_SUCCESS;
-}
-
-u8 hal_get_primary_channel_idx(u8 pri_ch, u8 central_ch, enum channel_width bw,
-			       enum chan_offset bw_offset)
-{
-	return 0;
 }
 
 enum rtw_hal_status rtw_hal_bb_set_ch_bw(struct hal_info_t *hal_info,

@@ -280,7 +280,7 @@ static inline s32 rtw_hal_macid_sleep_all_used(_adapter *adapter)
 static inline s32 rtw_hal_macid_wakeup_all_used(_adapter *adapter)
 {	return 0;}
 
-static void rtw_hal_c2h_pkt_hdl(_adapter *adapter, u8 *buf, u16 len)
+static inline void rtw_hal_c2h_pkt_hdl(_adapter *adapter, u8 *buf, u16 len)
 {
 	//adapter->dvobj->hal_func.hal_mac_c2h_handler(adapter, buf, len);
 }

@@ -1275,33 +1275,6 @@ static int rtw_wx_get_freq(struct net_device *dev,
 	return 0;
 }
 
-static u32 wext_mode_to_rtw_mlme_state(union iwreq_data *wrqu)
-{
-	switch (wrqu->mode) {
-	#ifdef CONFIG_WIFI_MONITOR
-	case IW_MODE_MONITOR:
-		return WIFI_MONITOR_STATE;
-	#endif
-	case IW_MODE_ADHOC:
-		return WIFI_ADHOC_STATE;
-	#ifdef CONFIG_AP_MODE
-	case IW_MODE_MASTER:
-		return WIFI_AP_STATE;
-	#endif
-	case IW_MODE_INFRA:
-		return WIFI_STATION_STATE;
-
-	#ifdef CONFIG_RTW_MESH
-	case IW_MODE_MESH:
-		return WIFI_MESH_STATE;
-	#endif
-
-	case IW_MODE_AUTO:
-	default:
-		return WIFI_STATION_STATE;
-	}
-}
-
 static int rtw_wx_set_mode(struct net_device *dev, struct iw_request_info *a,
 			   union iwreq_data *wrqu, char *b)
 {

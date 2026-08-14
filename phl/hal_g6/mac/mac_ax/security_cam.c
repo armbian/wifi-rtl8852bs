@@ -152,62 +152,6 @@ u32 fill_sec_cam_info(struct mac_ax_adapter *adapter,
 	return MACSUCCESS;
 }
 
-static u32 fill_addr_cam_sec_only(struct mac_ax_adapter *adapter,
-			   struct mac_ax_role_info *info,
-			   struct addr_sec_only_info *addr_sec_info)
-{
-	struct mac_ax_addr_cam_info a_info;
-
-	a_info = info->a_info;
-
-	addr_sec_info->dword0 =
-	cpu_to_le32((a_info.aid12 & 0xfff) |
-		    ((a_info.wol_pattern) ? FWCMD_H2C_ADDRCAM_INFO_WOL_PATTERN
-		     : 0) |
-		    ((a_info.wol_uc) ? FWCMD_H2C_ADDRCAM_INFO_WOL_UC : 0) |
-		    ((a_info.wol_magic) ?
-		     FWCMD_H2C_ADDRCAM_INFO_WOL_MAGIC : 0) |
-		    ((a_info.wapi) ? FWCMD_H2C_ADDRCAM_INFO_WAPI : 0) |
-		    SET_WORD(a_info.sec_ent_mode,
-			     FWCMD_H2C_ADDRCAM_INFO_SEC_ENT_MODE) |
-		    SET_WORD(a_info.sec_ent_keyid[0],
-			     FWCMD_H2C_ADDRCAM_INFO_SEC_ENT0_KEYID) |
-		    SET_WORD(a_info.sec_ent_keyid[1],
-			     FWCMD_H2C_ADDRCAM_INFO_SEC_ENT1_KEYID) |
-		    SET_WORD(a_info.sec_ent_keyid[2],
-			     FWCMD_H2C_ADDRCAM_INFO_SEC_ENT2_KEYID) |
-		    SET_WORD(a_info.sec_ent_keyid[3],
-			     FWCMD_H2C_ADDRCAM_INFO_SEC_ENT3_KEYID) |
-		    SET_WORD(a_info.sec_ent_keyid[4],
-			     FWCMD_H2C_ADDRCAM_INFO_SEC_ENT4_KEYID) |
-		    SET_WORD(a_info.sec_ent_keyid[5],
-			     FWCMD_H2C_ADDRCAM_INFO_SEC_ENT5_KEYID) |
-		    SET_WORD(a_info.sec_ent_keyid[6],
-			     FWCMD_H2C_ADDRCAM_INFO_SEC_ENT6_KEYID));
-
-	addr_sec_info->dword1 =
-	  cpu_to_le32(SET_WORD(a_info.sec_ent_valid,
-			       FWCMD_H2C_ADDRCAM_INFO_SEC_ENT_VALID) |
-		      SET_WORD(a_info.sec_ent[0],
-			       FWCMD_H2C_ADDRCAM_INFO_SEC_ENT0) |
-		      SET_WORD(a_info.sec_ent[1],
-			       FWCMD_H2C_ADDRCAM_INFO_SEC_ENT1) |
-		      SET_WORD(a_info.sec_ent[2],
-			       FWCMD_H2C_ADDRCAM_INFO_SEC_ENT2));
-
-	addr_sec_info->dword2 =
-	cpu_to_le32(SET_WORD(a_info.sec_ent[3],
-			     FWCMD_H2C_ADDRCAM_INFO_SEC_ENT3) |
-		    SET_WORD(a_info.sec_ent[4],
-			     FWCMD_H2C_ADDRCAM_INFO_SEC_ENT4) |
-		    SET_WORD(a_info.sec_ent[5],
-			     FWCMD_H2C_ADDRCAM_INFO_SEC_ENT5) |
-		    SET_WORD(a_info.sec_ent[6],
-			     FWCMD_H2C_ADDRCAM_INFO_SEC_ENT6));
-
-	return MACSUCCESS;
-}
-
 static u32 mac_upd_sec_infotbl(struct mac_ax_adapter *adapter,
 			struct fwcmd_seccam_info *info)
 {
