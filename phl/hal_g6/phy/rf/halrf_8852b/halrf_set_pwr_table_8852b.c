@@ -16,50 +16,6 @@
 
 #ifdef RF_8852B_SUPPORT
 
-static s8 _halrf_avg_power_8852b(struct rf_info *rf, enum phl_phy_idx phy, s8 *value, s8 n)
-{
-	u8 i;
-	s16 total = 0;
-
-	RF_DBG(rf, DBG_RF_POWER, "=======>%s\n", __func__);
-
-	for (i = 0; i < n; i++) {
-		total = total + value[i];
-		RF_DBG(rf, DBG_RF_POWER, "value[%d]=%d total=%d n=%d\n", i, value[i], total, n);
-	}
-
-	total = total / n;
-
-	return (s8)total;
-}
-
-static void _halrf_bub_sort_8852b(struct rf_info *rf, enum phl_phy_idx phy, s8 *data, u32 n)
-{
-	s32 i, j, sp;
-	s8 temp;
-	u32 k;
-
-	for (k = 0; k < n; k++)
-		RF_DBG(rf, DBG_RF_POWER, "===> %s  Before data[%d]=%d\n", __func__, k, data[k]);
-
-	for (i = n - 1; i >= 0; i--) {
-		sp = 1;
-		for (j = 0; j < i; j++) {
-			if (data[j] < data[j + 1]) {
-				temp = data[j];
-				data[j] = data[j + 1];
-				data[j + 1] = temp;
-				sp = 0;
-			}
-		}
-		if (sp == 1)
-			break;
-	}
-
-	for (k = 0; k < n; k++)
-		RF_DBG(rf, DBG_RF_POWER, "<=== %s  After data[%d]=%d\n", __func__, k, data[k]);
-}
-
 static bool halrf_set_power_by_rate_to_struct_8852b(struct rf_info *rf, enum phl_phy_idx phy)
 {
 	struct rtw_tpu_info *tpu = &rf->hal_com->band[phy].rtw_tpu_i;

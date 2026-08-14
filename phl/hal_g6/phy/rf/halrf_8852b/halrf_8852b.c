@@ -486,34 +486,6 @@ void halrf_set_rx_dck_8852b(struct rf_info *rf, enum phl_phy_idx phy, enum rf_pa
 #endif
 }
 
-static bool halrf_rx_dck_check_8852b(struct rf_info *rf, enum rf_path path)
-{
-	u8 addr;
-	bool is_fail = false;
-
-	if (halrf_rreg(rf, 0xc400 + path * 0x1000, 0xF0000) == 0x0)
-		 return is_fail = true;
-	else if (halrf_rreg(rf, 0xc400 + path * 0x1000, 0x0F000) == 0x0)
-		return is_fail = true;
-	else if (halrf_rreg(rf, 0xc440 + path * 0x1000, 0xF0000) == 0x0)
-		return is_fail = true;
-	else if (halrf_rreg(rf, 0xc440 + path * 0x1000, 0x0F000) == 0x0)
-		return is_fail = true;
-	else {
-		for (addr = 0x0; addr < 0x20; addr++) {
-			if (halrf_rreg(rf, 0xc400 + path * 0x1000 + addr * 4, 0x00FC0) == 0x0)
-				return is_fail = true;
-		}
-
-		for (addr = 0x0; addr < 0x20; addr++) {
-			if (halrf_rreg(rf, 0xc400 + path * 0x1000 + addr * 4, 0x0003F) == 0x0)
-				return is_fail = true;
-		}
-	}
-
-	return is_fail;
-}
-
 void halrf_rx_dck_8852b(struct rf_info *rf, enum phl_phy_idx phy, bool is_afe) 
 {
 	u8 path, dck_tune;
@@ -622,11 +594,6 @@ void halrf_rck_8852b(struct rf_info *rf, enum rf_path path)
 
 	RF_DBG(rf, DBG_RF_RFK, "[RCK] RF 0x1b = 0x%x\n",
 	       halrf_rrf(rf, path, 0x1b, MASKRF));
-}
-
-static void iqk_backup_8852b(struct rf_info *rf, enum rf_path path) 
-{
-	return;
 }
 
 void halrf_bf_config_rf_8852b(struct rf_info *rf)

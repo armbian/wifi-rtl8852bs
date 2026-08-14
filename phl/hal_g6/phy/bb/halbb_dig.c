@@ -467,23 +467,6 @@ u8 halbb_get_rxb_idx(struct bb_info *bb, enum rf_path path)
 	return rxb_idx;
 }
 
-static u8 halbb_igi_by_edcca(struct bb_info *bb, u8 igi)
-{
-#ifdef HALBB_EDCCA_SUPPORT
-	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
-	const u8 margin = IGI_EDCCA_GAP_LIMIT - 18; /* -128(dBm)+110(RSSI) */
-	u8 bound = bb->bb_edcca_i.th_h;
-
-	bound = margin > (EDCCA_MAX - bound) ? EDCCA_MAX : (bound + margin);
-	if (igi > bound) {
-		igi = bound;
-		BB_DIG_DBG(bb, DIG_DBG_LV0, "EDCCA th_h = %d, IGI upper clamp to %d.\n",
-			   bb->bb_edcca_i.th_h, bound);
-	}
-#endif
-	return igi;
-}
-
 static void halbb_dig_noisy_lv_decision(struct bb_info *bb)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;

@@ -252,37 +252,6 @@ void halbb_mp_reset_cnt(struct bb_info *bb)
 	halbb_set_reg_cmn(bb, cr->rst_all_cnt, cr->rst_all_cnt_m, 0, HW_PHY_1);
 }
 
-static void halbb_mp_psts_setting(struct bb_info *bb, u32 ie_bitmap_setting)
-{
-	struct bb_physts_info	*physts = &bb->bb_physts_i;
-	struct bb_rpt_cr_info *cr = &bb->bb_rpt_i.bb_rpt_cr_i;
-
-	BB_DBG(bb, DBG_PHY_CONFIG, "<====== %s ======>\n", __func__);
-
-	if (ie_bitmap_setting & BIT(IE00_CMN_CCK)) {
-		halbb_set_reg(bb, cr->phy_sts_bitmap_he_mu, cr->phy_sts_bitmap_he_mu_m, BIT(IE00_CMN_CCK));
-		halbb_set_reg(bb, cr->phy_sts_bitmap_vht_mu, cr->phy_sts_bitmap_vht_mu_m, BIT(IE00_CMN_CCK));
-		halbb_set_reg(bb, cr->phy_sts_bitmap_cck, cr->phy_sts_bitmap_cck_m, BIT(IE00_CMN_CCK));
-		halbb_set_reg(bb, cr->phy_sts_bitmap_legacy, cr->phy_sts_bitmap_legacy_m, BIT(IE00_CMN_CCK));
-		halbb_set_reg(bb, cr->phy_sts_bitmap_ht, cr->phy_sts_bitmap_ht_m, BIT(IE00_CMN_CCK));
-		halbb_set_reg(bb, cr->phy_sts_bitmap_vht, cr->phy_sts_bitmap_vht_m, BIT(IE00_CMN_CCK));
-		halbb_set_reg(bb, cr->phy_sts_bitmap_he, cr->phy_sts_bitmap_he_m, BIT(IE00_CMN_CCK));
-	}
-	if (ie_bitmap_setting & BIT(IE01_CMN_OFDM)) {
-		halbb_set_reg(bb, cr->phy_sts_bitmap_he_mu, cr->phy_sts_bitmap_he_mu_m, BIT(IE01_CMN_OFDM));
-		halbb_set_reg(bb, cr->phy_sts_bitmap_vht_mu, cr->phy_sts_bitmap_vht_mu_m, BIT(IE01_CMN_OFDM));
-		halbb_set_reg(bb, cr->phy_sts_bitmap_cck, cr->phy_sts_bitmap_cck_m, BIT(IE01_CMN_OFDM));
-		halbb_set_reg(bb, cr->phy_sts_bitmap_legacy, cr->phy_sts_bitmap_legacy_m, BIT(IE01_CMN_OFDM));
-		halbb_set_reg(bb, cr->phy_sts_bitmap_ht, cr->phy_sts_bitmap_ht_m, BIT(IE01_CMN_OFDM));
-		halbb_set_reg(bb, cr->phy_sts_bitmap_vht, cr->phy_sts_bitmap_vht_m, BIT(IE01_CMN_OFDM));
-		halbb_set_reg(bb, cr->phy_sts_bitmap_he, cr->phy_sts_bitmap_he_m, BIT(IE01_CMN_OFDM));
-	}
-
-	BB_DBG(bb, DBG_PHY_CONFIG, "[MP] physts ie bitmap setting : 0x%08x\n", ie_bitmap_setting);
-
-
-}
-
 static void
 halbb_mp_get_psts_ie_bitmap(struct bb_info *bb, struct bb_mp_psts *bb_mp_physts)
 {

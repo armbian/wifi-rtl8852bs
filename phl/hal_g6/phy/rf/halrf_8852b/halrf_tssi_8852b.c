@@ -69,24 +69,6 @@ static u8 _halrf_ch_to_idx_8852b(struct rf_info *rf, u8 channel)
 	return channelIndex;
 }
 
-static u8 _halrf_idx_to_ch_8852b(struct rf_info *rf, u8 idx)
-{
-	u8 channelIndex;
-
-	if (idx >= 0 && idx <= 13)
-		channelIndex = idx + 1;
-	else if (idx >= (0 + 14) && idx <= (14 + 14))
-		channelIndex = (idx - 14) * 2 + 36;
-	else if (idx >= (15 + 14) && idx <= (37 + 14))
-		channelIndex = (idx - 15 - 14) * 2 + 100;
-	else if (idx >= (38 + 14) && idx <= (52 + 14))
-		channelIndex = (idx - 38 - 14) * 2 + 149;
-	else
-		channelIndex = 0;
-
-	return channelIndex;
-}
-
 void _halrf_tssi_hw_tx_8852b(struct rf_info *rf,
 			enum phl_phy_idx phy, u8 path, u16 cnt, u16 period, s16 dbm, u32 rate, u8 bw,
 			bool enable)
@@ -338,24 +320,6 @@ static void _halrf_tssi_set_dck_8852b(struct rf_info *rf,
 	}
 }
 
-static void _halrf_tssi_set_bbgain_split_8852b(struct rf_info *rf,
-					enum phl_phy_idx phy, enum rf_path path)
-{
-	RF_DBG(rf, DBG_RF_TX_PWR_TRACK, "======>%s   path=%d\n", __func__, path);
-
-	if (path == RF_PATH_A) {
-		halrf_wreg(rf, 0x5818, 0x08000000, 0x1);
-		halrf_wreg(rf, 0x58d4, 0xf0000000, 0x7);
-		halrf_wreg(rf, 0x58f0, 0x000c0000, 0x1);
-		halrf_wreg(rf, 0x58f0, 0xfff00000, 0x400);
-	} else {
-		halrf_wreg(rf, 0x7818, 0x08000000, 0x1);
-		halrf_wreg(rf, 0x78d4, 0xf0000000, 0x7);
-		halrf_wreg(rf, 0x78f0, 0x000c0000, 0x1);
-		halrf_wreg(rf, 0x78f0, 0xfff00000, 0x400);
-	}
-}
-
 static void _halrf_tssi_set_tmeter_tbl_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
@@ -593,42 +557,6 @@ static void _halrf_tssi_set_tmeter_tbl_8852b(struct rf_info *rf,
 
 }
 
-static void _halrf_tssi_set_tmeter_tbl_zere_8852b(struct rf_info *rf,
-					enum phl_phy_idx phy, enum rf_path path)
-{
-	u8 i;
-	u32 thermal_offset_tmp = 0;
-	u32 ftable_reg[TSSI_PATH_MAX_8852B] = {0x5c00, 0x7c00};
-	u32 ftable_base_reg[TSSI_PATH_MAX_8852B] = {0x5810, 0x7810};
-	u32 ftable_trigger_reg[TSSI_PATH_MAX_8852B] = {0x5864, 0x7864};
-	s8 thermal_offset[64] = {0};
-
-	RF_DBG(rf, DBG_RF_TX_PWR_TRACK, "======>%s   path=%d\n", __func__, path);
-
-	halrf_wreg(rf, ftable_base_reg[path], 0x00010000, 0x0);
-	halrf_wreg(rf, ftable_base_reg[path], 0x01000000, 0x1);
-
-	halrf_wreg(rf, ftable_base_reg[path], 0x0000fc00, 32);
-	halrf_wreg(rf, ftable_trigger_reg[path], 0x03f00000, 32);
-
-	for (i = 0; i < 64; i = i + 4) {
-		thermal_offset_tmp = (thermal_offset[i] & 0xff) |
-				(thermal_offset[i + 1] & 0xff) << 8 |
-				(thermal_offset[i + 2] & 0xff) << 16 |
-				(thermal_offset[i + 3] & 0xff) << 24;
-
-		halrf_wreg(rf, (ftable_reg[path] + i), MASKDWORD, thermal_offset_tmp);
-		
-		RF_DBG(rf, DBG_RF_TX_PWR_TRACK,
-		       "[TSSI] write addr:0x%x value=0x%08x\n",
-		       (ftable_reg[path] + i), thermal_offset_tmp);
-	}
-
-	halrf_wreg(rf, ftable_trigger_reg[path], BIT(26), 0x1);
-	halrf_wreg(rf, ftable_trigger_reg[path], BIT(26), 0x0);
-
-}
-
 static void _halrf_tssi_set_dac_gain_tbl_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path)
 {
@@ -811,136 +739,6 @@ static void _halrf_tssi_slope_cal_org_8852b(struct rf_info *rf,
 }
 
 
-static void _halrf_tssi_slope_cal_8852b(struct rf_info *rf,
-					enum phl_phy_idx phy, enum rf_path path)
-{
-	u8 channel = rf->hal_com->band[phy].cur_chandef.center_ch;
-
-	s16 power_2g_high[4] = {80, 24, 0, -24};
-	s16 power_2g_low[4] = {56, 8, -16, -36};
-	s16 power_5g_high[4] = {80, 24, 0, -36};
-	s16 power_5g_low[4] = {56, 8, -16, -44};
-	s16 power_high[4] = {0}, power_low[4] = {0};
-	u32 tssi_cw_rpt_high = 0, tssi_cw_rpt_low = 0,
-		tssi_cw_rpt_offset[4] = {0};
-
-	u32 tssi_trigger[TSSI_PATH_MAX_8852B] = {0x5820, 0x7820};
-	u32 tssi_cw_rpt_addr[TSSI_PATH_MAX_8852B] = {0x1c18, 0x3c18};
-
-	u8 i, j, k;
-	u32 rate = HT_MF_FMT;
-	u8 bw = 0;
-	u8 phy_map;
-
-	phy_map = (BIT(phy) << 4) | BIT(path);
-
-	RF_DBG(rf, DBG_RF_TX_PWR_TRACK, "======> %s   channel=%d   path=%d\n",
-		__func__, channel, path);
-
-	if (channel >= 1 && channel <= 14) {
-		for (i = 0; i < 4; i++) {
-			power_high[i] = power_2g_high[i];
-			power_low[i] = power_2g_low[i];
-		}
-	} else {
-		for (i = 0; i < 4; i++) {
-			power_high[i] = power_5g_high[i];
-			power_low[i] = power_5g_low[i];
-		}
-	}
-	if(!rf->is_chl_rfk) {
-		halrf_btc_rfk_ntfy(rf, phy_map, RF_BTC_TSSI, RFK_ONESHOT_START);
-	}
-	for (j = 0; j < 4; j++) {
-		/*high power*/
-		halrf_wreg(rf, tssi_trigger[path], 0x80000000, 0x0);
-		halrf_wreg(rf, tssi_trigger[path], 0x80000000, 0x1);
-
-		_halrf_tssi_hw_tx_8852b(rf, phy, path, 100, 5000, power_high[j], rate, bw, true);
-		
-		for (k = 0; halrf_rreg(rf, tssi_cw_rpt_addr[path], BIT(16)) == 0; k++) {
-			halrf_delay_us(rf, 1);
-
-			if (k > 100) {
-				//halrf_set_pseudo_cw(rf, i, power_high[j], false);
-				RF_DBG(rf, DBG_RF_TX_PWR_TRACK, "[TSSI PA K] TSSI finish bit k > 100us path=%d\n",
-					i);
-				_halrf_tssi_hw_tx_8852b(rf, phy, path, 100, 5000, power_high[j], rate, bw, false);
-				return;
-			}
-		}
-		_halrf_tssi_hw_tx_8852b(rf, phy, path, 100, 5000, power_high[j], rate, bw, false);
-		tssi_cw_rpt_high = halrf_rreg(rf, tssi_cw_rpt_addr[path], 0x000001ff);
-
-		/*low power*/
-		halrf_wreg(rf, tssi_trigger[path], 0x80000000, 0x0);
-		halrf_wreg(rf, tssi_trigger[path], 0x80000000, 0x1);
-
-		_halrf_tssi_hw_tx_8852b(rf, phy, path, 100, 5000, power_low[j], rate, bw, true);
-		
-		for (k = 0; halrf_rreg(rf, tssi_cw_rpt_addr[path], BIT(16)) == 0; k++) {
-			halrf_delay_us(rf, 1);
-
-			if (k > 100) {
-				//halrf_set_pseudo_cw(rf, i, power_low[j], false);
-				RF_DBG(rf, DBG_RF_TX_PWR_TRACK, "[TSSI PA K] TSSI finish bit k > 100us path=%d\n",
-					i);
-				_halrf_tssi_hw_tx_8852b(rf, phy, path, 100, 5000, power_high[j], rate, bw, false);
-				return;
-			}
-		}
-		_halrf_tssi_hw_tx_8852b(rf, phy, path, 100, 5000, power_high[j], rate, bw, false);
-		tssi_cw_rpt_low = halrf_rreg(rf, tssi_cw_rpt_addr[path], 0x000001ff);
-
-		tssi_cw_rpt_offset[j] = tssi_cw_rpt_high - tssi_cw_rpt_low;
-
-		RF_DBG(rf, DBG_RF_TX_PWR_TRACK,
-			"[TSSI PA K] power_high[%d]=%d  power_low[%d]=%d\n", 
-			j, power_high[j], j, power_low[j]);
-
-		RF_DBG(rf, DBG_RF_TX_PWR_TRACK,
-			"[TSSI PA K] tssi_cw_rpt_offset[%d](0x%x) = tssi_cw_rpt_high(0x%x) - tssi_cw_rpt_low(0x%x)\n", 
-			j, tssi_cw_rpt_offset[j], tssi_cw_rpt_high, tssi_cw_rpt_low);
-
-		//halrf_set_pseudo_cw(rf, i, power_low[j], false);
-
-	}
-
-	halrf_wreg(rf, 0x581c, 0x00100000, 0x1);
-	halrf_wreg(rf, 0x58cc, 0x00001000, 0x1);
-	halrf_wreg(rf, 0x58cc, 0x00000007, 0x7);
-	halrf_wreg(rf, 0x58cc, 0x00000038, 0x6);
-	halrf_wreg(rf, 0x58cc, 0x000001c0, 0x3);
-	halrf_wreg(rf, 0x58cc, 0x00000e00, 0x1);
-
-	halrf_wreg(rf, 0x5828, 0x7fc00000, tssi_cw_rpt_offset[0]);
-	halrf_wreg(rf, 0x5898, 0x000000ff, power_high[0] - power_low[0]);
-
-	halrf_wreg(rf, 0x5830, 0x7fc00000, tssi_cw_rpt_offset[0]);
-	halrf_wreg(rf, 0x5898, 0x0000ff00, power_high[0] - power_low[0]);
-
-	halrf_wreg(rf, 0x5838, 0x7fc00000, tssi_cw_rpt_offset[1]);
-	halrf_wreg(rf, 0x5898, 0x00ff0000, power_high[1] - power_low[1]);
-
-	halrf_wreg(rf, 0x5840, 0x7fc00000, tssi_cw_rpt_offset[1]);
-	halrf_wreg(rf, 0x5898, 0xff000000, power_high[1] - power_low[1]);
-
-	halrf_wreg(rf, 0x5848, 0x7fc00000, tssi_cw_rpt_offset[2]);
-	halrf_wreg(rf, 0x589c, 0x000000ff, power_high[2] - power_low[2]);
-
-	halrf_wreg(rf, 0x5850, 0x7fc00000, tssi_cw_rpt_offset[2]);
-	halrf_wreg(rf, 0x589c, 0x0000ff00, power_high[2] - power_low[2]);
-
-	halrf_wreg(rf, 0x5858, 0x7fc00000, tssi_cw_rpt_offset[3]);
-	halrf_wreg(rf, 0x589c, 0x00ff0000, power_high[3] - power_low[3]);
-
-	halrf_wreg(rf, 0x5860, 0x7fc00000, tssi_cw_rpt_offset[3]);
-	halrf_wreg(rf, 0x589c, 0xff000000, power_high[3] - power_low[3]);
-	if(!rf->is_chl_rfk) {
-		halrf_btc_rfk_ntfy(rf, phy_map, RF_BTC_TSSI, RFK_ONESHOT_STOP);
-	}
-}
-
 static void _halrf_tssi_alignment_default_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy, enum rf_path path, bool all)
 {
@@ -1102,20 +900,6 @@ static void _halrf_tssi_alignment_default_8852b(struct rf_info *rf,
 		0x563c + (path << 13), halrf_rreg(rf, 0x563c + (path << 13), 0xffffffff),
 		0x5640 + (path << 13), halrf_rreg(rf, 0x5640 + (path << 13), 0xffffffff),
 		0x5644 + (path << 13), halrf_rreg(rf, 0x5644 + (path << 13), 0xffffffff));
-}
-
-static void _halrf_tssi_run_slope_8852b(struct rf_info *rf,
-					enum phl_phy_idx phy, enum rf_path path)
-{
-	RF_DBG(rf, DBG_RF_TX_PWR_TRACK, "======>%s   path=%d\n", __func__, path);
-
-	if (path == RF_PATH_A) {
-		halrf_wreg(rf, 0x5820, 0x80000000, 0x0);
-		halrf_wreg(rf, 0x5820, 0x80000000, 0x1);
-	} else {	
-		halrf_wreg(rf, 0x7820, 0x80000000, 0x0);
-		halrf_wreg(rf, 0x7820, 0x80000000, 0x1);
-	}
 }
 
 static void _halrf_tssi_set_tssi_slope_8852b(struct rf_info *rf,

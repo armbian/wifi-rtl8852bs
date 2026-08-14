@@ -51,25 +51,6 @@ static u8 _halrf_get_1byte_efuse_8852b(struct rf_info *rf, u32 addr, u8 *value)
 	return *value;
 }
 
-static s8 _halrf_efuse_exchange_8852b(struct rf_info *rf, u8 value, u8 mask)
-{
-	s8 tmp = 0;
-
-	if (mask == LOW_MASK) {
-		tmp = value & 0xf;
-
-		if (tmp & BIT(3))
-			tmp = tmp | 0xf0;
-	} else {
-		tmp = (value & 0xf0) >> 4;
-
-		if (tmp & BIT(3))
-			tmp = tmp | 0xf0;
-	}
-
-	return tmp;
-}
-
 static void _halrf_set_thermal_trim_8852b(struct rf_info *rf,
 					enum phl_phy_idx phy)
 {
