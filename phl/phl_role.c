@@ -16,37 +16,6 @@
 #include "phl_headers.h"
 
 static enum rtw_phl_status
-_phl_alloc_hw_port(struct phl_info_t *phl,
-                   struct rtw_wifi_role_link_t *rlink)
-{
-	struct rtw_phl_com_t *phl_com = phl->phl_com;
-	struct hal_spec_t *hal_spec = phl_get_ic_spec(phl_com);
-	struct mr_ctl_t *mr_ctl = phlcom_to_mr_ctrl(phl_com);
-	struct hw_band_ctl_t *band_ctrl;
-	u8 max_port_num = hal_spec->port_num;
-	u8 i = max_port_num;
-
-	band_ctrl = &mr_ctl->band_ctrl[rlink->hw_band];
-
-	_os_spinlock(phl_to_drvpriv(phl), &band_ctrl->lock, _bh, NULL);
-	for (i = 0; i < max_port_num; i++) {
-		if (!(band_ctrl->port_map & BIT(i))) {
-			band_ctrl->port_map |= BIT(i);
-			break;
-		}
-	}
-	_os_spinunlock(phl_to_drvpriv(phl), &band_ctrl->lock, _bh, NULL);
-
-	if (i == max_port_num) {
-		PHL_ERR("%s Can't get port idx\n", __func__);
-		return RTW_PHL_STATUS_FAILURE;
-	}
-	rlink->hw_port = i;
-
-	return RTW_PHL_STATUS_SUCCESS;
-}
-
-static enum rtw_phl_status
 _phl_realloc_hw_port(struct phl_info_t *phl,
                      struct rtw_wifi_role_link_t *rlink,
                      u8 new_port)
@@ -357,16 +326,6 @@ phl_get_wrole_by_ridx(struct phl_info_t *phl_info, u8 rold_idx)
 		return &(phl_com->wifi_roles[rold_idx]);
 
 	return NULL;
-}
-
-static void
-_phl_role_notify_buf_done(void* priv, struct phl_msg* msg)
-{
-	struct phl_info_t *phl_info = (struct phl_info_t *)priv;
-
-	if(msg->inbuf && msg->inlen){
-		_os_mem_free(phl_to_drvpriv(phl_info), msg->inbuf, msg->inlen);
-	}
 }
 
 #ifdef CONFIG_CMD_DISP
@@ -1074,23 +1033,6 @@ rtw_phl_wifi_role_realloc_port(void *phl,
                                u8 new_port)
 {
 	return phl_wifi_role_realloc_port((struct phl_info_t *)phl, wrole, rlink, new_port);
-}
-
-
-static enum rtw_phl_status
-phl_wifi_role_realloc_wmm(struct phl_info_t *phl_info,
-                          struct rtw_wifi_role_link_t *rlink,
-                          u8 new_wmm)
-{
-	enum rtw_phl_status psts = RTW_PHL_STATUS_FAILURE;
-
-	if (new_wmm == rlink->hw_wmm)
-		goto _exit;
-
-	psts = RTW_PHL_STATUS_SUCCESS;
-
-_exit:
-	return psts;
 }
 
 

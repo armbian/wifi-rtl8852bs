@@ -3945,34 +3945,6 @@ static u8 _phl_mr_process_by_mrc(struct phl_info_t *phl_info,
 	return __phl_mr_process(wrole, mr_ctl->role_map, exclude_self, data, ops_func);
 }
 
-static u8 _phl_mr_process_by_band(struct phl_info_t *phl_info,
-                                  struct rtw_wifi_role_t *wrole,
-                                  enum phl_band_idx band_idx,
-                                  bool exclude_self,
-                                  void *data,
-                                  u8(*ops_func)(struct rtw_wifi_role_t *wrole,
-                                                void *data))
-{
-	struct mr_ctl_t *mr_ctl = phlcom_to_mr_ctrl(phl_info->phl_com);
-	struct hw_band_ctl_t *band_ctrl = &(mr_ctl->band_ctrl[band_idx]);
-
-	return __phl_mr_process(wrole, band_ctrl->role_map, exclude_self, data, ops_func);
-}
-
-static u8 _phl_mr_process_by_chctx(struct phl_info_t *phl_info,
-                                   struct rtw_wifi_role_t *wrole,
-                                   struct rtw_wifi_role_link_t *rlink,
-                                   bool exclude_self,
-                                   void *data,
-                                   u8(*ops_func)(struct rtw_wifi_role_t *wrole, void *data))
-{
-	struct rtw_chan_ctx *chanctx = rlink->chanctx;
-
-	if (!chanctx)
-		return 0;
-	return __phl_mr_process(wrole, chanctx->role_map, exclude_self, data, ops_func);
-}
-
 static u8 _phl_mr_dump_mac_addr(struct rtw_wifi_role_t *wrole, void *data)
 {
 	PHL_INFO("RIDX:%d - MAC-Addr:%02x-%02x-%02x-%02x-%02x-%02x\n",

@@ -685,23 +685,6 @@ _exit:
 	return psts;
 }
 
-static enum rtw_phl_status
-_phl_chanctx_del_with_lock(struct phl_info_t *phl_info,
-			struct hw_band_ctl_t *band_ctrl,
-			struct rtw_chan_ctx *chanctx)
-{
-	void *drv = phl_to_drvpriv(phl_info);
-	enum rtw_phl_status psts = RTW_PHL_STATUS_FAILURE;
-
-	if (!chanctx)
-		return psts;
-
-	_os_spinlock(drv, &band_ctrl->chan_ctx_queue.lock, _bh, NULL);
-	psts = _phl_chanctx_del(phl_info, band_ctrl, chanctx);
-	_os_spinunlock(drv, &band_ctrl->chan_ctx_queue.lock, _bh, NULL);
-	return psts;
-}
-
 static inline enum rtw_phl_status
 _phl_chanctx_rmap_set(struct phl_info_t *phl_info,
 			struct rtw_wifi_role_t *wifi_role,

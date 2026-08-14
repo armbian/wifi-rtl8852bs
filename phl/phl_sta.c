@@ -299,13 +299,6 @@ exit:
 	return phl_status;
 }
 
-static u16 _phl_get_macid(struct phl_info_t *phl_info,
-		struct rtw_phl_stainfo_t *phl_sta)
-{
-	/* TODO: macid management */
-	return phl_sta->macid;
-}
-
 void
 phl_macid_map_clr(u32 *map, u16 id)
 {
@@ -688,69 +681,6 @@ _exit:
 	return psts;
 }
 #endif
-
-/**
- * This function is used to
- * check macid shared by all wifi role
- * @phl: see phl_info_t
- * @macid: macid
- */
-static u8
-rtw_phl_macid_is_wrole_shared(void *phl, u16 macid)
-{
-	struct phl_info_t *phl_info = (struct phl_info_t *)phl;
-	struct macid_ctl_t *macid_ctl = phl_to_mac_ctrl(phl_info);
-	int i = 0;
-	u8 iface_bmp = 0;
-
-	if (macid >= macid_ctl->max_num) {
-		PHL_ERR("%s macid(%d) is invalid\n", __func__, macid);
-		return false;
-	}
-
-	for (i = 0; i < MAX_WIFI_ROLE_NUMBER; i++) {
-		if (_phl_macid_is_used(&macid_ctl->wifi_role_usedmap[i][0], macid)) {
-			if (iface_bmp)
-				return true;
-			iface_bmp |= BIT(i);
-		}
-	}
-	return false;
-}
-
-/**
- * This function is used to
- * check macid not shared by all wifi role
- * and belong to wifi role
- * @phl: see phl_info_t
- * @macid: macid
- * @wrole: check id belong to this wifi role
- */
-static u8
-rtw_phl_macid_is_wrole_specific(void *phl,
-					u16 macid, struct rtw_wifi_role_t *wrole)
-{
-	struct phl_info_t *phl_info = (struct phl_info_t *)phl;
-	struct macid_ctl_t *macid_ctl = phl_to_mac_ctrl(phl_info);
-	int i = 0;
-	u8 iface_bmp = 0;
-
-	if (macid >= macid_ctl->max_num) {
-		PHL_ERR("%s macid(%d) invalid\n", __func__, macid);
-		return false;
-	}
-
-	for (i = 0; i < MAX_WIFI_ROLE_NUMBER; i++) {
-		if (_phl_macid_is_used(&macid_ctl->wifi_role_usedmap[i][0], macid)) {
-			if (iface_bmp || i != wrole->id)
-				return false;
-			iface_bmp |= BIT(i);
-		}
-	}
-
-	return iface_bmp ? true : false;
-}
-
 
 /*********** stainfo_ctrl section ***********/
 static enum rtw_phl_status
@@ -3283,41 +3213,6 @@ _calc_tbtt(u64 tsf, u16 append_t, u16 bcn_intvl)
 }
 
 static u32
-_min_tbtt_ofst(u32 tbtt1, u32 tbtt2, u32 bcn_intvl)
-{
-	u32 diff_th = (bcn_intvl * TU * 8) / 10;
-	u32 diff = 0, min = 0;
-
-	if (tbtt1 > tbtt2)
-		diff = tbtt1 - tbtt2;
-	else
-		diff = tbtt2 - tbtt1;
-	if (diff > diff_th) {
-		if (tbtt1 > tbtt2) {
-			/* ex: tbtt1 = 92TU, tbtt2 = 2 TU */
-			if (tbtt2 > (bcn_intvl * TU - tbtt1))
-				min = tbtt1;
-			else
-				min = tbtt2;
-		} else {
-			/* ex: tbtt1 = 10TU, tbtt2 = 92 TU */
-			if (tbtt1 > (bcn_intvl * TU - tbtt2))
-				min = tbtt2;
-			else
-				min = tbtt1;
-		}
-	} else {
-		if (tbtt1 < tbtt2)
-			min = tbtt1;
-		else
-			min = tbtt2;
-	}
-	PHL_TRACE(COMP_PHL_DBG, _PHL_DEBUG_, "%s: tbtt1(%d), tbtt2(%d), bcn_intvl(%d), min(%d)\n",
-		__func__, tbtt1, tbtt2, bcn_intvl, min);
-	return min;
-}
-
-static u32
 _min_tbtt(u32 tbtt1, u32 tbtt2, u32 bcn_intvl)
 {
 	u32 diff_th = (bcn_intvl * TU * 85) / 100;
@@ -4877,45 +4772,6 @@ phl_cmd_set_seciv_hdl(struct phl_info_t *phl_info, u8 *param)
 	       RTW_HAL_STATUS_SUCCESS ? RTW_PHL_STATUS_SUCCESS : RTW_PHL_STATUS_FAILURE;
 }
 #endif
-
-static enum rtw_phl_status
-rtw_phl_cmd_set_sta_seciv(void *phl,
-                       struct rtw_wifi_role_t *wifi_role,
-                       struct rtw_phl_stainfo_t *sta,
-                       u64 sec_iv,
-                       enum phl_cmd_type cmd_type,
-                       u32 cmd_timeout)
-{
-	enum rtw_phl_status sts = RTW_PHL_STATUS_FAILURE;
-
-	if (NULL == sta)
-		return RTW_PHL_STATUS_FAILURE;
-
-	sta->sec_iv = sec_iv;
-
-#ifdef CONFIG_CMD_DISP
-	sts = phl_cmd_enqueue(phl,
-	                      wifi_role->rlink[RTW_RLINK_PRIMARY].hw_band,
-	                      MSG_EVT_SET_STA_SEC_IV,
-	                      (u8 *)sta,
-	                      0,
-	                      NULL,
-	                      cmd_type,
-	                      cmd_timeout);
-	if (is_cmd_failure(sts)) {
-		PHL_ERR("%s : cmd fail (0x%x)!\n", __func__, sts);
-		sts = RTW_PHL_STATUS_FAILURE;
-	} else {
-		sts = RTW_PHL_STATUS_SUCCESS;
-	}
-
-	return sts;
-#else
-	PHL_ERR("%s : CMD_DISP not set for MSG_EVT_SET_STA_SEC_IV\n", __func__);
-	sts = phl_cmd_cfg_sec_iv_hdl(phl, sta);
-	return sts;
-#endif
-}
 
 const char *rtw_phl_get_lstate_str(enum link_state lstate)
 {
