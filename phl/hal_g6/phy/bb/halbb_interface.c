@@ -405,20 +405,6 @@ static u32 halbb_c2h_lowrt_rty(struct bb_info *bb, u16 len, u8 *c2h)
 	return 0;
 }
 
-static void halbb_fw_ctrl_rtyrpt(struct bb_info *bb, u8 rpt_rtycnt, u8 en_fw_rpt)
-{
-	struct bb_fw_dbg_cmn_info *fwmn_i = &bb->bb_fwdbg_i;
-	u32 *bb_h2c = (u32 *) fwmn_i;
-	u8 cmdlen = sizeof(struct bb_fw_dbg_cmn_info);
-	bool ret_val = false;
-	
-	fwmn_i->fw_cmn_info |= (en_fw_rpt & 0x01);
-	fwmn_i->fw_rty_rpt_ctrl = rpt_rtycnt;
-	BB_DBG(bb, DBG_FW_INFO, "FW CTRL RTYRPT: %d %d\n", fwmn_i->fw_cmn_info, fwmn_i->fw_rty_rpt_ctrl);
-	BB_DBG(bb, DBG_FW_INFO, "FW CMN CTRL: %x %x\n", bb_h2c[0], bb_h2c[1]);
-	ret_val = halbb_fill_h2c_cmd(bb, cmdlen, DM_H2C_FWTRACE, HALBB_H2C_DM, bb_h2c);
-}
-
 #endif
 
 /* Remove after 8852A B cut */
@@ -723,47 +709,4 @@ u8 halbb_set_cmac_databw_er(struct bb_info *bb, struct rtw_phl_stainfo_t *phl_st
 {
 	/* 0: RU242, 1:RU106*/
 	return 0;
-}
-
-static bool halbb_set_pwr_by_rate_tbl(struct bb_info *bb, struct rtw_phl_stainfo_t *phl_sta_i)
-{
-	struct halbb_pwr_by_rate_tbl pwr_t = {{0}};
-	u8 i = 0;
-	enum rtw_data_rate ru_pwr_rate[PWR_TBL_NUM] = {RTW_DATA_RATE_HE_NSS1_MCS0, 
-		RTW_DATA_RATE_HE_NSS1_MCS1, RTW_DATA_RATE_HE_NSS1_MCS2, 
-		RTW_DATA_RATE_HE_NSS1_MCS3, RTW_DATA_RATE_HE_NSS1_MCS4, 
-		RTW_DATA_RATE_HE_NSS1_MCS5, RTW_DATA_RATE_HE_NSS1_MCS6, 
-		RTW_DATA_RATE_HE_NSS1_MCS7, RTW_DATA_RATE_HE_NSS1_MCS8, 
-		RTW_DATA_RATE_HE_NSS1_MCS9, RTW_DATA_RATE_HE_NSS1_MCS10, 
-		RTW_DATA_RATE_HE_NSS1_MCS11, RTW_DATA_RATE_HE_NSS2_MCS0, 
-		RTW_DATA_RATE_HE_NSS2_MCS1, RTW_DATA_RATE_HE_NSS2_MCS2, 
-		RTW_DATA_RATE_HE_NSS2_MCS3, RTW_DATA_RATE_HE_NSS2_MCS4, 
-		RTW_DATA_RATE_HE_NSS2_MCS5, RTW_DATA_RATE_HE_NSS2_MCS6, 
-		RTW_DATA_RATE_HE_NSS2_MCS7, RTW_DATA_RATE_HE_NSS2_MCS8, 
-		RTW_DATA_RATE_HE_NSS2_MCS9, RTW_DATA_RATE_HE_NSS2_MCS10, 
-		RTW_DATA_RATE_HE_NSS2_MCS11, RTW_DATA_RATE_HE_NSS1_MCS0, 
-		RTW_DATA_RATE_HE_NSS1_MCS1, RTW_DATA_RATE_HE_NSS1_MCS3, 
-		RTW_DATA_RATE_HE_NSS1_MCS4, RTW_DATA_RATE_HE_NSS2_MCS0, 
-		RTW_DATA_RATE_HE_NSS2_MCS1, RTW_DATA_RATE_HE_NSS2_MCS3, 
-		RTW_DATA_RATE_HE_NSS2_MCS4};
-	u32 *pval = (u32 *)&pwr_t;
-	u8 cmdlen = sizeof(pwr_t);
-	u8 dcm = 0;
-	enum rtw_data_rate rate;
-	enum channel_width  bw = phl_sta_i->chandef.bw;
-	u8 channel = phl_sta_i->chandef.center_ch;
-	s16 pwr_db = 0;
-
-
-	for (i = 0; i < PWR_TBL_NUM; i++) {
-		rate = ru_pwr_rate[i];
-		if (i >=24)
-			dcm = 1;
-		/*rtw_hal_rf_read_pwr_table(bb->hal_com, 0, rate, bw, channel, 0, dcm, 0, &pwr_db);*/
-		pwr_t.pwr_by_rate[i*2] = (u8)(pwr_db&0xff);
-		pwr_t.pwr_by_rate[i*2+1] = (u8)((pwr_db>>8)&0xff);
-	}
-	/* Get pwr by rate tbl from halrf */
-	halbb_fill_h2c_cmd(bb, cmdlen, RUA_H2C_PWR_TBL, HALBB_H2C_RUA, pval);
-	return false;
 }

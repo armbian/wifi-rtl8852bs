@@ -425,40 +425,6 @@ static void halbb_antdiv_get_rssi_target_ant(struct bb_info *bb)
 		(bb_ant_div->target_ant_rssi == MAIN_ANT) ? "MAIN_ANT" : "AUX_ANT");
 }
 
-static void halbb_antdiv_get_cn_target_ant(struct bb_info *bb)
-{
-	struct bb_antdiv_info *bb_ant_div = &bb->bb_ant_div_i;
-	struct bb_link_info *bb_link = &bb->bb_link_i;
-	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
-	struct bb_rate_info *rate_i = &cmn_rpt->bb_rate_i;
-	struct bb_antdiv_cn_info *bb_cn_i = &bb_ant_div->bb_cn_i;
-	struct bb_antdiv_rate_info *bb_rate_i = &bb_ant_div->bb_rate_i;
-	u32 main_cn, aux_cn;
-	u8 target_ant_cn;
-
-	/* CN */
-	main_cn =  (u8)HALBB_DIV(bb_cn_i->main_cn_avg_acc, (bb_rate_i->main_pkt_cnt_t + bb_rate_i->main_pkt_cnt_ofdm));
-	aux_cn =  (u8)HALBB_DIV(bb_cn_i->aux_cn_avg_acc, (bb_rate_i->aux_pkt_cnt_t+ bb_rate_i->aux_pkt_cnt_ofdm));
-
-	if (aux_cn == 0)
-		target_ant_cn = MAIN_ANT;
-	else if (main_cn == 0)
-		target_ant_cn = AUX_ANT;
-	else
-		target_ant_cn = (main_cn == aux_cn) ? (bb_ant_div->pre_target_ant) : ((main_cn >= aux_cn) ? AUX_ANT : MAIN_ANT);
-
-	BB_DBG(bb, DBG_ANT_DIV, "%-9s (%02d.%03d)\n", "[Main-Ant CN_avg]",
-	       (main_cn >> 1),
-	       halbb_show_fraction_num(main_cn & 0x1, 1));
-
-	BB_DBG(bb, DBG_ANT_DIV, "%-9s (%02d.%03d)\n", "[Aux-Ant CN_avg]",
-	       (aux_cn >> 1),
-	       halbb_show_fraction_num(aux_cn & 0x1, 1));
-
-	bb_ant_div->target_ant_cn = target_ant_cn;
-	BB_DBG(bb, DBG_ANT_DIV, "CN based TargetAnt= [%s]\n", (bb_ant_div->target_ant_cn == MAIN_ANT) ? "MAIN_ANT" : "AUX_ANT");
-}
-
 
 void halbb_antdiv_get_highest_mcs(struct bb_info *bb)
 {

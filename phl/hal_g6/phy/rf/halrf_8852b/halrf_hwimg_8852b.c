@@ -26,35 +26,6 @@
 #include "halrf_hwimg_raw_data_8852b.h"
 #include "halrf_hwimg_nctl_raw_data_8852b.h"
 
-static bool halrf_check_cond_8852b(struct rf_info *rf, u32 para_opt)
-{
-	struct rtw_hal_com_t *hal = rf->hal_com;
-	u32 cv_ver = (hal->cv == CAV) ? 15 : hal->cv;
-	/*[20200204][Dino]Request from SD7 Sinda, and need Sinda to tell us what is the correct pkg_type/rfe_type parameters in PHL layer for halbb reference*/
-	u8 pkg_type = 0; /*(hal->efuse->pkg_type == 0) ? 15 : hal->efuse->pkg_type;*/
-	u8 rfe_type = 0; /*hal->efuse->rfe_type;*/
-	u32 drv_cfg = cv_ver << 16 | pkg_type << 8 | rfe_type;
-	u32 para_opt_tmp = 0;
-
-	/*============== value Defined Check ===============*/
-	/*Cart ver BIT[23:16]*/
-	para_opt_tmp = para_opt & 0xff0000;
-	if (para_opt_tmp && (para_opt_tmp != (drv_cfg & 0xff0000)))
-		return false;
-
-	/*PKG type, BIT[15:8]*/
-	para_opt_tmp = para_opt & 0xff00;
-	if (para_opt_tmp && (para_opt_tmp != (drv_cfg & 0xff00)))
-		return false;
-
-	/*RFE, BIT[7:0]*/
-	para_opt_tmp = para_opt & 0xff;
-	if (para_opt_tmp && (para_opt_tmp != (drv_cfg & 0xff)))
-		return false;
-
-	return true;
-}
-
 u32
 halrf_get_8852b_nctl_reg_ver(void)
 {
