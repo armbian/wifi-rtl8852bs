@@ -2281,16 +2281,6 @@ exit:
 	return phl_status;
 }
 
-static enum rtw_phl_status rtw_phl_restart(void *phl)
-{
-	enum rtw_phl_status phl_status = RTW_PHL_STATUS_FAILURE;
-
-	phl_status = RTW_PHL_STATUS_SUCCESS;
-
-	return phl_status;
-}
-
-
 /******************* IO  APIs *******************/
 u8 rtw_phl_read8(void *phl, u32 addr)
 {

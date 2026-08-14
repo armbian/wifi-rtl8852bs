@@ -1014,34 +1014,6 @@ bool rtw_phl_btc_send_cmd(struct rtw_phl_com_t *phl_com,
 }
 #endif /*CONFIG_PHL_CMD_BTC*/
 
-#ifndef CONFIG_FSM
-static int rtw_phl_btc_notify(void *phl, enum RTW_PHL_BTC_NOTIFY notify,
-				struct rtw_phl_btc_ntfy *ntfy)
-{
-	PHL_ERR("CMD_BTC not support :%s\n", __func__);
-	return 0;
-}
-static void rtw_phl_btc_role_notify(void *phl, u8 role_id, enum role_state rstate)
-{
-	struct rtw_phl_btc_ntfy ntfy = {0};
-	struct rtw_phl_btc_role_info_param *prinfo = &ntfy.u.rinfo;
-
-	prinfo->role_id = role_id;
-	prinfo->rstate = rstate;
-
-	ntfy.notify = PHL_BTC_NTFY_ROLE_INFO;
-	ntfy.ops = NULL;
-	ntfy.priv = NULL;
-	ntfy.ntfy_cb = NULL;
-
-	rtw_phl_btc_notify(phl, ntfy.notify, &ntfy);
-}
-
-static void rtw_phl_btc_hub_msg_hdl(void *phl, struct phl_msg *msg)
-{
-}
-#endif
-
 #else
 
 enum rtw_phl_status phl_register_btc_module(struct phl_info_t *phl_info)

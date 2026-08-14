@@ -62,42 +62,6 @@ static void fpga_cmd_done_notification(struct fpga_context *fpga_ctx, enum fpga_
 	}
 }
 
-/*
- * @enum phl_msg_evt_id id: Assign different types of FPGA related msg event
- *	to pass buffer to another layer for further process
- */
-static void fpga_buf_notification(struct fpga_context *fpga_ctx, void *buf, u32 buf_len,
-			 enum phl_msg_evt_id id)
-{
-	struct phl_msg msg = {0};
-	struct phl_msg_attribute attr;
-	u8 *info = NULL;
-
-	info = _os_kmem_alloc(fpga_ctx->phl_com->drv_priv, buf_len);
-
-	if(info == NULL){
-		PHL_ERR("%s: Allocate msg hub buffer fail!\n", __FUNCTION__);
-		return;
-	}
-
-	_os_mem_cpy(fpga_ctx->phl_com->drv_priv, info, buf, buf_len);
-
-	SET_MSG_MDL_ID_FIELD(msg.msg_id, PHL_FUNC_MDL_TEST_MODULE);
-	SET_MSG_EVT_ID_FIELD(msg.msg_id, id);
-
-	attr.completion.completion = fpga_notification_complete;
-	attr.completion.priv = fpga_ctx;
-
-	msg.inbuf = info;
-	msg.inlen = buf_len;
-
-	if (phl_msg_hub_send(fpga_ctx->phl, &attr, &msg) != RTW_PHL_STATUS_SUCCESS) {
-		PHL_ERR("%s: send msg_hub failed\n", __func__);
-		_os_kmem_free(fpga_ctx->phl_com->drv_priv, info, buf_len);
-	}
-}
-
-
 static bool fpga_get_rpt_check(struct fpga_context *fpga_ctx, void *rpt_buf)
 {
 	bool ret = true;
