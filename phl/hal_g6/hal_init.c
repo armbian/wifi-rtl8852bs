@@ -1316,25 +1316,6 @@ u32 rtw_hal_var_init(struct rtw_phl_com_t *phl_com, void *hal)
 	return hal_status;
 }
 
-static int
-_hal_parse_macreg(void *drv_priv, u32 *pdest_buf, u8 *psrc_buf, u32 buflen)
-{
-	return 0;
-}
-
-static void _hal_send_hal_init_hub_msg(struct rtw_phl_com_t *phl_com, u8 init_ok)
-{
-	struct phl_msg msg = {0};
-	u16 evt_id = (init_ok) ? MSG_EVT_HAL_INIT_OK : MSG_EVT_HAL_INIT_FAIL;
-
-	msg.inbuf = NULL;
-	msg.inlen = 0;
-	SET_MSG_MDL_ID_FIELD(msg.msg_id, PHL_MDL_PHY_MGNT);
-	SET_MSG_EVT_ID_FIELD(msg.msg_id, evt_id);
-	msg.band_idx = HW_BAND_0;
-	rtw_phl_msg_hub_hal_send(phl_com, NULL, &msg);
-}
-
 enum rtw_hal_status rtw_hal_preload(struct rtw_phl_com_t *phl_com, void *hal)
 {
 	struct hal_info_t *hal_info = (struct hal_info_t *)hal;
@@ -1558,17 +1539,6 @@ rtw_hal_beacon_stop(void *hal,
 	hsts = rtw_hal_mac_port_cfg(hal_info, rlink, PCFG_BCN_EN, &bcn_en);
 
 	return hsts;
-}
-
-static enum rtw_hal_status
-hal_ver_check(struct rtw_hal_com_t *hal_com)
-{
-	if ((hal_com->mac_vc.mac_ver < hal_com->bb_vc.mac_ver) ||
-		(hal_com->mac_vc.mac_ver < hal_com->rf_vc.mac_ver) ||
-		(hal_com->mac_vc.mac_ver < hal_com->btc_vc.mac_ver) ||
-		(hal_com->mac_vc.mac_ver < hal_com->fw_vc.mac_ver))
-		return RTW_HAL_STATUS_FAILURE;
-	return RTW_HAL_STATUS_SUCCESS;
 }
 
 

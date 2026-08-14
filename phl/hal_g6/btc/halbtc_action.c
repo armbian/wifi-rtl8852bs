@@ -273,33 +273,6 @@ static void _set_rf_trx_para(struct btc_t *btc)
 	}
 }
 
-static void _set_bt_golden_rx_range(struct btc_t *btc, u8 p_id, u8 level)
-{
-	struct btc_bt_link_info *bt_linfo = &btc->cx.bt.link_info;
-	u8 buf[2] = {0}, pos = 0, i;
-
-	if (p_id > BTC_BT_PAN)
-		return;
-
-	for (i = 0; i< BTC_PROFILE_MAX; i++) {
-		if ((p_id >> i) & 0x1) {
-			pos = i;
-			break;
-		}
-	}
-
-	if (bt_linfo->golden_rx_shift[pos] == level)
-		return;
-
-	bt_linfo->golden_rx_shift[pos] = level;
-	PHL_TRACE(COMP_PHL_BTC, _PHL_DEBUG_, "[BTC], %s(): p_id=%d, level=%d\n",
-		  __func__, p_id, level);
-
-	buf[0] = level;
-	buf[1] = pos;
-	hal_btc_fw_set_bt(btc, SET_BT_GOLDEN_RX_RANGE, sizeof(buf), buf);
-}
-
 static void _set_wl_ch_map(struct btc_t *btc)
 {
 	struct rtw_hal_com_t *h = btc->hal;

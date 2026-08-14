@@ -16,41 +16,6 @@
 #include "coex.h"
 #include "mac_priv.h"
 
-static void restore_flr_lps(struct mac_ax_adapter *adapter)
-{
-	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
-	u32 val32 = 0;
-
-	MAC_REG_W32(R_AX_WCPU_FW_CTRL, 0);
-
-#if MAC_AX_8852A_SUPPORT || MAC_AX_8852B_SUPPORT || MAC_AX_8851B_SUPPORT
-	if (is_chip_id(adapter, MAC_AX_CHIP_ID_8852A) ||
-	    is_chip_id(adapter, MAC_AX_CHIP_ID_8852B) ||
-	    is_chip_id(adapter, MAC_AX_CHIP_ID_8851B)) {
-		MAC_REG_W32(R_AX_AFE_CTRL1, MAC_REG_R32(R_AX_AFE_CTRL1) &
-			    ~B_AX_CMAC_CLK_SEL);
-
-		val32 = MAC_REG_R32(R_AX_GPIO0_15_EECS_EESK_LED1_PULL_LOW_EN);
-		MAC_REG_W32(R_AX_GPIO0_15_EECS_EESK_LED1_PULL_LOW_EN, val32 &
-			    ~(B_AX_GPIO8_PULL_LOW_EN | B_AX_LED1_PULL_LOW_EN));
-	}
-#endif
-
-#if (MAC_AX_8852C_SUPPORT || MAC_AX_8192XB_SUPPORT || MAC_AX_8851E_SUPPORT || \
-MAC_AX_8852D_SUPPORT || MAC_AX_1115E_SUPPORT)
-	if (is_chip_id(adapter, MAC_AX_CHIP_ID_8852C) ||
-	    is_chip_id(adapter, MAC_AX_CHIP_ID_8192XB) ||
-	    is_chip_id(adapter, MAC_AX_CHIP_ID_8851E) ||
-	    is_chip_id(adapter, MAC_AX_CHIP_ID_8852D) ||
-	    is_chip_id(adapter, MAC_BE_CHIP_ID_1115E)) {
-		val32 = MAC_REG_R32(R_AX_GPIO0_15_EECS_EESK_LED1_PULL_LOW_EN);
-		MAC_REG_W32(R_AX_GPIO0_15_EECS_EESK_LED1_PULL_LOW_EN, val32 &
-			    ~(B_AX_GPIO8_PULL_LOW_EN |
-			      B_AX_LED1_PULL_LOW_EN_V1));
-	}
-#endif
-}
-
 static void clr_aon_int(struct mac_ax_adapter *adapter)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
@@ -66,80 +31,6 @@ static void clr_aon_int(struct mac_ax_adapter *adapter)
 	val32 = MAC_REG_R32(R_AX_FWS0ISR);
 	val32 |= B_AX_FS_GPIOA_INT;
 	MAC_REG_W32(R_AX_FWS0ISR, val32);
-}
-
-static u32 _patch_flr_lps(struct mac_ax_adapter *adapter)
-{
-	struct mac_ax_ops *mac_ops = adapter_to_mac_ops(adapter);
-	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
-	u32 val32, cnt, ret = MACSUCCESS;
-
-	if (chk_patch_flr_lps(adapter) == PATCH_DISABLE)
-		return MACSUCCESS;
-
-	restore_flr_lps(adapter);
-
-	val32 = MAC_REG_R32(R_AX_FWS0IMR);
-	val32 |= B_AX_FS_GPIOA_INT_EN;
-	MAC_REG_W32(R_AX_FWS0IMR, val32);
-
-	ret = mac_ops->set_gpio_func(adapter, RTW_MAC_GPIO_SW_IO,
-				     LPS_LEAVE_GPIO);
-	if (ret != MACSUCCESS) {
-		PLTFM_MSG_ERR("[ERR]set gpio fail %d\n", ret);
-		return ret;
-	}
-
-	val32 = MAC_REG_R32(R_AX_GPIO_EXT_CTRL);
-	val32 &= ~BIT18;
-	MAC_REG_W32(R_AX_GPIO_EXT_CTRL, val32);
-
-	val32 = MAC_REG_R32(R_AX_GPIO0_15_EECS_EESK_LED1_PULL_LOW_EN);
-	val32 &= ~B_AX_GPIO10_PULL_LOW_EN;
-	MAC_REG_W32(R_AX_GPIO0_15_EECS_EESK_LED1_PULL_LOW_EN, val32);
-
-	val32 = MAC_REG_R32(R_AX_GPIO0_15_EECS_EESK_LED1_PULL_HIGH_EN);
-	val32 |= B_AX_GPIO10_PULL_HIGH_EN;
-	MAC_REG_W32(R_AX_GPIO0_15_EECS_EESK_LED1_PULL_HIGH_EN, val32);
-
-	val32 = MAC_REG_R32(R_AX_GPIO_INTM);
-	val32 |= B_AX_GPIOA_INT_MD;
-	MAC_REG_W32(R_AX_GPIO_INTM, val32);
-
-	val32 = MAC_REG_R32(R_AX_GPIO_EXT_CTRL);
-	val32 |= BIT26;
-	MAC_REG_W32(R_AX_GPIO_EXT_CTRL, val32);
-
-	val32 = MAC_REG_R32(R_AX_GPIO0_15_EECS_EESK_LED1_PULL_LOW_EN);
-	val32 |= B_AX_GPIO10_PULL_LOW_EN;
-	MAC_REG_W32(R_AX_GPIO0_15_EECS_EESK_LED1_PULL_LOW_EN, val32);
-
-	val32 = MAC_REG_R32(R_AX_GPIO0_15_EECS_EESK_LED1_PULL_HIGH_EN);
-	val32 &= ~B_AX_GPIO10_PULL_HIGH_EN;
-	MAC_REG_W32(R_AX_GPIO0_15_EECS_EESK_LED1_PULL_HIGH_EN, val32);
-
-	val32 = MAC_REG_R32(R_AX_GPIO0_15_EECS_EESK_LED1_PULL_LOW_EN);
-	val32 &= ~B_AX_GPIO10_PULL_LOW_EN;
-	MAC_REG_W32(R_AX_GPIO0_15_EECS_EESK_LED1_PULL_LOW_EN, val32);
-
-	val32 = MAC_REG_R32(R_AX_GPIO0_15_EECS_EESK_LED1_PULL_HIGH_EN);
-	val32 |= B_AX_GPIO10_PULL_HIGH_EN;
-	MAC_REG_W32(R_AX_GPIO0_15_EECS_EESK_LED1_PULL_HIGH_EN, val32);
-
-	cnt = LPS_POLL_CNT;
-	while (cnt && (GET_FIELD(MAC_REG_R32(R_AX_IC_PWR_STATE), B_AX_WLMAC_PWR_STE) ==
-		       MAC_AX_MAC_LPS)) {
-		cnt--;
-		PLTFM_DELAY_US(LPS_POLL_DLY_US);
-	}
-
-	if (!cnt) {
-		PLTFM_MSG_ERR("[ERR]Polling MAC state timeout! 0x3F0 = %X\n",
-			      MAC_REG_R32(R_AX_IC_PWR_STATE));
-		return MACPOLLTO;
-	}
-
-	return MACSUCCESS;
 }
 
 static u32 pwr_cmd_poll(struct mac_ax_adapter *adapter, struct mac_pwr_cfg *seq)

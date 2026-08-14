@@ -4449,24 +4449,6 @@ rtw_hal_mac_scan_ofld_fw_busy(struct hal_info_t *hal, u8 hw_band)
 }
 #endif /* CONFIG_PHL_SCANOFLD */
 
-static enum rtw_hal_status
-hal_mac_read_efuse(struct mac_ax_adapter *mac, u32 addr, u32 size,
-						u8 *val, enum mac_ax_efuse_bank bank)
-{
-	if (mac->ops->read_efuse(mac, addr, size, val, bank) != MACSUCCESS)
-		return RTW_HAL_STATUS_FAILURE;
-	return RTW_HAL_STATUS_SUCCESS;
-}
-
-static enum rtw_hal_status
-hal_mac_write_efuse(struct mac_ax_adapter *mac, u32 addr, u8 val,
-						enum mac_ax_efuse_bank bank)
-{
-	if (mac->ops->write_efuse(mac, addr, val, bank) != MACSUCCESS)
-		return RTW_HAL_STATUS_FAILURE;
-	return RTW_HAL_STATUS_SUCCESS;
-}
-
 enum rtw_hal_status
 rtw_hal_mac_enable_cpu(struct hal_info_t *hal_info, u8 reason, u8 dlfw)
 {
@@ -5270,31 +5252,6 @@ rtw_hal_mac_ax_bfee_set_csi_rrsc(void *mac, u8 band, u32 rrsc)
 	struct mac_ax_adapter *mac_info = (struct mac_ax_adapter *)mac;
 
 	hal_status = mac_info->ops->csi_rrsc(mac_info, band, rrsc);
-
-	return hal_status;
-}
-
-/**
- * rtw_hal_mac_ax_bfee_forced_csi_rate
- * 	set bf report frame rate
- * @mac:(struct mac_ax_adapter *)
- * @ht_rate:
- * @vht_rate:
- * @he_rate:
- */
-
-static enum rtw_hal_status
-rtw_hal_mac_ax_bfee_forced_csi_rate(void *mac, struct rtw_phl_stainfo_t *sta,
-	u8 ht_rate, u8 vht_rate, u8 he_rate)
-{
-	enum rtw_hal_status hal_status = RTW_HAL_STATUS_FAILURE;
-	struct mac_ax_adapter *mac_info = (struct mac_ax_adapter *)mac;
-
-	hal_status = mac_info->ops->csi_force_rate(mac_info,
-	                                           sta->rlink->hw_band,
-	                                           ht_rate,
-	                                           vht_rate,
-	                                           he_rate);
 
 	return hal_status;
 }
