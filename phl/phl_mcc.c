@@ -1050,41 +1050,6 @@ static void _mcc_discision_dur_for_2g_mcc_2role_bt(struct phl_mcc_info *minfo)
 	}
 }
 
-static bool _mcc_discision_duration_for_2role_bt_v2(struct phl_mcc_info *minfo)
-{
-	struct rtw_phl_mcc_en_info *en_info = &minfo->en_info;
-	struct rtw_phl_mcc_bt_info *bt_info = &minfo->bt_info;
-	struct rtw_phl_mcc_role *m_role1 = &en_info->mcc_role[0];
-	struct rtw_phl_mcc_role *m_role2 = &en_info->mcc_role[1];
-	bool add_extra_bt_role = false;
-
-	if (bt_info->bt_dur == 0)
-		goto exit;
-	if (m_role1->chandef->band == BAND_ON_24G &&
-		m_role2->chandef->band == BAND_ON_24G) {
-		PHL_TRACE(COMP_PHL_MCC, _PHL_ERR_, "_mcc_discision_duration_for_2role_bt_v2(): Not support , We will ignore Bt slot\n");
-#if 0
-		if (_mcc_adjust_dur_for_2g_mcc_2role_bt(minfo)) {
-			add_extra_bt_role = true;
-		} else {
-			PHL_TRACE(COMP_PHL_MCC, _PHL_ERR_, "_mcc_discision_duration_for_2role_bt(): Adjust dur fail, We will ignore Bt slot\n");
-		}
-#endif
-		goto exit;
-	}
-	if (m_role1->chandef->band != BAND_ON_24G &&
-		m_role2->chandef->band != BAND_ON_24G) {
-		PHL_TRACE(COMP_PHL_MCC, _PHL_INFO_, "_mcc_discision_duration_for_2role_bt_v2(): All 5G, Don't care BT duration\n");
-		goto exit;
-	}
-	if (m_role1->chandef->band == BAND_ON_24G)
-		_mcc_adjust_dur_for_2_band_mcc_2role_bt(minfo, m_role1, m_role2);
-	else
-		_mcc_adjust_dur_for_2_band_mcc_2role_bt(minfo, m_role2, m_role1);
-exit:
-	return add_extra_bt_role;
-}
-
 static bool _mcc_discision_duration_for_2role_bt(struct phl_mcc_info *minfo)
 {
 	struct rtw_phl_mcc_en_info *en_info = &minfo->en_info;
@@ -3237,59 +3202,6 @@ _cfg_info_fail:
 	_mcc_set_state(minfo, MCC_NONE);
 exit:
 	PHL_TRACE(COMP_PHL_MCC, _PHL_ALWAYS_, "<<< rtw_phl_mcc_ap_bt_coex_enable():status(%d)\n",
-		status);
-	return status;
-}
-
-static enum rtw_phl_status rtw_phl_mcc_go_bt_coex_disable(struct phl_info_t *phl,
-				struct rtw_wifi_role_t *spec_role)
-{
-	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
-	struct phl_mcc_info *minfo = NULL;
-	struct rtw_phl_mcc_en_info *en_info = NULL;
-	struct rtw_phl_mcc_role *m_role = NULL;
-	u8 hw_band = 0;
-
-	if (spec_role->rlink_num > 1) {
-		PHL_TRACE(COMP_PHL_MCC, _PHL_INFO_, "%s: MLD not support\n", __func__);
-		goto exit;
-	}
-
-	hw_band = spec_role->rlink[spec_role->rlink_num-1].hw_band;
-
-	if (!is_mcc_init(phl)) {
-		PHL_TRACE(COMP_PHL_MCC, _PHL_ERR_, "rtw_phl_mcc_go_bt_coex_disable(): mcc is not init, please check code\n");
-		goto exit;
-	}
-	minfo = get_mcc_info(phl, hw_band);
-	en_info = &minfo->en_info;
-	if (MCC_RUNING != minfo->state) {
-		PHL_TRACE(COMP_PHL_MCC, _PHL_ERR_, "rtw_phl_mcc_go_bt_coex_disable(): MCC_RUNING != m_info->state, please check code flow\n");
-		_mcc_dump_state(&minfo->state);
-		goto exit;
-	}
-	if (NULL == (m_role = _mcc_get_mrole_by_wrole(minfo, spec_role))) {
-		PHL_TRACE(COMP_PHL_MCC, _PHL_ERR_, "rtw_phl_mcc_go_bt_coex_disable(): Can't get mrole, wrole id(%d), please check code flow\n",
-			spec_role->id);
-		goto exit;
-	}
-	_mcc_set_state(minfo, MCC_TRIGGER_FW_DIS);
-	if (rtw_hal_mcc_disable(phl->hal, m_role->group, m_role->macid,
-				minfo->mcc_mode) != RTW_HAL_STATUS_SUCCESS) {
-		status = RTW_PHL_STATUS_FAILURE;
-		_mcc_set_state(minfo, MCC_FW_DIS_FAIL);
-		PHL_TRACE(COMP_PHL_MCC, _PHL_ERR_,"rtw_phl_mcc_go_bt_coex_disable(): Disable FW mcc Fail\n");
-		goto exit;
-	}
-
-	rtw_hal_sync_cur_ch(phl->hal, hw_band, spec_role->rlink[spec_role->rlink_num-1].chandef);
-
-	_mcc_set_state(minfo, MCC_STOP);
-	PHL_TRACE(COMP_PHL_MCC, _PHL_ERR_, "rtw_phl_mcc_go_bt_coex_disable(): Disable FW mcc ok\n");
-	_mcc_clean_noa(phl, en_info);
-	status = RTW_PHL_STATUS_SUCCESS;
-exit:
-	PHL_TRACE(COMP_PHL_MCC, _PHL_ALWAYS_, "<<< rtw_phl_mcc_go_bt_coex_disable(): status(%d)\n",
 		status);
 	return status;
 }

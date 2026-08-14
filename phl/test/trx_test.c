@@ -261,27 +261,6 @@ static struct rtw_xmit_req *_phl_query_idle_tx_req(struct phl_info_t *phl_info)
 	return treq;
 }
 
-static struct rtw_xmit_req *_phl_query_busy_tx_req(struct phl_info_t *phl_info)
-{
-	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
-	struct rtw_pool *tx_req_pool = &trx_test->tx_req_pool;
-	struct rtw_xmit_req *treq = NULL;
-	void *drv_priv = phl_to_drvpriv(phl_info);
-
-	_os_spinlock(drv_priv, &tx_req_pool->busy_lock, _bh, NULL);
-
-	if (false == list_empty(&tx_req_pool->busy_list)) {
-		treq = list_first_entry(&tx_req_pool->busy_list,
-				  struct rtw_xmit_req, list);
-		list_del(&treq->list);
-		tx_req_pool->busy_cnt--;
-	}
-
-	_os_spinunlock(drv_priv, &tx_req_pool->busy_lock, _bh, NULL);
-
-	return treq;
-}
-
 static void _phl_remove_busy_tx_req(struct phl_info_t *phl_info, struct rtw_xmit_req *treq)
 {
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
@@ -473,27 +452,6 @@ static struct rtw_payload *_phl_query_idle_tx_pkt(struct phl_info_t *phl_info)
 	return tpkt;
 }
 
-static struct rtw_payload *_phl_query_busy_tx_pkt(struct phl_info_t *phl_info)
-{
-	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
-	struct rtw_pool *tx_pkt_pool = &trx_test->tx_pkt_pool;
-	struct rtw_payload *tpkt = NULL;
-	void *drv_priv = phl_to_drvpriv(phl_info);
-
-	_os_spinlock(drv_priv, &tx_pkt_pool->busy_lock, _bh, NULL);
-
-	if (false == list_empty(&tx_pkt_pool->busy_list)) {
-		tpkt = list_first_entry(&tx_pkt_pool->busy_list,
-				  struct rtw_payload, list);
-		list_del(&tpkt->list);
-		tx_pkt_pool->busy_cnt--;
-	}
-
-	_os_spinunlock(drv_priv, &tx_pkt_pool->busy_lock, _bh, NULL);
-
-	return tpkt;
-}
-
 static void _phl_remove_busy_tx_pkt(struct phl_info_t *phl_info, struct rtw_payload *tpkt)
 {
 	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
@@ -543,20 +501,6 @@ static void _phl_insert_busy_tx_pkt(struct phl_info_t *phl_info, struct rtw_payl
 	_os_spinunlock(drv_priv, &tx_pkt_pool->busy_lock, _bh, NULL);
 }
 
-static u8 _phl_is_tx_test_done(void *phl)
-{
-	struct phl_info_t *phl_info = (struct phl_info_t *)phl;
-	struct phl_trx_test *trx_test = (struct phl_trx_test *)phl_info->trx_test;
-	struct rtw_pool *tx_req_pool = &trx_test->tx_req_pool;
-	struct rtw_pool *tx_pkt_pool = &trx_test->tx_pkt_pool;
-
-	if (list_empty(&tx_req_pool->busy_list) && list_empty(&tx_pkt_pool->busy_list))
-		return true;
-	else
-		return false;
-}
-
-
 
 static void phl_update_test_param(void *phl, struct rtw_trx_test_param *test_param)
 {
@@ -565,61 +509,6 @@ static void phl_update_test_param(void *phl, struct rtw_trx_test_param *test_par
 	void *drv_priv = phl_to_drvpriv(phl_info);
 
 	_os_mem_cpy(drv_priv, &trx_test->test_param, test_param, sizeof(*test_param));
-}
-
-extern enum rtw_phl_status
-phl_wifi_role_start(struct phl_info_t *phl_info,
-				struct rtw_wifi_role_t *wrole,
-				struct rtw_phl_stainfo_t *sta);
-static enum rtw_phl_status
-_phl_test_add_role(void *phl, struct rtw_trx_test_param *test_param)
-{
-	enum rtw_phl_status phl_status = RTW_PHL_STATUS_FAILURE;
-	struct phl_info_t *phl_info = (struct phl_info_t *)phl;
-	struct rtw_phl_com_t *phl_com = phl_info->phl_com;
-	struct rtw_t_meta_data *txcap = NULL;
-	struct rtw_wifi_role_t *test_wrole = &phl_com->wifi_roles[0];
-	struct rtw_wifi_role_link_t *rlink = get_rlink(test_wrole,
-	                                               RTW_RLINK_PRIMARY);
-	struct rtw_phl_stainfo_t *sta_info = NULL;
-
-	if (NULL != test_param) {
-		txcap = &test_param->tx_cap;
-
-		rlink->hw_port = (u8)txcap->macid;
-
-		sta_info = rtw_phl_get_stainfo_by_addr(phl_info,
-		                                       test_wrole,
-		                                       rlink,
-		                                       test_wrole->mac_addr);
-		if (NULL != sta_info) {
-			test_param->tx_cap.macid = sta_info->macid;
-			phl_status = phl_wifi_role_start(phl_info, test_wrole, sta_info);
-			PHL_INFO("update test param macid to %d\n", test_param->tx_cap.macid);
-		} else {
-			PHL_ERR("fail to get stainfo from test wrole!\n");
-			phl_status = RTW_PHL_STATUS_FAILURE;
-		}
-	}
-
-	return phl_status;
-}
-
-extern enum rtw_phl_status
-phl_wifi_role_stop(struct phl_info_t *phl_info, struct rtw_wifi_role_t *wrole);
-static enum rtw_phl_status _phl_test_remove_role(
-					   void *phl,
-				       struct rtw_trx_test_param *test_param)
-{
-	enum rtw_phl_status phl_status = RTW_PHL_STATUS_FAILURE;
-	struct phl_info_t *phl_info = (struct phl_info_t *)phl;
-	struct rtw_phl_com_t *phl_com = phl_info->phl_com;
-	struct rtw_wifi_role_t *test_wrole = &phl_com->wifi_roles[0];
-
-	if (NULL != test_param)
-		phl_status = phl_wifi_role_stop(phl_info, test_wrole);
-
-	return phl_status;
 }
 
 static void phl_test_sw_free(void *phl)
@@ -732,23 +621,6 @@ static void phl_test_hw_config_init(void *phl, u8 mode)
 		/* address cam receive all */
 		/* rtl8852a_hal_init_misc: */
 		/* rtl8852ae_test_loopback: */
-		break;
-	default:
-		break;
-
-	}
-
-
-}
-
-
-static void phl_test_hw_config_runtime(void *phl, u8 mode)
-{
-	switch (mode) {
-	case TEST_MODE_PHL_TX_RING_TEST:
-		/* debug register :*/
-		/* edca config */
-		/* zero delimiter counter flush */
 		break;
 	default:
 		break;
@@ -913,17 +785,6 @@ static enum rtw_phl_status rtw_phl_rx_reap(void *phl, u8 *xmit_req,
 	return sts;
 }
 
-static enum rtw_phl_status rtw_phl_test_rxq_notify(void *phl)
-{
-	enum rtw_phl_status pstatus = RTW_PHL_STATUS_FAILURE;
-	struct phl_info_t *phl_info = (struct phl_info_t *)phl;
-
-	pstatus = phl_schedule_handler(phl_info->phl_com,
-				       &phl_info->phl_tx_handler);
-
-	return pstatus;
-}
-
 
 static enum rtw_phl_status phl_tx_ring_test(void *phl,
 				     struct rtw_trx_test_param *test_param)
@@ -988,12 +849,6 @@ static enum rtw_phl_status phl_tx_ring_test(void *phl,
 			break;
 		}
 	} while (false);
-/*
-	while (false == _phl_is_tx_test_done(phl) && i < 100) {
-		_os_delay_ms(drv_priv, 1);
-		i++;
-	}
-*/
 	FUNCOUT_WSTS(sts);
 	return sts;
 }
@@ -1177,30 +1032,6 @@ enum rtw_phl_status phl_recycle_test_tx(void *phl, struct rtw_xmit_req *treq)
 end:
 	FUNCOUT_WSTS(sts);
 	return sts;
-}
-
-static void _phl_rx_test_pattern(struct phl_info_t *phl_info, void *ptr)
-{
-	struct rtw_recv_pkt *rpkt = NULL;
-
-	FUNCIN();
-
-	if (NULL == ptr) {
-		PHL_ERR("bp_info->ptr is NULL!\n");
-		goto end;
-	}
-
-	rpkt = (struct rtw_recv_pkt *)ptr;
-	if (NULL == rpkt) {
-		PHL_ERR("rpkt is NULL!\n");
-		goto end;
-	}
-
-	PHL_INFO("rpkt->buf_len = %d\n", rpkt->pkt_list[0].length);
-	debug_dump_data(rpkt->pkt_list[0].vir_addr, (u16)rpkt->pkt_list[0].length, "dump_rx");
-
-end:
-	FUNCOUT();
 }
 
 void rtw_phl_trx_default_param(void *phl, struct rtw_trx_test_param *test_param)

@@ -188,6 +188,7 @@ static u8 verify_start(void *ctx)
 	return (u8)phl_status;
 }
 
+#if 0	/* verify keep in current mode */
 static void verify_change_mode(struct verify_context *ver_ctx, enum rtw_drv_mode driver_mode)
 {
 	struct phl_info_t *phl_info = ver_ctx->phl;
@@ -205,6 +206,7 @@ static void verify_change_mode(struct verify_context *ver_ctx, enum rtw_drv_mode
 #endif
 
 }
+#endif
 
 enum rtw_phl_status phl_test_verify_alloc(struct phl_info_t *phl_info, void *hal, void **ctx)
 {
