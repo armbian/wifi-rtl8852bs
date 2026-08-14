@@ -11239,6 +11239,7 @@ exit:
 	return ret;
 }
 
+#if 0 /*ifndef CONFIG_STA_CMD_DISPR*/
 static void set_hw_before_join(struct _ADAPTER *a)
 {
 	struct mlme_ext_priv *pmlmeext = &a->mlmeextpriv;
@@ -11267,6 +11268,7 @@ static void set_hw_before_join(struct _ADAPTER *a)
 	/*reset hw before connection if necessary*/
 
 }
+#endif
 
 void update_join_link_info(struct _ADAPTER *a, struct _ADAPTER_LINK *alink, struct _WLAN_BSSID_EX *pbuf)
 {

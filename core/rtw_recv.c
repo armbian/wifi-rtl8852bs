@@ -5009,33 +5009,6 @@ void rtw_free_lite_recv_resource(struct dvobj_priv *dvobj)
 #endif
 
 #ifdef RTW_PHL_RX
-static void rx_dump_skb(struct sk_buff *skb)
-{
-	int idx=0;
-	u8 *tmp=skb->data;
-	printk("===");
-	printk("[%s]skb=%p len=%d\n", __FUNCTION__, skb, skb->len);
-	
-#if 0	
-	printk("data-tail=0x%x-0x%x(%d)\n", 
-		skb->data, skb->tail, (skb->tail - skb->data));
-	printk("head-end=0x%x-0x%x(%d)\n", 
-		skb->head, skb->end, (skb->end - skb->head));
-#endif
-	
-	for(idx=0; idx<skb->len; idx++){
-		printk("%02x ", tmp[idx]);
-		if(idx%20==19)
-			printk("\n");
-	}
-	printk("\n===\n");
-}
-
-static void dump_rxreq(_adapter *adapter, union recv_frame *prframe)
-{
-
-
-}
 
 void dump_recv_frame(_adapter *adapter, union recv_frame *prframe)
 {
