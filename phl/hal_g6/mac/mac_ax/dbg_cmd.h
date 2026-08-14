@@ -822,19 +822,6 @@ u32 cmd_mac_req_pwr_lvl(struct mac_ax_adapter *adapter,
 			char *output, u32 out_len, u32 *used);
 
 /**
- * @brief fw_log_int_dump
- *
- * @param *adapter
- * @param *buf
- * @param *msgno
- * @param *para_num
- * @return Please Place Description here.
- * @retval void
- */
-static void fw_log_int_dump(struct mac_ax_adapter *adapter, u32 *buf, u32 msgno, u8 para_num,
-			    char *str_buf);
-
-/**
  * @brief fw_log_scan_array
  *
  * @param *adapter

@@ -1704,27 +1704,6 @@ struct btc_t {
 	bool bt_req_en;
 };
 
-static void _send_fw_cmd(struct btc_t *btc, u8 h2c_class, u8 h2c_func,
-			 u8 *param, u16 len);
-static void _ntfy_power_on(struct btc_t *btc);
-static void _ntfy_power_off(struct btc_t *btc);
-static void _ntfy_init_coex(struct btc_t *btc, u8 mode);
-static void _ntfy_scan_start(struct btc_t *btc, u8 phy_idx, u8 band);
-static void _ntfy_scan_finish(struct btc_t *btc, u8 pyh_idx);
-static void _ntfy_switch_band(struct btc_t *btc, u8 phy_idx, u8 band);
-static void _ntfy_specific_packet(struct btc_t *btc, u8 pkt_type);
-static void _ntfy_role_info(struct btc_t *btc, u8 rid,
-			    struct btc_wl_link_info *info,
-			    enum link_state reason);
-static void _ntfy_radio_state(struct btc_t *btc, u8 rf_state);
-static void _ntfy_customerize(struct btc_t *btc, u8 type, u16 len, u8 *buf);
-static u8 _ntfy_wl_rfk(struct btc_t *btc, u8 phy_path, u8 type, u8 state);
-static void _ntfy_wl_sta(struct btc_t *btc, struct rtw_stats *phl_stats,
-			u8 ntfy_num, struct rtw_phl_stainfo_t *sta[],
-			u8 reason);
-static void _ntfy_fwinfo(struct btc_t *btc, u8 *buf, u32 len, u8 cls, u8 func);
-static void _ntfy_timer(struct btc_t *btc, u16 tmr_id);
-
 #ifdef BTC_8852A_SUPPORT
 extern const struct btc_chip chip_8852a;
 #endif

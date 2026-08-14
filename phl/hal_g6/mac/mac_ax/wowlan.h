@@ -762,9 +762,6 @@ u32 mac_get_wow_fw_status(struct mac_ax_adapter *adapter,
  * @}
  */
 
-static u32 read_aoac_c2hreg(struct mac_ax_adapter *adapter,
-			    struct mac_ax_aoac_report *aoac_rpt);
-
 /**
  * @addtogroup WakeOnWlan
  * @{
