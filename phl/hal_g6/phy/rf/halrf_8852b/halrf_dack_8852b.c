@@ -36,10 +36,6 @@ static void halrf_afe_init_8852b(struct rf_info *rf)
 
 	halrf_write_fwofld_end(rf);		/*FW Offload End*/
 }
-static void halrf_dack_init_8852b(struct rf_info *rf)
-{
-}
-
 static void halrf_drck_8852b(struct rf_info *rf)
 {
 	u32 c = 10000;
@@ -202,50 +198,6 @@ static void halrf_dack_backup_s1_8852b(struct rf_info *rf)
 	/*DADCK*/
 	dack->dadck_d[1][0] = (u8)halrf_rreg(rf, 0xc160, 0xff000000);
 	dack->dadck_d[1][1] = (u8)halrf_rreg(rf, 0xc184, 0xff000000);
-}
-
-static void halrf_dack_reload_by_path_8852b(struct rf_info *rf, enum rf_path path)
-{
-	struct halrf_dack_info *dack = &rf->dack;
-	u8 i;
-	u32 oft;
-
-	if (path == RF_PATH_A)
-		oft = 0;
-	else
-		oft = 0x100;
-	/*MSBK*/
-	for (i = 0; i < 16; i++) {
-		halrf_wreg(rf, 0xc000+ oft, 0x1e, i);
-		halrf_wreg(rf, 0xc004+ oft, 0x3fc0, dack->msbk_d[path][0][i]);
-	}
-	for (i = 0; i < 16; i++) {
-		halrf_wreg(rf, 0xc020+ oft, 0x1e, i);
-		halrf_wreg(rf, 0xc024+ oft, 0x3fc0, dack->msbk_d[path][1][i]);
-	}
-
-	/*biask*/
-	halrf_wreg(rf, 0xc004+ oft, 0x3ff00000, dack->biask_d[path][0]);
-	halrf_wreg(rf, 0xc024+ oft, 0x3ff00000, dack->biask_d[path][1]);
-	/*DADCK*/
-}
-
-static void halrf_dack_reload_8852b(struct rf_info *rf, enum rf_path path)
-{
-	u32 oft;
-
-	if (path == RF_PATH_A)
-		oft = 0;
-	else
-		oft = 0x100;
-
-	halrf_wreg(rf, 0xc004 + oft, 0x3, 0x2);
-	halrf_wreg(rf, 0xc024 + oft, 0x3, 0x2);
-	halrf_wreg(rf, 0xc004 + oft, BIT(5), 0x1);
-	halrf_wreg(rf, 0xc024 + oft, BIT(5), 0x1);
-	halrf_dack_reload_by_path_8852b(rf, path);
-	halrf_wreg(rf, 0xc004 + oft, 0x3, 0x0);
-	halrf_wreg(rf, 0xc024 + oft, 0x3, 0x0);
 }
 
 static void halrf_check_addc_8852b(struct rf_info *rf, enum rf_path path)

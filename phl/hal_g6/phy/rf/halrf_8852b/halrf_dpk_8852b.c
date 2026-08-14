@@ -428,24 +428,6 @@ static void _dpk_kip_set_rxagc_8852b(
 #endif
 }
 
-static void _dpk_read_rxsram_8852b(
-	struct rf_info *rf)
-{
-	u32 addr;
-
-	halrf_wreg(rf, 0x80e8, BIT(7), 0x1);	/*web_iqrx*/
-	halrf_wreg(rf, 0x8074, BIT(31), 0x1);	/*rxsram_ctrl_sel*/
-	halrf_wreg(rf, 0x80d4, MASKDWORD, 0x00020000);	/*rpt_sel*/
-
-	for (addr = 0; addr < 0x200; addr++) {
-		halrf_wreg(rf, 0x80d8, MASKDWORD, 0x00010000 | addr);
-		RF_DBG(rf, DBG_RF_DPK, "[DPK] RXSRAM[%03d] = 0x%x\n", addr,
-			halrf_rreg(rf, 0x80fc, MASKDWORD));
-	}
-	halrf_wreg(rf, 0x80e8, BIT(7), 0x0);	/*web_iqrx*/
-	halrf_wreg(rf, 0x8074, BIT(31), 0x0);	/*rxsram_ctrl_sel*/
-}
-
 static void _dpk_lbk_rxiqk_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
@@ -520,32 +502,6 @@ static void _dpk_get_thermal_8852b(struct rf_info *rf, u8 kidx, enum rf_path pat
 	RF_DBG(rf, DBG_RF_DPK, "[DPK] thermal@DPK (by RFC)= 0x%x\n", dpk->bp[path][kidx].ther_dpk);
 }
 
-static void _dpk_tx_mapping_8852b(
-	struct rf_info *rf,
-	enum rf_path path,
-	u8 kidx,
-	u8 txagc)
-{
-	struct halrf_dpk_info *dpk = &rf->dpk;
-
-	u16 table_g[18] = {0xa043, 0xb043, 0xc043, 0xd043, 0xe043,
-			0xf043, 0xa053, 0xb053, 0xc053, 0xd053,
-			0xe053, 0xf053, 0x9063, 0xa063, 0xb063,
-			0xc063, 0xd063, 0xe063};
-	u16 table_a[18] = {0xd033, 0xe033, 0xf033, 0x3043, 0x4043,
-			0x5043, 0x4053, 0x5053, 0x6053, 0x3063,
-			0x4063, 0x5063, 0x6063, 0x7063, 0x8063,
-			0x9063, 0xa063, 0xb063};
-	u16 tx_gain = 0;
-
-	if (dpk->bp[path][kidx].band == BAND_ON_24G)
-		tx_gain = table_g[txagc - 0x2e];
-	if (dpk->bp[path][kidx].band == BAND_ON_5G)
-		tx_gain = table_a[txagc - 0x2e];
-
-	halrf_wrf(rf, path, 0x11, MASKRF, tx_gain);
-}
-
 static void _dpk_rf_setting_8852b(
 	struct rf_info *rf,
 	u8 gain,
@@ -587,37 +543,6 @@ static void _dpk_rf_setting_8852b(
 	       halrf_rrf(rf, path, 0x11, MASKRF),
 	       halrf_rrf(rf, path, 0x1a, MASKRF));
 #endif
-}
-
-static void _dpk_manual_txcfir_8852b(
-	struct rf_info *rf,
-	enum rf_path path,
-	bool is_manual)
-{
-	u8 tmp_pad, tmp_txbb;
-
-	if (is_manual) {
-		halrf_wreg(rf, 0x8140 + (path << 8), BIT(8), 0x1);
-		/*set pad to pad_man*/
-		tmp_pad = (u8)halrf_rrf(rf, path, 0x56, 0x003e0); /*[9:5]*/
-		halrf_wreg(rf, 0x8144 + (path << 8), 0x0001f, tmp_pad); /*[4:0]*/
-
-		/*set txbb to txbb_man*/
-		tmp_txbb = (u8)halrf_rrf(rf, path, 0x56, 0x0001f); /*[4:0]*/
-		halrf_wreg(rf, 0x8144 + (path << 8), 0x01f00, tmp_txbb); /*[12:8]*/
-
-		/*cfir load shot*/
-		halrf_wreg(rf, 0x81dc + (path << 8), BIT(1) | BIT(0), 0x1);
-		halrf_wreg(rf, 0x81dc + (path << 8), BIT(1) | BIT(0), 0x0);
-
-		halrf_wreg(rf, 0x81dc + (path << 8), BIT(1), 0x1); /*auto*/
-
-		RF_DBG(rf, DBG_RF_DPK, "[DPK] PAD_man / TXBB_man = 0x%x / 0x%x\n",
-		       tmp_pad, tmp_txbb);
-	} else {
-		halrf_wreg(rf, 0x8140 + (path << 8), BIT(8), 0x0);
-		RF_DBG(rf, DBG_RF_DPK, "[DPK] disable manual switch TXCFIR\n");
-	}
 }
 
 static void _dpk_bypass_rxcfir_8852b(
@@ -784,24 +709,6 @@ static s8 _dpk_dgain_mapping_8852b(
 	//RF_DBG(rf, DBG_RF_DPK, "[DPK] DGain offset = %d\n", offset);
 
 	return offset;
-}
-
-static u8 _dpk_pas_check_8852b(
-	struct rf_info *rf)
-{
-	u8 fail = 0;
-
-	halrf_wreg(rf, 0x80d4, MASKBYTE2, 0x06); /*0x80d6, ctrl_out_Kpack*/
-	halrf_wreg(rf, 0x80bc, BIT(14), 0x0);	/*query status*/
-	halrf_wreg(rf, 0x80c0, MASKBYTE2, 0x08);
-
-	halrf_wreg(rf, 0x80c0, MASKBYTE3, 0x00); /*0x80C3*/
-	if (halrf_rreg(rf, 0x80fc, MASKHWORD) == 0x0800) {
-		fail = 1;
-		RF_DBG(rf, DBG_RF_DPK, "[DPK] PAS check Fail!!\n");
-	}
-	
-	return fail;
 }
 
 static u8 _dpk_gainloss_read_8852b(
@@ -1140,84 +1047,6 @@ static void _dpk_idl_mpa_8852b(
 	//halrf_write_fwofld_end(rf);		/*FW Offload End*/
 }
 
-static u8 _dpk_order_convert_8852b(
-	struct rf_info *rf)
-{
-	u8 val;
-
-	val = 0x3 >> (u8)halrf_rreg(rf, 0x80a0, 0x00000003);
-
-	/*0x80a0 [1:0] = 0x0 => 0x81bc[26:25] = 0x3   //(5,3,1)*/
-	/*0x80a0 [1:0] = 0x1 => 0x81bc[26:25] = 0x1   //(5,3,0)*/
-	/*0x80a0 [1:0] = 0x2 => 0x81bc[26:25] = 0x0   //(5,0,0)*/
-
-	/*0x80a0->val : 0->3; 1->1; 2->0*/
-
-	RF_DBG(rf, DBG_RF_DPK, "[DPK] convert MDPD order to 0x%x\n", val);
-
-	return val;
-}
-
-static u8 _dpk_pwsf_addr_cal_8852b(
-	struct rf_info *rf,
-	u8 t1,
-	u8 t2)
-{
-	u8 addr;
-	s8 offset;
-
-	/*w/o TSSI : t2 = cur_thermal*/
-	offset = t2 - t1;
-	addr = 0x78 + (offset << 3); /*due to TPG -3dB, start from 0x78*/
-
-	return addr;
-}
-
-static void _dpk_gs_normalize_8852b(
-	struct rf_info *rf,
-	enum phl_phy_idx phy,
-	enum rf_path path,
-	u8 kidx,
-	u8 txagc,
-	u8 gs_ori,
-	u16 pwsf)
-{
-	struct halrf_dpk_info *dpk = &rf->dpk;
-
-	u8 gs;
-	u16 sqrt_out;
-
-	if (dpk->bp[path][kidx].bw == 2) /*80M*/
-		halrf_wreg(rf, 0x819c + (path << 8), MASKDWORD, 0x000300c0);
-	else
-		halrf_wreg(rf, 0x819c + (path << 8), MASKDWORD, 0x00030200);
-
-	halrf_wreg(rf, 0x81c8 + (path << 8), 0x0000003F, txagc); /*man_txagc_vall*/
-	halrf_wreg(rf, 0x81c8 + (path << 8), BIT(6), 0x1); /*man_txagc_en*/
-	halrf_wreg(rf, 0x81c8 + (path << 8), MASKBYTE2, 0x08); /*man_pwsf_en*/
-	halrf_wreg(rf, 0x81c8 + (path << 8), MASKBYTE1, pwsf - 24); /*man_pwsf_val*/
-
-	_dpk_one_shot_8852b(rf, phy, path, GAIN_CAL);
-
-	halrf_wreg(rf, 0x81d4, 0x003F0000, 0x13);	/*rpt_sel = pow_diff */
-	sqrt_out = (u16)halrf_rreg(rf, 0x81fc, 0x000001FF); /*[8:0]*/
-
-	gs = (u8)(gs_ori * sqrt_out >> 8);
-
-	/*ch0/gain0 [6:0]*/
-	halrf_wreg(rf, 0x81bc + (path << 8), 0x0000007F, gs);
-	/*ch0/gain1 [14:8]*/
-	halrf_wreg(rf, 0x81bc + (path << 8), 0x00007F00, gs);
-	/*ch1/gain0 [6:0]*/
-	//halrf_wreg(rf, 0x81c0 + (path << 8), 0x0000007F, gs);
-	/*ch1/gain1 [14:8]*/
-	//halrf_wreg(rf, 0x81c0 + (path << 8), 0x00007F00, gs);
-
-	RF_DBG(rf, DBG_RF_DPK, "[DPK] gs_ori/ sqrt_out/ gs_new = 0x%x/ %d/ 0x%x\n",
-		   gs_ori, sqrt_out, gs);
-
-}
-
 static void _dpk_fill_result_8852b(
 	struct rf_info *rf,
 	enum phl_phy_idx phy,
@@ -1329,30 +1158,6 @@ static void _dpk_fill_result_8852b(
 	//halrf_write_fwofld_end(rf);		/*FW Offload End*/
 
 	//_dpk_gs_normalize_8852b(rf, path, txagc, gs, pwsf);
-}
-
-static void _dpk_coef_read_8852b(
-	struct rf_info *rf,
-	enum rf_path path,
-	u8 kidx,
-	u8 gain)
-{
-	u32 reg, reg_start, reg_stop;
-
-	halrf_wreg(rf, 0x81d8 + (path << 8), MASKDWORD, 0x00010000);
-
-	reg_start = 0x9500 + kidx * 0xa0 + path * 0x200 + gain * 0x50;
-
-	reg_stop = reg_start + 0x50;
-
-	RF_DBG(rf, DBG_RF_DPK, "[DPK] ===== [Coef of S%d[%d], gain%d] =====\n",
-		path, kidx, gain);
-
-	for (reg = reg_start; reg < reg_stop ; reg += 4) {
-		RF_DBG(rf, DBG_RF_DPK, "[DPK][coef_r] 0x%x = 0x%08x\n", reg,
-			   halrf_rreg(rf, reg, MASKDWORD));
-	}
-	halrf_wreg(rf, 0x81d8 + (path << 8), MASKDWORD, 0x00000000);
 }
 
 static bool _dpk_reload_check_8852b(

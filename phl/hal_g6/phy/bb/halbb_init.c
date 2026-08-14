@@ -14,59 +14,6 @@
  *****************************************************************************/
 #include "halbb_precomp.h"
 
-static bool halbb_chk_bb_rf_pkg_set_valid(struct bb_info *bb)
-{
-	struct rtw_hal_com_t	*hal_i = bb->hal_com;
-	u8 bb_ver = 0; /*hal_i->bb_para_pkg_ver;*/ /*TBD*/
-	u8 rf_ver = 0; /*hal_i->rf_para_pkg_ver;*/ /*TBD*/
-	bool valid = true;
-
-	switch (bb->ic_type) {
-
-	#ifdef BB_8852A_2_SUPPORT
-	case BB_RTL8852A:
-		valid = halbb_chk_pkg_valid_8852a_2(bb, bb_ver, rf_ver);
-		break;
-	#endif
-
-	#ifdef BB_8852B_SUPPORT
-	case BB_RTL8852B:
-		valid = halbb_chk_pkg_valid_8852b(bb, bb_ver, rf_ver);
-		break;
-	#endif
-
-	#ifdef BB_8852C_SUPPORT
-	case BB_RTL8852C:
-		valid = halbb_chk_pkg_valid_8852c(bb, bb_ver, rf_ver);
-		break;
-	#endif
-
-	#ifdef BB_8834A_SUPPORT
-	case BB_RTL8834A:
-		valid = halbb_chk_pkg_valid_8834a(bb, bb_ver, rf_ver);
-		break;
-	#endif
-
-	#ifdef BB_8192XB_SUPPORT
-	case BB_RTL8192XB:
-		valid = halbb_chk_pkg_valid_8192xb(bb, bb_ver, rf_ver);
-		break;
-	#endif
-
-	#ifdef BB_8851B_SUPPORT
-	case BB_RTL8851B:
-		valid = halbb_chk_pkg_valid_8851b(bb, bb_ver, rf_ver);
-		break;
-	#endif
-
-	default:
-		break;
-
-	}
-
-	return valid;
-}
-
 void halbb_ic_hw_setting_init(struct bb_info *bb)
 {
 	#ifdef HALBB_TDMA_CR_SUPPORT

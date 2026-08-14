@@ -807,19 +807,6 @@ static u64 halbb_ramask_mod(struct bb_info *bb, u8 macid, u64 ramask, u8 rssi, u
 	return mod_mask_rssi;
 }
 
-static void rtw_halbb_mudbg(struct bb_info *bb, u8 type, u8 mu_entry, u8 macid, 
-			   bool en_256q, bool en_1024q)
-{
-	struct bb_h2c_mu_cfg mucfg = {0};
-	u32 *bb_h2c = (u32 *)&mucfg;
-	u8 cmdlen = sizeof(mucfg);
-
-	mucfg.cmd_type = type;
-	mucfg.entry = mu_entry;
-	mucfg.macid = macid;
-	halbb_fill_h2c_cmd(bb, cmdlen, RA_H2C_MUCFG, HALBB_H2C_RA, bb_h2c);
-}
-
 static u64 halbb_gen_abg_mask(struct bb_info *bb, struct rtw_phl_stainfo_t *phl_sta_i)
 {
 	u64 abg_mask = 0;
@@ -1460,32 +1447,6 @@ bool rtw_halbb_dft_mask(struct bb_info *bb_0,
 		BB_WARNING("[%s]Error default mask, it should not zero\n", __func__);
 		return false;
 	}
-}
-
-static u8 rtw_halbb_arfr_trans(struct bb_info *bb,
-	struct rtw_phl_stainfo_t *phl_sta_i)
-{
-	struct rtw_hal_stainfo_t *hal_sta_i;
-	u8 mode;
-	u8 arfr_ret = 0x0;
-
-	if (!phl_sta_i)
-		return false;
-	hal_sta_i = phl_sta_i->hal_sta;
-	if (!hal_sta_i)
-		return false;
-	mode = phl_sta_i->wmode;
-	if (mode & WLAN_MD_11B) /*11B*/
-		arfr_ret |= CCK_SUPPORT;
-	if ((mode & WLAN_MD_11A)||(mode & WLAN_MD_11G)) /*11G, 11A*/
-		arfr_ret |= OFDM_SUPPORT;
-	if (mode & WLAN_MD_11N) /* 11_N*/
-		arfr_ret |= HT_SUPPORT;
-	if (mode & WLAN_MD_11AC) /*11AC*/
-		arfr_ret |= VHT_SUPPORT_TX;
-	return arfr_ret;
-	/*if (mode|WLAN_MD_11AX ) // 11AX usually can use arfr
-		hw_mode_map |= HE_SUPPORT;*/
 }
 
 static bool halbb_ra_cfg_chk(struct bb_info *bb, u8 *mode, u8 *tx_nss, bool *tx_stbc)
@@ -2347,24 +2308,6 @@ static void halbb_ra_rssi_setting_watchdog(struct bb_info *bb)
 		hal_mem_free(bb->hal_com, rssi_i, rssi_len);
 }
 
-static void halbb_ra_giltf_ctrl(struct bb_info *bb, u8 macid, u8 delay_sp, u8 assoc_giltf)
-{
-	//struct bb_ra_info *bb_ra = &bb->bb_cmn_hooker->bb_ra_i[macid];
-	//struct bb_h2c_ra_cfg_info *ra_cfg = &bb->bb_cmn_hooker->bb_ra_i[macid].ra_cfg;
-	//enum rtw_gi_ltf giltf = RTW_GILTF_LGI_4XHE32;
-
-	//if (!bb)
-	//	return;
-
-	/*This dhould be decision before ra mask h2c*/
-	/* GI LTF decision algorithm is needed*/
-	/*if (delay_sp)
-		giltf = RTW_GILTF_LGI_4XHE32;
-	else
-		giltf = RTW_GILTF_LGI_4XHE32;
-	ra_cfg->giltf = giltf;*/
-}
-
 static bool halbb_ra_bfer_chk(struct bb_info *bb, struct rtw_phl_stainfo_t *phl_sta_i)
 {
 	struct protocol_cap_t *asoc_cap = &phl_sta_i->asoc_cap;
@@ -2517,120 +2460,6 @@ void halbb_ra_init(struct bb_info *bb)
 		if (!bb_ra)
 			halbb_mem_set(bb, bb_ra, 0, sizeof (struct bb_ra_info));
 	}
-}
-
-static u8 rtw_halbb_rts_rate(struct bb_info *bb, u16 tx_rate, bool is_erp_prot)
-{
-
-	u8 rts_ini_rate = RTW_DATA_RATE_OFDM6;
-
-	if (is_erp_prot) { /* use CCK rate as RTS */
-		rts_ini_rate = RTW_DATA_RATE_CCK1;
-	} else {
-		switch (tx_rate) {
-		case RTW_DATA_RATE_VHT_NSS4_MCS9:
-		case RTW_DATA_RATE_VHT_NSS4_MCS8:
-		case RTW_DATA_RATE_VHT_NSS4_MCS7:
-		case RTW_DATA_RATE_VHT_NSS4_MCS6:
-		case RTW_DATA_RATE_VHT_NSS4_MCS5:
-		case RTW_DATA_RATE_VHT_NSS4_MCS4:
-		case RTW_DATA_RATE_VHT_NSS4_MCS3:
-		case RTW_DATA_RATE_VHT_NSS3_MCS9:
-		case RTW_DATA_RATE_VHT_NSS3_MCS8:
-		case RTW_DATA_RATE_VHT_NSS3_MCS7:
-		case RTW_DATA_RATE_VHT_NSS3_MCS6:
-		case RTW_DATA_RATE_VHT_NSS3_MCS5:
-		case RTW_DATA_RATE_VHT_NSS3_MCS4:
-		case RTW_DATA_RATE_VHT_NSS3_MCS3:
-		case RTW_DATA_RATE_VHT_NSS2_MCS9:
-		case RTW_DATA_RATE_VHT_NSS2_MCS8:
-		case RTW_DATA_RATE_VHT_NSS2_MCS7:
-		case RTW_DATA_RATE_VHT_NSS2_MCS6:
-		case RTW_DATA_RATE_VHT_NSS2_MCS5:
-		case RTW_DATA_RATE_VHT_NSS2_MCS4:
-		case RTW_DATA_RATE_VHT_NSS2_MCS3:
-		case RTW_DATA_RATE_VHT_NSS1_MCS9:
-		case RTW_DATA_RATE_VHT_NSS1_MCS8:
-		case RTW_DATA_RATE_VHT_NSS1_MCS7:
-		case RTW_DATA_RATE_VHT_NSS1_MCS6:
-		case RTW_DATA_RATE_VHT_NSS1_MCS5:
-		case RTW_DATA_RATE_VHT_NSS1_MCS4:
-		case RTW_DATA_RATE_VHT_NSS1_MCS3:
-		case RTW_DATA_RATE_MCS31:
-		case RTW_DATA_RATE_MCS30:
-		case RTW_DATA_RATE_MCS29:
-		case RTW_DATA_RATE_MCS28:
-		case RTW_DATA_RATE_MCS27:
-		case RTW_DATA_RATE_MCS23:
-		case RTW_DATA_RATE_MCS22:
-		case RTW_DATA_RATE_MCS21:
-		case RTW_DATA_RATE_MCS20:
-		case RTW_DATA_RATE_MCS19:
-		case RTW_DATA_RATE_MCS15:
-		case RTW_DATA_RATE_MCS14:
-		case RTW_DATA_RATE_MCS13:
-		case RTW_DATA_RATE_MCS12:
-		case RTW_DATA_RATE_MCS11:
-		case RTW_DATA_RATE_MCS7:
-		case RTW_DATA_RATE_MCS6:
-		case RTW_DATA_RATE_MCS5:
-		case RTW_DATA_RATE_MCS4:
-		case RTW_DATA_RATE_MCS3:
-		case RTW_DATA_RATE_OFDM54:
-		case RTW_DATA_RATE_OFDM48:
-		case RTW_DATA_RATE_OFDM36:
-		case RTW_DATA_RATE_OFDM24:
-			rts_ini_rate = RTW_DATA_RATE_OFDM24;
-			break;
-		case RTW_DATA_RATE_VHT_NSS4_MCS2:
-		case RTW_DATA_RATE_VHT_NSS4_MCS1:
-		case RTW_DATA_RATE_VHT_NSS3_MCS2:
-		case RTW_DATA_RATE_VHT_NSS3_MCS1:
-		case RTW_DATA_RATE_VHT_NSS2_MCS2:
-		case RTW_DATA_RATE_VHT_NSS2_MCS1:
-		case RTW_DATA_RATE_VHT_NSS1_MCS2:
-		case RTW_DATA_RATE_VHT_NSS1_MCS1:
-		case RTW_DATA_RATE_MCS26:
-		case RTW_DATA_RATE_MCS25:
-		case RTW_DATA_RATE_MCS18:
-		case RTW_DATA_RATE_MCS17:
-		case RTW_DATA_RATE_MCS10:
-		case RTW_DATA_RATE_MCS9:
-		case RTW_DATA_RATE_MCS2:
-		case RTW_DATA_RATE_MCS1:
-		case RTW_DATA_RATE_OFDM18:
-		case RTW_DATA_RATE_OFDM12:
-			rts_ini_rate = RTW_DATA_RATE_OFDM12;
-			break;
-		case RTW_DATA_RATE_VHT_NSS4_MCS0:
-		case RTW_DATA_RATE_VHT_NSS3_MCS0:
-		case RTW_DATA_RATE_VHT_NSS2_MCS0:
-		case RTW_DATA_RATE_VHT_NSS1_MCS0:
-		case RTW_DATA_RATE_MCS24:
-		case RTW_DATA_RATE_MCS16:
-		case RTW_DATA_RATE_MCS8:
-		case RTW_DATA_RATE_MCS0:
-		case RTW_DATA_RATE_OFDM9:
-		case RTW_DATA_RATE_OFDM6:
-			rts_ini_rate = RTW_DATA_RATE_OFDM6;
-			break;
-		case RTW_DATA_RATE_CCK11:
-		case RTW_DATA_RATE_CCK5_5:
-		case RTW_DATA_RATE_CCK2:
-		case RTW_DATA_RATE_CCK1:
-			rts_ini_rate = RTW_DATA_RATE_CCK1;
-			break;
-		default:
-			rts_ini_rate = RTW_DATA_RATE_OFDM6;
-			break;
-		}
-	}
-
-	if (bb->hal_com->band[0].cur_chandef.band == BAND_ON_5G) {
-		if (rts_ini_rate < RTW_DATA_RATE_OFDM6)
-			rts_ini_rate = RTW_DATA_RATE_OFDM6;
-	}
-	return rts_ini_rate;
 }
 
 void halbb_ra_shift_darf_tc(struct bb_info *bb, bool enable, u8 *init_fb_cnt)
