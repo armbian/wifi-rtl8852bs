@@ -782,11 +782,12 @@ static void halbb_dyn_pd_th_cck(struct bb_info *bb, u8 rssi, bool set_en)
 		BB_DIG_DBG(bb, DIG_DBG_LV0, "Dynamic CCK PD th dsiabled\n");
 	} else {
 		if(!halbb_set_pd_lower_bound_cck(bb, RSSI_MAX - rssi, cbw,
-		   bb->bb_phy_idx))
+		   bb->bb_phy_idx)) {
 			BB_DIG_DBG(bb, DIG_DBG_LV0, "CCK PD th set warning.\n");
-		else
+		} else {
 			BB_DIG_DBG(bb, DIG_DBG_LV1, "dyn_max=%d, backoff=%d, pd_th=%d(-%ddBm)\n",
 				   pd_dyn_max, margin, rssi, RSSI_MAX - rssi);
+		}
 	}
 }
 
@@ -811,11 +812,12 @@ static void halbb_dyn_pd_th_ofdm(struct bb_info *bb, u8 rssi, bool set_en)
 		BB_DIG_DBG(bb, DIG_DBG_LV0, "Dynamic PD th dsiabled\n");
 	} else {
 		if(!halbb_set_pd_lower_bound(bb, RSSI_MAX - rssi, cbw,
-		   bb->bb_phy_idx))
+		   bb->bb_phy_idx)) {
 			BB_DIG_DBG(bb, DIG_DBG_LV0, "PD th set warning.\n");
-		else
+		} else {
 			BB_DIG_DBG(bb, DIG_DBG_LV1, "pd_dyn_max=%d, backoff=%d, pd_th_eq_rssi=%d(-%ddBm)\n",
 				   pd_dyn_max, margin, rssi, RSSI_MAX - rssi);
+		}
 	}
 }
 
@@ -1348,8 +1350,9 @@ void halbb_dig(struct bb_info *bb)
 	halbb_dig_cfg_bbcr(bb, igi_new);
 
 DIG_END:
-	if (!halbb_dig_fahm_trig(bb, DIG_CCX_WD_TRIGTIME))
+	if (!halbb_dig_fahm_trig(bb, DIG_CCX_WD_TRIGTIME)) {
 		BB_DIG_DBG(bb, DIG_DBG_LV0, "FAHM Trig Fail\n");
+	}
 }
 
 #ifdef HALBB_DIG_TDMA_SUPPORT
