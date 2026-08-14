@@ -322,50 +322,6 @@ u32 mac_set_slot_time(struct mac_ax_adapter *adapter, enum mac_ax_slot_time);
  * @{
  */
 /**
- * @brief mac_h2c_join_info
- *
- * @param *adapter
- * @param *info
- * @return Please Place Description here.
- * @retval  u32
- */
-
-static u32 mac_h2c_join_info(struct mac_ax_adapter *adapter,
-			     struct mac_ax_role_info *info);
-/**
- * @}
- * @}
- */
-
-/**
- * @addtogroup Association
- * @{
- * @addtogroup Role_Related
- * @{
- */
-
-/**
- * @brief mac_fw_role_maintain
- *
- * @param *adapter
- * @param *info
- * @return Please Place Description here.
- * @retval  u32
- */
-static u32 mac_fw_role_maintain(struct mac_ax_adapter *adapter,
-				struct mac_ax_role_info *info);
-/**
- * @}
- * @}
- */
-
-/**
- * @addtogroup Association
- * @{
- * @addtogroup Role_Related
- * @{
- */
-/**
  * @brief mac_role_sync
  *
  * @param *adapter

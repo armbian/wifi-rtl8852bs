@@ -33,6 +33,12 @@ static struct mac_role_tbl *_role_srch(struct mac_ax_adapter *adapter, u8 macid)
 static u32 _role_sync(struct mac_ax_adapter *adapter,
 		      struct mac_ax_role_info *info);
 
+static u32 mac_h2c_join_info(struct mac_ax_adapter *adapter,
+			     struct mac_ax_role_info *info);
+
+static u32 mac_fw_role_maintain(struct mac_ax_adapter *adapter,
+				struct mac_ax_role_info *info);
+
 static inline void __role_queue_head_init(struct mac_ax_adapter *adapter,
 					  struct mac_role_tbl_head *list)
 {
