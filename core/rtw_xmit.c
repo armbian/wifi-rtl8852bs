@@ -812,6 +812,7 @@ u8 rtw_get_tx_bw_mode(_adapter *adapter, struct sta_info *sta)
 	return bw;
 }
 
+#if 0 /*GEORGIA_TODO_FIXIT*/
 static void rtw_get_adapter_tx_rate_bmp_by_bw(_adapter *adapter, u8 bw, u16 *r_bmp_cck_ofdm, u32 *r_bmp_ht, u64 *r_bmp_vht)
 {
 /* ToDo */
@@ -896,6 +897,7 @@ static void rtw_get_shared_macid_tx_rate_bmp_by_bw(struct dvobj_priv *dvobj, u8 
 		*r_bmp_vht = bmp_vht;
 #endif
 }
+#endif
 
 void rtw_update_tx_rate_bmp(struct dvobj_priv *dvobj)
 {
@@ -6321,27 +6323,6 @@ s32 rtw_xmit(_adapter *padapter, struct sk_buff **ppkt, u16 os_qid)
 u32 test_seq;
 #endif
 
-static u8 *get_head_from_txreq(_adapter *padapter, struct xmit_frame *pxframe, u8 frag_idx)
-{
-	return 0;
-}
-
-static u8 *get_tail_from_txreq(_adapter *padapter, struct xmit_frame *pxframe, u8 frag_idx)
-{
-	return 0;
-}
-
-static void dump_pkt(u8 *start, u32 len)
-{
-	u32 idx = 0;
-	for (idx = 0; idx < len; idx++) {
-		printk("%02x ", start[idx]);
-		if ((idx % 20) == 19)
-			printk("\n");
-	}
-	printk("\n");
-}
-
 /* TXREQ_QMGT */
 u8 *get_txreq_buffer(_adapter *padapter, u8 **txreq, u8 **pkt_list, u8 **head, u8 **tail)
 {
@@ -6387,57 +6368,6 @@ u8 *get_txreq_buffer(_adapter *padapter, u8 **txreq, u8 **pkt_list, u8 **head, u
 	}
 
 	return (u8 *)ptxreq_buf;
-}
-
-static void get_txreq_resources(_adapter *padapter, struct xmit_frame *pxframe,
-	u8 **txreq, u8 **pkt_list, u8 **head, u8 **tail)
-{
-	u32 offset_head = (sizeof(struct rtw_xmit_req) * RTW_MAX_FRAG_NUM);
-	u32 offset_tail = offset_head + (SZ_HEAD_BUF * RTW_MAX_FRAG_NUM);
-	u32 offset_list = offset_tail + (SZ_TAIL_BUF * RTW_MAX_FRAG_NUM);
-	u8 *pbuf = NULL;
-
-	PHLTX_ENTER;
-
-	//rtw_phl_tx todo: error handle, max tx req limit
-	padapter->tx_ring_idx++;
-	padapter->tx_ring_idx = (padapter->tx_ring_idx % MAX_TX_RING_NUM);
-
-	pbuf = padapter->tx_pool_ring[padapter->tx_ring_idx];
-	//memset(pbuf, 0, (SZ_TX_RING*RTW_MAX_FRAG_NUM));
-
-	if (txreq)
-		*txreq = pbuf;
-
-	if (head)
-		*head = pbuf + offset_head;
-
-	if (tail)
-		*tail = pbuf + offset_tail;
-
-	if (pkt_list)
-		*pkt_list = pbuf + offset_list;
-}
-
-static void dump_xmitframe_txreq(_adapter *padapter, struct xmit_frame *pxframe)
-{
-	struct rtw_xmit_req *txreq = pxframe->phl_txreq;
-	u32 idx, idx1 = 0;
-
-	PHLTX_ENTER;
-	printk("total txreq=%d \n", pxframe->txreq_cnt);
-
-	for (idx = 0; idx < pxframe->txreq_cnt; idx++) {
-		struct rtw_pkt_buf_list *pkt_list = (struct rtw_pkt_buf_list *)txreq->pkt_list;
-		printk("txreq[%d] with %d pkts =====\n", idx, txreq->pkt_cnt);
-		for (idx1 = 0; idx1 < txreq->pkt_cnt; idx1++) {
-			printk("pkt[%d] 0x%p len=%d\n", idx1, (void *)pkt_list->vir_addr, pkt_list->length);
-			dump_pkt(pkt_list->vir_addr, pkt_list->length);
-			pkt_list++;
-		}
-		txreq++;
-	}
-	printk("\n");
 }
 
 #ifdef CONFIG_PCI_HCI
@@ -6691,6 +6621,7 @@ static void fill_txreq_list_skb(_adapter *padapter,
 		RTW_WARN("remain req_sz=%d should be zero\n", req_sz);
 }
 
+#if 0 /* only used by the disabled path in core_tx_update_xmitframe() */
 static s32 rtw_core_replace_skb(struct sk_buff **pskb, u32 need_head, u32 need_tail)
 {
 	struct sk_buff *newskb;
@@ -6706,6 +6637,7 @@ static s32 rtw_core_replace_skb(struct sk_buff **pskb, u32 need_head, u32 need_t
 
 	return SUCCESS;
 }
+#endif
 
 #ifdef CONFIG_BR_EXT
 static s32 core_br_client_tx(_adapter *padapter, struct xmit_frame *pxframe, struct sk_buff **pskb)
@@ -7282,69 +7214,6 @@ enum rtw_data_rate _rate_mrate2phl(enum MGN_RATE mrate)
 
 	if ((mrate != MGN_1M) && (phl == RTW_DATA_RATE_CCK1))
 		RTW_WARN("%s: Invalid rate 0x%x\n", __func__, mrate);
-
-	return phl;
-}
-
-/*
- * _rate_drv2phl() - convert data rate from drive to PHL(MAC)
- * @sta:	struct sta_info *
- * @rate:	date rate of driver
- *		0x0~0xB: CCK 1M ~ OFDM 54M
- *		>0xB: HT/VHT/HE use the same bits field to represent each
- *		      data rate, so these bits's real definition depended on
- *		      sta's wireless mode.
- *
- * Convert driver's data rate definition to PHL's definition.
- *
- * Return PHL's data rate definition "enum rtw_data_rate".
- */
-static enum rtw_data_rate _rate_drv2phl(struct sta_info *sta, u8 rate)
-{
-	enum rtw_data_rate phl = RTW_DATA_RATE_CCK1;
-	u8 ht_support = 0, vht_support = 0, he_support = 0;
-
-
-	if (rate < 12) {
-		/* B/G mode, CCK/OFDM rate */
-		return (enum rtw_data_rate)rate;
-	}
-
-#ifdef CONFIG_80211N_HT
-	if (sta->htpriv.ht_option == _TRUE)
-		ht_support = 1;
-#ifdef CONFIG_80211AC_VHT
-	if (sta->vhtpriv.vht_option == _TRUE)
-		vht_support = 1;
-#ifdef CONFIG_80211AX_HE
-	if (sta->hepriv.he_option == _TRUE)
-		he_support = 1;
-#endif /* CONFIG_80211AX_HE */
-#endif /* CONFIG_80211AC_VHT */
-#endif /* CONFIG_80211N_HT */
-
-	rate -= 12;
-	if (he_support) {
-		if (rate < 12)
-			phl = RTW_DATA_RATE_HE_NSS1_MCS0 + rate;
-		else if (rate < 24)
-			phl = RTW_DATA_RATE_HE_NSS2_MCS0 + (rate - 12);
-		else if (rate < 36)
-			phl = RTW_DATA_RATE_HE_NSS3_MCS0 + (rate - 24);
-		else
-			phl = RTW_DATA_RATE_HE_NSS4_MCS0 + (rate - 36);
-	} else if (vht_support) {
-		if (rate < 10)
-			phl = RTW_DATA_RATE_VHT_NSS1_MCS0 + rate;
-		else if (rate < 20)
-			phl = RTW_DATA_RATE_VHT_NSS2_MCS0 + (rate - 10);
-		else if (rate < 30)
-			phl = RTW_DATA_RATE_VHT_NSS3_MCS0 + (rate - 20);
-		else
-			phl = RTW_DATA_RATE_VHT_NSS4_MCS0 + (rate - 30);
-	} else if (ht_support) {
-		phl = RTW_DATA_RATE_MCS0 + rate;
-	}
 
 	return phl;
 }

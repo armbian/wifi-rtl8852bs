@@ -4975,18 +4975,6 @@ exit:
 
 }
 
-static void rtw_getrttbl_cmd_cmdrsp_callback(_adapter *padapter,  struct cmd_obj *pcmd)
-{
-
-	rtw_free_cmd_obj(pcmd);
-#ifdef CONFIG_MP_INCLUDED
-	if (padapter->registrypriv.mp_mode == 1)
-		padapter->mppriv.workparam.bcompleted = _TRUE;
-#endif
-
-
-}
-
 u8 set_txq_params_cmd(_adapter *adapter, struct _ADAPTER_LINK *padapter_link, u32 ac_parm, u8 ac_type)
 {
 	struct cmd_obj *cmdobj;

@@ -298,30 +298,7 @@ static void PHY_LCCalibrate(_adapter *padapter)
 	//halrf_lck_trigger(adapter_to_phydm(padapter));
 }
 
-static u8 PHY_QueryRFPathSwitch(_adapter *padapter)
-{
-	u8 bmain = 0;
-
-
-	return bmain;
-}
-
 static void  PHY_SetRFPathSwitch(_adapter *padapter , BOOLEAN bMain) {
-
-}
-
-
-static void phy_switch_rf_path_set(_adapter *padapter , u8 *prf_set_State) {
-#ifdef CONFIG_RTL8821C
-	struct dm_struct *phydm = adapter_to_phydm(padapter);
-
-	if (IS_HARDWARE_TYPE_8821C(padapter)) {
-		config_phydm_set_ant_path(phydm, *prf_set_State, phydm->current_ant_num_8821c);
-		/* Do IQK when switching to BTG/WLG, requested by RF Binson */
-		if (*prf_set_State == SWITCH_TO_BTG || *prf_set_State == SWITCH_TO_WLG)
-			PHY_IQCalibrate(padapter, FALSE);
-	}
-#endif
 
 }
 
@@ -513,21 +490,6 @@ void rtw_mp_trigger_lck(_adapter *padapter)
 void rtw_mp_trigger_dpk(_adapter *padapter)
 {
 	rtw_mp_cal_trigger(padapter, RTW_MP_CAL_DPK);
-}
-
-static void rtw_mp_trigger_tssi(_adapter *padapter)
-{
-	rtw_mp_cal_trigger(padapter, RTW_MP_CAL_TSSI);
-}
-
-static void rtw_mp_trigger_ch_rfk(_adapter *padapter)
-{
-	rtw_mp_cal_trigger(padapter, RTW_MP_CAL_CHL_RFK);
-}
-
-static void rtw_mp_trigger_dack(_adapter *padapter)
-{
-	rtw_mp_cal_trigger(padapter, RTW_MP_CAL_DACK);
 }
 
 static void init_mp_data(_adapter *padapter)
@@ -987,19 +949,6 @@ void SetDataRate(_adapter *padapter)
 	rtw_mp_phl_config_arg(padapter, RTW_MP_CONFIG_CMD_SET_RATE_IDX);
 
 	return;
-}
-
-static void SetTxAGCOffset(_adapter *adapter, u32 ulTxAGCOffset)
-{
-	u32 TxAGCOffset_B, TxAGCOffset_C, TxAGCOffset_D, tmpAGC;
-
-	TxAGCOffset_B = (ulTxAGCOffset & 0x000000ff);
-	TxAGCOffset_C = ((ulTxAGCOffset & 0x0000ff00) >> 8);
-	TxAGCOffset_D = ((ulTxAGCOffset & 0x00ff0000) >> 16);
-
-	tmpAGC = (TxAGCOffset_D << 8 | TxAGCOffset_C << 4 | TxAGCOffset_B);
-//	write_bbreg(adapter, rFPGA0_TxGainStage,
-//		    (bXBTxAGC | bXCTxAGC | bXDTxAGC), tmpAGC);
 }
 
 void MP_PHY_SetRFPathSwitch(_adapter *adapter , BOOLEAN bMain)
@@ -1932,207 +1881,6 @@ void rtw_mp_reset_phy_count(_adapter *adapter)
 	rtw_mp_phl_config_arg(adapter, RTW_MP_CONFIG_CMD_SET_RESET_PHY_COUNT);
 	rtw_mp_phl_config_arg(adapter, RTW_MP_CONFIG_CMD_SET_RESET_MAC_COUNT);
 	rtw_mp_phl_config_arg(adapter, RTW_MP_CONFIG_CMD_SET_RESET_DRV_COUNT);
-}
-
-struct psd_init_regs {
-	/* 3 wire */
-	int reg_88c;
-	int reg_c00;
-	int reg_e00;
-	int reg_1800;
-	int reg_1a00;
-	/* cck */
-	int reg_800;
-	int reg_808;
-};
-
-static int rtw_mp_psd_init(_adapter *padapter, struct psd_init_regs *regs)
-{
-	u8 rf_type = GET_HAL_RFPATH(adapter_to_dvobj(padapter));
-#if 0
-	switch (rf_type) {
-	/* 1R */
-	case RF_1T1R:
-		if (rtw_hw_chk_proto_cap(padapter, PROTO_CAP_11AC)) {
-			/* 11AC 1R PSD Setting 3wire & cck off */
-			regs->reg_c00 = rtw_read32(padapter, 0xC00);
-			phy_set_bb_reg(padapter, 0xC00, 0x3, 0x00);
-			regs->reg_808 = rtw_read32(padapter, 0x808);
-			phy_set_bb_reg(padapter, 0x808, 0x10000000, 0x0);
-		} else {
-			/* 11N 3-wire off 1 */
-			regs->reg_88c = rtw_read32(padapter, 0x88C);
-			phy_set_bb_reg(padapter, 0x88C, 0x300000, 0x3);
-			/* 11N CCK off */
-			regs->reg_800 = rtw_read32(padapter, 0x800);
-			phy_set_bb_reg(padapter, 0x800, 0x1000000, 0x0);
-		}
-	break;
-
-	/* 2R */
-	case RF_1T2R:
-	case RF_2T2R:
-		if (rtw_hw_chk_proto_cap(padapter, PROTO_CAP_11AC)) {
-			/* 11AC 2R PSD Setting 3wire & cck off */
-			regs->reg_c00 = rtw_read32(padapter, 0xC00);
-			regs->reg_e00 = rtw_read32(padapter, 0xE00);
-			phy_set_bb_reg(padapter, 0xC00, 0x3, 0x00);
-			phy_set_bb_reg(padapter, 0xE00, 0x3, 0x00);
-			regs->reg_808 = rtw_read32(padapter, 0x808);
-			phy_set_bb_reg(padapter, 0x808, 0x10000000, 0x0);
-		} else {
-			/* 11N 3-wire off 2 */
-			regs->reg_88c = rtw_read32(padapter, 0x88C);
-			phy_set_bb_reg(padapter, 0x88C, 0xF00000, 0xF);
-			/* 11N CCK off */
-			regs->reg_800 = rtw_read32(padapter, 0x800);
-			phy_set_bb_reg(padapter, 0x800, 0x1000000, 0x0);
-		}
-	break;
-
-	/* 3R */
-	case RF_2T3R:
-	case RF_3T3R:
-		if (rtw_hw_chk_proto_cap(padapter, PROTO_CAP_11AC)) {
-			/* 11AC 3R PSD Setting 3wire & cck off */
-			regs->reg_c00 = rtw_read32(padapter, 0xC00);
-			regs->reg_e00 = rtw_read32(padapter, 0xE00);
-			regs->reg_1800 = rtw_read32(padapter, 0x1800);
-			phy_set_bb_reg(padapter, 0xC00, 0x3, 0x00);
-			phy_set_bb_reg(padapter, 0xE00, 0x3, 0x00);
-			phy_set_bb_reg(padapter, 0x1800, 0x3, 0x00);
-			regs->reg_808 = rtw_read32(padapter, 0x808);
-			phy_set_bb_reg(padapter, 0x808, 0x10000000, 0x0);
-		} else {
-			RTW_ERR("%s: 11n don't support 3R\n", __func__);
-			return -1;
-		}
-		break;
-
-	/* 4R */
-	case RF_2T4R:
-	case RF_3T4R:
-	case RF_4T4R:
-		if (rtw_hw_chk_proto_cap(padapter, PROTO_CAP_11AC)) {
-			/* 11AC 4R PSD Setting 3wire & cck off */
-			regs->reg_c00 = rtw_read32(padapter, 0xC00);
-			regs->reg_e00 = rtw_read32(padapter, 0xE00);
-			regs->reg_1800 = rtw_read32(padapter, 0x1800);
-			regs->reg_1a00 = rtw_read32(padapter, 0x1A00);
-			phy_set_bb_reg(padapter, 0xC00, 0x3, 0x00);
-			phy_set_bb_reg(padapter, 0xE00, 0x3, 0x00);
-			phy_set_bb_reg(padapter, 0x1800, 0x3, 0x00);
-			phy_set_bb_reg(padapter, 0x1A00, 0x3, 0x00);
-			regs->reg_808 = rtw_read32(padapter, 0x808);
-			phy_set_bb_reg(padapter, 0x808, 0x10000000, 0x0);
-		} else {
-			RTW_ERR("%s: 11n don't support 4R\n", __func__);
-			return -1;
-		}
-		break;
-
-	default:
-		RTW_ERR("%s: unknown %d rf type\n", __func__,
-			GET_HAL_RFPATH(adapter_to_dvobj(padapter)));
-		return -1;
-	}
-
-	/* Set PSD points, 0=128, 1=256, 2=512, 3=1024 */
-	if (rtw_hw_chk_proto_cap(padapter, PROTO_CAP_11AC))
-		phy_set_bb_reg(padapter, 0x910, 0xC000, 3);
-	else
-		phy_set_bb_reg(padapter, 0x808, 0xC000, 3);
-#endif
-	RTW_INFO("%s: set %d rf type done\n", __func__,
-		GET_HAL_RFPATH(adapter_to_dvobj(padapter)));
-	return 0;
-}
-
-static int rtw_mp_psd_close(_adapter *padapter, struct psd_init_regs *regs)
-{
-	u8 rf_type = GET_HAL_RFPATH(adapter_to_dvobj(padapter));
-
-#if 0
-	if (!rtw_hw_chk_proto_cap(padapter, PROTO_CAP_11AC)) {
-		/* 11n 3wire restore */
-		rtw_write32(padapter, 0x88C, regs->reg_88c);
-		/* 11n cck restore */
-		rtw_write32(padapter, 0x800, regs->reg_800);
-		RTW_INFO("%s: restore %d rf type\n", __func__, rf_type);
-		return 0;
-	}
-
-	/* 11ac 3wire restore */
-	switch (rf_type) {
-	case RF_1T1R:
-		rtw_write32(padapter, 0xC00, regs->reg_c00);
-		break;
-	case RF_1T2R:
-	case RF_2T2R:
-		rtw_write32(padapter, 0xC00, regs->reg_c00);
-		rtw_write32(padapter, 0xE00, regs->reg_e00);
-		break;
-	case RF_2T3R:
-	case RF_3T3R:
-		rtw_write32(padapter, 0xC00, regs->reg_c00);
-		rtw_write32(padapter, 0xE00, regs->reg_e00);
-		rtw_write32(padapter, 0x1800, regs->reg_1800);
-		break;
-	case RF_2T4R:
-	case RF_3T4R:
-	case RF_4T4R:
-		rtw_write32(padapter, 0xC00, regs->reg_c00);
-		rtw_write32(padapter, 0xE00, regs->reg_e00);
-		rtw_write32(padapter, 0x1800, regs->reg_1800);
-		rtw_write32(padapter, 0x1A00, regs->reg_1a00);
-		break;
-	default:
-		RTW_WARN("%s: unknown %d rf type\n", __func__, rf_type);
-		break;
-	}
-
-	/* 11ac cck restore */
-	rtw_write32(padapter, 0x808, regs->reg_808);
-#endif	
-	RTW_INFO("%s: restore %d rf type done\n", __func__, rf_type);
-	return 0;
-}
-
-/* reg 0x808[9:0]: FFT data x
- * reg 0x808[22]:  0  -->  1  to get 1 FFT data y
- * reg 0x8B4[15:0]: FFT data y report */
-static u32 rtw_GetPSDData(_adapter *adapter, u32 point)
-{
-	u32 psd_val = 0;
-#if 0
-#if defined(CONFIG_RTL8822B) || defined(CONFIG_RTL8821C) || defined(CONFIG_RTL8822C)
-	u16 psd_reg = 0x910;
-	u16 psd_regL = 0xF44;
-#else
-	u16 psd_reg = 0x808;
-	u16 psd_regL = 0x8B4;
-#endif
-
-	psd_val = rtw_read32(adapter, psd_reg);
-
-	psd_val &= 0xFFBFFC00;
-	psd_val |= point;
-
-	rtw_write32(adapter, psd_reg, psd_val);
-	rtw_mdelay_os(1);
-	psd_val |= 0x00400000;
-
-	rtw_write32(adapter, psd_reg, psd_val);
-	rtw_mdelay_os(1);
-
-	psd_val = rtw_read32(adapter, psd_regL);
-#if defined(CONFIG_RTL8821C)
-	psd_val = (psd_val & 0x00FFFFFF) / 32;
-#else
-	psd_val &= 0x0000FFFF;
-#endif
-#endif
-	return psd_val;
 }
 
 static u8 rtw_mp_phl_psd_cmd(_adapter *padapter, struct rtw_mp_cal_arg	*psd_arg, u8 cmdid)

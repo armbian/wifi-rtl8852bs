@@ -409,24 +409,6 @@ int rtw_init_link_mlme_priv(struct _ADAPTER_LINK *padapter_link)
 	return _SUCCESS;
 }
 
-static sint	_rtw_enqueue_network(_queue *queue, struct wlan_network *pnetwork)
-{
-
-	if (pnetwork == NULL)
-		goto exit;
-
-	_rtw_spinlock_bh(&queue->lock);
-
-	rtw_list_insert_tail(&pnetwork->list, &queue->queue);
-
-	_rtw_spinunlock_bh(&queue->lock);
-
-exit:
-
-
-	return _SUCCESS;
-}
-
 /*
 struct	wlan_network *_rtw_dequeue_network(_queue *queue)
 {
@@ -660,18 +642,6 @@ int	rtw_init_mlme_priv(_adapter *padapter) /* (struct	mlme_priv *pmlmepriv) */
 void rtw_free_mlme_priv(struct mlme_priv *pmlmepriv)
 {
 	_rtw_free_mlme_priv(pmlmepriv);
-}
-
-static int rtw_enqueue_network(_queue *queue, struct wlan_network *pnetwork)
-{
-	int	res;
-	res = _rtw_enqueue_network(queue, pnetwork);
-	return res;
-}
-
-static void rtw_free_network(struct mlme_priv *pmlmepriv, struct	wlan_network *pnetwork, u8 is_freeall)/* (struct	wlan_network *pnetwork, _queue	*free_queue) */
-{
-	_rtw_free_network(pmlmepriv, pnetwork, is_freeall);
 }
 
 static void rtw_free_network_nolock(_adapter *padapter, struct wlan_network *pnetwork)
@@ -991,11 +961,6 @@ static void _rtw_free_mld_network_queue(_adapter *padapter, u8 isfreeall)
 	_rtw_spinunlock_bh(&scanned_queue->lock);
 
 
-}
-
-static void rtw_free_mld_network(struct mlme_priv *pmlmepriv, struct wlan_mld_network *pmld_network, u8 is_freeall)
-{
-	_rtw_free_mld_network(pmlmepriv, pmld_network, is_freeall);
 }
 
 #ifdef CONFIG_80211BE_EHT

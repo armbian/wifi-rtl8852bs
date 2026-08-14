@@ -266,10 +266,6 @@ static void rtw_ecsa_update_sta_chan_info(struct _ADAPTER *a,
 	#endif
 }
 
-static void rtw_ap_update_beacon_by_role(void *priv, struct rtw_wifi_role_t *role , struct rtw_wifi_role_link_t *rlink)
-{
-	/* TODO */
-}
 static void rtw_ecsa_update_ap_chan_info(struct _ADAPTER *a, struct rtw_chan_def new_chan_def)
 {
 	struct core_ecsa_info *ecsa_info = &(a->ecsa_info);
