@@ -372,12 +372,6 @@ recycle:
 	return RTW_PHL_STATUS_SUCCESS;
 }
 
-static void _phl_tx_flow_ctrl_sdio(struct phl_info_t *phl_info,
-						      _os_list *sta_list)
-{
-	phl_tx_flow_ctrl(phl_info, sta_list);
-}
-
 static enum rtw_phl_status phl_handle_xmit_ring_sdio(
 					struct phl_info_t *phl_info,
 					struct phl_ring_status *ring_sts)
