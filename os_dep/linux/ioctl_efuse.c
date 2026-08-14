@@ -431,7 +431,7 @@ static u8 rtw_efuse_map_file_load(_adapter *padapter, u8 *filepath, u8 efuse_typ
 				rtw_efuse_cmd(padapter, efuse_arg, RTW_EFUSE_CMD_BT_FILE_MAP_LOAD);
 		}
 	}
-	if (efuse_arg->cmd_ok && efuse_arg->status == RTW_PHL_STATUS_SUCCESS)
+	if (efuse_arg && efuse_arg->cmd_ok && efuse_arg->status == RTW_PHL_STATUS_SUCCESS)
 			res = _SUCCESS;
 	else
 			res = _FAIL;
@@ -462,7 +462,7 @@ static u8 rtw_efuse_mask_file_load(_adapter *padapter, u8 *filepath, u8 efuse_ty
 		}
 	}
 
-	if (efuse_arg->cmd_ok && efuse_arg->status == RTW_PHL_STATUS_SUCCESS)
+	if (efuse_arg && efuse_arg->cmd_ok && efuse_arg->status == RTW_PHL_STATUS_SUCCESS)
 			res = _SUCCESS;
 	else
 			res = _FAIL;
@@ -1577,6 +1577,8 @@ u8 rtw_efuse_bt_write_raw_hidden(_adapter * adapter, u16 addr, u16 cnts, u8 *dat
 	u16 i = 0;
 
 	efuse_arg = _rtw_zmalloc(sizeof(struct rtw_efuse_phl_arg));
+	if (!efuse_arg)
+		return _FAIL;
 
 	while (i < cnts) {
 		efuse_arg->io_type = 1;
