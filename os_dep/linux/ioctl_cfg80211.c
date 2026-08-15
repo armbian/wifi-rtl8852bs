@@ -6760,6 +6760,11 @@ void rtw_cfg80211_external_auth_request(_adapter *padapter, union recv_frame *rf
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 	struct link_mlme_ext_priv *pmlmeext = &(padapter_link->mlmeextpriv);
 	struct link_mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
+#if !((KERNEL_VERSION(4, 17, 0) <= LINUX_VERSION_CODE) \
+      || defined(CONFIG_KERNEL_PATCH_EXTERNAL_AUTH))
+	u8 frame[256] = { 0 };
+	uint frame_len = 24;
+#endif
 
 	s32 freq = 0;
 
@@ -6784,9 +6789,6 @@ void rtw_cfg80211_external_auth_request(_adapter *padapter, union recv_frame *rf
 	cfg80211_external_auth_request(netdev,
 		(struct cfg80211_external_auth_params *)&params, GFP_ATOMIC);
 #elif (KERNEL_VERSION(2, 6, 37) <= LINUX_VERSION_CODE)
-	u8 frame[256] = { 0 };
-	uint frame_len = 24;
-
 	set_frame_sub_type(frame, WIFI_AUTH);
 
 	_rtw_memcpy(frame + 4, get_my_bssid(&pmlmeinfo->network), ETH_ALEN);
