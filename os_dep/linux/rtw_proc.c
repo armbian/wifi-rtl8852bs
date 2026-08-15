@@ -126,7 +126,9 @@ static int proc_get_drv_cfg(struct seq_file *m, void *v)
 static ssize_t proc_set_log_level(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
 	char tmp[32];
+#ifdef CONFIG_RTW_DEBUG
 	int log_level;
+#endif
 
 	if (count < 1)
 		return -EINVAL;
@@ -1154,9 +1156,6 @@ static ssize_t proc_set_rx_info_msg(struct file *file, const char __user *buffer
 }
 static int proc_get_rx_info_msg(struct seq_file *m, void *v)
 {
-	struct net_device *dev = m->private;
-	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-
 	/*rtw_hal_set_phydm_var(padapter, HAL_PHYDM_RX_DATA_INFO, m, _FALSE);*/
 	return 0;
 }
@@ -1801,8 +1800,6 @@ static int proc_get_cap_spt_op_class_ch(struct seq_file *m, void *v)
 
 static ssize_t proc_set_cap_spt_op_class_ch(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
-	struct net_device *dev = data;
-	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	char tmp[32];
 
 	if (count < 1)
@@ -1835,8 +1832,6 @@ static int proc_get_reg_spt_op_class_ch(struct seq_file *m, void *v)
 
 static ssize_t proc_set_reg_spt_op_class_ch(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
-	struct net_device *dev = data;
-	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	char tmp[32];
 
 	if (count < 1)
@@ -1869,8 +1864,6 @@ static int proc_get_cur_spt_op_class_ch(struct seq_file *m, void *v)
 
 static ssize_t proc_set_cur_spt_op_class_ch(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
-	struct net_device *dev = data;
-	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	char tmp[32];
 
 	if (count < 1)
@@ -3020,9 +3013,6 @@ static int proc_get_tx_power_ext_info(struct seq_file *m, void *v)
 
 static ssize_t proc_set_tx_power_ext_info(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
-	struct net_device *dev = data;
-	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
-
 	char tmp[32] = {0};
 	char cmd[16] = {0};
 
@@ -4638,8 +4628,6 @@ static ssize_t proc_set_amsdu_mode(struct file *file, const char __user *buffer,
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
 	char tmp[32];
 	u32 mode;
-	u8 bw_2g;
-	u8 bw_5g;
 
 	if (count < 1)
 		return -EFAULT;
@@ -5339,9 +5327,6 @@ static char *phydm_msg = NULL;
 
 static int proc_get_phydm_cmd(struct seq_file *m, void *v)
 {
-	struct net_device *netdev = m->private;
-	_adapter *padapter = (_adapter *)rtw_netdev_priv(netdev);
-
 	if (NULL == phydm_msg) {
 		_RTW_PRINT_SEL(m, "(Nothing to output)\n");
 		return 0;
