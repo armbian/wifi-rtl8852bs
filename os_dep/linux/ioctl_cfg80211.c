@@ -976,9 +976,6 @@ void rtw_cfg80211_indicate_connect(_adapter *padapter)
 	struct wlan_network  *cur_network = &(pmlmepriv->dev_cur_network);
 	struct wireless_dev *pwdev = padapter->rtw_wdev;
 	struct rtw_wdev_priv *pwdev_priv = adapter_wdev_data(padapter);
-#ifdef CONFIG_P2P
-	struct wifidirect_info *pwdinfo = &(padapter->wdinfo);
-#endif
 #if defined(CPTCFG_VERSION) || LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)
 	struct cfg80211_roam_info roam_info ={};
 #endif
@@ -1096,9 +1093,6 @@ void rtw_cfg80211_indicate_disconnect(_adapter *padapter, u16 reason, u8 locally
 {
 	struct wireless_dev *pwdev = padapter->rtw_wdev;
 	struct rtw_wdev_priv *pwdev_priv = adapter_wdev_data(padapter);
-#ifdef CONFIG_P2P
-	struct wifidirect_info *pwdinfo = &(padapter->wdinfo);
-#endif
 
 	RTW_INFO(FUNC_ADPT_FMT" ,reason = %d\n", FUNC_ADPT_ARG(padapter), reason);
 
@@ -1583,9 +1577,6 @@ static int rtw_cfg80211_set_encryption(struct net_device *dev, struct ieee_param
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 	struct link_mlme_priv *lmlmepriv = &padapter_link->mlmepriv;
 	struct link_security_priv *lsecuritypriv = &padapter_link->securitypriv;
-#ifdef CONFIG_P2P
-	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
-#endif /* CONFIG_P2P */
 
 	RTW_INFO("%s\n", __func__);
 
@@ -1835,7 +1826,6 @@ static int cfg80211_rtw_add_key(struct wiphy *wiphy, RTW_CFG80211_DEV_PARAM_TYPE
 	struct ieee_param *param = NULL;
 	int ret = 0;
 	_adapter *padapter = RTW_CFG80211_GET_ADAPTER(RTW_CFG80211_DEV_PARAM_NAME);
-	struct wireless_dev *rtw_wdev = padapter->rtw_wdev;
 	struct net_device *ndev = RTW_CFG80211_GET_NETDEV(RTW_CFG80211_DEV_PARAM_NAME);
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 #ifdef CONFIG_TDLS
@@ -1976,10 +1966,10 @@ static int cfg80211_rtw_add_key(struct wiphy *wiphy, RTW_CFG80211_DEV_PARAM_TYPE
 	} else if (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == _TRUE
 		|| check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == _TRUE
 	) {
-		/* RTW_INFO("@@@@@@@@@@ fw_state=0x%x, iftype=%d\n", pmlmepriv->fw_state, rtw_wdev->iftype); */
+		/* RTW_INFO("@@@@@@@@@@ fw_state=0x%x, iftype=%d\n", pmlmepriv->fw_state, padapter->rtw_wdev->iftype); */
 		ret = rtw_cfg80211_set_encryption(ndev, param);
 	} else
-		RTW_INFO("error! fw_state=0x%x, iftype=%d\n", pmlmepriv->fw_state, rtw_wdev->iftype);
+		RTW_INFO("error! fw_state=0x%x, iftype=%d\n", pmlmepriv->fw_state, padapter->rtw_wdev->iftype);
 
 
 addkey_end:
@@ -2198,10 +2188,10 @@ static int cfg80211_rtw_del_key(struct wiphy *wiphy, RTW_CFG80211_DEV_PARAM_TYPE
 #endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) */
 {
 	_adapter *padapter = RTW_CFG80211_GET_ADAPTER(RTW_CFG80211_DEV_PARAM_NAME);
-	struct net_device *ndev = RTW_CFG80211_GET_NETDEV(RTW_CFG80211_DEV_PARAM_NAME);
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 
-	RTW_INFO(FUNC_NDEV_FMT" key_index=%d, addr=%pM\n", FUNC_NDEV_ARG(ndev), key_index, mac_addr);
+	RTW_INFO(FUNC_NDEV_FMT" key_index=%d, addr=%pM\n",
+		FUNC_NDEV_ARG(RTW_CFG80211_GET_NETDEV(RTW_CFG80211_DEV_PARAM_NAME)), key_index, mac_addr);
 
 	if (key_index == psecuritypriv->dot11PrivacyKeyIndex) {
 		/* clear the flag of wep default key set. */
@@ -2270,13 +2260,12 @@ static int cfg80211_rtw_set_default_mgmt_key(struct wiphy *wiphy,
 #endif
 	, u8 key_index)
 {
-	struct net_device *ndev = RTW_CFG80211_GET_NETDEV(RTW_CFG80211_DEV_PARAM_NAME);
 #define SET_DEF_KEY_PARAM_FMT " key_index=%d"
 #define SET_DEF_KEY_PARAM_ARG , key_index
 
 	RTW_INFO(FUNC_NDEV_FMT
 		SET_DEF_KEY_PARAM_FMT
-		"\n", FUNC_NDEV_ARG(ndev)
+		"\n", FUNC_NDEV_ARG(RTW_CFG80211_GET_NETDEV(RTW_CFG80211_DEV_PARAM_NAME))
 		SET_DEF_KEY_PARAM_ARG
 	);
 
@@ -3307,12 +3296,9 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 	u8 _status = _FALSE;
 	int ret = 0;
 	struct sitesurvey_parm *parm = NULL;
-	u8 survey_times = 3;
-	u8 survey_times_for_one_ch = 6;
 	struct cfg80211_ssid *ssids = request->ssids;
-	int social_channel = 0, j = 0;
+	int social_channel = 0;
 	bool need_indicate_scan_done = _FALSE;
-	bool ps_denied = _FALSE;
 	u8 ssc_chk;
 	_adapter *padapter;
 	struct wireless_dev *wdev;
@@ -3842,7 +3828,6 @@ static int rtw_cfg80211_set_wpa_ie(_adapter *padapter, u8 *pie, size_t ielen)
 	int wpa2_ielen = 0;
 	int rsnx_ielen = 0;
 	u8 *pwpa, *pwpa2, *prsnx;
-	u8 null_addr[] = {0, 0, 0, 0, 0, 0};
 
 	if (pie == NULL || !ielen) {
 		/* Treat this as normal case, but need to clear WIFI_UNDER_WPS */
@@ -4707,9 +4692,7 @@ static int cfg80211_rtw_set_pmksa(struct wiphy *wiphy,
 				  struct net_device *ndev,
 				  struct cfg80211_pmksa *pmksa)
 {
-	u8	index, blInserted = _FALSE;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(ndev);
-	struct mlme_priv *mlme = &padapter->mlmepriv;
 	struct security_priv	*psecuritypriv = &padapter->securitypriv;
 	u8	strZeroMacAddress[ETH_ALEN] = { 0x00 };
 	bool sae_auth = rtw_sec_chk_auth_type(padapter, MLME_AUTHTYPE_SAE);
@@ -4780,15 +4763,14 @@ static int cfg80211_rtw_flush_pmksa(struct wiphy *wiphy,
 #ifdef CONFIG_AP_MODE
 void rtw_cfg80211_indicate_sta_assoc(_adapter *padapter, u8 *pmgmt_frame, uint frame_len)
 {
-	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
-	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 #if !defined(RTW_USE_CFG80211_STA_EVENT) && !defined(COMPAT_KERNEL_RELEASE)
 	s32 freq;
 	int channel;
 	struct wireless_dev *pwdev = padapter->rtw_wdev;
+	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
+	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 	struct link_mlme_ext_priv *pmlmeext = &(padapter_link->mlmeextpriv);
 #endif
-	struct net_device *ndev = padapter->pnetdev;
 
 	RTW_INFO(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(padapter));
 
@@ -4808,7 +4790,7 @@ void rtw_cfg80211_indicate_sta_assoc(_adapter *padapter, u8 *pmgmt_frame, uint f
 		#if LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0)
 		cfg80211_new_sta(padapter->rtw_wdev, get_addr2_ptr(pmgmt_frame), &sinfo, GFP_ATOMIC);
 		#else
-		cfg80211_new_sta(ndev, get_addr2_ptr(pmgmt_frame), &sinfo, GFP_ATOMIC);
+		cfg80211_new_sta(padapter->pnetdev, get_addr2_ptr(pmgmt_frame), &sinfo, GFP_ATOMIC);
 		#endif
 	}
 #else /* defined(RTW_USE_CFG80211_STA_EVENT) */
@@ -4838,8 +4820,6 @@ void rtw_cfg80211_indicate_sta_assoc(_adapter *padapter, u8 *pmgmt_frame, uint f
 
 void rtw_cfg80211_indicate_sta_disassoc(_adapter *padapter, const u8 *da, unsigned short reason)
 {
-	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
-	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 #if !defined(RTW_USE_CFG80211_STA_EVENT) && !defined(COMPAT_KERNEL_RELEASE)
 	s32 freq;
 	int channel;
@@ -4851,8 +4831,9 @@ void rtw_cfg80211_indicate_sta_disassoc(_adapter *padapter, const u8 *da, unsign
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wireless_dev *wdev = padapter->rtw_wdev;
+	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
+	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 #endif
-	struct net_device *ndev = padapter->pnetdev;
 
 	RTW_INFO(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(padapter));
 
@@ -4860,7 +4841,7 @@ void rtw_cfg80211_indicate_sta_disassoc(_adapter *padapter, const u8 *da, unsign
 	#if LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0)
 	cfg80211_del_sta(padapter->rtw_wdev, da, GFP_ATOMIC);
 	#else
-	cfg80211_del_sta(ndev, da, GFP_ATOMIC);
+	cfg80211_del_sta(padapter->pnetdev, da, GFP_ATOMIC);
 	#endif
 #else /* defined(RTW_USE_CFG80211_STA_EVENT) */
 	channel = padapter_link->mlmeext.chandef.chan;
@@ -4929,7 +4910,6 @@ static int rtw_cfg80211_monitor_if_xmit_entry(struct sk_buff *skb, struct net_de
 	struct rtw_ieee80211_hdr *dot11_hdr;
 	struct ieee80211_radiotap_header *rtap_hdr;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(ndev);
-	struct rf_ctl_t *rfctl = adapter_to_rfctl(padapter);
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 
@@ -5504,7 +5484,6 @@ static int cfg80211_rtw_start_ap(struct wiphy *wiphy, struct net_device *ndev,
 
 #ifdef RTW_PHL_BCN
 	{
-		struct rtw_wifi_role_t *wrole = adapter->phl_role;
 		struct rtw_wifi_role_link_t *rlink = adapter_link->wrlink;
 		if (rlink)
 			rlink->bcn_cmn.bcn_added = 0;
@@ -5973,12 +5952,12 @@ static int	cfg80211_rtw_add_station(struct wiphy *wiphy, RTW_CFG80211_DEV_PARAM_
 #endif
 #ifdef CONFIG_TDLS
 	struct sta_info *psta;
-#endif /* CONFIG_TDLS */
 	void *phl = GET_PHL_INFO(adapter_to_dvobj(padapter));
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 	u16 main_id = rtw_phl_get_macid_max_num(phl);
 	struct rtw_phl_mld_t *pmld = NULL;
+#endif /* CONFIG_TDLS */
 
 	RTW_INFO(FUNC_NDEV_FMT" mac:"MAC_FMT"\n", FUNC_NDEV_ARG(ndev), MAC_ARG(mac));
 
@@ -6301,7 +6280,6 @@ static int cfg80211_rtw_change_station(struct wiphy *wiphy,
 	struct station_parameters *params)
 {
 	_adapter *adapter = RTW_CFG80211_GET_ADAPTER(RTW_CFG80211_DEV_PARAM_NAME);
-	struct net_device *ndev = RTW_CFG80211_GET_NETDEV(RTW_CFG80211_DEV_PARAM_NAME);
 	int ret = 0;
 
 	RTW_INFO(FUNC_ADPT_FMT" mac:"MAC_FMT"\n", FUNC_ADPT_ARG(adapter), MAC_ARG(mac));
@@ -6783,8 +6761,6 @@ void rtw_cfg80211_external_auth_request(_adapter *padapter, union recv_frame *rf
 	struct link_mlme_ext_priv *pmlmeext = &(padapter_link->mlmeextpriv);
 	struct link_mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	u8 frame[256] = { 0 };
-	uint frame_len = 24;
 	s32 freq = 0;
 
 	/* rframe, in this case is null point */
@@ -6808,6 +6784,9 @@ void rtw_cfg80211_external_auth_request(_adapter *padapter, union recv_frame *rf
 	cfg80211_external_auth_request(netdev,
 		(struct cfg80211_external_auth_params *)&params, GFP_ATOMIC);
 #elif (KERNEL_VERSION(2, 6, 37) <= LINUX_VERSION_CODE)
+	u8 frame[256] = { 0 };
+	uint frame_len = 24;
+
 	set_frame_sub_type(frame, WIFI_AUTH);
 
 	_rtw_memcpy(frame + 4, get_my_bssid(&pmlmeinfo->network), ETH_ALEN);
@@ -7338,7 +7317,6 @@ static s32 cfg80211_rtw_remain_on_channel(struct wiphy *wiphy,
 	unsigned int duration, u64 *cookie)
 #endif
 {
-	s32 err = 0;
 	u8 remain_ch = (u8) ieee80211_frequency_to_channel(channel->center_freq);
 	_adapter *padapter = NULL;
 	struct registry_priv  *pregistrypriv = NULL;
@@ -7662,12 +7640,6 @@ static int _cfg80211_rtw_mgmt_tx(_adapter *padapter, u8 tx_band, u8 tx_ch, u8 no
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	struct rtw_chan_def u_chdef = {0};
 	u8 leave_op = 0;
-#ifdef CONFIG_P2P
-	struct cfg80211_roch_info *pcfg80211_rochinfo = &padapter->cfg80211_rochinfo;
-	#ifdef CONFIG_CONCURRENT_MODE
-	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
-	#endif
-#endif
 	u8 frame_styp;
 	u8 hdr_len = sizeof(struct rtw_ieee80211_hdr_3addr);
 	u8 *ies;
@@ -8224,7 +8196,6 @@ static void cfg80211_rtw_update_mgmt_frame_register(
 	_adapter *padapter;
 	struct rtw_wdev_priv *pwdev_priv;
 	u32 rtw_stypes_mask = 0;
-	u32 rtw_mstypes_mask = 0;
 
 	ndev = wdev_to_ndev(wdev);
 
@@ -9959,10 +9930,8 @@ static void rtw_cfg80211_init_ht_capab_ex(_adapter *padapter,
 	struct protocol_cap_t *dft_proto_cap,
 	struct role_link_cap_t *dft_cap)
 {
-	struct registry_priv *pregistrypriv = &padapter->registrypriv;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct ht_priv		*phtpriv = &pmlmepriv->dev_htpriv;
-	u8 stbc_rx_enable = _FALSE;
 
 	rtw_ht_get_dft_setting(padapter, dft_proto_cap, dft_cap);
 
@@ -10088,10 +10057,8 @@ static int rtw_cfg80211_init_he_capab(_adapter *padapter,
 	struct protocol_cap_t *dft_proto_cap, enum nl80211_band band)
 {
 	struct ieee80211_sta_he_cap *sta_he_cap = &(sta_iface_data->he_cap);
-	void *phl = GET_PHL_INFO(adapter_to_dvobj(padapter));
 	struct registry_priv *regsty = &padapter->registrypriv;
 	u8 cap_len = 0;
-	u8 he_mcs_set_ext_len = 0;
 	u8 he_cap_ie[HE_CAP_ELE_MAX_LEN] = {0};
 #if defined(CONFIG_IEEE80211_BAND_6GHZ) && (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0))
 	u8 he_6g_band_cap_ie[HE_6G_BAND_CAP_MAX_LEN] = {0};
@@ -10163,7 +10130,6 @@ static void rtw_cfg80211_init_sband_iftype_data(_adapter *padapter,
 		struct protocol_cap_t *dft_ap_proto_cap)
 {
 	struct ieee80211_sband_iftype_data *he_iftype = NULL;
-	void *phl = GET_PHL_INFO(adapter_to_dvobj(padapter));
 	int ret = _FAIL;
 
 	he_iftype = (struct ieee80211_sband_iftype_data *)(((u8 *)band->bitrates)
@@ -10409,8 +10375,6 @@ struct ieee80211_iface_combination rtw_combinations[] = {
 
 static int rtw_cfg80211_init_wiphy(_adapter *adapter, struct wiphy *wiphy)
 {
-	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
-	struct registry_priv *regsty = dvobj_to_regsty(dvobj);
 	int ret = _FAIL;
 
 	/* copy mac_addr to wiphy */
@@ -10772,8 +10736,6 @@ int rtw_hostapd_acs_dump_survey(struct wiphy *wiphy, struct net_device *netdev, 
 static int cfg80211_rtw_external_auth(struct wiphy *wiphy, struct net_device *dev,
 	struct cfg80211_external_auth_params *params)
 {
-	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-
 	RTW_INFO(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(dev));
 
 	rtw_cfg80211_external_auth_status(wiphy, dev,
@@ -10915,7 +10877,6 @@ static int cfg80211_rtw_channel_switch(struct wiphy *wiphy,
 	_adapter *a = (_adapter *)rtw_netdev_priv(dev);
 	struct core_ecsa_info *ecsa_info = &(a->ecsa_info);
 	struct rtw_phl_ecsa_param *ecsa_param = &(ecsa_info->phl_ecsa_param);
-	struct rf_ctl_t *rfctl = adapter_to_rfctl(a);
 	struct rtw_chan_def csa_chdef = {0};
 	u8 mode = 0, count = 0, ht = 0;
 
