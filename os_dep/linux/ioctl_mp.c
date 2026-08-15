@@ -3474,7 +3474,6 @@ int rtw_mp_band(struct net_device *dev,
 			 union iwreq_data *wrqu, char *extra)
 {
 	_adapter *padapter = rtw_netdev_priv(dev);
-	struct registry_priv *regsty = &padapter->registrypriv;
 	struct mp_priv *pmp_priv = (struct mp_priv *)&padapter->mppriv;
 	u8 band = 0;
 

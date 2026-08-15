@@ -2262,7 +2262,6 @@ static bool rtw_chplan_update_per_link_cisr(struct rf_ctl_t *rfctl, u8 iface_id
 {
 	struct country_ie_slave_record ori_cisr_cont[RTW_RLINK_MAX];
 	u8 alink_id_s, alink_id_e, alink_id;
-	int i;
 	bool effected = false;
 
 	if (cisr_alink_id < RTW_RLINK_MAX) {
