@@ -232,7 +232,6 @@ int rtw_rfctl_init(struct dvobj_priv *dvobj)
 {
 	struct registry_priv *regsty = dvobj_to_regsty(dvobj);
 	struct rf_ctl_t *rfctl = dvobj_to_rfctl(dvobj);
-	_adapter *adapter = dvobj_get_primary_adapter(dvobj);
 	u8 band_bmp = 0;
 	u8 bw_bmp_of_band[BAND_MAX] = {0};
 	int ret;
@@ -263,7 +262,6 @@ int rtw_rfctl_init(struct dvobj_priv *dvobj)
 void rtw_rfctl_deinit(struct dvobj_priv *dvobj)
 {
 	struct rf_ctl_t *rfctl = dvobj_to_rfctl(dvobj);
-	_adapter *adapter = dvobj_get_primary_adapter(dvobj);
 
 	_rtw_mutex_free(&rfctl->offch_mutex);
 
@@ -1094,9 +1092,11 @@ unsigned int OnProbeReq(_adapter *padapter, union recv_frame *precv_frame)
 	u8 wifi_test_chk_rate = 1;
 #endif
 	struct _ADAPTER_LINK *padapter_link = precv_frame->u.hdr.adapter_link;
+#ifdef CONFIG_AUTO_AP_MODE
 	void *phl = GET_PHL_INFO(adapter_to_dvobj(padapter));
 	struct rtw_phl_mld_t *mld = NULL;
 	u16 main_id = rtw_phl_get_macid_max_num(phl);
+#endif
 #ifdef CONFIG_80211BE_EHT
 	u8 eid_eht_ml = EID_EXT_MULTI_LINK;
 	struct rtw_phl_ml_element ml_ele = {0};
@@ -1438,9 +1438,6 @@ unsigned int OnProbeRsp(_adapter *padapter, union recv_frame *precv_frame)
 {
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	u8	*pframe = precv_frame->u.hdr.rx_data;
-#ifdef CONFIG_P2P
-	struct wifidirect_info	*pwdinfo = &padapter->wdinfo;
-#endif
 	struct _ADAPTER_LINK *padapter_link = precv_frame->u.hdr.adapter_link;
 
 	if ((mlmeext_chk_scan_state(pmlmeext, SCAN_PROCESS))
@@ -1892,8 +1889,6 @@ unsigned int OnAuth(_adapter *padapter, union recv_frame *precv_frame)
 	unsigned char	*sa, *p;
 	u16	algorithm;
 	int	status;
-	static struct sta_info stat;
-	static struct rtw_phl_stainfo_t phl_stat;
 	struct	sta_info	*pstat = NULL;
 	struct	sta_priv *pstapriv = &padapter->stapriv;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
@@ -2384,7 +2379,9 @@ unsigned int OnAssocReq(_adapter *padapter, union recv_frame *precv_frame)
 	unsigned short		frame_type, ie_offset = 0;
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
+#if defined(PRIVATE_R) || defined(CONFIG_RTW_MBO)
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
+#endif
 	WLAN_BSSID_EX	*cur = &(pmlmeinfo->dev_network);
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	u8 *pframe = precv_frame->u.hdr.rx_data;
@@ -2917,10 +2914,11 @@ void rtw_ie_handler(struct _ADAPTER *padapter, struct _ADAPTER_LINK *padapter_li
 
 unsigned int OnAssocRsp(_adapter *padapter, union recv_frame *precv_frame)
 {
-	uint i;
 	int res;
 	unsigned short status;
+#ifdef CONFIG_WAPI_SUPPORT
 	PNDIS_802_11_VARIABLE_IEs pIE = NULL;
+#endif
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -3026,9 +3024,6 @@ unsigned int OnDeAuth(_adapter *padapter, union recv_frame *precv_frame)
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	u8 *pframe = precv_frame->u.hdr.rx_data;
 	bool active = _FALSE;
-#ifdef CONFIG_P2P
-	struct wifidirect_info *pwdinfo = &(padapter->wdinfo);
-#endif /* CONFIG_P2P */
 
 	/* check A3 */
 	if (!(rtw_match_bssid_ext(padapter, GetAddr3Ptr(pframe))))
@@ -3128,9 +3123,6 @@ unsigned int OnDisassoc(_adapter *padapter, union recv_frame *precv_frame)
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	u8 *pframe = precv_frame->u.hdr.rx_data;
 	bool active = _FALSE;
-#ifdef CONFIG_P2P
-	struct wifidirect_info *pwdinfo = &(padapter->wdinfo);
-#endif /* CONFIG_P2P */
 
 	/* check A3 */
 	if (!(rtw_match_bssid_ext(padapter, GetAddr3Ptr(pframe))))
@@ -3889,8 +3881,6 @@ void issue_probersp_p2p(_adapter *padapter, unsigned char *da)
 	u16					beacon_interval = 100;
 	u16					capInfo = 0;
 	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
-	u8					wpsie[255] = { 0x00 };
-	u32					wpsielen = 0, p2pielen = 0;
 #ifdef CONFIG_WFD
 	u32					wfdielen = 0;
 #endif
@@ -4013,8 +4003,6 @@ static int _issue_probereq_p2p(_adapter *padapter, u8 *da, int wait_ack)
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	u8	bc_addr[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
-	u8					wpsie[255] = { 0x00 }, p2pie[255] = { 0x00 };
-	u16					wpsielen = 0, p2pielen = 0;
 #ifdef CONFIG_WFD
 	u32					wfdielen = 0;
 #endif
@@ -4395,10 +4383,8 @@ unsigned int OnAction_sa_query(_adapter *padapter, union recv_frame *precv_frame
 {
 	u8 *pframe = precv_frame->u.hdr.rx_data;
 	struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
-	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct sta_info		*psta;
 	struct sta_priv		*pstapriv = &padapter->stapriv;
-	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	u16 tid;
 	struct _ADAPTER_LINK *padapter_link = precv_frame->u.hdr.adapter_link;
 	/* Baron */
@@ -4521,10 +4507,8 @@ unsigned int OnAction_p2p(_adapter *padapter, union recv_frame *precv_frame)
 {
 #ifdef CONFIG_P2P
 	u8 *frame_body;
-	u8 category, OUI_Subtype, dialogToken = 0;
+	u8 category;
 	u8 *pframe = precv_frame->u.hdr.rx_data;
-	uint len = precv_frame->u.hdr.len;
-	struct	wifidirect_info	*pwdinfo = &(padapter->wdinfo);
 
 	/* check RA matches or not */
 	if (!_rtw_memcmp(adapter_mac_addr(padapter), GetAddr1Ptr(pframe), ETH_ALEN))
@@ -4963,7 +4947,6 @@ void dump_mgntframe(_adapter *padapter, struct xmit_frame *pmgntframe)
 s32 dump_mgntframe_and_wait(_adapter *padapter, struct xmit_frame *pmgntframe, int timeout_ms)
 {
 	s32 ret = _FAIL;
-	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 
 	#if 0 /*CONFIG_CORE_XMITBUF*/
 	struct xmit_buf *pxmitbuf = pmgntframe->pxmitbuf;
@@ -5231,13 +5214,13 @@ void issue_beacon(_adapter *padapter, int timeout_ms)
 		/* RTW_INFO("ie len=%d\n", cur_network->IELength); */
 #ifdef CONFIG_P2P
 		/* for P2P : Primary Device Type & Device Name */
-		u32 wpsielen = 0, insert_len = 0;
+		u32 wpsielen = 0;
 		u8 *wpsie = NULL;
 		wpsie = rtw_get_wps_ie(cur_network->IEs + _FIXED_IE_LENGTH_, cur_network->IELength - _FIXED_IE_LENGTH_, NULL, &wpsielen);
 
 		if (rtw_p2p_chk_role(pwdinfo, P2P_ROLE_GO) && wpsie && wpsielen > 0) {
 			uint wps_offset, remainder_ielen;
-			u8 *premainder_ie, *pframe_wscie;
+			u8 *premainder_ie;
 
 			wps_offset = (uint)(wpsie - cur_network->IEs);
 
@@ -6197,7 +6180,9 @@ void issue_asocrsp(_adapter *padapter, unsigned short status, struct sta_info *p
 	struct link_mlme_priv	*pmlmepriv = &(padapter_link->mlmepriv);
 	WLAN_BSSID_EX *pnetwork = &padapter_link->mlmeextpriv.mlmext_info.network;
 	u8 *ie = pnetwork->IEs;
+#if defined(CONFIG_RTW_80211K) || defined(CONFIG_RTW_MBO)
 	uint ie_len = 0;
+#endif
 #ifdef CONFIG_P2P
 	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
 #ifdef CONFIG_WFD
@@ -6540,9 +6525,6 @@ int rtw_build_assocreq_ies(_adapter *padapter, struct _ADAPTER_LINK *padapter_li
 	PNDIS_802_11_VARIABLE_IEs	pIE;
 	u8	vs_ie_length = 0;
 #ifdef CONFIG_P2P
-	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
-	u8					p2pie[255] = { 0x00 };
-	u16					p2pielen = 0;
 #ifdef CONFIG_WFD
 	u32					wfdielen = 0;
 #endif
@@ -6865,7 +6847,6 @@ void _issue_assocreq(_adapter *padapter, u8 is_reassoc)
 	struct xmit_priv		*pxmitpriv = &(padapter->xmitpriv);
 	/* Send assoc req via the primary link */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
-	struct link_mlme_priv *pmlmepriv = &(padapter_link->mlmepriv);
 	struct link_mlme_ext_priv	*pmlmeext = &(padapter_link->mlmeextpriv);
 	struct link_mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 #ifdef CONFIG_80211BE_EHT
@@ -7331,9 +7312,6 @@ static int _issue_deauth(_adapter *padapter, unsigned char *da, unsigned short r
 	struct _ADAPTER_LINK	*padapter_link = GET_PRIMARY_LINK(padapter);
 	struct link_mlme_ext_info	*pmlmeinfo = &(padapter_link->mlmeextpriv.mlmext_info);
 	int ret = _FAIL;
-#ifdef CONFIG_P2P
-	struct wifidirect_info *pwdinfo = &(padapter->wdinfo);
-#endif /* CONFIG_P2P	 */
 
 	/* RTW_INFO("%s to "MAC_FMT"\n", __func__, MAC_ARG(da)); */
 
@@ -7466,9 +7444,6 @@ static int _issue_disassoc(_adapter *padapter, unsigned char *da, unsigned short
 	struct _ADAPTER_LINK	*padapter_link = GET_PRIMARY_LINK(padapter);
 	struct link_mlme_ext_info	*pmlmeinfo = &(padapter_link->mlmeextpriv.mlmext_info);
 	int ret = _FAIL;
-#ifdef CONFIG_P2P
-	struct wifidirect_info *pwdinfo = &(padapter->wdinfo);
-#endif /* CONFIG_P2P	 */
 
 	/* RTW_INFO("%s to "MAC_FMT"\n", __func__, MAC_ARG(da)); */
 
@@ -7531,7 +7506,6 @@ void issue_action_SA_Query(_adapter *padapter, struct _ADAPTER_LINK *padapter_li
 			unsigned char *raddr, unsigned char action, unsigned short tid, u8 key_type)
 {
 	u8	category = RTW_WLAN_CATEGORY_SA_QUERY;
-	u16	reason_code;
 	struct xmit_frame		*pmgntframe;
 	struct pkt_attrib		*pattrib;
 	u8					*pframe;
@@ -7541,8 +7515,6 @@ void issue_action_SA_Query(_adapter *padapter, struct _ADAPTER_LINK *padapter_li
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct sta_info		*psta;
 	struct sta_priv		*pstapriv = &padapter->stapriv;
-	struct registry_priv		*pregpriv = &padapter->registrypriv;
-	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct link_mlme_ext_info	*pmlmeinfo = &(padapter_link->mlmeextpriv.mlmext_info);
 
 	if (alink_is_tx_blocked_by_ch_waiting(padapter_link))
@@ -8903,7 +8875,6 @@ dsconfig_done:
 void start_create_ibss(_adapter *padapter)
 {
 	unsigned short	caps;
-	u8	val8;
 	u8	join_type;
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
@@ -9316,8 +9287,6 @@ void report_survey_event(_adapter *padapter, union recv_frame *precv_frame)
 void report_surveydone_event(_adapter *padapter, bool acs, u8 flags)
 {
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
-	/* Currently only use the primary link to scan */
-	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 
 	if (flags & RTW_CMDF_DIRECTLY) {
 		struct surveydone_event survey_done;
@@ -9327,7 +9296,8 @@ void report_surveydone_event(_adapter *padapter, bool acs, u8 flags)
 		survey_done.acs = acs;
 		RTW_INFO("survey done event(%x) wifi band:%d for "ADPT_FMT"-HW_BAND_%d\n",
 			survey_done.bss_cnt, padapter->setband, ADPT_ARG(padapter),
-			padapter_link->wrlink->hw_band);
+			/* Currently only use the primary link to scan */
+			GET_PRIMARY_LINK(padapter)->wrlink->hw_band);
 		rtw_surveydone_event_callback(padapter, (u8 *)&survey_done);
 	} else {
 
@@ -9373,7 +9343,8 @@ void report_surveydone_event(_adapter *padapter, bool acs, u8 flags)
 
 		RTW_INFO("survey done event(%x) wifi band:%d for "ADPT_FMT"- HW_BAND_%d\n",
 			psurveydone_evt->bss_cnt, padapter->setband, ADPT_ARG(padapter),
-			padapter_link->wrlink->hw_band);
+			/* Currently only use the primary link to scan */
+			GET_PRIMARY_LINK(padapter)->wrlink->hw_band);
 
 		rtw_enqueue_cmd(pcmdpriv, pcmd_obj);
 	}
@@ -9768,7 +9739,6 @@ void update_sta_info(_adapter *padapter, struct sta_info *psta) {
 static void update_sta_trx_nss(_adapter *adapter, struct sta_info *psta)
 {
 	s8 tx_nss, rx_nss;
-	struct mlme_ext_priv *mlmeext = &adapter->mlmeextpriv;
 
 	/* get adapter tx nss */
 	tx_nss = rtw_get_sta_tx_nss(adapter, psta);
@@ -9885,10 +9855,11 @@ void rtw_mlmeext_disconnect(_adapter *padapter)
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
+#ifdef PRIVATE_R
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	struct recv_info *precvinfo = &padapter->recvinfo;
+#endif
 	u8 self_action = MLME_ACTION_UNKNOWN;
-	u8 state_backup = (pmlmeinfo->state & 0x03);
 	u8 ASIX_ID[] = {0x00, 0x0E, 0xC6};
 	u8 *mac;
 	struct sta_info *sta;
@@ -10850,7 +10821,6 @@ void sa_query_timer_hdl(void *ctx)
 {
 	struct sta_info *psta = (struct sta_info *)ctx;
 	_adapter *padapter = psta->padapter;
-	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 
 	if (MLME_IS_STA(padapter) &&
@@ -11276,7 +11246,6 @@ void update_join_link_info(struct _ADAPTER *a, struct _ADAPTER_LINK *alink, stru
 	struct _WLAN_BSSID_EX *pnetwork = &pmlmeinfo->network;
 	struct _NDIS_802_11_VARIABLE_IEs *pIE;
 	u32 i;
-	u8 join_type;
 
 	alink->mlmepriv.num_FortyMHzIntolerant = 0;
 	alink->mlmepriv.num_sta_no_ht = 0;
@@ -11366,9 +11335,11 @@ void update_join_info(struct _ADAPTER *a, struct _WLAN_BSSID_EX *pbuf)
 	struct mlme_ext_info *pmlmeinfo = &pmlmeext->mlmext_info;
 	struct _WLAN_BSSID_EX *pnetwork = &pmlmeinfo->dev_network;
 	struct _ADAPTER_LINK *alink = GET_PRIMARY_LINK(a);
+#ifdef CONFIG_80211BE_EHT
 	struct wlan_mld_network *mld_network = NULL;
 	struct wlan_network *link_network = NULL;
 	u8 lidx;
+#endif
 
 	pmlmeinfo->agg_enable_bitmap = 0;
 	pmlmeinfo->candidate_tid_bitmap = 0;
@@ -11432,7 +11403,7 @@ void rtw_join_done_chk_ch(_adapter *adapter, int join_res)
 	struct rtw_chan_def u_chdef = {0};
 	struct rtw_chan_def new_chdef = {0};
 	struct rtw_mr_chctx_info mr_cc_info = {0};
-	int i, ret;
+	int i;
 	bool is_chctx_add = false;
 	struct _ADAPTER_LINK *adapter_link = NULL;
 	struct _ADAPTER_LINK *iface_link = NULL;
@@ -12798,9 +12769,9 @@ u8 led_blink_hdl(_adapter *padapter, unsigned char *pbuf)
 
 u8 tdls_hdl(_adapter *padapter, unsigned char *pbuf)
 {
+#ifdef CONFIG_TDLS
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
-#ifdef CONFIG_TDLS
 	struct tdls_info *ptdlsinfo = &padapter->tdlsinfo;
 #ifdef CONFIG_TDLS_CH_SW
 	struct tdls_ch_switch *pchsw_info = &ptdlsinfo->chsw_info;
