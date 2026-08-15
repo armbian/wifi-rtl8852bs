@@ -80,11 +80,6 @@ static void halbb_7_physts_detail_dump(struct bb_info *bb, u32 bitmap, u32 bitma
 	struct bb_physts_rslt_2_info *psts_2 = &physts->bb_physts_rslt_2_i;
 	struct bb_physts_rslt_8_info *psts_8 = &physts->bb_physts_rslt_8_i;
 	struct bb_physts_rslt_9_info *psts_9 = &physts->bb_physts_rslt_9_i;
-	struct bb_physts_rslt_12_info *psts_12 = &physts->bb_physts_rslt_12_i;
-	struct bb_physts_rslt_13_info *psts_13 = &physts->bb_physts_rslt_13_i;
-	struct bb_physts_rslt_14_info *psts_14 = &physts->bb_physts_rslt_14_i;
-	struct bb_physts_rslt_15_info *psts_15 = &physts->bb_physts_rslt_15_i;
-	struct bb_physts_rslt_17_info *psts_17 = &physts->bb_physts_rslt_17_i;
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
 	char *tmp_char = NULL;
 //	u8 i;
@@ -409,7 +404,6 @@ static u8 halbb_7_physts_ie_hdr(struct bb_info *bb,
 	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	struct bb_physts_rslt_hdr_info	*psts_h = &physts->bb_physts_rslt_hdr_i;
 	struct physts_hdr_info *physts_hdr = NULL;
-	u8 *addr_in_bkp = addr;
 
 	/*---[Physts header parsing]------------------------------------------*/
 	physts_hdr = (struct physts_hdr_info *)addr;
@@ -690,7 +684,6 @@ static bool halbb_7_physts_ie_08(struct bb_info *bb,
 	struct bb_ch_info_physts_info *ch_physts = &ch_rpt->bb_ch_info_physts_i;
 	struct bb_ch_info_cr_cfg_info *cfg = &ch_rpt->bb_ch_info_cr_cfg_i;
 	#endif
-	u64 *phy_sts_tmp = NULL;
 
 	ie_8 = (struct physts_ie_8_ch_info *)addr;
 	psts_8->ie_08_addr = addr;
@@ -1578,7 +1571,6 @@ static bool halbb_7_physts_ie_26(struct bb_info *bb,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
 {
-	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	struct physts_ie_26_info *ie_26 = NULL;
 
 	ie_26 = (struct physts_ie_26_info *)addr;
@@ -1591,7 +1583,6 @@ static bool halbb_7_physts_ie_27(struct bb_info *bb,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
 {
-	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	struct physts_ie_27_info *ie_27 = NULL;
 
 	ie_27 = (struct physts_ie_27_info *)addr;
@@ -1698,7 +1689,6 @@ static bool halbb_7_physts_ie_30(struct bb_info *bb,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
 {
-	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	struct physts_ie_30_info *ie_30 = NULL;
 
 	ie_30 = (struct physts_ie_30_info *)addr;
@@ -1711,7 +1701,6 @@ static bool halbb_7_physts_ie_31(struct bb_info *bb,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
 {
-	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	struct physts_ie_31_info *ie_31 = NULL;
 
 	ie_31 = (struct physts_ie_31_info *)addr;
