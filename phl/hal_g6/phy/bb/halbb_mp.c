@@ -133,8 +133,6 @@ u32 halbb_mp_get_rx_crc_ok(struct bb_info *bb, enum phl_phy_idx phy_idx)
 {
 	u32 crc_ok = 0;
 
-	struct bb_rpt_cr_info *cr = &bb->bb_rpt_i.bb_rpt_cr_i;
-
 
 	switch (bb->bb_80211spec) {
 	case BB_AX_IC:
@@ -215,8 +213,6 @@ u32 halbb_mp_get_rx_crc_err(struct bb_info *bb, enum phl_phy_idx phy_idx)
 {
 	u32 crc_err = 0;
 
-	struct bb_rpt_cr_info *cr = &bb->bb_rpt_i.bb_rpt_cr_i;
-
 
 	switch (bb->bb_80211spec) {
 	case BB_AX_IC:
@@ -296,10 +292,6 @@ halbb_mp_get_psts_ie_01(struct bb_info *bb, struct bb_mp_psts *bb_mp_physts)
 void
 halbb_mp_get_psts(struct bb_info *bb , struct bb_mp_psts *bb_mp_physts)
 {
-	struct bb_physts_info	*physts = &bb->bb_physts_i;
-	struct bb_physts_rslt_hdr_info	*psts_h = &physts->bb_physts_rslt_hdr_i;
-
-
 	BB_DBG(bb, DBG_PHY_CONFIG, "<====== %s ======>\n", __func__);
 
 	// IE bitmap info //
@@ -803,7 +795,6 @@ struct rssi_physts halbb_get_mp_rssi_physts(struct bb_info *bb, enum rf_path pat
 	u8 band = 0;
 	u8 central_ch = bb->hal_com->band[phy_idx].cur_chandef.center_ch;
 	u8 RPL = 0;
-	u32 rssi = 0;
 	u32 dbg_port = 0;
 	s32 cal_tmp[2] = {0};
 	u16 tmp = 0;
@@ -895,6 +886,8 @@ struct rssi_physts halbb_get_mp_rssi_physts(struct bb_info *bb, enum rf_path pat
 			}
 		}
 	#else
+		u32 rssi = 0;
+
 		#if 0
 		rssi_rpt.rssi_seg[0].rssi[0] = (s32)((rssi & 0xff) - 220);
 		rssi_rpt.rssi_seg[0].rssi[1] = (s32)(((rssi & 0xff00) >> 8) - 220);

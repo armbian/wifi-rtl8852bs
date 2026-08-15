@@ -123,7 +123,6 @@ static void halbb_bb_td_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 {
 	struct bb_dbg_info *dbg = &bb->bb_dbg_i;
 	u32 val[10] = {0};
-	u32 tmp = 0;
 
 	if (_os_strcmp(input[1], "-h") == 0) {
 		BB_DBG_CNSL(*_out_len, *_used, output + *_used, *_out_len - *_used,
@@ -214,8 +213,6 @@ static void halbb_bb_td_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 static void halbb_bb_fd_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 			      char *output, u32 *_out_len)
 {
-	u32 val[10] = {0};
-
 	if (_os_strcmp(input[1], "-h") == 0) {
 		BB_DBG_CNSL(*_out_len, *_used, output + *_used, *_out_len - *_used,
 			 "{fd dbg}\n");
@@ -504,11 +501,9 @@ void halbb_cmd_parser(struct bb_info *bb_0, char input_in[][MAX_ARGV],
 	char input[MAX_ARGC][MAX_ARGV];
 	u32 used = 0;
 	u8 id = 0;
-	u32 var1[10] = {0};
 	u32 i;
 	u32 halbb_ary_size = echo_cmd->cmd_size;
 	u32 directory = 0;
-	char char_temp = ' ';
 	enum phl_phy_idx  phy_idx_tmp = HW_PHY_0;
 
 	//BB_TRACE("[IN ] %s %s %s %s %s\n", input_in[0], input_in[1], input_in[2], input_in[3], input_in[4]);
