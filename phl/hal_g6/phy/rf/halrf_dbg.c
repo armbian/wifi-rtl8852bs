@@ -313,7 +313,7 @@ static void _halrf_dpk_info(struct rf_info *rf, char input[][16], u32 *_used,
 
 	u32 used = *_used;
 	u32 out_len = *_out_len;
-	char *ic_name = NULL;
+	char *ic_name = "unknown";
 	u32 dpk_ver = 0;
 	u32 rf_para = 0;
 	u32 rfk_init_ver = 0;
@@ -475,7 +475,7 @@ static void halrf_dpk_read_rc_mtx(struct rf_info *rf, char input[][16], u32 *_us
 	u32 used = *_used;
 	u32 out_len = *_out_len;
 	u32 addr = 0;
-	char *ic_name = NULL;
+	char *ic_name = "unknown";
 
 	switch (hal_i->chip_id) {
 #ifdef RF_8852C_SUPPORT
@@ -519,7 +519,7 @@ static void halrf_dpk_read_rx_sram(struct rf_info *rf, char input[][16], u32 *_u
 	u32 used = *_used;
 	u32 out_len = *_out_len;
 	u32 addr = 0;
-	char *ic_name = NULL;
+	char *ic_name = "unknown";
 
 	switch (hal_i->chip_id) {
 #ifdef RF_8852C_SUPPORT
@@ -561,7 +561,7 @@ static void halrf_dpk_read_coef(struct rf_info *rf, char input[][16], u32 *_used
 	u32 used = *_used;
 	u32 out_len = *_out_len;
 	u32 addr = 0;
-	char *ic_name = NULL;
+	char *ic_name = "unknown";
 
 	switch (hal_i->chip_id) {
 #ifdef RF_8852C_SUPPORT
@@ -699,7 +699,7 @@ void halrf_rx_dck_info(struct rf_info *rf, char input[][16], u32 *_used,
 
 	u32 used = *_used;
 	u32 out_len = *_out_len;
-	char *ic_name = NULL;
+	char *ic_name = "unknown";
 	u32 rxdck_ver = 0;
 	u8 path;
 	u32 addr = 0;
@@ -916,7 +916,7 @@ static void halrf_dack_dbg_info(struct rf_info *rf, char input[][16], u32 *_used
 
 	u32 used = *_used;
 	u32 out_len = *_out_len;
-	char *ic_name = NULL;
+	char *ic_name = "unknown";
 	u32 dack_ver = 0;
 	u32 rf_para = 0;
 	u8 i;
@@ -1054,7 +1054,7 @@ static void _halrf_tssi_info(struct rf_info *rf, char input[][16], u32 *_used,
 
 	u32 used = *_used;
 	u32 out_len = *_out_len;
-	char *ic_name = NULL;
+	char *ic_name = "unknown";
 	u32 tssi_ver = 0;
 
 	switch (hal_i->chip_id) {
@@ -1289,7 +1289,7 @@ static void _halrf_iqk_info(struct rf_info *rf, char input[][16], u32 *_used,
 
 	u32 used = *_used;
 	u32 out_len = *_out_len;
-	char *ic_name = NULL;
+	char *ic_name = "unknown";
 	u32 ver = 0;
 	u32 rfk_init_ver = 0;
 	u8 tmp = iqk_info->iqk_table_idx[0];
@@ -1879,7 +1879,7 @@ static void _halrf_gapk_info(struct rf_info *rf, char input[][16], u32 *_used,
 
 	u32 used = *_used;
 	u32 out_len = *_out_len;
-	char *ic_name = NULL;
+	char *ic_name = "unknown";
 	u32 txgapk_ver = 0;
 	u32 rf_para = 0;
 	u32 rfk_init_ver = 0;
@@ -2256,7 +2256,7 @@ void halrf_chl_rfk_dbg_cmd(struct rf_info *rf, char input[][16], u32 *_used,
 	u32 used = *_used;
 	u32 out_len = *_out_len;
 	u8 i;
-	char *ic_name = NULL;
+	char *ic_name = "unknown";
 
 	u8 dack_ver = 0;
 	u8 rxdck_ver = 0;
