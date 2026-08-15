@@ -170,7 +170,6 @@ static void halbb_digital_cfo_comp(struct bb_info *bb, s32 curr_cfo)
 
 static void halbb_digital_cfo_comp_init(struct bb_info *bb)
 {
-	struct bb_cfo_trk_info *cfo_trk = &bb->bb_cfo_trk_i;
 	struct bb_cfo_trk_cr_info *cr = &bb->bb_cfo_trk_i.bb_cfo_trk_cr_i;
 
 	// 0x4494[29] Whether the memory of r_cfo_comp_312p5khz is valid
@@ -492,7 +491,6 @@ static void halbb_crystal_cap_adjust(struct bb_info *bb, s32 curr_cfo)
 {
 	struct bb_cfo_trk_info *bb_cfo_trk = &bb->bb_cfo_trk_i;
 	struct bb_cfo_rc_info *bb_cfo_rc = &bb_cfo_trk->bb_cfo_rc_i;
-	struct bb_path_info *bb_path = &bb->bb_path_i;
 	//enum bb_mlo_mode_info mode = MLO_0_PLUS_2;
 	u8 x_cap = bb_cfo_trk->crystal_cap;
 	u8 step = 0;
@@ -600,11 +598,9 @@ static s32 halbb_avg_cfo_calc(struct bb_info *bb)
 static s32 halbb_multi_sta_avg_cfo_calc(struct bb_info *bb)
 {
 	struct bb_cfo_trk_info *bb_cfo_trk = &bb->bb_cfo_trk_i;
-	struct rtw_hal_com_t *hal = bb->hal_com;
 	struct rtw_phl_com_t *phl = bb->phl_com;
 	struct dev_cap_t *dev = &phl->dev_cap;
 	u8 band = bb->hal_com->band[0].cur_chandef.band;
-	struct bb_link_info *bb_link = &bb->bb_link_i;
 	struct rtw_phl_stainfo_t *sta;
 	struct rtw_cfo_info *cfo_t = NULL;
 	s32 target_cfo = 0;
@@ -613,10 +609,8 @@ static s32 halbb_multi_sta_avg_cfo_calc(struct bb_info *bb)
 	s32 cfo_avg = 0;
 	s32 max_cfo_lb= 0x80000000;
 	s32 min_cfo_ub = 0x7fffffff;
-	u16 cfo_cnt_all = 0;
 	u8 active_entry_cnt = 0, sta_cnt = 0;
 	u32 tp_all = 0;
-	u16 active_entry = 0;
 	u8 i;
 	u8 cfo_tol = 0;
 	u16 macid;
@@ -856,7 +850,6 @@ halbb_cfo_trk_abort(struct bb_info *bb)
 
 void halbb_cfo_trk(struct bb_info *bb, s32 curr_cfo)
 {
-	struct bb_cfo_trk_info *bb_cfo_trk = &bb->bb_cfo_trk_i;
 	struct bb_link_info *bb_link = &bb->bb_link_i;
 	struct rtw_phl_com_t *phl = bb->phl_com;
 	struct dev_cap_t *dev = &phl->dev_cap;
@@ -919,9 +912,7 @@ static bool halbb_cfo_acc_mode_en(struct bb_info *bb)
 {
 	struct bb_cfo_trk_info *cfo_trk = &bb->bb_cfo_trk_i;
 	struct bb_link_info *link = &bb->bb_link_i;
-	struct rtw_phl_com_t *phl = bb->phl_com;
 	struct rtw_hal_com_t *hal = bb->hal_com;
-	struct dev_cap_t *dev = &phl->dev_cap;
 	struct rtw_phl_stainfo_t *sta;
 	u8 sta_cnt = 0;
 	u32 i = 0, cfo_tf_cnt = 0, cfo_tf_cnt_cur = 0;
@@ -1016,8 +1007,6 @@ void halbb_cfo_dm(struct bb_info *bb)
 	struct bb_cfo_trk_info *cfo_trk = &bb->bb_cfo_trk_i;
 	struct bb_cfo_diver_info *cfo_div = &cfo_trk->bb_cfo_div_i;
 	struct bb_link_info *bb_link = &bb->bb_link_i;
-	struct rtw_phl_com_t *phl = bb->phl_com;
-	struct dev_cap_t *dev = &phl->dev_cap;
 	bool x_cap_update = false;
 	u8 pre_x_cap = cfo_trk->crystal_cap;
 	s32 new_cfo = 0;
