@@ -149,7 +149,6 @@ u8 rtw_chplan_is_bchbw_valid(u8 id, u8 id_6g, enum band_type band, u8 ch, u8 bw,
 	u8 op_ch;
 	u8 valid = 0;
 	int i;
-	int ch_idx;
 	u8 flags;
 
 	cch = rtw_get_center_ch_by_band(band, ch, bw, offset);
@@ -973,10 +972,9 @@ static void rtw_txpwr_apply_regd_req_default(struct rf_ctl_t *rfctl, struct regd
 static void rtw_txpwr_apply_regd_req(struct rf_ctl_t *rfctl, struct regd_req_t *req
 	, char *names_of_band[], int names_of_band_len[])
 {
-	struct dvobj_priv *dvobj = rfctl_to_dvobj(rfctl);
 	struct rtw_chset *chset = &rfctl->chset;
-	struct country_chplan *chplan = &req->chplan;
 #ifdef CONFIG_REGD_SRC_FROM_OS
+	struct country_chplan *chplan = &req->chplan;
 	char req_alpha2_str[3] = {chplan->alpha2[0], chplan->alpha2[1], 0};
 #endif
 	const char *name_of_band[BAND_MAX];
@@ -2264,7 +2262,7 @@ static bool rtw_chplan_update_per_link_cisr(struct rf_ctl_t *rfctl, u8 iface_id
 {
 	struct country_ie_slave_record ori_cisr_cont[RTW_RLINK_MAX];
 	u8 alink_id_s, alink_id_e, alink_id;
-	int i, j;
+	int i;
 	bool effected = false;
 
 	if (cisr_alink_id < RTW_RLINK_MAX) {
@@ -3725,7 +3723,9 @@ static void dump_chplan_edcca_modes(void *sel, struct get_chplan_resp *chplan)
 static void dump_addl_ch_disable_conf(void *sel, struct get_chplan_resp *chplan)
 {
 	struct chplan_confs *confs = &chplan->confs;
+#if CONFIG_IEEE80211_BAND_6GHZ
 	int i;
+#endif
 
 	if (confs->dis_ch_flags) {
 		char buf[RTW_CH_FLAGS_STR_LEN];
@@ -3758,7 +3758,6 @@ void dump_cur_country(void *sel, struct rf_ctl_t *rfctl)
 {
 	struct dvobj_priv *dvobj = rfctl_to_dvobj(rfctl);
 	struct get_chplan_resp *chplan;
-	int i;
 
 	if (rtw_get_chplan_cmd(dvobj_get_primary_adapter(dvobj), RTW_CMDF_WAIT_ACK, &chplan) == _FAIL)
 		return;
