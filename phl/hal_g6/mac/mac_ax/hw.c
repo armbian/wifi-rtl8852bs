@@ -658,9 +658,8 @@ u32 set_bacam_mode(struct mac_ax_adapter *adapter, u8 mode_sel)
 
 static u32 set_xtal_aac(struct mac_ax_adapter *adapter, u8 aac_mode)
 {
-	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
-
 #if MAC_AX_8852A_SUPPORT
+	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
 	u8 val8;
 
 	val8 = MAC_REG_R8(R_AX_XTAL_ON_CTRL2);

@@ -1897,8 +1897,6 @@ int rtw_hal_mac_sdio_parse_rx(struct rtw_hal_com_t *hal,
 {
 	struct hal_info_t *hal_info = hal->hal_priv;
 	struct mac_ax_adapter *mac = hal_to_mac(hal_info);
-	struct rtw_phl_com_t *phl_com = hal_info->phl_com;
-	struct phl_info_t *phl_info = (struct phl_info_t *)phl_com->phl_priv;
 	struct mac_ax_rxpkt_info info = {0};
 	struct sdio_rx_pkt *pkt;
 	u8 *ptr;
@@ -1920,7 +1918,7 @@ int rtw_hal_mac_sdio_parse_rx(struct rtw_hal_com_t *hal,
 			PHL_ERR("%s: agg_idx=%d, len=%u(%u), parse_rxdesc FAIL!(%u)\n",
 				__func__, i, len, rxbuf->len, err);
 			rxbuf->len -= len;
-			rtw_phl_debug_trx((void *)phl_info);
+			rtw_phl_debug_trx((void *)hal_info->phl_com->phl_priv);
 			len = 0;
 			break;
 		}

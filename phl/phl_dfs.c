@@ -69,7 +69,6 @@ static bool phl_overlap_radar_detect_range(struct rtw_dfs_t *dfs_info
 {
 	bool ret = false;
 	u32 hi = 0, lo = 0;
-	int i;
 
 	if (!rtw_phl_bchbw_to_freq_range(band, ch, bw, offset, &hi, &lo)) {
 		_os_warn_on(1);

@@ -217,7 +217,6 @@ void rtw_hal_rf_reg_dump(void *sel, void *h)
 #ifdef RTW_WKARD_RF_CR_DUMP
 	int i, j = 1, path;
 	struct hal_info_t *hal_info = (struct hal_info_t *)h;
-	struct rtw_hal_com_t *hal = hal_info->hal_com;
 	struct rtw_phl_com_t *phl_com = hal_info->phl_com;
 	u32 value;
 	u8 path_nums;

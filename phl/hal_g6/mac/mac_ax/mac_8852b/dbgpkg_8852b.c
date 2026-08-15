@@ -367,20 +367,6 @@ static struct mac_ax_dbg_port_info dbg_port_ple_bufmgn_ctl = {
 	0xFFFFFFFF
 };
 
-static struct mac_ax_dbg_port_info dbg_port_ple_bufmgn_arb = {
-	R_AX_PLE_DBG_CTL,
-	MAC_AX_BYTE_SEL_2,
-	0,
-	0xFFFF,
-	0xE0E,
-	0xE0E,
-	0x101,
-	R_AX_PLE_DBG_OUT,
-	MAC_AX_BYTE_SEL_4,
-	0,
-	0xFFFFFFFF
-};
-
 static struct mac_ax_dbg_port_info dbg_port_ple_quemgn_ctl = {
 	R_AX_PLE_DBG_CTL,
 	MAC_AX_BYTE_SEL_2,
@@ -654,90 +640,6 @@ static struct mac_ax_dbg_port_info dbg_port_txpktctrl_b0_unit0_1 = {
 	0xffffffff,
 	0x1080108,
 	0x10D010D,
-	0x10001,
-	R_AX_TPC_DBG_OUT,
-	MAC_AX_BYTE_SEL_4,
-	0,
-	0xffffffff,
-};
-
-static struct mac_ax_dbg_port_info dbg_port_txpktctrl_b0_unit1_0 = {
-	R_AX_DBG_CTL_TXPKT,
-	MAC_AX_BYTE_SEL_4,
-	0,
-	0xffffffff,
-	0x1100110,
-	0x1120112,
-	0x10001,
-	R_AX_TPC_DBG_OUT,
-	MAC_AX_BYTE_SEL_4,
-	0,
-	0xffffffff,
-};
-
-static struct mac_ax_dbg_port_info dbg_port_txpktctrl_b0_unit1_1 = {
-	R_AX_DBG_CTL_TXPKT,
-	MAC_AX_BYTE_SEL_4,
-	0,
-	0xffffffff,
-	0x1180118,
-	0x11D011D,
-	0x10001,
-	R_AX_TPC_DBG_OUT,
-	MAC_AX_BYTE_SEL_4,
-	0,
-	0xffffffff,
-};
-
-static struct mac_ax_dbg_port_info dbg_port_txpktctrl_b0_unit2_0 = {
-	R_AX_DBG_CTL_TXPKT,
-	MAC_AX_BYTE_SEL_4,
-	0,
-	0xffffffff,
-	0x1200120,
-	0x1220122,
-	0x10001,
-	R_AX_TPC_DBG_OUT,
-	MAC_AX_BYTE_SEL_4,
-	0,
-	0xffffffff,
-};
-
-static struct mac_ax_dbg_port_info dbg_port_txpktctrl_b0_unit2_1 = {
-	R_AX_DBG_CTL_TXPKT,
-	MAC_AX_BYTE_SEL_4,
-	0,
-	0xffffffff,
-	0x1280128,
-	0x12D012D,
-	0x10001,
-	R_AX_TPC_DBG_OUT,
-	MAC_AX_BYTE_SEL_4,
-	0,
-	0xffffffff,
-};
-
-static struct mac_ax_dbg_port_info dbg_port_txpktctrl_b0_unit3_0 = {
-	R_AX_DBG_CTL_TXPKT,
-	MAC_AX_BYTE_SEL_4,
-	0,
-	0xffffffff,
-	0x1300130,
-	0x1320132,
-	0x10001,
-	R_AX_TPC_DBG_OUT,
-	MAC_AX_BYTE_SEL_4,
-	0,
-	0xffffffff,
-};
-
-static struct mac_ax_dbg_port_info dbg_port_txpktctrl_b0_unit3_1 = {
-	R_AX_DBG_CTL_TXPKT,
-	MAC_AX_BYTE_SEL_4,
-	0,
-	0xffffffff,
-	0x1380138,
-	0x13D013D,
 	0x10001,
 	R_AX_TPC_DBG_OUT,
 	MAC_AX_BYTE_SEL_4,
