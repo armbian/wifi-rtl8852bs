@@ -147,7 +147,6 @@ static bool halbb_sniffer_phy_sts_ie_10(struct bb_info *bb)
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
 	u32 sigb_tmp = 0;
 	u16 sig_b_len_tmp = 0;
-	u32 sig_b_len = 0;
 
 	BB_DBG(bb, DBG_SNIFFER, "[IE:10] snif_sig_b_len=%d\n", snif->snif_sig_b_len);
 

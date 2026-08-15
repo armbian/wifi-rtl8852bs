@@ -397,7 +397,6 @@ void halbb_spur_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 	u32 val[10] = {0};
 	u32 used = *_used;
 	u32 out_len = *_out_len;
-	u8 tmp = 0;
 
 	if (_os_strcmp(input[1], "-h") == 0) {
 		BB_DBG_CNSL(out_len, used, output + used, out_len - used,
