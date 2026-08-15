@@ -773,9 +773,6 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param, 
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
-#ifdef CONFIG_P2P
-	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
-#endif /* CONFIG_P2P */
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 	struct link_security_priv *lsecuritypriv = &padapter_link->securitypriv;
@@ -950,9 +947,6 @@ static int rtw_set_wpa_ie(_adapter *padapter, char *pie, unsigned short ielen)
 	u8 mfp_opt = MFP_NO;
 	int ret = 0;
 	u8 null_addr[] = {0, 0, 0, 0, 0, 0};
-#ifdef CONFIG_P2P
-	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
-#endif /* CONFIG_P2P */
 
 	if ((ielen > MAX_WPA_IE_LEN) || (pie == NULL)) {
 		_clr_fwstate_(&padapter->mlmepriv, WIFI_UNDER_WPS);
@@ -1352,7 +1346,6 @@ static int rtw_wx_get_mode(struct net_device *dev, struct iw_request_info *a,
 			   union iwreq_data *wrqu, char *b)
 {
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	struct	mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 
 	if (MLME_IS_STA(padapter))
 		wrqu->mode = IW_MODE_INFRA;
@@ -1821,9 +1814,6 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 	/*struct mlme_priv *pmlmepriv = &padapter->mlmepriv;*/
 	struct sitesurvey_parm *parm = NULL;
 	u8 ssc_chk;
-#ifdef CONFIG_P2P
-	struct wifidirect_info *pwdinfo = &(padapter->wdinfo);
-#endif /* CONFIG_P2P */
 
 #ifdef DBG_IOCTL
 	RTW_INFO("DBG_IOCTL %s:%d\n", __FUNCTION__, __LINE__);
@@ -2053,10 +2043,6 @@ static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 	sint wait_status;
 	enum band_type band;
 	u8 ch;
-
-#ifdef CONFIG_P2P
-	struct	wifidirect_info	*pwdinfo = &padapter->wdinfo;
-#endif /* CONFIG_P2P */
 
 
 #ifdef DBG_IOCTL
@@ -2556,7 +2542,6 @@ static int rtw_wx_set_enc(struct net_device *dev,
 
 	struct iw_point *erq = &(wrqu->encoding);
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
 	RTW_INFO("+rtw_wx_set_enc, flags=0x%x\n", erq->flags);
 
 	_rtw_memset(&wep, 0, sizeof(NDIS_802_11_WEP));
@@ -4670,7 +4655,6 @@ static int rtw_set_encryption(struct net_device *dev, struct ieee_param *param, 
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
-	struct link_mlme_priv	*lmlmepriv = &padapter_link->mlmepriv;
 	struct link_security_priv *lsecuritypriv = &(padapter_link->securitypriv);
 
 	RTW_INFO("%s\n", __FUNCTION__);
@@ -6168,12 +6152,9 @@ _clear_path:
 static int rtw_phl_test_set(struct net_device *dev,
 	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
 {
-	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	u32 mode = 0;
-	u32 bytes = 0;
-	int ret = 0;
-
 #if defined(RTW_PHL_DBG_CMD)
+	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
+
 	core_cmd_phl_handler(padapter, extra);
 #endif
 
@@ -6514,9 +6495,9 @@ static int rtw_priv_get(struct net_device *dev,
 {
 	struct iw_point *wrqu = (struct iw_point *)wdata;
 	u32 subcmd = wrqu->flags;
-	_adapter *padapter = rtw_netdev_priv(dev);
 	int status = 0 ;
 #ifndef CONFIG_MP_INCLUDED
+	_adapter *padapter = rtw_netdev_priv(dev);
 
 	if (padapter == NULL)
 		return -ENETDOWN;

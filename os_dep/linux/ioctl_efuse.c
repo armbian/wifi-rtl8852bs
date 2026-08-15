@@ -272,9 +272,8 @@ static u8 rtw_efuse_compare_data(_adapter *padapter,
 
 u8 rtw_efuse_map_read(_adapter * adapter, u16 addr, u16 cnts, u8 *data, u8 efuse_type)
 {
-	struct dvobj_priv *d;
 	u8 *efuse = NULL;
-	u16 size, i;
+	u16 size;
 	int err = _FAIL;
 	u8 status = _SUCCESS;
 
@@ -332,12 +331,9 @@ exit:
 
 u8 rtw_efuse_map_write(_adapter * adapter, u16 addr, u16 cnts, u8 *data, u8 efuse_type, u8 bpg)
 {
-	struct dvobj_priv *d;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	u16 size;
 	int err = _FAIL;
-	u8 mask_buf[64] = "";
-	u32 backupRegs[4] = {0};
 	u8 status = _SUCCESS;
 	struct rtw_efuse_phl_arg *efuse_arg = NULL;
 	u16 i = 0;
@@ -478,7 +474,6 @@ int rtw_ioctl_efuse_get(struct net_device *dev,
 				union iwreq_data *wrqu, char *extra)
 {
 	_adapter *padapter = rtw_netdev_priv(dev);
-	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	char *pch, *ptmp, *token, *tmp[3] = {0x00, 0x00, 0x00};
 	u16 i = 0, j = 0, mapLen = 0, addr = 0, cnts = 0;
 	int err = 0;
@@ -953,15 +948,12 @@ int rtw_ioctl_efuse_set(struct net_device *dev,
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 
-	u32 i = 0, j = 0, jj = 0, kk = 0;
+	u32 i = 0, jj = 0, kk = 0;
 	u8 *setdata = NULL;
 	u8 *shadowmap = NULL;
-	u8 *setrawdata = NULL;
 	char *pch, *ptmp, *token, *tmp[3] = {0x00, 0x00, 0x00};
 	u16 addr = 0xFF, cnts = 0, max_available_len = 0;
-	u16 wifimaplen;
 	int err = 0;
-	boolean bcmpchk = _TRUE;
 	u8 status = _SUCCESS;
 	u16 size;
 	u8 bpg = true;
@@ -1519,9 +1511,8 @@ static u8 rtw_efuse_get_realraw(_adapter *padapter, u8 *map, u16 addr, u16 size,
 
 u8 rtw_efuse_raw_map_read(_adapter * adapter, u16 addr, u16 cnts, u8 *data, u8 efuse_type)
 {
-	struct dvobj_priv *d;
 	u8 *efuse = NULL;
-	u16 size, i;
+	u16 size;
 	int err = _FAIL;
 	u8 status = _SUCCESS;
 
