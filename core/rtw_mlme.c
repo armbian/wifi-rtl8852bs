@@ -48,7 +48,6 @@ static sint	_rtw_init_mlme_priv(_adapter *padapter)
 	u8	*pbuf;
 	struct wlan_network	*pnetwork;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
-	struct rf_ctl_t *rfctl = adapter_to_rfctl(padapter);
 	sint	res = _SUCCESS;
 #ifdef CONFIG_RTW_MULTI_AP
 	struct unassoc_sta_info *unassoc_sta;
@@ -374,7 +373,9 @@ exit:
 
 static void _rtw_free_mlme_priv(struct mlme_priv *pmlmepriv)
 {
+#ifdef CONFIG_RTW_MULTI_AP
 	_adapter *adapter = mlme_to_adapter(pmlmepriv);
+#endif
 	if (NULL == pmlmepriv) {
 		rtw_warn_on(1);
 		goto exit;
@@ -979,9 +980,7 @@ static void rtw_joinbss_update_link_network(_adapter *padapter, struct _ADAPTER_
 		struct wlan_network *ptarget_wlan, struct wlan_network *pnetwork)
 {
 	struct link_mlme_priv	*pmlmepriv = &(padapter_link->mlmepriv);
-	struct link_security_priv *psecuritypriv = &(padapter_link->securitypriv);
 	struct wlan_network  *cur_network = &(pmlmepriv->cur_network);
-	sint tmp_fw_state = 0x0;
 
 	RTW_INFO("%s\n", __FUNCTION__);
 
@@ -1969,8 +1968,6 @@ void rtw_free_assoc_resources(_adapter *adapter, u8 lock_scanned_queue)
 	}
 
 	if (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE | WIFI_ADHOC_MASTER_STATE)) {
-		struct sta_info *psta;
-
 		rtw_free_all_stainfo(adapter);
 	}
 
@@ -2427,9 +2424,9 @@ void rtw_joinbss_event_prehandle(_adapter *adapter, u8 *pbuf, u16 status)
 	struct wlan_network	*pcur_wlan = NULL, *ptarget_wlan = NULL;
 	unsigned int		the_same_macaddr = _FALSE;
 	struct _ADAPTER_LINK *adapter_link = GET_PRIMARY_LINK(adapter);
-	struct wlan_network *ptmp_wlan = NULL;
 	u8 lidx;
 #ifdef CONFIG_80211BE_EHT
+	struct wlan_network *ptmp_wlan = NULL;
 	struct wlan_mld_network *pmld_network = NULL;
 	struct wlan_mld_network *ptarget_wlan_mld = NULL;
 	struct wlan_network *plink_network = NULL;
@@ -2965,10 +2962,12 @@ void rtw_stadel_event_callback(_adapter *adapter, u8 *pbuf)
 	struct	mlme_priv	*pmlmepriv = &(adapter->mlmepriv);
 	struct	stadel_event *pstadel	= (struct stadel_event *)pbuf;
 	struct wlan_network *tgt_network = &(pmlmepriv->dev_cur_network);
+#ifdef CONFIG_80211BE_EHT
 	struct wlan_mld_network *pmld_network = NULL;
 	struct wlan_network *pnetwork = NULL;
 	int network_num = 0;
 	u8 lidx;
+#endif
 
 	RTW_INFO("%s(mac_id=%d)=" MAC_FMT "\n", __func__, pstadel->mac_id, MAC_ARG(pstadel->macaddr));
 
@@ -3296,13 +3295,10 @@ static void rtw_reset_snr_statistics(struct _ADAPTER *adapter)
 	struct sta_info *psta = NULL;
 	u8 sta_mac[NUM_STA][ETH_ALEN] = {{0}};
 	uint mac_id[NUM_STA];
-	struct stainfo_stats	*pstats = NULL;
 	struct sta_priv	*pstapriv = &(adapter->stapriv);
 	u32 i, j, macid_rec_idx = 0;
 	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 	u8 null_addr[ETH_ALEN] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
-	struct xmit_priv *pxmitpriv = &(adapter->xmitpriv);
 
 	_rtw_spinlock_bh(&pstapriv->sta_hash_lock);
 	for (i = 0; i < NUM_STA; i++) {
@@ -4572,8 +4568,7 @@ void rtw_ht_get_dft_setting(_adapter *padapter,
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	struct ht_priv		*phtpriv = &pmlmepriv->dev_htpriv;
 	struct registry_priv	*pregistrypriv = &padapter->registrypriv;
-	BOOLEAN		bHwLDPCSupport = _FALSE, bHwSTBCSupport = _FALSE;
-	u8		stbc_rx = 0;
+	BOOLEAN		bHwLDPCSupport = _FALSE;
 #ifdef CONFIG_BEAMFORMING
 	BOOLEAN		bHwSupportBeamformer = _FALSE, bHwSupportBeamformee = _FALSE;
 #endif /* CONFIG_BEAMFORMING */
@@ -4641,12 +4636,6 @@ void rtw_ht_get_dft_setting(_adapter *padapter,
 void	rtw_ht_use_default_setting(_adapter *padapter, struct _ADAPTER_LINK *padapter_link)
 {
 	struct registry_priv	*pregistrypriv = &padapter->registrypriv;
-	BOOLEAN		bHwLDPCSupport = _FALSE, bHwSTBCSupport = _FALSE;
-	u8		stbc_rx = 0;
-	struct rtw_wifi_role_t *wrole = padapter->phl_role;
-#ifdef CONFIG_BEAMFORMING
-	BOOLEAN		bHwSupportBeamformer = _FALSE, bHwSupportBeamformee = _FALSE;
-#endif /* CONFIG_BEAMFORMING */
 	struct link_mlme_priv *pmlmepriv = &padapter_link->mlmepriv;
 	struct protocol_cap_t *protocol_cap = &(padapter_link->wrlink->protocol_cap);
 	struct role_link_cap_t *cap = &(padapter_link->wrlink->cap);
@@ -4729,7 +4718,6 @@ unsigned int rtw_restructure_ht_ie(_adapter *padapter,
 	enum band_type band = channel > 14 ? BAND_ON_5G : BAND_ON_24G;
 	struct rtw_ieee80211_ht_cap ht_capie;
 	u8	cbw40_enable = 0, rf_num = 0, rx_stbc_nss = 0, rx_nss = 0;
-	struct rtw_wifi_role_t *wrole = padapter->phl_role;
 	struct registry_priv *pregistrypriv = &padapter->registrypriv;
 	struct mlme_ext_info *pmlmeinfo = &(padapter->mlmeextpriv.mlmext_info);
 	struct link_mlme_ext_priv *pmlmeext = &padapter_link->mlmeextpriv;
@@ -5892,7 +5880,6 @@ static enum rtw_phl_status _connect_disconnect_end_notify(struct _ADAPTER *a)
 static void _connect_cmd_done(struct _ADAPTER *a)
 {
 	struct dvobj_priv *d = adapter_to_dvobj(a);
-	struct rtw_wifi_role_t *role = a->phl_role;
 	enum rtw_phl_status status;
 
 
@@ -6010,7 +5997,6 @@ static enum phl_mdl_ret_code _connect_msg_hdlr(void* dispr, void* priv,
 	struct phl_msg nextmsg = {0};
 	struct phl_msg_attribute attr = {0};
 	enum rtw_phl_status status;
-	enum phl_mdl_ret_code mdl_err;
 	struct rtw_mr_chctx_info mr_cc_info = {0};
 	int err;
 	u32 res;
@@ -6677,7 +6663,6 @@ static void _disconnect_free_cmdobj(struct _ADAPTER *a)
 static void _disconnect_cmd_done(struct _ADAPTER *a)
 {
 	struct dvobj_priv *d = adapter_to_dvobj(a);
-	struct rtw_wifi_role_t *role = a->phl_role;
 	enum rtw_phl_status status;
 
 
@@ -6989,13 +6974,10 @@ enum rtw_phl_status rtw_disconnect_cmd(struct _ADAPTER *a, struct cmd_obj *pcmd)
 /* Wait disconnect FG to finish */
 static bool _disconnect_wait(struct _ADAPTER *a, u32 timeout)
 {
-	struct dvobj_priv *d = adapter_to_dvobj(a);
-	struct rtw_wifi_role_t *role = a->phl_role;
 	systime start;
 	u32 pass_t;
 	u32 msg_i;	/* message interval */
 	u32 msg_t = 0;	/* next time point to print message */
-	enum rtw_phl_status status;
 	bool terminated = false;
 
 
@@ -7096,10 +7078,6 @@ exit:
  */
 int rtw_disconnect_abort_wait(struct _ADAPTER *a)
 {
-	struct dvobj_priv *d = adapter_to_dvobj(a);
-	struct rtw_wifi_role_t *role = a->phl_role;
-	u32 token;
-	enum rtw_phl_status status;
 	int ret, err = 0;
 
 
