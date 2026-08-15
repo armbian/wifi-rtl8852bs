@@ -17,9 +17,9 @@
 
 u8 halbb_dbcc_get_valid_rf_path_mask(struct bb_info *bb)
 {
+#ifdef HALBB_DBCC_SUPPORT
 	u8 path_en_mask = 0;
 
-#ifdef HALBB_DBCC_SUPPORT
 	if (!bb->hal_com->dbcc_en)
 		return (u8)halbb_gen_mask_from_0(bb->num_rf_path);
 
@@ -714,7 +714,6 @@ u8 halbb_get_txsc(struct bb_info *bb, u8 pri_ch, u8 central_ch,
 {
 	u8 txsc_idx = 0;
 	u8 tmp = 0;
-	u8 ofst = 0;
 
 	if ((cbw == dbw) || (cbw == CHANNEL_WIDTH_20)) {
 		txsc_idx = 0;
@@ -781,8 +780,6 @@ u8 halbb_get_txsb(struct bb_info *bb, u8 pri_ch, u8 central_ch,
 		    enum channel_width cbw, enum channel_width dbw)
 {
 	u8 txsb_idx = 0;
-	u8 tmp = 0;
-	u8 ofst = 0;
 
 	if ((cbw == dbw) || (cbw == CHANNEL_WIDTH_20)) {
 		txsb_idx = 0;
@@ -1151,7 +1148,9 @@ void halbb_dfs_en(struct bb_info *bb, bool en)
 
 void halbb_adc_en(struct bb_info *bb, bool en)
 {
+	#ifdef BB_8852C_SUPPORT
 	enum phl_phy_idx phy_idx = HW_PHY_0;
+	#endif
 
 	switch (bb->ic_type) {
 
@@ -2377,7 +2376,6 @@ bool halbb_set_pd_lower_bound(struct bb_info *bb, u8 bound,
 			      enum channel_width bw, enum phl_phy_idx phy_idx)
 {
 	bool rpt = true;
-	struct bb_api_info *bb_api = &bb->bb_api_i;
 
 	switch (bb->ic_type) {
 
@@ -2423,7 +2421,6 @@ bool halbb_set_pd_lower_bound_cck(struct bb_info *bb, u8 bound,
 			      enum channel_width bw, enum phl_phy_idx phy_idx)
 {
 	bool rpt = true;
-	struct bb_api_info *bb_api = &bb->bb_api_i;
 
 	switch (bb->ic_type) {
 
@@ -2914,7 +2911,9 @@ static void halbb_set_tx_pow_ref_and_cw(struct bb_info *bb,
 void halbb_set_tx_pow_ref(struct bb_info *bb, enum phl_phy_idx phy_idx)
 {
 	struct rtw_tpu_info *tpu = &bb->hal_com->band[phy_idx].rtw_tpu_i;
+	#ifdef BB_1115_SUPPORT
 	struct bb_tpu_be_info *tpu_be = &bb->hal_com->band[bb->bb_phy_idx].bb_tpu_all_i.bb_tpu_be_i;
+	#endif
 
 	switch (bb->ic_type) {
 
@@ -3350,8 +3349,9 @@ void halbb_ic_hw_setting(struct bb_info *bb)
 void halbb_ic_hw_setting_dbg(struct bb_info *bb, char input[][16],
 			     u32 *_used, char *output, u32 *_out_len)
 {
+#if defined(BB_DYN_CFO_TRK_LOP) || defined(BB_DYN_1R_CCA) || defined(BB_DYN_DTR)
 	u32 val[5] = {0};
-	u8 i = 0, j = 0;
+#endif
 #ifdef BB_DYN_CFO_TRK_LOP
 	struct bb_cfo_trk_info *cfo_trk = &bb->bb_cfo_trk_i;
 	struct bb_dyn_cfo_trk_lop_info *dctl = &cfo_trk->bb_dyn_cfo_trk_lop_i;
@@ -3485,8 +3485,6 @@ void halbb_ic_api_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 	u32 val[10] = {0};
 	u32 used = *_used;
 	u32 out_len = *_out_len;
-	u8 tmp = 0, i = 0;
-	enum phl_phy_idx phy_idx = HW_PHY_0;
 	u32 j = 0;
 	#ifdef BB_8852B_SUPPORT
 	bool judge_f;
@@ -3801,7 +3799,7 @@ u8 halbb_upd_mcc_macid(struct bb_info *bb, struct bb_mcc_i *mi)
 void halbb_mcc_stop(struct bb_info *bb)
 {
 	struct halbb_mcc_dm *mcc_dm = &bb->mcc_dm;
-	u8 i = 0, j = 0;
+	u8 i = 0;
 
 	BB_DBG(bb, DBG_DIG, "<====== %s ======>\n", __func__);
 
