@@ -513,8 +513,8 @@ void expire_timeout_chk(_adapter *padapter)
 	#endif
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
-	struct link_mlme_ext_priv *pmlmeext = &padapter_link->mlmeextpriv;
 #if defined(CONFIG_ACTIVE_KEEP_ALIVE_CHECK)
+	struct link_mlme_ext_priv *pmlmeext = &padapter_link->mlmeextpriv;
 	u8 switch_channel_by_drv = _TRUE;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	struct rtw_chan_def hw_chdef = {0};
@@ -1085,7 +1085,6 @@ static void update_sta_info_apmode_ht_bf_cap(_adapter *padapter, struct sta_info
 void update_sta_info_apmode(_adapter *padapter, struct sta_info *psta)
 {
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
-	struct rtw_wifi_role_t *wrole = padapter->phl_role;
 	struct _ADAPTER_LINK *padapter_link = psta->padapter_link;
 	struct link_mlme_priv *pmlmepriv = &(padapter_link->mlmepriv);
 	struct link_mlme_ext_priv *pmlmeext = &(padapter_link->mlmeextpriv);
@@ -1758,15 +1757,16 @@ void rtw_core_ap_start(_adapter *padapter, struct createbss_parm *parm)
 }
 static void rtw_core_ap_chan_decision(_adapter *padapter, struct createbss_parm *parm)
 {
+#ifdef CONFIG_DBCC_SUPPORT
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 	struct link_mlme_priv *pmlmepriv = &(padapter_link->mlmepriv);
 	struct link_mlme_ext_priv *pmlmeext = &(padapter_link->mlmeextpriv);
-	struct link_mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	bool is_chctx_add = false;
 	struct rtw_chan_def new_chdef = {0};
 	struct rtw_mr_chctx_info mr_cc_info = {0};
+#endif
 
 	if (!(parm->req_ch == 0 && padapter->mlmeextpriv.mlmext_info.state == WIFI_FW_AP_STATE))
 		return;
@@ -1985,13 +1985,14 @@ int rtw_check_beacon_data(_adapter *padapter, u8 *pbuf,  int len)
 	u8 channel = 0, network_type;
 	u8 OUI1[] = {0x00, 0x50, 0xf2, 0x01};
 	u8 WMM_PARA_IE[] = {0x00, 0x50, 0xf2, 0x02, 0x01, 0x01};
+#ifdef CONFIG_RTW_MBO
 	u8 WIFI_ALLIANCE_OUI[] = {0x50, 0x6f, 0x9a};
+#endif
 	HT_CAP_AMPDU_DENSITY best_ampdu_density = 0;
 	struct registry_priv *pregistrypriv = &padapter->registrypriv;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
-	struct link_security_priv *lsecuritypriv = &padapter_link->securitypriv;
 	struct link_mlme_priv *pmlmepriv = &(padapter_link->mlmepriv);
 	struct link_mlme_ext_priv	*pmlmeext = &(padapter_link->mlmeextpriv);
 	WLAN_BSSID_EX *pbss_network = (WLAN_BSSID_EX *)&pmlmepriv->cur_network.network;
@@ -3444,7 +3445,6 @@ static bool _update_csa_ie(_adapter *padapter, struct _ADAPTER_LINK *padapter_li
 	struct core_ecsa_info *ecsa_info = &(padapter->ecsa_info);
 	struct rtw_phl_ecsa_param *ecsa_param = &(ecsa_info->phl_ecsa_param);
 	WLAN_BSSID_EX *pnetwork = &(padapter_link->mlmeextpriv.mlmext_info.network);
-	u8 chan = ecsa_param->new_chan_def.chan;
 	u8 count = ecsa_param->count;
 	u8 *ies = pnetwork->IEs + _BEACON_IE_OFFSET_;
 	sint ies_len = pnetwork->IELength - _BEACON_IE_OFFSET_;
@@ -3458,7 +3458,7 @@ static bool _update_csa_ie(_adapter *padapter, struct _ADAPTER_LINK *padapter_li
 			/* update CSA IE */
 			#ifdef DBG_CSA
 			RTW_INFO("CSA : "FUNC_ADPT_FMT" ch=%u, count=%u, update CSA IE\n",
-				FUNC_ADPT_ARG(padapter), chan, count);
+				FUNC_ADPT_ARG(padapter), ecsa_param->new_chan_def.chan, count);
 			#endif
 
 			csa_ie = csa_ie + 2;
@@ -3466,7 +3466,7 @@ static bool _update_csa_ie(_adapter *padapter, struct _ADAPTER_LINK *padapter_li
 		} else {
 			/* remove CSA IE */
 			RTW_INFO("CSA : "FUNC_ADPT_FMT" ch=%u, count=%u, remove CSA IE\n",
-				FUNC_ADPT_ARG(padapter), chan, count);
+				FUNC_ADPT_ARG(padapter), ecsa_param->new_chan_def.chan, count);
 
 			rtw_remove_bcn_ie(padapter, pnetwork, WLAN_EID_CHANNEL_SWITCH);
 			SET_ECSA_STATE(padapter, ECSA_ST_SW_DONE);
@@ -3484,7 +3484,6 @@ static bool _update_ecsa_ie(_adapter *padapter, struct _ADAPTER_LINK *padapter_l
 	struct core_ecsa_info *ecsa_info = &(padapter->ecsa_info);
 	struct rtw_phl_ecsa_param *ecsa_param = &(ecsa_info->phl_ecsa_param);
 	WLAN_BSSID_EX *pnetwork = &(padapter_link->mlmeextpriv.mlmext_info.network);
-	u8 chan = ecsa_param->new_chan_def.chan;
 	u8 count = ecsa_param->count;
 	u8 *ies = pnetwork->IEs + _BEACON_IE_OFFSET_;
 	sint ies_len = pnetwork->IELength - _BEACON_IE_OFFSET_;
@@ -3498,14 +3497,14 @@ static bool _update_ecsa_ie(_adapter *padapter, struct _ADAPTER_LINK *padapter_l
 			/* update CSA IE */
 			#ifdef DBG_CSA
 			RTW_INFO("CSA : "FUNC_ADPT_FMT" ch=%u, count=%u, update ECSA IE\n",
-				FUNC_ADPT_ARG(padapter), chan, count);
+				FUNC_ADPT_ARG(padapter), ecsa_param->new_chan_def.chan, count);
 			#endif
 			ecsa_ie = ecsa_ie + 2;
 			ecsa_ie[3] = count;
 		} else {
 			/* remove ECSA IE */
 			RTW_INFO("CSA : "FUNC_ADPT_FMT" ch=%u, count=%u, remove ECSA IE\n",
-				FUNC_ADPT_ARG(padapter), chan, count);
+				FUNC_ADPT_ARG(padapter), ecsa_param->new_chan_def.chan, count);
 
 			rtw_remove_bcn_ie(padapter, pnetwork, WLAN_EID_ECSA);
 			SET_ECSA_STATE(padapter, ECSA_ST_SW_DONE);
@@ -4430,7 +4429,6 @@ void rtw_ap_restore_network(_adapter *padapter)
 void start_ap_mode(_adapter *padapter)
 {
 	int i;
-	struct sta_info *psta = NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 #ifdef CONFIG_CONCURRENT_MODE
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
@@ -4495,13 +4493,10 @@ void start_ap_mode(_adapter *padapter)
 void stop_ap_mode(_adapter *padapter)
 {
 	u8 self_action = MLME_ACTION_UNKNOWN;
-	struct sta_info *psta = NULL;
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 	struct link_mlme_priv *pmlmepriv = &(padapter_link->mlmepriv);
 	struct link_mlme_ext_priv *pmlmeext = &padapter_link->mlmeextpriv;
-	int chanctx_num = 0;
-	struct rtw_chan_def chan_def = {0};
 
 	RTW_INFO("%s -"ADPT_FMT"\n", __func__, ADPT_ARG(padapter));
 
@@ -4931,7 +4926,9 @@ u8 rtw_ap_bchbw_decision(_adapter *adapter, u8 ifbmp, u8 excl_ifbmp, s8 req_band
 	u8 cur_ie_bw[CONFIG_IFACE_NUMBER] = {0};
 	u8 cur_ie_offset[CONFIG_IFACE_NUMBER] = {0};
 	enum band_type dec_band[CONFIG_IFACE_NUMBER] = {BAND_ON_24G};
+#ifdef CONFIG_DBCC_SUPPORT
 	u8 dec_hwband[CONFIG_IFACE_NUMBER] = {0};
+#endif
 	u8 dec_ch[CONFIG_IFACE_NUMBER] = {0};
 	u8 dec_bw[CONFIG_IFACE_NUMBER] = {0};
 	u8 dec_offset[CONFIG_IFACE_NUMBER] = {0};
@@ -4950,7 +4947,9 @@ u8 rtw_ap_bchbw_decision(_adapter *adapter, u8 ifbmp, u8 excl_ifbmp, s8 req_band
 	struct rtw_phl_com_t *phl_com = GET_PHL_COM(dvobj);
 	u8 mcc_sup = phl_com->dev_cap.mcc_sup;
 #endif
+#if defined(CONFIG_DBCC_SUPPORT) || defined(CONFIG_MCC_MODE)
 	struct _ADAPTER_LINK *adapter_link = GET_PRIMARY_LINK(adapter);
+#endif
 	struct _ADAPTER_LINK *iface_link;
 	struct link_mlme_ext_priv *mlmeext;
 #ifdef CONFIG_DBCC_SUPPORT
@@ -5800,7 +5799,6 @@ static bool rtw_ap_data_bmc_to_uc(_adapter *adapter
 	, u16 os_qid, _list *b2u_list)
 {
 	struct sta_priv *stapriv = &adapter->stapriv;
-	struct xmit_priv *xmitpriv = &adapter->xmitpriv;
 	_list *head, *list;
 	struct sta_info *sta;
 	char b2u_sta_id[NUM_STA];
@@ -6110,7 +6108,9 @@ int rtw_ap_rx_msdu_act_check(union recv_frame *rframe
 {
 	_adapter *adapter = rframe->u.hdr.adapter;
 	struct rx_pkt_attrib *rattrib = &rframe->u.hdr.attrib;
+#ifdef CONFIG_RTW_WDS
 	struct rtw_wds_path *wpath;
+#endif
 	u8 is_da_bmc = IS_MCAST(da);
 	u8 is_da_self = !is_da_bmc && _rtw_memcmp(da, adapter_mac_addr(adapter), ETH_ALEN);
 	u8 is_da_peer = 0;
@@ -6118,7 +6118,9 @@ int rtw_ap_rx_msdu_act_check(union recv_frame *rframe
 	u16 os_qid;
 	struct xmit_frame *xframe;
 	struct pkt_attrib *xattrib;
+#ifdef CONFIG_RTW_WDS
 	u8 fwd_ra[ETH_ALEN] = {0};
+#endif
 	int act = 0;
 
 #ifdef CONFIG_RTW_WDS
@@ -6521,8 +6523,6 @@ _ap_start_end_notify(struct _ADAPTER *padapter, bool success, bool abort)
 
 static void ap_free_cmdobj(struct cmd_obj *pcmd)
 {
-	struct _ADAPTER *padapter = pcmd->padapter;
-
 	if (!pcmd)
 		return;
 
@@ -6543,7 +6543,6 @@ static void _ap_start_cmd_done(struct cmd_obj *pcmd)
 {
 	struct _ADAPTER *padapter = pcmd->padapter;
 	struct dvobj_priv *d = adapter_to_dvobj(padapter);
-	struct rtw_wifi_role_t *role = padapter->phl_role;
 	enum rtw_phl_status status;
 
 	RTW_INFO("%s: +\n", __func__);
@@ -6591,7 +6590,6 @@ static enum phl_mdl_ret_code _ap_start_req_acquired(void *dispr, void *priv)
 	struct _ADAPTER *padapter = pcmd->padapter;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	struct createbss_parm *parm = (struct createbss_parm *)pcmd->parmbuf;
-	struct rtw_wifi_role_t *role = padapter->phl_role;
 	struct phl_msg msg = {0};
 	struct phl_msg_attribute attr = {0};
 	enum rtw_phl_status status = RTW_PHL_STATUS_SUCCESS;
@@ -6690,9 +6688,6 @@ static enum phl_mdl_ret_code _ap_start_req_ev_hdlr(void *dispr, void *priv, stru
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct createbss_parm *parm = (struct createbss_parm *)pcmd->parmbuf;
-	struct rtw_wifi_role_t *wifi_role = padapter->phl_role;
-	struct rtw_phl_com_t *phl_com = wifi_role->phl_com;
-	void *d = phlcom_to_drvpriv(phl_com);
 	enum rtw_phl_status status = RTW_PHL_STATUS_SUCCESS;
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
@@ -6822,7 +6817,6 @@ static enum phl_mdl_ret_code _ap_start_req_query_info(void *dispr, void *priv, s
 static void rtw_cmd_ap_start_req_init(struct cmd_obj *pcmd, struct phl_cmd_token_req *fgreq)
 {
 	struct _ADAPTER *padapter = pcmd->padapter;
-	u8 res = _SUCCESS;
 
 	/* Fill foreground command request */
 	fgreq->module_id= PHL_FG_MDL_AP_START;
@@ -6848,7 +6842,6 @@ enum rtw_phl_status rtw_ap_start_cmd(struct cmd_obj *pcmd)
 	struct phl_cmd_token_req fgreq={0};
 	struct dvobj_priv *d = adapter_to_dvobj(padapter);
 	enum rtw_phl_status status;
-	struct rtw_wifi_role_t *role = padapter->phl_role;
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 
@@ -6873,7 +6866,6 @@ static void _ap_stop_cmd_done(struct cmd_obj *pcmd)
 {
 	struct _ADAPTER *padapter = pcmd->padapter;
 	struct dvobj_priv *d = adapter_to_dvobj(padapter);
-	struct rtw_wifi_role_t *role = padapter->phl_role;
 	enum rtw_phl_status status;
 
 	RTW_DBG(FUNC_ADPT_FMT ": +\n", FUNC_ADPT_ARG(padapter));
@@ -6950,8 +6942,6 @@ static void _ap_stop_abort_notify_cb(void *priv, struct phl_msg *msg)
 	struct dvobj_priv *d = adapter_to_dvobj(padapter);
 	struct _ADAPTER *adapter = (struct _ADAPTER *)priv;
 	enum rtw_phl_status phl_status = RTW_PHL_STATUS_SUCCESS;
-	struct rtw_chan_def chan_def = {0};
-	u8 chctx_num = 0;
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *adapter_link = GET_PRIMARY_LINK(adapter);
 
@@ -6997,7 +6987,6 @@ static enum phl_mdl_ret_code _ap_stop_req_acquired(void *dispr, void *priv)
 	struct cmd_obj *pcmd = (struct cmd_obj *)priv;
 	struct _ADAPTER *padapter = pcmd->padapter;
 	struct rtw_wifi_role_t *role = padapter->phl_role;
-	struct phl_msg msg = {0};
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 
@@ -7044,11 +7033,12 @@ static enum phl_mdl_ret_code _ap_stop_req_ev_hdlr(void *dispr, void *priv, struc
 {
 	struct cmd_obj *pcmd = (struct cmd_obj *)priv;
 	struct _ADAPTER *padapter = pcmd->padapter;
+#ifdef CONFIG_DBCC_SUPPORT
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
-	struct rtw_wifi_role_t *wifi_role = padapter->phl_role;
-	enum rtw_phl_status status = RTW_PHL_STATUS_SUCCESS;
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
+#endif
+	enum rtw_phl_status status = RTW_PHL_STATUS_SUCCESS;
 
 	RTW_DBG(FUNC_ADPT_FMT ": + msg_id=0x%08x\n",
 		FUNC_ADPT_ARG(padapter), msg->msg_id);
@@ -7198,7 +7188,6 @@ enum rtw_phl_status rtw_ap_stop_cmd(struct cmd_obj *pcmd)
 	struct phl_cmd_token_req fgreq={0};
 	struct dvobj_priv *d = adapter_to_dvobj(padapter);
 	enum rtw_phl_status pstatus;
-	struct rtw_wifi_role_t *role = padapter->phl_role;
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 
@@ -7222,7 +7211,6 @@ error:
 static void _ap_add_del_sta_cmd_done(struct _ADAPTER *padapter)
 {
 	struct dvobj_priv *d = adapter_to_dvobj(padapter);
-	struct rtw_wifi_role_t *role = padapter->phl_role;
 	enum rtw_phl_status status;
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
@@ -7268,13 +7256,9 @@ static struct rtw_add_del_sta_obj *rtw_ap_get_stainfo_by_add_sta_list(struct _AD
 static enum phl_mdl_ret_code _ap_add_del_sta_req_acquired(void *dispr, void *priv)
 {
 	struct _ADAPTER *padapter = (struct _ADAPTER *)priv;
-	struct sta_priv *pstapriv = &padapter->stapriv;
-	struct rtw_wifi_role_t *role = padapter->phl_role;
 	struct rtw_add_del_sta_obj *add_del_sta_obj;
 	struct sta_info *psta = NULL;
-	struct phl_msg_attribute attr = {0};
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
-	struct phl_msg msg = {0};
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 
@@ -7323,9 +7307,6 @@ static enum phl_mdl_ret_code _ap_add_del_sta_req_acquired(void *dispr, void *pri
 
 static enum phl_mdl_ret_code _ap_add_del_sta_req_abort(void *dispr, void *priv)
 {
-	struct _ADAPTER *padapter = (struct _ADAPTER *)priv;
-
-
 	RTW_INFO("%s\n", __func__);
 	return MDL_RET_SUCCESS;
 }
@@ -7333,14 +7314,10 @@ static enum phl_mdl_ret_code _ap_add_del_sta_req_abort(void *dispr, void *priv)
 static enum phl_mdl_ret_code _ap_add_del_sta_req_ev_hdlr(void *dispr, void *priv, struct phl_msg* msg)
 {
 	struct _ADAPTER *padapter = (struct _ADAPTER *)priv;
-	struct rtw_wifi_role_t *wifi_role = padapter->phl_role;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct rtw_add_del_sta_obj *add_del_sta_obj = NULL;
 	struct sta_info *psta = NULL;
-	struct phl_msg next_msg = {0};
-	_list	*phead, *plist;
 	enum rtw_phl_status status = RTW_PHL_STATUS_FAILURE;
-	struct rtw_phl_stainfo_t *phl_stainfo;
 #if defined(CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
 	u8 *passoc_req = NULL;
 	u32 assoc_req_len = 0;
@@ -7569,7 +7546,6 @@ void rtw_cmd_ap_add_del_sta_req_free(struct _ADAPTER *padapter)
 
 void rtw_cmd_ap_add_del_sta_req_init(struct _ADAPTER *padapter)
 {
-	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 	struct phl_cmd_token_req *req;
 
 	RTW_DBG(FUNC_ADPT_FMT ": \n", FUNC_ADPT_ARG(padapter));
@@ -7597,7 +7573,6 @@ enum rtw_phl_status rtw_ap_add_del_sta_cmd(struct _ADAPTER *padapter)
 	struct phl_cmd_token_req *fgreq;
 	struct dvobj_priv *d = adapter_to_dvobj(padapter);
 	enum rtw_phl_status status;
-	struct rtw_wifi_role_t *role = padapter->phl_role;
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 
