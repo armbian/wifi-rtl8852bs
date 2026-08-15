@@ -31,7 +31,6 @@ static void halbb_env_mntr_log_cnsl(struct bb_info *bb, u32 *_used,
 			     char *output, u32 *_out_len)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
-	u8 i = 0;
 
 	if (bb->bb_watchdog_mode != BB_WATCHDOG_NORMAL)
 		return;
@@ -810,12 +809,10 @@ void halbb_basic_dbg_msg_tx_dbg_reg_cnsl(struct bb_info *bb, u32 *_used,
 static void halbb_basic_dbg_msg_tx_info_cnsl(struct bb_info *bb, u32 *_used,
 				      char *output, u32 *_out_len)
 {
-	struct bb_ch_info *ch = &bb->bb_ch_i;
 	struct rtw_phl_stainfo_t *sta;
 	struct rtw_ra_sta_info	*ra;
 	u16 sta_cnt = 0;
 	u8 i = 0;
-	u8 tmp = 0;
 	u16 curr_tx_rt = 0;
 	enum rtw_gi_ltf curr_gi_ltf = RTW_GILTF_LGI_4XHE32;
 	enum hal_rate_bw curr_bw = HAL_RATE_BW_20;
@@ -891,7 +888,6 @@ static void halbb_basic_dbg_msg_rx_info_cnsl(struct bb_info *bb, u32 *_used,
 static void halbb_basic_dbg_msg_physts_su_cnsl(struct bb_info *bb, u32 *_used,
 					char *output, u32 *_out_len)
 {
-	struct bb_ch_info *ch = &bb->bb_ch_i;
 	struct bb_link_info *link = &bb->bb_link_i;
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
 	struct bb_pkt_cnt_su_info *pkt_cnt = &cmn_rpt->bb_pkt_cnt_su_i;
@@ -1363,7 +1359,6 @@ static void halbb_show_phy_hitogram_su_cnsl(struct bb_info *bb, u32 *_used,
 static void halbb_basic_dbg_msg_physts_mu_cnsl(struct bb_info *bb, u32 *_used,
 					char *output, u32 *_out_len)
 {
-	struct bb_ch_info *ch = &bb->bb_ch_i;
 	struct bb_link_info *link = &bb->bb_link_i;
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
 	struct bb_pkt_cnt_mu_info *pkt_cnt = &cmn_rpt->bb_pkt_cnt_mu_i;
@@ -1787,7 +1782,6 @@ void halbb_basic_dbg_message_cnsl_dbg(struct bb_info *bb, char input[][16], u32 
 {
 	struct bb_link_info	*link = &bb->bb_link_i;
 	struct bb_ch_info	*ch = &bb->bb_ch_i;
-	struct bb_dbg_info	*dbg = &bb->bb_dbg_i;
 	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	struct bb_cmn_dbg_info *cmn_dbg = &bb->bb_cmn_hooker->bb_cmn_dbg_i;
 	enum channel_width bw = bb->hal_com->band[bb->bb_phy_idx].cur_chandef.bw;
@@ -1928,7 +1922,6 @@ void halbb_show_rx_rate(struct bb_info *bb, char input[][16], u32 *_used,
 {
 	struct bb_cmn_dbg_info *cmn_dbg = &bb->bb_cmn_hooker->bb_cmn_dbg_i;
 	u32 val[10] = {0};
-	bool en = false;
 
 	if (_os_strcmp(input[1], "-h") == 0) {
 		BB_DBG_CNSL(*_out_len, *_used, output + *_used, *_out_len - *_used,

@@ -1301,7 +1301,6 @@ static void halbb_ramask_trans(struct bb_info *bb, u8 macid, u64 mask, u64 mask_
 
 static u8 halbb_get_opt_giltf(struct bb_info *bb, u8 assoc_giltf)
 {
-	u8 i =0;
 	u8 opt_gi_ltf = 0;
 
 	if (assoc_giltf & BIT(1)) /* cap. for 4x0.8*/
@@ -1315,8 +1314,6 @@ static u8 halbb_get_opt_giltf(struct bb_info *bb, u8 assoc_giltf)
 
 static u8 halbb_giltf_trans(struct bb_info *bb, u8 assoc_giltf, u8 cal_giltf)
 {
-	u8 i =0;
-
 	BB_DBG(bb, DBG_RA, "Ass GILTF=%x,Cal GILTF=%x\n", assoc_giltf, cal_giltf);
 	if (cal_giltf == RTW_GILTF_LGI_4XHE32 && (assoc_giltf & BIT(0)))
 		return cal_giltf;
@@ -1686,7 +1683,6 @@ bool rtw_halbb_raupdate(struct bb_info *bb_0,
 	struct protocol_cap_t *asoc_cap_i;
 	u8 tx_nss;
 	u8 rssi;
-	u8 init_lv = 0;
 	u8 mode = 0;
 	u8 giltf_cap = 0;
 	bool ret_val = false;
@@ -1834,7 +1830,6 @@ static bool halbb_ra_update_mask_watchdog(struct bb_info *bb, struct rtw_phl_sta
 	struct protocol_cap_t *asoc_cap_i;
 	u8 tx_nss;
 	u8 rssi;
-	u8 init_lv = 0;
 	u8 mode = 0;
 	u8 giltf_cap = 0;
 	bool ret_val = false;
@@ -2552,7 +2547,6 @@ void halbb_ra_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 	//struct bb_h2c_rssi_setting *rssi_i;
 	u8 rssi_a = 0, rssi_b = 0, bcn_rssi_a = 0, bcn_rssi_b = 0, cmdlen = 0;
 	u8 h2c_ra_cls[4];
-	u16 rssi_len = 0;
 	u32 *bb_h2c = NULL;
 	struct bb_h2c_ra_adjust ra_th_i;
 	struct bb_h2c_ra_mask ra_mask_i;
