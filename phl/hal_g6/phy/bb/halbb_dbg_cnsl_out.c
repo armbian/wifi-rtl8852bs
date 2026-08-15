@@ -1785,7 +1785,7 @@ void halbb_basic_dbg_message_cnsl_dbg(struct bb_info *bb, char input[][16], u32 
 	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	struct bb_cmn_dbg_info *cmn_dbg = &bb->bb_cmn_hooker->bb_cmn_dbg_i;
 	enum channel_width bw = bb->hal_com->band[bb->bb_phy_idx].cur_chandef.bw;
-	struct halbb_statistic_exp_t statistic_exp;
+	struct halbb_statistic_exp_t *statistic_exp;
 	u32 var[10] = {0};
 	bool dbg_en;
 	u8 fc = bb->hal_com->band[bb->bb_phy_idx].cur_chandef.center_ch;
@@ -1809,19 +1809,27 @@ void halbb_basic_dbg_message_cnsl_dbg(struct bb_info *bb, char input[][16], u32 
 		if (!dbg_en)
 			return;
 
-		halbb_statistic_exp(bb, &statistic_exp, bb->bb_phy_idx);
+		/* ~1.4 KB, too large for the stack */
+		statistic_exp = halbb_mem_alloc(bb, sizeof(*statistic_exp));
+		if (!statistic_exp) {
+			BB_DBG_CNSL(*_out_len, *_used, output + *_used, *_out_len - *_used,
+				    "no memory\n");
+			return;
+		}
+		halbb_statistic_exp(bb, statistic_exp, bb->bb_phy_idx);
 		BB_DBG_CNSL(*_out_len, *_used, output + *_used, *_out_len - *_used,
-			    "tx_rate=0x%x, tx_PER=%d\n", statistic_exp.tx_rate, statistic_exp.tx_per);
+			    "tx_rate=0x%x, tx_PER=%d\n", statistic_exp->tx_rate, statistic_exp->tx_per);
 		BB_DBG_CNSL(*_out_len, *_used, output + *_used, *_out_len - *_used,
-			    "pkt_cnt_ofdm=%d\n", statistic_exp.bb_pkt_cnt_exp.pkt_cnt_ofdm);
+			    "pkt_cnt_ofdm=%d\n", statistic_exp->bb_pkt_cnt_exp.pkt_cnt_ofdm);
 		BB_DBG_CNSL(*_out_len, *_used, output + *_used, *_out_len - *_used,
-			    "rssi_ofdm_avg=%d\n", statistic_exp.bb_rssi_su_avg_exp.rssi_ofdm_avg);
+			    "rssi_ofdm_avg=%d\n", statistic_exp->bb_rssi_su_avg_exp.rssi_ofdm_avg);
 		BB_DBG_CNSL(*_out_len, *_used, output + *_used, *_out_len - *_used,
-			    "evm_1ss=%d, evm_2ss={%d, %d}, SNR = %d\n", statistic_exp.evm_1ss,
-			    statistic_exp.evm_max, statistic_exp.evm_min, statistic_exp.snr_avg);
+			    "evm_1ss=%d, evm_2ss={%d, %d}, SNR = %d\n", statistic_exp->evm_1ss,
+			    statistic_exp->evm_max, statistic_exp->evm_min, statistic_exp->snr_avg);
 		BB_DBG_CNSL(*_out_len, *_used, output + *_used,
 			    *_out_len - *_used,
-			    "edcca_fb_pwdb=%d\n", statistic_exp.edcca_fb_pwdb);
+			    "edcca_fb_pwdb=%d\n", statistic_exp->edcca_fb_pwdb);
+		halbb_mem_free(bb, statistic_exp, sizeof(*statistic_exp));
 		return;
 	}
 
