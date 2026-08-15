@@ -487,7 +487,9 @@ u32 mac_set_mu_table(struct mac_ax_adapter *adapter,
 		     struct mac_mu_table *mu_table)
 {
 	struct mac_ax_intf_ops *ops = adapter_to_intf_ops(adapter);
+#if MAC_AX_8852C_SUPPORT || MAC_AX_8192XB_SUPPORT || MAC_AX_8851E_SUPPORT || MAC_AX_8852D_SUPPORT
 	struct mac_ax_ops *mac_ops = adapter_to_mac_ops(adapter);
+#endif
 #if MAC_AX_8852A_SUPPORT || MAC_AX_8852B_SUPPORT || MAC_AX_8851B_SUPPORT
 	if (is_chip_id(adapter, MAC_AX_CHIP_ID_8852A) ||
 	    is_chip_id(adapter, MAC_AX_CHIP_ID_8852B) ||

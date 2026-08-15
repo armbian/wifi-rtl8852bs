@@ -260,7 +260,9 @@ u32 hal_hci_cfg_8852bs(struct rtw_phl_com_t *phl_com,
 static void _hal_config_int_8852bs(struct hal_info_t *hal, enum rtw_hal_config_int hal_int_mode)
 {
 	struct rtw_hal_com_t *hal_com = hal->hal_com;
+#ifndef CONFIG_PHL_SDIO_READ_RXFF_IN_INT
 	long bit_of_rx_req = 0;
+#endif
 
 	switch (hal_int_mode) {
 	case RTW_HAL_EN_DEFAULT_INT:
