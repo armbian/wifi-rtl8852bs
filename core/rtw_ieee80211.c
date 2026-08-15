@@ -562,7 +562,7 @@ u8 rtw_ies_add_ie(u8 *ies, uint *ies_len, uint ies_offset, u8 eid,
 {
 	u8 ret = _FAIL;
 	PNDIS_802_11_VARIABLE_IEs pIE = {0};
-	u8 *pstart = NULL, *pcurrent = NULL, *premainder_id = NULL;
+	u8 *pstart = NULL, *pcurrent = NULL;
 	u8 *pbackup_remainder_ie = NULL, *dst_ie = NULL;
 	uint search_len = 0, remainder_ielen = 0;
 	u32 offset = 0;

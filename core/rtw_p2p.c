@@ -2011,7 +2011,11 @@ static bool rtw_p2p_nego_intent_compare(u8 req, u8 resp)
 
 int rtw_p2p_check_frames(_adapter *padapter, const u8 *buf, u32 len, u8 tx)
 {
+#if defined(CONFIG_CONCURRENT_MODE) && defined(CONFIG_CFG80211_ONECHANNEL_UNDER_CONCURRENT)
+#ifdef CONFIG_DBCC_SUPPORT
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
+#endif
+#endif
 	int is_p2p_frame = (-1);
 	unsigned char	*frame_body;
 	u8 category, action, OUI_Subtype, dialogToken = 0;
@@ -2694,7 +2698,6 @@ void process_p2p_ps_ie(_adapter *padapter, u8 *IEs, u32 IELength)
 
 void p2p_ps_wk_hdl(_adapter *padapter, u8 p2p_ps_state)
 {
-	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
 	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */

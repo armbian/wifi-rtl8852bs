@@ -1035,7 +1035,6 @@ int get_ax_valid_key(void* sel, struct _ADAPTER *a)
 	u32 addr_tmp_buf = 0;
 	u8 addr_map[40]= {0};
 	u8 sec_ent_valid = 0;
-	u8 macid = 0;
 	int i, j;
 
 	phl = GET_PHL_INFO(dvobj);

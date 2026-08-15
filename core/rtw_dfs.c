@@ -138,7 +138,6 @@ bool rtw_rfctl_overlap_radar_detect_ch(struct rf_ctl_t *rfctl, enum band_type ba
 	bool ret = false;
 	u8 rd_hwband;
 	u32 hi = 0, lo = 0;
-	u32 r_hi = 0, r_lo = 0;
 
 	if (band != BAND_ON_5G || !rfctl->radar_detect_enabled)
 		goto exit;
@@ -636,7 +635,6 @@ static void rtw_dfs_ch_switch_hdl(struct dvobj_priv *dvobj, u8 band_idx)
 	_adapter *m_iface = rtw_mi_get_ap_mesh_iface_by_hwband(dvobj, band_idx);
 	u8 ifbmp_m;
 	u8 ifbmp_s;
-	u8 i;
 
 	if (!m_iface) {
 		RTW_WARN(FUNC_HWBAND_FMT" can't get ap/mesh iface\n", FUNC_HWBAND_ARG(band_idx));
