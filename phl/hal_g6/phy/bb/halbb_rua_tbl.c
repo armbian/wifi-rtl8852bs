@@ -1479,13 +1479,16 @@ u32 halbb_csiinfo_cfg(struct bb_info *bb, struct rtw_csiinfo_cfg *cfg)
 	// if (len != pkt_len)
 	//	 BB_WARNING("halbb_csiinfo_cfg: tble length mismatch!!\n");
 	csiinfo_i = hal_mem_alloc(bb->hal_com, pkt_len);
+	if (!csiinfo_i)
+		return ret;
 
 	bb_h2c = (u32 *) csiinfo_i;
 
 	csiinfo_i->macid = (u8)cfg->macid;
 	csiinfo_i->csi_info_bitmap = (u8)cfg->csi_info_bitmap;
 
-	BB_DBG(bb, DBG_RUA_TBL, "content %x %x %x \n", bb_h2c[0], bb_h2c[1], bb_h2c[2]);
+	/* struct csiinfo_cfg is a single u32 */
+	BB_DBG(bb, DBG_RUA_TBL, "content %x\n", bb_h2c[0]);
 	ret_v = halbb_fill_h2c_cmd(bb, pkt_len, RUA_H2C_CSIINFO, HALBB_H2C_RUA, bb_h2c);
 //out:
 	if (csiinfo_i)
