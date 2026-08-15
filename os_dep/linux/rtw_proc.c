@@ -1280,6 +1280,9 @@ static ssize_t proc_set_false_alarm_accumulated(struct file *file,
 
 	if (buffer && !copy_from_user(tmp, buffer, count)) {
 		u32 num = sscanf(tmp, "%u ", &false_clr);
+
+		if (num != 1)
+			return -EINVAL;
 		ATOMIC_SET((ATOMIC_T *)&dvobj->fa_cnt_acc[hw_band],
 			   (int)false_clr);
 	} else {
@@ -2479,6 +2482,8 @@ static ssize_t proc_set_rx_chk_limit(struct file *file, const char __user *buffe
 	if (buffer && !copy_from_user(tmp, buffer, count)) {
 		int num = sscanf(tmp, "%d", &rx_chk_limit);
 
+		if (num != 1)
+			return -EINVAL;
 		rtw_set_rx_chk_limit(padapter, rx_chk_limit);
 	}
 
@@ -4641,6 +4646,8 @@ static ssize_t proc_set_amsdu_mode(struct file *file, const char __user *buffer,
 
 		int num = sscanf(tmp, "%d", &mode);
 
+		if (num != 1)
+			return -EINVAL;
 		if (mode == RTW_AMSDU_MODE_NON_SPP
 			|| mode == RTW_AMSDU_MODE_SPP
 			|| mode == RTW_AMSDU_MODE_ALL_DROP) {
