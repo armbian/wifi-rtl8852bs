@@ -402,7 +402,6 @@ static u8 mpt_ProStartTest(_adapter *padapter)
 void rtw_mp_cal_trigger(_adapter *padapter, u8 cal_tye)
 {
 	struct rtw_mp_cal_arg	*mp_cal_arg = NULL;
-	struct mp_priv *pmppriv = &padapter->mppriv;
 
 	mp_cal_arg = _rtw_malloc(sizeof(struct rtw_mp_cal_arg));
 	if (mp_cal_arg)
@@ -437,7 +436,6 @@ void rtw_mp_cal_trigger(_adapter *padapter, u8 cal_tye)
 void rtw_mp_cal_capab(_adapter *padapter, u8 cal_tye, u8 benable)
 {
 	struct rtw_mp_cal_arg	*mp_cal_arg = NULL;
-	struct mp_priv *pmppriv = &padapter->mppriv;
 
 	mp_cal_arg = _rtw_malloc(sizeof(struct rtw_mp_cal_arg));
 	if (mp_cal_arg)
@@ -523,7 +521,6 @@ u32 mp_join(_adapter *padapter, u8 mode)
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 	struct rtw_phl_mld_t *pmld = NULL;
-	void *phl = GET_PHL_INFO(adapter_to_dvobj(padapter));
 
 	/* 1. initialize a new WLAN_BSSID_EX */
 	_rtw_memset(&bssid, 0, sizeof(WLAN_BSSID_EX));
@@ -647,7 +644,6 @@ end_of_mp_start_test:
 /* This function initializes the DUT to the MP test mode */
 s32 mp_start_test(_adapter *padapter)
 {
-	struct mp_priv *pmppriv = &padapter->mppriv;
 	s32 res = _SUCCESS;
 
 	padapter->registrypriv.mp_mode = 1;
@@ -843,7 +839,6 @@ int rtw_mp_txpoweridx(_adapter *adapter)
 static s16 rtw_mp_get_pwr_refcw(_adapter *adapter, u8 rfpath, u8 is_cck)
 {
 	struct rtw_mp_txpwr_arg	ptxpwr_arg;
-	struct mp_priv *pmppriv = &adapter->mppriv;
 	s16 txpwr_refcw_idx;
 
 	_rtw_memset((void *)&ptxpwr_arg, 0, sizeof(struct rtw_mp_txpwr_arg));
@@ -1023,7 +1018,6 @@ void GetUuid(_adapter *adapter, u32 *uuid)
 
 void GetThermalMeter(_adapter *adapter, u8 rfpath ,u8 *value)
 {
-	struct mp_priv	*pmppriv = &adapter->mppriv;
 	struct rtw_mp_txpwr_arg	ptxpwr_arg;
 	u16 i = 0;
 
@@ -1085,7 +1079,6 @@ void rtw_mp_continuous_tx(_adapter *adapter, u8 bstart)
 
 void rtw_mp_txpwr_level(_adapter *adapter)
 {
-	struct mp_priv *pmp_priv = &adapter->mppriv;
 	struct _ADAPTER_LINK *adapter_link = GET_PRIMARY_LINK(adapter);
 	u8 rfpath_i = 0;
 	u8 tx_nss = get_phy_tx_nss(adapter, adapter_link);
@@ -1490,7 +1483,6 @@ exit:
 
 static void rtw_get_tx_idle(_adapter *padapter)
 {
-	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	struct mp_priv *pmp_priv = &padapter->mppriv;
 	u8 j;
 
@@ -1571,7 +1563,6 @@ static void rtw_pretx_trkdpk(_adapter *padapter)
 	struct mp_priv *pmp_priv = &padapter->mppriv;
 	u8 tx_nss = get_phy_tx_nss(padapter, padapter_link);
 	u8 rfpath_i = 0;
-	u8 tssi_mode = pmp_priv->tssi_mode;
 	u32 bk_tx_stop = pmp_priv->tx.stop;
 	u32 bk_tx_count = pmp_priv->tx.count;
 	s16 bk_txpwr = pmp_priv->txpowerdbm;
@@ -1885,7 +1876,6 @@ void rtw_mp_reset_phy_count(_adapter *adapter)
 
 static u8 rtw_mp_phl_psd_cmd(_adapter *padapter, struct rtw_mp_cal_arg	*psd_arg, u8 cmdid)
 {
-	struct mp_priv	*pmppriv = &padapter->mppriv;
 	u16 i = 0;
 	u32 cmd_size = sizeof(struct rtw_mp_cal_arg);
 
@@ -1925,7 +1915,6 @@ u32 mp_query_psd(_adapter *adapter, u8 *data)
 
 	u32 i, psd_pts = 0, psd_start = 0, psd_stop = 0;
 	u32 fft = 0, avg = 0, iq_path = 0;
-	u32 psd_data = 0;
 	int len;
 
 	my_psd_arg = _rtw_malloc(sizeof(struct rtw_mp_cal_arg));
@@ -2728,7 +2717,6 @@ u32 mpt_ProQueryCalTxPower(
 	u8		RfPath
 )
 {
-	PMPT_CONTEXT		pMptCtx = &(adapter->mppriv.mpt_ctx);
 #if 0
 	u32			TxPower = 1;
 	struct txpwr_idx_comp tic;
@@ -2769,9 +2757,6 @@ u32 rtw_mpt_raw2dec_dbm(u32 val)
 
 u32 mpt_get_tx_power_finalabs_val(_adapter *padapter, u8 rf_path)
 {
-	PMPT_CONTEXT		pMptCtx = &(padapter->mppriv.mpt_ctx);
-
-	u8 mgn_rate = mpt_to_mgnt_rate(pMptCtx->mpt_rate_index);
 	u32 powerdbm = 0;
 
 #ifdef CONFIG_80211AX_HE
@@ -2933,7 +2918,6 @@ void rtw_mp_set_phl_cmd(_adapter *padapter, void* buf, u32 buflen)
 
 u8 rtw_mp_phl_txpower(_adapter *padapter, struct rtw_mp_txpwr_arg	*ptxpwr_arg, u8 cmdid)
 {
-	struct mp_priv	*pmppriv = &padapter->mppriv;
 	u16 i = 0;
 
 	ptxpwr_arg->mp_class = RTW_MP_CLASS_TXPWR;
@@ -2963,9 +2947,6 @@ bool rtw_mp_phl_config_arg(_adapter *padapter, enum rtw_mp_config_cmdid cmdid)
 {
 	struct mp_priv	*pmppriv = &padapter->mppriv;
 	struct rtw_mp_config_arg pmp_arg;
-	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
-	struct rtw_phl_com_t *phl_com = dvobj->phl_com;
-	enum rf_path tx, rx;
 	u16 i = 0;
 
 	_rtw_memset((void *)&pmp_arg, 0, sizeof(struct rtw_mp_config_arg));
@@ -3056,7 +3037,6 @@ bool rtw_mp_phl_config_arg(_adapter *padapter, enum rtw_mp_config_cmdid cmdid)
 
 void rtw_mp_phl_rx_physts(_adapter *padapter, struct rtw_mp_rx_arg *rx_arg, bool bstart)
 {
-	struct mp_priv *pmppriv = &padapter->mppriv;
 	u8 i = 0;
 
 	rx_arg->mp_class = RTW_MP_CLASS_RX;
@@ -3084,7 +3064,6 @@ void rtw_mp_phl_rx_physts(_adapter *padapter, struct rtw_mp_rx_arg *rx_arg, bool
 
 void rtw_mp_phl_rx_rssi(_adapter *padapter, struct rtw_mp_rx_arg *rx_arg)
 {
-	struct mp_priv *pmppriv = &padapter->mppriv;
 	u8 i = 0;
 
 	rx_arg->mp_class = RTW_MP_CLASS_RX;
@@ -3111,7 +3090,6 @@ void rtw_mp_phl_rx_rssi(_adapter *padapter, struct rtw_mp_rx_arg *rx_arg)
 
 void rtw_mp_phl_rx_gain_offset(_adapter *padapter, struct rtw_mp_rx_arg *rx_arg, u8 path_num)
 {
-	struct mp_priv *pmppriv = &padapter->mppriv;
 	u8 all_path_num = path_num;
 	u8 rf_path = 0;
 
@@ -3150,7 +3128,6 @@ void rtw_mp_phl_rx_gain_offset(_adapter *padapter, struct rtw_mp_rx_arg *rx_arg,
 
 void rtw_mp_phl_query_rx(_adapter *padapter, struct rtw_mp_rx_arg *rx_arg ,u8 rx_qurey_type)
 {
-	struct mp_priv *pmppriv = &padapter->mppriv;
 	u8 rxcmd[2] = {0, 0};
 	u8 cmd_idx = 0;
 
@@ -3289,7 +3266,6 @@ void rtw_mp_set_crystal_cap(_adapter *padapter, u32 xcapvalue)
 
 u8 rtw_mp_phl_calibration(_adapter *padapter, struct rtw_mp_cal_arg	*pcal_arg, u8 cmdid)
 {
-	struct mp_priv	*pmppriv = &padapter->mppriv;
 	u16 i = 0;
 	u32 cmd_size = sizeof(struct rtw_mp_cal_arg);
 
@@ -3318,7 +3294,6 @@ u8 rtw_mp_phl_calibration(_adapter *padapter, struct rtw_mp_cal_arg	*pcal_arg, u
 
 u8 rtw_mp_phl_reg(_adapter *padapter, struct rtw_mp_reg_arg	*reg_arg, u8 cmdid)
 {
-	struct mp_priv	*pmppriv = &padapter->mppriv;
 	u16 i = 0;
 	u32 cmd_size = sizeof(struct rtw_mp_reg_arg);
 
@@ -3454,7 +3429,7 @@ u8 rtw_mp_update_ru_tone(_adapter *padapter)
 	u8 user_idx = pmp_priv->mp_plcp_useridx;
 	u8 cur_coding = pmp_priv->mp_plcp_user[user_idx].coding;
 	u8 ruidx = MP_RU_TONE_26;
-	u8 i = 0 , j = 0;
+	u8 i = 0;
 
 	if (cur_coding == 0) {/* 1 LDPC, 0 BCC */
 		ruidx = MP_RU_TONE_242;
@@ -3548,7 +3523,6 @@ u8 rtw_mp_update_ru_alloc(_adapter *padapter)
 u32 rtw_mp_get_tssi_de(_adapter *padapter, u8 rf_path)
 {
 	struct rtw_mp_txpwr_arg	ptxpwr_arg;
-	struct mp_priv *pmppriv = &padapter->mppriv;
 
 	_rtw_memset((void *)&ptxpwr_arg, 0, sizeof(struct rtw_mp_txpwr_arg));
 
@@ -3563,7 +3537,6 @@ u32 rtw_mp_get_tssi_de(_adapter *padapter, u8 rf_path)
 s32 rtw_mp_get_online_tssi_de(_adapter *padapter, s32 out_pwr, s32 tgdbm, u8 rf_path)
 {
 	struct rtw_mp_txpwr_arg	ptxpwr_arg;
-	struct mp_priv *pmppriv = &padapter->mppriv;
 
 	_rtw_memset((void *)&ptxpwr_arg, 0, sizeof(struct rtw_mp_txpwr_arg));
 
@@ -3579,11 +3552,7 @@ s32 rtw_mp_get_online_tssi_de(_adapter *padapter, s32 out_pwr, s32 tgdbm, u8 rf_
 
 u8 rtw_mp_set_tsside2verify(_adapter *padapter, u32 tssi_de, u8 rf_path)
 {
-	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 	struct rtw_mp_txpwr_arg	ptxpwr_arg;
-	struct mp_priv *pmppriv = &padapter->mppriv;
-	u8 tx_nss = get_phy_tx_nss(padapter, padapter_link);
-	u8 i = 0;
 
 	_rtw_memset((void *)&ptxpwr_arg, 0, sizeof(struct rtw_mp_txpwr_arg));
 
@@ -3598,11 +3567,7 @@ u8 rtw_mp_set_tsside2verify(_adapter *padapter, u32 tssi_de, u8 rf_path)
 
 u8 rtw_mp_set_tssi_offset(_adapter *padapter, u32 tssi_offset, u8 rf_path)
 {
-	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 	struct rtw_mp_txpwr_arg	ptxpwr_arg;
-	struct mp_priv *pmppriv = &padapter->mppriv;
-	u8 tx_nss = get_phy_tx_nss(padapter, padapter_link);
-	u8 i = 0;
 
 	_rtw_memset((void *)&ptxpwr_arg, 0, sizeof(struct rtw_mp_txpwr_arg));
 
@@ -3725,10 +3690,6 @@ void rtw_mp_phl_set_mac_io_test(_adapter *padapter)
 
 u8 rtw_mp_get_tx_req_recycle(_adapter *padapter)
 {
-	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
-	uint status = _FALSE;
-	struct mp_priv *pmppriv = &padapter->mppriv;
-
 	u32 idle_cnt = 0, busy_cnt = 0, total_cnt = 0;
 	u8 tx_report = 0;
 	u32 i = 0;
