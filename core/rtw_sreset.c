@@ -112,10 +112,8 @@ bool sreset_inprogress(_adapter *padapter)
 
 static void sreset_restore_security_station(_adapter *padapter, struct _ADAPTER_LINK *padapter_link)
 {
-	struct mlme_priv *mlmepriv = &padapter->mlmepriv;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct sta_info *psta;
-	struct mlme_ext_info	*pmlmeinfo = &padapter->mlmeextpriv.mlmext_info;
 
 	rtw_hal_set_hwreg(padapter, HW_VAR_SEC_CFG, NULL);
 
@@ -137,18 +135,19 @@ static void sreset_restore_network_station(_adapter *padapter)
 {
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
-	struct link_mlme_priv *mlmepriv = &padapter_link->mlmepriv;
 	struct link_mlme_ext_priv	*pmlmeext = &padapter_link->mlmeextpriv;
 	struct link_mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
 	rtw_setopmode_cmd(padapter, Ndis802_11Infrastructure, RTW_CMDF_DIRECTLY);
 
 	{
-		u8 threshold;
 #ifdef CONFIG_USB_HCI
 		/* TH=1 => means that invalidate usb rx aggregation */
 		/* TH=0 => means that validate usb rx aggregation, use init value. */
 #ifdef CONFIG_80211N_HT
+		struct link_mlme_priv *mlmepriv = &padapter_link->mlmepriv;
+		u8 threshold;
+
 		if (mlmepriv->htpriv.ht_option) {
 			if (padapter->registrypriv.wifi_spec == 1)
 				threshold = 1;
@@ -205,7 +204,9 @@ static void sreset_restore_network_status(_adapter *padapter)
 void sreset_stop_adapter(_adapter *padapter)
 {
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
+#if defined(CONFIG_USB_HCI)
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
+#endif
 
 	if (padapter == NULL)
 		return;
@@ -234,7 +235,9 @@ void sreset_stop_adapter(_adapter *padapter)
 void sreset_start_adapter(_adapter *padapter)
 {
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
+#if defined(CONFIG_USB_HCI)
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
+#endif
 
 	if (padapter == NULL)
 		return;

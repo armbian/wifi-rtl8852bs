@@ -304,7 +304,6 @@ void rtw_scan_abort_no_wait(_adapter *adapter)
 
 static inline bool _rtw_scan_abort_check(_adapter *adapter, const char *caller)
 {
-	struct	mlme_priv *pmlmepriv = &adapter->mlmepriv;
 	struct mlme_ext_priv *pmlmeext = &adapter->mlmeextpriv;
 	struct submit_ctx *sctx = &pmlmeext->sitesurvey_res.sctx;
 
@@ -773,9 +772,6 @@ static bool update_scanned_network(_adapter *adapter, WLAN_BSSID_EX *target)
 	_list	*plist, *phead;
 	u32	bssid_ex_sz;
 	struct mlme_priv	*pmlmepriv = &(adapter->mlmepriv);
-#ifdef CONFIG_P2P
-	struct wifidirect_info *pwdinfo = &(adapter->wdinfo);
-#endif /* CONFIG_P2P */
 	_queue	*queue	= &(pmlmepriv->scanned_queue);
 	struct wlan_network	*pnetwork = NULL;
 	struct wlan_network	*choice = NULL;
@@ -1306,7 +1302,9 @@ static void add_mbssid_network(_adapter *padapter, WLAN_BSSID_EX *ref_bss)
 void rtw_survey_event_callback(_adapter	*adapter, u8 *pbuf)
 {
 	u32 len;
+#ifdef CONFIG_RTW_80211K
 	u8 val8;
+#endif
 	WLAN_BSSID_EX *pnetwork;
 	struct	mlme_priv	*pmlmepriv = &(adapter->mlmepriv);
 
@@ -2145,7 +2143,6 @@ static int scan_complete_cb(void *priv, struct rtw_phl_scan_param *param)
 {
 	struct scan_priv *scan_priv = (struct scan_priv *)priv;
 	_adapter *padapter = scan_priv->padapter;
-	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 	bool acs = _FALSE;
 	int ret = _FAIL;
@@ -2270,11 +2267,9 @@ static int scan_issue_p2p_pbreq_cb(void *priv, struct rtw_phl_scan_param *param,
 
 static int scan_ch_ready_cb(void *priv, struct rtw_phl_scan_param *param, u8 sctrl_idx)
 {
-	struct scan_priv *scan_priv = (struct scan_priv *)priv;
-	_adapter *padapter = scan_priv->padapter;
-	struct phl_scan_channel *scan_ch = param->sctrl[sctrl_idx].scan_ch;
-
-	RTW_INFO("%s: band=%d, ch=%d\n", __func__, scan_ch->band, scan_ch->channel);
+	RTW_INFO("%s: band=%d, ch=%d\n", __func__,
+		param->sctrl[sctrl_idx].scan_ch->band,
+		param->sctrl[sctrl_idx].scan_ch->channel);
 	return 0;
 }
 
@@ -2887,11 +2882,9 @@ static int roch_ready_cb(void *priv, struct rtw_phl_scan_param *param, u8 sctrl_
 {
 	struct scan_priv *scan_priv = (struct scan_priv *)priv;
 	_adapter *padapter = scan_priv->padapter;
-	struct cfg80211_roch_info *pcfg80211_rochinfo =
-		&padapter->cfg80211_rochinfo;
 
 	RTW_INFO("%s cookie:0x%llx\n", __func__,
-		pcfg80211_rochinfo->remain_on_ch_cookie);
+		padapter->cfg80211_rochinfo.remain_on_ch_cookie);
 
 	if ((scan_priv->roch_step & ROCH_CH_READY))
 		return 0;
@@ -2911,8 +2904,10 @@ static int roch_ready_cb(void *priv, struct rtw_phl_scan_param *param, u8 sctrl_
 static int roch_off_ch_tx_cb(void *priv,
 	struct rtw_phl_scan_param *param, void *data)
 {
+#ifndef CONFIG_CMD_SCAN
 	struct scan_priv *scan_priv = (struct scan_priv *)priv;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(scan_priv->padapter);
+#endif
 
 #ifdef CONFIG_CMD_SCAN
 	RTW_ERR("CMD_SCAN call %s\n", __func__);
@@ -2929,10 +2924,8 @@ static int p2p_roch_complete_cb(void *priv, struct rtw_phl_scan_param *param)
 	struct scan_priv *scan_priv = (struct scan_priv *)priv;
 	_adapter *padapter = scan_priv->padapter;
 	int ret = _FAIL;
-	struct rtw_wdev_priv *pwdev_priv = adapter_wdev_data(padapter);
 	struct cfg80211_roch_info *pcfg80211_rochinfo =
 		&padapter->cfg80211_rochinfo;
-	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
 
 	if (!rtw_is_adapter_up(padapter))
 		goto _exit;
@@ -2951,7 +2944,7 @@ static int p2p_roch_complete_cb(void *priv, struct rtw_phl_scan_param *param)
 	rtw_back_opch(padapter);
 #endif
 #ifdef CONFIG_DEBUG_CFG80211
-	RTW_INFO("%s, role=%d\n", __func__, rtw_p2p_role(pwdinfo));
+	RTW_INFO("%s, role=%d\n", __func__, rtw_p2p_role(&padapter->wdinfo));
 #endif
 
 	rtw_cfg80211_set_is_roch(padapter, _FALSE);
@@ -3032,8 +3025,6 @@ static int roch_complete_cb(void *priv, struct rtw_phl_scan_param *param)
 {
 	struct scan_priv *scan_priv = (struct scan_priv *)priv;
 	_adapter *padapter = scan_priv->padapter;
-	struct cfg80211_roch_info *pcfg80211_rochinfo =
-		&padapter->cfg80211_rochinfo;
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 	int ret = _FAIL;
 
@@ -3062,7 +3053,7 @@ _exit:
 		, scan_priv->channel_type, GFP_KERNEL);
 
 	RTW_INFO("cfg80211_remain_on_channel_expired cookie:0x%llx\n"
-		, pcfg80211_rochinfo->remain_on_ch_cookie);
+		, padapter->cfg80211_rochinfo.remain_on_ch_cookie);
 
 	RTW_INFO(FUNC_ADPT_FMT" takes %d ms to scan %d channels\n",
 			FUNC_ADPT_ARG(padapter), param->total_scan_time,
