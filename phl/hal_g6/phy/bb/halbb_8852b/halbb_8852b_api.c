@@ -649,8 +649,6 @@ bool halbb_write_rf_reg_8852b_d(struct bb_info *bb, enum rf_path path,
 bool halbb_write_rf_reg_8852b(struct bb_info *bb, enum rf_path path,
 			      u32 reg_addr, u32 bit_mask, u32 data)
 {
-	u8 path_tmp = 0, b_msk_en = 0;
-	u32 w_reg = 0;
 	bool rpt = true;
 	enum rtw_dv_sel ad_sel = (enum rtw_dv_sel)((reg_addr & 0x10000) >> 16);
 
@@ -682,10 +680,6 @@ bool halbb_write_rf_reg_8852b(struct bb_info *bb, enum rf_path path,
 }
 void halbb_ctrl_btg_8852b(struct bb_info *bb, bool btg)
 {
-	struct rtw_phl_com_t *phl = bb->phl_com;
-	struct dev_cap_t *dev = &phl->dev_cap;
-	
-	
 	BB_DBG(bb, DBG_PHY_CONFIG, "<====== %s ======>\n", __func__);
 /*
 	if(bb->hal_com->band[0].cur_chandef.band != BAND_ON_24G)
@@ -801,7 +795,6 @@ void halbb_ctrl_btc_preagc_8852b(struct bb_info *bb, bool bt_en)
 bool halbb_bw_setting_8852b(struct bb_info *bb, enum channel_width bw,
 			    enum rf_path path)
 {
-	u32 rf_reg18 = 0;
 	u32 adc_sel[2] = {0xC0EC, 0xC1EC};
 	u32 wbadc_sel[2] = {0xC0E4, 0xC1E4};
 
@@ -997,8 +990,6 @@ bool halbb_ctrl_bw_8852b(struct bb_info *bb, u8 pri_ch, enum channel_width bw,
 bool halbb_ch_setting_8852b(struct bb_info *bb, u8 central_ch, enum rf_path path,
 			    bool *is_2g_ch)
 {
-	u32 rf_reg18 = 0;
-
 	//*is_2g_ch = (central_ch <= 14) ? true : false;
 	//RF_18 R/W already move to RF API
 	BB_DBG(bb, DBG_PHY_CONFIG, "[Success][ch_setting] CH: %d for Path-%d\n",
@@ -2027,7 +2018,6 @@ static void halbb_ext_loss_avg_update_8852b(struct bb_info *bb)
 
 void halbb_get_efuse_ofst_init_8852b(struct bb_info *bb)
 {
-	struct bb_efuse_info *gain = &bb->bb_efuse_i;
 	u8 tmp_ofst;
 
 	BB_DBG(bb, DBG_PHY_CONFIG, "<====== %s ======>\n", __func__);
@@ -2272,7 +2262,7 @@ void halbb_set_efuse_8852b(struct bb_info *bb, u8 central_ch, enum phl_phy_idx p
 {
 	u8 band;
 	u8 gain_val = 0;
-	s32 hidden_efuse = 0, normal_efuse = 0, normal_efuse_cck = 0;
+	s32 normal_efuse = 0, normal_efuse_cck = 0;
 	s32 normal_efuse_a = 0, normal_efuse_b = 0;
 	s32 tmp = 0;
 	u8 path = 0;
@@ -2478,10 +2468,6 @@ void halbb_set_rxsc_rpl_comp_8852b(struct bb_info *bb, u8 central_ch)
 {
 	struct bb_gain_info *gain = &bb->bb_gain_i;
 	u8 band;
-	u8 path = 0;
-	u8 i = 0;
-	u8 rxsc = 0;
-	s8 ofst = 0;
 	s8 bw20_avg = 0;
 	s8 bw40_avg = 0, bw40_avg_1 = 0, bw40_avg_2 = 0;
 	s8 bw80_avg = 0;
@@ -2575,7 +2561,6 @@ void halbb_normal_efuse_verify_8852b(struct bb_info *bb, s8 rx_gain_offset,
 				       enum rf_path rx_path,
 				       enum phl_phy_idx phy_idx)
 {
-	s32 normal_efuse = 0;
 	s32 tmp = 0;
 
 	BB_DBG(bb, DBG_PHY_CONFIG, "<====== %s ======>\n", __func__);
