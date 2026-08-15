@@ -286,7 +286,6 @@ void halrf_dbg_trace(struct rf_info *rf, char input[][16], u32 *_used,
 void halrf_dump_rfk_reg(struct rf_info *rf, char input[][16], u32 *_used,
 			 char *output, u32 *_out_len)
 {
-	u32 val[10] = {0};
 	u32 used = *_used;
 	u32 out_len = *_out_len;
 	u32 addr = 0;
@@ -473,7 +472,6 @@ static void halrf_dpk_read_rc_mtx(struct rf_info *rf, char input[][16], u32 *_us
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
 	struct halrf_dpk_info *dpk = &rf->dpk;
 
-	u32 val[10] = {0};
 	u32 used = *_used;
 	u32 out_len = *_out_len;
 	u32 addr = 0;
@@ -518,7 +516,6 @@ static void halrf_dpk_read_rx_sram(struct rf_info *rf, char input[][16], u32 *_u
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
 	struct halrf_dpk_info *dpk = &rf->dpk;
 
-	u32 val[10] = {0};
 	u32 used = *_used;
 	u32 out_len = *_out_len;
 	u32 addr = 0;
@@ -561,7 +558,6 @@ static void halrf_dpk_read_coef(struct rf_info *rf, char input[][16], u32 *_used
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
 	struct halrf_dpk_info *dpk = &rf->dpk;
 
-	u32 val[10] = {0};
 	u32 used = *_used;
 	u32 out_len = *_out_len;
 	u32 addr = 0;
@@ -663,7 +659,6 @@ void halrf_dpk_track_dbg_cmd(struct rf_info *rf, char input[][16], u32 *_used,
 	char *cmd[4] = {"-h", "on", "off", "status"};
 	u32 used = *_used;
 	u32 out_len = *_out_len;
-	u32 val = 0;
 	u8 i;
 
 	if (!(rf->support_ability & HAL_RF_DPK_TRACK)) {
@@ -924,7 +919,6 @@ static void halrf_dack_dbg_info(struct rf_info *rf, char input[][16], u32 *_used
 	char *ic_name = NULL;
 	u32 dack_ver = 0;
 	u32 rf_para = 0;
-	u32 rfk_init_ver = 0;
 	u8 i;
 
 	switch (hal_i->chip_id) {
@@ -1393,7 +1387,6 @@ void halrf_iqk_bypass_cmd(struct rf_info *rf, char input[][16], u32 *_used,
 	char *cmd[4] = {"-h", "lok", "txk", "rxk"};
 	u32 used = *_used;
 	u32 out_len = *_out_len;
-	u32 val = 0;
 	u8 i;
 
 	if (!(rf->support_ability & HAL_RF_IQK)) {
@@ -1436,7 +1429,6 @@ void halrf_iqk_klog_cmd(struct rf_info *rf, char input[][16], u32 *_used,
 	char *cmd[6] = {"-h", "fft", "sram", "xym", "cfir",  "off"};
 	u32 used = *_used;
 	u32 out_len = *_out_len;
-	u32 val = 0;
 	u8 i;
 
 	if (!(rf->support_ability & HAL_RF_IQK)) {
@@ -1540,7 +1532,6 @@ void halrf_pwr_table_dbg_cmd(struct rf_info *rf, char input[][16], u32 *_used,
 			"rate_pwr_ctl", "pwr_lmt_6g", "antgain", "ant"};
 	u32 used = *_used;
 	u32 out_len = *_out_len;
-	u32 val = 0;
 	u32 tmp, tmp1, phy = HW_PHY_0;
 	u8 i;
 
@@ -1811,7 +1802,6 @@ void halrf_rfk_check_reg_cmd(struct rf_info *rf, char input[][16], u32 *_used,
 	char *cmd[4] = {"-h", "backup", "check", "reload"};
 	u32 used = *_used;
 	u32 out_len = *_out_len;
-	u32 val = 0;
 	u8 i;
 
 	if (_os_strcmp(input[1], cmd[0]) == 0) {
@@ -2127,7 +2117,6 @@ void halrf_dump_rf_reg_cmd(struct rf_info *rf, char input[][16], u32 *_used,
 	char *cmd[1] = {"-h"};
 	u32 used = *_used;
 	u32 out_len = *_out_len;
-	u32 val = 0;
 	u32 i;
 	u32 start_addr = 0, end_addr = 0, range_value = 0, path = 0;
 
@@ -2234,8 +2223,6 @@ void halrf_hwtx_dbg_cmd(struct rf_info *rf, char input[][16], u32 *_used,
 void halrf_kfree_dbg_cmd(struct rf_info *rf, char input[][16], u32 *_used,
 			 char *output, u32 *_out_len)
 {
-	struct halrf_kfree_info *kfree = &rf->kfree_info;
-
 	char *cmd[3] = {"-h", "info", "efuse"};
 	u32 val = 0;
 	u8 i, tmp;
@@ -2268,7 +2255,6 @@ void halrf_chl_rfk_dbg_cmd(struct rf_info *rf, char input[][16], u32 *_used,
 	char *cmd[6] = {"-h","info", "time", "ic", "radio_init", "nctl_init"};
 	u32 used = *_used;
 	u32 out_len = *_out_len;
-	u32 val = 0;
 	u8 i;
 	char *ic_name = NULL;
 
@@ -2562,7 +2548,6 @@ void halrf_op5k_dbg_cmd(struct rf_info *rf, char input[][16], u32 *_used,
 {
 	u8 idx = 3;
 	char *cmd[3] = {"-h", "info", "trigger"};
-	u32 val = 0;
 	u8 i;
 
 	if (_os_strcmp(input[1], cmd[0]) == 0) {
