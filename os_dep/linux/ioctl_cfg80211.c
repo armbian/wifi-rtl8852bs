@@ -4329,13 +4329,11 @@ static int rtw_set_security(struct _ADAPTER *a,
 			return -EINVAL;
 		wep_key_len = wep_key_len <= 5 ? 5 : 13;
 		wep_total_len = wep_key_len + FIELD_OFFSET(NDIS_802_11_WEP, KeyMaterial);
-		pwep = (NDIS_802_11_WEP *) rtw_malloc(wep_total_len);
+		pwep = (NDIS_802_11_WEP *) rtw_zmalloc(sizeof(*pwep));
 		if (pwep == NULL) {
 			RTW_INFO(" wpa_set_encryption: pwep allocate fail !!!\n");
 			return -ENOMEM;
 		}
-
-		_rtw_memset(pwep, 0, wep_total_len);
 
 		pwep->KeyLength = wep_key_len;
 		pwep->Length = wep_total_len;
@@ -4354,7 +4352,7 @@ static int rtw_set_security(struct _ADAPTER *a,
 			ret = -EOPNOTSUPP ;
 
 		if (pwep)
-			rtw_mfree((u8 *)pwep, wep_total_len);
+			rtw_mfree((u8 *)pwep, sizeof(*pwep));
 
 		if (ret < 0)
 			return ret;
