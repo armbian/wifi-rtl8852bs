@@ -39,7 +39,6 @@ int rtw_mp_write_reg(struct net_device *dev,
 	u32 addr, data;
 	int ret;
 	_adapter *padapter = rtw_netdev_priv(dev);
-	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	char input[RTW_IWD_MAX_LEN];
 	struct rtw_mp_reg_arg	reg_arg;
 
@@ -151,7 +150,6 @@ int rtw_mp_read_reg(struct net_device *dev,
 	u32 addr = 0, strtout = 0;
 	u32 i = 0, j = 0, ret = 0, data32 = 0;
 	_adapter *padapter = rtw_netdev_priv(dev);
-	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	struct rtw_mp_reg_arg	reg_arg;
 
 	char *pextra = extra;
@@ -448,7 +446,6 @@ int rtw_mp_stop(struct net_device *dev,
 		struct iw_point *wrqu, char *extra)
 {
 	int ret = 0;
-	u8 status = 0;
 	_adapter *padapter = rtw_netdev_priv(dev);
 	struct mp_priv *pmppriv = &padapter->mppriv;
 
@@ -476,13 +473,9 @@ int rtw_mp_rate(struct net_device *dev,
 	u16 rate = MPT_RATE_1M;
 	u8		input[RTW_IWD_MAX_LEN];
 	_adapter *padapter = rtw_netdev_priv(dev);
-	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
 	struct mp_priv *pmp_priv = (struct mp_priv *)&padapter->mppriv;
-	PMPT_CONTEXT		pMptCtx = &(padapter->mppriv.mpt_ctx);
-	u8 tx_nss = get_phy_tx_nss(padapter, padapter_link);
 	char *pextra = extra;
-	u8 path_i = 0, i = 0;
-	u16 pwr_dbm = 0;
+	u8 i = 0;
 
 	_rtw_memset(input, 0, sizeof(input));
 	if (copy_from_user(input, wrqu->pointer, wrqu->length))
@@ -783,12 +776,8 @@ int rtw_mp_txpower(struct net_device *dev,
 			u8 ret = 0xff;
 			int int_num = 0;
 			u32 dec_num = 0;
-			s16 pout = 0;
 			int i;
-			u32 poutdbm = 0;
-			s32 db_temp = 0;
 			s16 pset = 0;
-			u8 rfpath;
 
 			if (sscanf(input, "dbm=%7s", pout_str_buf) == 1) {
 				ret = 0;
@@ -1110,10 +1099,6 @@ int rtw_mp_disable_bt_coexist(struct net_device *dev,
 			      struct iw_request_info *info,
 			      union iwreq_data *wrqu, char *extra)
 {
-#ifdef CONFIG_BTC
-	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-
-#endif
 	u8 input[RTW_IWD_MAX_LEN];
 	u32 bt_coexist;
 
@@ -1450,7 +1435,6 @@ int rtw_mp_pwrtrk(struct net_device *dev,
 		  struct iw_point *wrqu, char *extra)
 {
 	u8 enable;
-	u32 thermal;
 	s32 ret = 0;
 	_adapter *padapter = rtw_netdev_priv(dev);
 	struct mp_priv *pmp_priv = (struct mp_priv *)&padapter->mppriv;
@@ -1541,8 +1525,6 @@ int rtw_mp_thermal(struct net_device *dev,
 {
 	u8 val[4] = {0};
 	u8 ret = 0;
-	u16 ther_path_addr[4] = {0};
-	u16 cnt = 1;
 	_adapter *padapter = rtw_netdev_priv(dev);
 	int rfpath = RF_PATH_A;
 
@@ -1686,9 +1668,7 @@ int rtw_mp_SetRFPath(struct net_device *dev,
 		     struct iw_request_info *info,
 		     struct iw_point *wrqu, char *extra)
 {
-	_adapter *padapter = rtw_netdev_priv(dev);
 	char	input[RTW_IWD_MAX_LEN];
-	int		bMain = 1, bTurnoff = 1;
 #ifdef CONFIG_ANTENNA_DIVERSITY
 	u8 ret = _TRUE;
 #endif
@@ -1739,7 +1719,6 @@ int rtw_mp_switch_rf_path(struct net_device *dev,
 	_adapter *padapter = rtw_netdev_priv(dev);
 	struct mp_priv *pmp_priv;
 	char	input[RTW_IWD_MAX_LEN];
-	int		bwlg = 1, bwla = 1, btg = 1, bbt=1;
 	u8 ret = 0;
 
 
@@ -1783,7 +1762,6 @@ int rtw_mp_QueryDrv(struct net_device *dev,
 		    struct iw_request_info *info,
 		    union iwreq_data *wrqu, char *extra)
 {
-	_adapter *padapter = rtw_netdev_priv(dev);
 	char	input[RTW_IWD_MAX_LEN];
 	int	qAutoLoad = 1;
 	//struct efuse_info *efuse = adapter_to_efuse(padapter);
@@ -1811,7 +1789,6 @@ int rtw_mp_PwrCtlDM(struct net_device *dev,
 		    struct iw_request_info *info,
 		    struct iw_point *wrqu, char *extra)
 {
-	_adapter *padapter = rtw_netdev_priv(dev);
 	u8		input[RTW_IWD_MAX_LEN];
 	u8		pwrtrk_state = 0;
 	u8		pwtk_type[5][25] = {"Thermal tracking off","Thermal tracking on",
@@ -1895,7 +1872,6 @@ int rtw_mp_dpk(struct net_device *dev,
 {
 	_adapter *padapter = rtw_netdev_priv(dev);
 	//struct dm_struct *phydm = adapter_to_phydm(padapter);
-	struct pwrctrl_priv *pwrctrlpriv = adapter_to_pwrctl(padapter);
 
 	if (copy_from_user(extra, wrqu->data.pointer, wrqu->data.length))
 		return -EFAULT;
@@ -2174,12 +2150,8 @@ int rtw_mp_mon(struct net_device *dev,
 	       struct iw_request_info *info,
 	       union iwreq_data *wrqu, char *extra)
 {
-	_adapter *padapter = rtw_netdev_priv(dev);
-	struct mp_priv *pmp_priv = &padapter->mppriv;
-	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	//struct hal_ops *pHalFunc = &hal->hal_func;
 	NDIS_802_11_NETWORK_INFRASTRUCTURE networkType;
-	int bstart = 1, bstop = 1;
 
 	networkType = Ndis802_11Infrastructure;
 	if (copy_from_user(extra, wrqu->data.pointer, wrqu->data.length))
@@ -2303,16 +2275,10 @@ int rtw_mp_tx(struct net_device *dev,
 	      struct iw_request_info *info,
 	      union iwreq_data *wrqu, char *extra)
 {
-	_adapter *padapter = rtw_netdev_priv(dev);
-	struct mp_priv *pmp_priv = &padapter->mppriv;
-	PMPT_CONTEXT		pMptCtx = &(padapter->mppriv.mpt_ctx);
-	char *pextra = extra;
-	u32 bandwidth = 0, sg = 0, channel = 6, txpower = 40, rate = 108, ant = 0, txmode = 1, count = 0;
-	u8 bStartTest = 1, status = 0;
+	u8 status = 0;
 #ifdef CONFIG_MP_VHT_HW_TX_MODE
 	u8 Idx = 0, tmpU1B;
 #endif
-	u16 antenna = 0;
 
 	if (copy_from_user(extra, wrqu->data.pointer, wrqu->data.length))
 		return -EFAULT;
@@ -2626,13 +2592,6 @@ int rtw_mp_rx(struct net_device *dev,
 	      struct iw_request_info *info,
 	      union iwreq_data *wrqu, char *extra)
 {
-	_adapter *padapter = rtw_netdev_priv(dev);
-	struct mp_priv *pmp_priv = &padapter->mppriv;
-	char *pextra = extra;
-	u32 bandwidth = 0, sg = 0, channel = 6, ant = 0;
-	u16 antenna = 0;
-	u8 bStartRx = 0;
-
 	if (copy_from_user(extra, wrqu->data.pointer, wrqu->data.length))
 		return -EFAULT;
 #if 0
@@ -2748,11 +2707,11 @@ int rtw_mp_hwtx(struct net_device *dev,
 		struct iw_request_info *info,
 		union iwreq_data *wrqu, char *extra)
 {
+#if defined(CONFIG_RTL8821B) || defined(CONFIG_RTL8822B) || defined(CONFIG_RTL8821C) || defined(CONFIG_RTL8822C)
 	_adapter *padapter = rtw_netdev_priv(dev);
 	struct mp_priv *pmp_priv = &padapter->mppriv;
 	PMPT_CONTEXT mpt_ctx = &(padapter->mppriv.mpt_ctx);
 
-#if defined(CONFIG_RTL8821B) || defined(CONFIG_RTL8822B) || defined(CONFIG_RTL8821C) || defined(CONFIG_RTL8822C)
 	if (copy_from_user(extra, wrqu->data.pointer, wrqu->data.length))
 		return -EFAULT;
 	*(extra + wrqu->data.length) = '\0';
@@ -2780,8 +2739,6 @@ int rtw_mp_pwrlmt(struct net_device *dev,
 			union iwreq_data *wrqu, char *extra)
 {
 	_adapter *padapter = rtw_netdev_priv(dev);
-	struct registry_priv  *registry_par = &padapter->registrypriv;
-	u8 pwrlimtstat = 0;
 
 	if (copy_from_user(extra, wrqu->data.pointer, wrqu->data.length))
 		return -EFAULT;
@@ -2812,7 +2769,6 @@ int rtw_mp_dpk_track(struct net_device *dev,
 			struct iw_request_info *info,
 			union iwreq_data *wrqu, char *extra)
 {
-	_adapter *padapter = rtw_netdev_priv(dev);
 	//struct dm_struct *phydm = adapter_to_phydm(padapter);
 
 	if (copy_from_user(extra, wrqu->data.pointer, wrqu->data.length))
@@ -3324,7 +3280,6 @@ int rtw_mp_phl_rfk(struct net_device *dev,
 			 union iwreq_data *wrqu, char *extra)
 {
 	_adapter *padapter = rtw_netdev_priv(dev);
-	struct mp_priv *pmp_priv = (struct mp_priv *)&padapter->mppriv;
 	u8 k_type = RTW_MP_CAL_MAX;
 	u8 k_cap_ctrl = false;
 	u8 k_cap_on = false;
@@ -3499,10 +3454,10 @@ int rtw_mp_get_he(struct net_device *dev,
 			 struct iw_request_info *info,
 			 union iwreq_data *wrqu, char *extra)
 {
+#ifdef CONFIG_80211AX_HE
 	_adapter *padapter = rtw_netdev_priv(dev);
 	struct registry_priv *regsty = &padapter->registrypriv;
 
-#ifdef CONFIG_80211AX_HE
 	if (!REGSTY_IS_11AX_ENABLE(regsty) ||
 		!is_supported_he(regsty->wireless_mode))
 		sprintf(extra, "false");
@@ -3560,10 +3515,9 @@ int rtw_mp_link(struct net_device *dev,
 	int		bgetrxdata = 0, btxdata = 0, bsetbt = 0;
 	int err = 0;
 	u32 i = 0, datalen = 0,jj, kk, waittime = 0;
-	u16 val = 0x00, ret = 0;
 	char *pextra = NULL;
 	u8 *setdata = NULL;
-	char *pch, *ptmp, *token, *tmp[4] = {0x00, 0x00, 0x00};
+	char *pch, *token, *tmp[4] = {0x00, 0x00, 0x00};
 
 	pmp_priv = &padapter->mppriv;
 
