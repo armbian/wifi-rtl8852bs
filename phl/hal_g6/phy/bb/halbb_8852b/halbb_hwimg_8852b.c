@@ -151,7 +151,9 @@ bool halbb_cfg_bbcr_ax_8852b(struct bb_info *bb, bool is_form_folder,
 	u32 v1 = 0, v2 = 0;
 	u8 h_size = 0;
 	u8 h_idx = 0;
+	#ifdef HALBB_FW_OFLD_SUPPORT
 	bool ret = false;
+	#endif
 
 	BB_DBG(bb, DBG_INIT, "===> %s\n", __func__);
 

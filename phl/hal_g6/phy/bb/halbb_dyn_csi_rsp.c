@@ -38,8 +38,6 @@ static void halbb_csi_rsp_rlt(struct bb_info *bb, bool en)
 	struct bf_ch_raw_info *bf = &bb->bb_cmn_hooker->bf_ch_raw_i;
 	enum dcr_csi_rsp;
 
-	bool ret=false;
-	
 	if (en == bf->is_csi_rsp_en)
 		return;
 	
@@ -465,10 +463,8 @@ void halbb_dcr_env_det(struct bb_info *bb)
 void halbb_dyn_csi_rsp_dbg(struct bb_info *bb, char input[][16], 
 				    u32 *_used, char *output, u32 *_out_len)
 {
-	struct bb_ch_info_physts_info *physts = &bb->bb_ch_rpt_i.bb_ch_info_physts_i;
 	struct bf_ch_raw_info *bf = &bb->bb_cmn_hooker->bf_ch_raw_i;
 	u32 val[10] = {0};
-	bool dcr_en = false;
 	bool bool_tmp;
 
 	HALBB_SCAN(input[1], DCMD_DECIMAL, &val[0]);

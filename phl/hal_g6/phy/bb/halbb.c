@@ -338,8 +338,6 @@ void halbb_sta_info_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 	struct rtw_rssi_info *rssi_t = NULL;
 	struct rtw_ra_sta_info	*ra;
 	char dbg_buf[HALBB_SNPRINT_SIZE] = {0};
-	u32 val[10] = {0};
-	u32 tmp = 0;
 	u16 curr_tx_rt = 0;
 	u8 i = 0, j = 0;
 	enum phl_phy_idx phy_idx = HW_PHY_0;

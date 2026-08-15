@@ -103,7 +103,6 @@ static void halbb_ch_info_cr_dump(struct bb_info *bb)
 {
 	struct bb_ch_rpt_info *ch_rpt = &bb->bb_ch_rpt_i;
 	struct bb_ch_info_cr_info *cr = &ch_rpt->bb_ch_info_cr_i;
-	struct bb_ch_info_cr_cfg_info *cfg = &ch_rpt->bb_ch_info_cr_cfg_i;
 	struct bb_ch_info_cr_cfg_info *cur_cfg = &ch_rpt->bb_ch_info_cur_cr_cfg_i;
 	u32 cr_table[4];
 	u8 cr_len = sizeof(cr_table) / sizeof(u32);
@@ -317,7 +316,7 @@ static bool halbb_ch_info_chk_cr_valid(struct bb_info *bb, struct bb_ch_info_cr_
 	struct bb_ch_rpt_info *ch_rpt = &bb->bb_ch_rpt_i;
 	struct bb_ch_rpt_size_info *rpt_size = &ch_rpt->bb_ch_rpt_size_i;
 	u8 ch_matrix_nr[4];
-	u8 i = 0, j = 0;
+	u8 i = 0;
 	u8 nc = 1, nr = 1;
 	u8 msb_bit = 0;
 	u8 mask_tmp = 0;
@@ -1342,9 +1341,10 @@ void halbb_cr_cfg_ch_info_init(struct bb_info *bb)
 void halbb_ch_info_close_powersaving(struct bb_info *bb, bool en,
 			 enum phl_phy_idx phy_idx)
 {
+	#if (defined(BB_8852C_SUPPORT) || defined(BB_8192XB_SUPPORT))
 	struct bb_ch_rpt_info *ch_rpt = &bb->bb_ch_rpt_i;
 	struct bb_ch_info_cr_info *cr = &ch_rpt->bb_ch_info_cr_i;
-	#if (defined(BB_8852C_SUPPORT) || defined(BB_8192XB_SUPPORT))
+
 	if ((bb->ic_type == BB_RTL8852C) || (bb->ic_type == BB_RTL8192XB)){
 		if (en) {
 			if (phy_idx == HW_PHY_0) {

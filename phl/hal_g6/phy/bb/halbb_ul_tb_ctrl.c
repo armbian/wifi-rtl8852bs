@@ -70,7 +70,6 @@ void halbb_ul_tb_ctrl(struct bb_info *bb)
 	struct bb_ul_tb_info *bb_ul_tb = &bb->bb_ul_tb_i;
 	struct bb_link_info *bb_link = &bb->bb_link_i;
 	struct rtw_phl_com_t *phl = bb->phl_com;
-	struct dev_cap_t *dev = &phl->dev_cap;
 	struct rtw_phl_stainfo_t *sta;
 	struct bb_ul_tb_cr_info *cr = &bb->bb_ul_tb_i.bb_ul_tb_cr_i;
 	struct bb_api_info *bb_api = &bb->bb_api_i;

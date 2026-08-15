@@ -147,7 +147,7 @@ static bool halbb_sniffer_phy_sts_ie_10(struct bb_info *bb)
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
 	u32 sigb_tmp = 0;
 	u16 sig_b_len_tmp = 0;
-	u32 sig_b_len = 0, vht_mcs = 0; 
+	u32 sig_b_len = 0;
 
 	BB_DBG(bb, DBG_SNIFFER, "[IE:10] snif_sig_b_len=%d\n", snif->snif_sig_b_len);
 
@@ -199,7 +199,6 @@ bool halbb_sniffer_phy_sts(struct bb_info *bb, struct physts_result *rpt,
 	struct bb_snif_info *snif = &bb->bb_cmn_hooker->bb_snif_i;
 	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	struct bb_physts_rslt_hdr_info	*psts_h = &physts->bb_physts_rslt_hdr_i;
-	struct bb_physts_rslt_9_info *psts_9 = &physts->bb_physts_rslt_9_i;
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
 	bool rpt_valid = true;
 
@@ -249,8 +248,6 @@ bool halbb_sniffer_phy_sts(struct bb_info *bb, struct physts_result *rpt,
 
 void halbb_sniffer_phy_sts_init(struct bb_info *bb)
 {
-	struct bb_snif_info *snif = &bb->bb_cmn_hooker->bb_snif_i;
-
 	BB_DBG(bb, DBG_SNIFFER, "[%s] \n", __func__);
 }
 
