@@ -313,8 +313,8 @@ static inline void *_os_pkt_buf_alloc_rx(void *d, u32 *bus_addr_l,
                                          u32 *bus_addr_h, u32 buf_sz,
                                          void **os_priv)
 {
-	struct dvobj_priv *pobj = (struct dvobj_priv *)d;
 #ifdef CONFIG_PCI_HCI
+	struct dvobj_priv *pobj = (struct dvobj_priv *)d;
 	PPCI_DATA pci_data = dvobj_to_pci(pobj);
 	struct pci_dev *pdev = pci_data->ppcidev;
 	dma_addr_t dma_addr;
@@ -348,8 +348,8 @@ static inline void *_os_pkt_buf_alloc_rx(void *d, u32 *bus_addr_l,
 static inline void _os_pkt_buf_free_rx(void *d, u8 *vir_addr, u32 bus_addr_l,
                                        u32 bus_addr_h, u32 buf_sz, void *os_priv)
 {
-	struct dvobj_priv *pobj = (struct dvobj_priv *)d;
 #ifdef CONFIG_PCI_HCI
+	struct dvobj_priv *pobj = (struct dvobj_priv *)d;
 	PPCI_DATA pci_data = dvobj_to_pci(pobj);
 	struct pci_dev *pdev = pci_data->ppcidev;
 	dma_addr_t bus_addr = bus_addr_l;
