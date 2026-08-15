@@ -392,7 +392,6 @@ static void halbb_dig_damping_chk(struct bb_info *bb)
 static void halbb_dig_damping_chk_init(struct bb_info *bb)
 {
 	struct bb_dig_info *dig = &bb->bb_dig_i;
-	struct bb_dig_record_info *dig_rc = &dig->bb_dig_record_i;
 
 	halbb_dig_recorder_reset(bb);
 	dig->dig_dl_en = true;
@@ -742,7 +741,6 @@ static void halbb_sdagc_follow_pagc_config(struct bb_info *bb, bool set_en)
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 	const struct bb_dig_cr_info *cr = &bb_dig->bb_dig_cr_i;
 	u32 val = (set_en) ? 1 : 0;
-	u8 i = 0;
 
 	if (bb_dig->p_cur_dig_unit->sdagc_follow_pagc_en == set_en)
 		return;
@@ -765,7 +763,6 @@ static void halbb_dyn_pd_th_cck(struct bb_info *bb, u8 rssi, bool set_en)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 	struct bb_dig_op_unit *bb_dig_u = bb_dig->p_cur_dig_unit;
-	const struct bb_dig_cr_info *cr = &bb_dig->bb_dig_cr_i;
 	u8 pd_dyn_max = bb_dig->igi_rssi + 5; /* PD_low upper bound */
 	u8 margin = bb_dig_u->pd_low_th_ofst; /* backoff of CCA ability */
 	u8 phy = bb->bb_phy_idx == HW_PHY_1 ? 1 : 0;
@@ -795,7 +792,6 @@ static void halbb_dyn_pd_th_ofdm(struct bb_info *bb, u8 rssi, bool set_en)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 	struct bb_dig_op_unit *bb_dig_u = bb_dig->p_cur_dig_unit;
-	const struct bb_dig_cr_info *cr = &bb_dig->bb_dig_cr_i;
 	u8 pd_dyn_max = bb_dig->igi_rssi + 5; /* PD_low upper bound */
 	u8 margin = bb_dig_u->pd_low_th_ofst; /* backoff of CCA ability */
 	u8 phy = bb->bb_phy_idx == HW_PHY_1 ? 1 : 0;
@@ -964,7 +960,6 @@ static const u16 fa_th_linked[FA_TH_NUM] = {4, 8, 12, 16};
 static void halbb_dig_para_update(struct bb_info *bb)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
-	struct bb_link_info *bb_link = &bb->bb_link_i;
 	struct bb_dig_op_para_unit *para_dst;
 
 	BB_DIG_DBG(bb, DIG_DBG_LV1, "%s ======>\n", __func__);
@@ -1012,7 +1007,6 @@ static void halbb_dig_op_unit_para_reset_h(struct bb_info *bb)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 	struct bb_dig_op_unit *unit_cur = &bb_dig->dig_state_h_i;
-	u8 i = 0;
 
 	unit_cur->cur_gaincode = bb_dig->max_gaincode;
 	unit_cur->force_gaincode = bb_dig->max_gaincode;
@@ -1029,7 +1023,6 @@ static void halbb_dig_op_unit_para_reset_l(struct bb_info *bb)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
 	struct bb_dig_op_unit *unit_cur = &bb_dig->dig_state_l_i;
-	u8 i = 0;
 
 	unit_cur->cur_gaincode = bb_dig->max_gaincode;
 	unit_cur->force_gaincode = bb_dig->max_gaincode;
@@ -1185,7 +1178,9 @@ static bool halbb_dig_abort(struct bb_info *bb)
 void halbb_dig_cfg_bbcr(struct bb_info *bb, u8 igi_new)
 {
 	struct bb_dig_info *dig = &bb->bb_dig_i;
+#ifdef BB_8852A_2_SUPPORT
 	struct bb_dig_op_unit *bb_dig_u = dig->p_cur_dig_unit;
+#endif
 	struct bb_dig_op_unit *dig_u = &dig->dig_state_h_i;
 	struct bb_dig_op_para_unit *para = &dig_u->dig_op_para;
 
@@ -1222,7 +1217,6 @@ void halbb_dig_cfg_bbcr(struct bb_info *bb, u8 igi_new)
 void halbb_dig_lps(struct bb_info *bb)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
-	struct bb_dig_op_unit *bb_dig_u = bb_dig->p_cur_dig_unit;
 	struct bb_link_info *bb_link = &bb->bb_link_i;
 	s16 final_rssi = 0;
 
@@ -1243,7 +1237,6 @@ void halbb_dig_lps(struct bb_info *bb)
 void halbb_dig_simple(struct bb_info *bb, u8 rssi_ofst)
 {
 	struct bb_dig_info *bb_dig = &bb->bb_dig_i;
-	struct bb_dig_op_unit *bb_dig_u = bb_dig->p_cur_dig_unit;
 	struct bb_link_info *bb_link = &bb->bb_link_i;
 	s16 final_rssi = 0;
 	u8 bound = 0;
@@ -1273,7 +1266,6 @@ void halbb_dig(struct bb_info *bb)
 {
 	struct bb_dig_info *dig = &bb->bb_dig_i;
 	struct bb_dig_op_unit *dig_u = &dig->dig_state_h_i;
-	struct bb_dig_op_para_unit *para = &dig_u->dig_op_para;
 	struct bb_link_info *bb_link = &bb->bb_link_i;
 	u16 fa_avg;
 	u8 igi_new, igi_pre = dig_u->igi_fa_rssi;
@@ -1564,9 +1556,9 @@ void halbb_dig_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 	struct bb_dig_op_unit *bb_dig_u = &bb_dig->dig_state_h_i;
 #ifdef BB_8852A_2_SUPPORT
 	struct agc_gaincode_set set_tmp;
+	u8 i = 0;
 #endif
 	u32 var[10] = {0};
-	u8 i = 0;
 
 	if (_os_strcmp(input[1], "-h") == 0) {
 #ifdef HALBB_DIG_TDMA_SUPPORT
