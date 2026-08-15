@@ -274,8 +274,7 @@ static void halrf_doiqk(struct rf_info *rf, bool force, enum phl_phy_idx phy_idx
 	u32 backup_mac_val[RF_BACKUP_MAC_REG_MAX_NUM] = {0x0};
 	u32 backup_bb_val[RF_BACKUP_BB_REG_MAX_NUM] = {0x0};
 	u32 backup_rf_val[RF_PATH_MAX_NUM][RF_BACKUP_RF_REG_MAX_NUM] = {{0x0}};
-	u8 rf_path = 0x0;
-	
+
 #if 0	
 	if(!force) {
 		if (!phl_is_mp_mode(rf->phl_com)) {
@@ -424,9 +423,8 @@ static void halrf_iqk_set_info(struct rf_info *rf, enum phl_phy_idx phy_idx, u8 
 
 static u8 halrf_get_fw_iqk_times(struct rf_info *rf)
 {
-	struct halrf_iqk_info *iqk_info = &rf->iqk;
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
-	u8 times =0x0;	
+	u8 times =0x0;
 
 	switch (hal_i->chip_id) {
 #ifdef RF_8852A_SUPPORT
@@ -486,7 +484,6 @@ void halrf_iqk(struct rf_info *rf, enum phl_phy_idx phy_idx, bool force)
 {
 	struct halrf_iqk_info *iqk_info = &rf->iqk;
 	bool isfail = true;
-	struct rtw_hal_com_t *hal_i = rf->hal_com;
 
 #if 0
 	if ((rf->phl_com->id.id & 0x7)== 0x2)  //USB

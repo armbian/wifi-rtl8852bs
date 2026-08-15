@@ -223,9 +223,9 @@ void halrf_btc_rfk_ntfy(struct rf_info *rf, u8 phy_map, enum halrf_rfk_type type
 
 void halrf_fcs_init(struct rf_info *rf)
 {
+#ifdef RF_8852A_SUPPORT
 	struct rtw_hal_com_t *hal_com = rf->hal_com;
 
-#ifdef RF_8852A_SUPPORT
 	if (hal_com->chip_id == CHIP_WIFI6_8852A)
 		halrf_fcs_init_8852a(rf);
 #endif
@@ -295,7 +295,6 @@ void halrf_wifi_event_notify(void *rf_void,
 			enum phl_msg_evt_id event, enum phl_phy_idx phy_idx)
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
-	struct halrf_pwr_info *pwr = &rf->pwr_info;
 
 	switch (event) {
 		case MSG_EVT_SCAN_START:
@@ -535,11 +534,14 @@ void halrf_mcc_get_ch_info(void *rf_void, enum phl_phy_idx phy)
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct halrf_mcc_info *mcc_info = &rf->mcc_info;
 	u8 idx;
-	u8 get_empty_table = false;
+#ifdef RF_8852C_SUPPORT
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
+#endif
 
 	halrf_mcc_info_init(rf, phy);
-#if 0	
+#if 0
+	u8 get_empty_table = false;
+
 	//get channel info
 	for  (idx = 0;  idx < 2; idx++) {
 		if (mcc_info->ch[idx] == 0) {
@@ -594,7 +596,6 @@ void halrf_chlk_backup_dbcc(struct rf_info *rf, enum phl_phy_idx phy)
 
 void halrf_chlk_reload_dbcc(struct rf_info *rf, enum phl_phy_idx phy, u8 idx) 
 {
-	struct halrf_dbcc_info *dbcc_info = &rf->dbcc_info;
 	u8 kpath;
 
 	RF_DBG(rf, DBG_RF_RFK, "[DBCC]======> %s \n", __func__);
