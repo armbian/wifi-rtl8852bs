@@ -585,7 +585,6 @@ int rtw_os_tx(struct sk_buff *pkt, _nic_hdl pnetdev)
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(pnetdev);
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	u16 os_qid = 0;
-	s32 res = 0;
 
 #ifdef RTW_PHL_DBG_CMD
 	core_add_record(padapter, REC_TX_DATA, pkt);
@@ -637,7 +636,6 @@ exit:
 static void ieee8023_header_to_rfc1042(struct sk_buff *skb, int pads)
 {
 	void *data;
-	int pad;
 	__be16 len;
 	const int headroom = SNAP_SIZE + 2 + pads;
 

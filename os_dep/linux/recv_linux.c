@@ -407,7 +407,6 @@ void dynamic_napi_th_chk (_adapter *adapter)
 void rtw_os_recv_indicate_pkt(_adapter *padapter, struct sk_buff *pkt,
 						union recv_frame *rframe)
 {
-	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct recv_priv *precvpriv = &adapter_to_dvobj(padapter)->recvpriv;
 	struct registry_priv	*pregistrypriv = &padapter->registrypriv;
 #ifdef CONFIG_BR_EXT
@@ -417,8 +416,6 @@ void rtw_os_recv_indicate_pkt(_adapter *padapter, struct sk_buff *pkt,
 
 	/* Indicat the packets to upper layer */
 	if (pkt) {
-		struct ethhdr *ehdr = (struct ethhdr *)pkt->data;
-
 		DBG_COUNTER(padapter->rx_logs.os_indicate);
 #ifdef CONFIG_BR_EXT
 		if (!adapter_use_wds(padapter) &&

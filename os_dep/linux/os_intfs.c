@@ -1179,7 +1179,6 @@ u8 rtw_reset_drv_sw(_adapter *padapter)
 {
 	u8	ret8 = _SUCCESS;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-	struct pwrctrl_priv *pwrctrlpriv = adapter_to_pwrctl(padapter);
 
 	/* hal_priv */
 	rtw_hw_cap_init(adapter_to_dvobj(padapter));
@@ -1727,8 +1726,6 @@ void rtw_drv_stop_prim_iface(_adapter *adapter)
 {
 	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
 	struct pwrctrl_priv *pwrctl = adapter_to_pwrctl(adapter);
-	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
-	struct debug_priv *pdbgpriv = &dvobj->drv_dbg;
 
 	if (check_fwstate(pmlmepriv, WIFI_ASOC_STATE) == _TRUE)
 		rtw_disassoc_cmd(adapter, 0, RTW_CMDF_DIRECTLY|RTW_CMDF_WAIT_ACK);
@@ -2423,7 +2420,6 @@ static int _pm_netdev_open(_adapter *padapter)
 {
 	uint status;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
-	struct pwrctrl_priv *pwrctrlpriv = adapter_to_pwrctl(padapter);
 	struct net_device *pnetdev = padapter->pnetdev;
 
 	RTW_INFO(FUNC_NDEV_FMT" start\n", FUNC_NDEV_ARG(pnetdev));
@@ -2505,11 +2501,9 @@ static int pm_netdev_open(struct net_device *pnetdev, u8 bnormal)
 static int netdev_close(struct net_device *pnetdev)
 {
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(pnetdev);
-	struct pwrctrl_priv *pwrctl = adapter_to_pwrctl(padapter);
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info *pmlmeinfo = &pmlmeext->mlmext_info;
-	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 
 	RTW_INFO(FUNC_NDEV_FMT" , netif_up=%d\n", FUNC_NDEV_ARG(pnetdev), padapter->netif_up);
 
@@ -2524,7 +2518,7 @@ static int netdev_close(struct net_device *pnetdev)
 	{
 		RTW_INFO("netif_up=%d, hw_init_completed=%s\n",
 			padapter->netif_up,
-			rtw_hw_is_init_completed(dvobj) ? "_TRUE" : "_FALSE");
+			rtw_hw_is_init_completed(adapter_to_dvobj(padapter)) ? "_TRUE" : "_FALSE");
 
 		/* s1. */
 		if (pnetdev)

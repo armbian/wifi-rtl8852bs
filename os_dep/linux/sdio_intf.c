@@ -796,7 +796,9 @@ exit:
 static void rtw_dev_remove(struct sdio_func *func)
 {
 	struct dvobj_priv *dvobj = sdio_get_drvdata(func);
+#if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_ANDROID_POWER)
 	struct pwrctrl_priv *pwrctl = dvobj_to_pwrctl(dvobj);
+#endif
 	_adapter *padapter = dvobj_get_primary_adapter(dvobj);
 
 	RTW_INFO("+%s\n", __func__);
