@@ -2341,9 +2341,6 @@ static s32 update_attrib(_adapter *padapter, struct sk_buff *pkt, struct pkt_att
 	struct _ADAPTER_LINK *padapter_link = NULL;
 	struct qos_priv		*pqospriv = NULL;
 	struct rtw_phl_mld_t *pmld = NULL;
-	struct sta_info *lsta = NULL;
-	u8 lidx;
-	u16 macid = 0xffff;
 
 	DBG_COUNTER(padapter->tx_logs.core_tx_upd_attrib);
 
@@ -2626,7 +2623,6 @@ static s32 xmitframe_addmic(_adapter *padapter, struct xmit_frame *pxmitframe)
 	struct	mic_data		micdata;
 	/* struct	sta_info		*stainfo; */
 	struct	pkt_attrib	*pattrib = &pxmitframe->attrib;
-	struct	security_priv	*psecuritypriv = &padapter->securitypriv;
 	struct	xmit_priv		*pxmitpriv = &padapter->xmitpriv;
 	u8 priority[4] = {0x0, 0x0, 0x0, 0x0};
 	u8 hw_hdr_offset = 0;
@@ -4157,23 +4153,15 @@ s32 rtw_mgmt_xmitframe_coalesce(_adapter *padapter, struct sk_buff *pkt, struct 
 #define DBG_MGMT_XMIT_BIP_DUMP 0
 #define DBG_MGMT_XMIT_ENC_DUMP 0
 
-	struct pkt_file pktfile;
-	s32 frg_inx, frg_len, mpdu_len, llc_sz, mem_sz;
-	SIZE_PTR addr;
 	u8 *pframe, *mem_start = NULL, *tmp_buf = NULL;
-	u8 hw_hdr_offset, subtype ;
+	u8 subtype ;
 	u8 category = 0xFF;
 	struct sta_info		*psta = NULL;
-	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
 	struct pkt_attrib	*pattrib = &pxmitframe->attrib;
-	u8 *pbuf_start;
 	s32 bmcst = IS_MCAST(pattrib->ra);
-	s32 res = _FAIL;
 	u8 *BIP_AAD = NULL;
 	u8 *MGMT_body = NULL;
 
-	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
-	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	u8 mme_cont[_MME_IE_LENGTH_ - 2];
 	u8 mme_clen;
@@ -5391,7 +5379,6 @@ struct xmit_frame *rtw_get_xframe(struct xmit_priv *pxmitpriv, int *num_frame)
 	struct tx_servq *ptxservq = NULL;
 	_queue *pframe_queue = NULL;
 	struct xmit_frame *pxmitframe = NULL;
-	_adapter *padapter = pxmitpriv->adapter;
 	int i, inx[4];
 
 	inx[0] = 0;
@@ -6528,7 +6515,6 @@ static void _fill_txreq_list_skb(_adapter *padapter,
 	} while (0)
 
 	struct rtw_pkt_buf_list *list = *pkt_list;
-	u8 nr_frags = skb_shinfo(skb)->nr_frags;
 	s32 offset = *req_offset;
 	u32 rem_sz = *req_sz;
 	u32 cur_frag_total, cur_frag_rem;
@@ -6642,8 +6628,6 @@ static s32 rtw_core_replace_skb(struct sk_buff **pskb, u32 need_head, u32 need_t
 #ifdef CONFIG_BR_EXT
 static s32 core_br_client_tx(_adapter *padapter, struct xmit_frame *pxframe, struct sk_buff **pskb)
 {
-	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-
 	if (!adapter_use_wds(padapter) && check_fwstate(&padapter->mlmepriv, WIFI_STATION_STATE | WIFI_ADHOC_STATE) == _TRUE) {
 		void *br_port = NULL;
 
@@ -6669,9 +6653,6 @@ static s32 core_br_client_tx(_adapter *padapter, struct xmit_frame *pxframe, str
 
 static s32 core_tx_update_pkt(_adapter *padapter, struct xmit_frame *pxframe, struct sk_buff **pskb)
 {
-	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-	struct sk_buff *skb_orig = *pskb;
-
 	PHLTX_LOG;
 
 //rtw_phl_tx todo, BR EXT
@@ -7222,7 +7203,6 @@ static void fill_txreq_mdata(_adapter *padapter, struct xmit_frame *pxframe)
 {
 	struct rtw_xmit_req *txreq = pxframe->phl_txreq;
 	struct sta_info *psta = pxframe->attrib.psta;
-	struct rtw_phl_stainfo_t *phl_sta = NULL;
 	struct rtw_t_meta_data *mdata = &(txreq->mdata);
 #ifdef BMC_ON_HIQ
        struct sta_priv *pstapriv = &padapter->stapriv;
@@ -7584,11 +7564,9 @@ static void core_wlan_fill_tail(_adapter *padapter, struct xmit_frame *pxframe)
 static u8 core_wlan_fill_tkip_mic(_adapter *padapter, struct xmit_frame *pxframe)
 {
 	u8 *llc = NULL;
-	u8 *payload = NULL;
 	u8 mic[8] = {0x0};
 	struct mic_data micdata;
 	struct pkt_attrib *pattrib = &pxframe->attrib;
-	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	s8 bmcst = IS_MCAST(pattrib->ra);
 	u8 priority[4] = {0x0};
 	int i = 0;
