@@ -36,8 +36,6 @@ u8 signal_stat_calc_profile[SIGNAL_STAT_CALC_PROFILE_MAX][2] = {
 
 u8 rtw_bridge_tunnel_header[] = { 0xaa, 0xaa, 0x03, 0x00, 0x00, 0xf8 };
 u8 rtw_rfc1042_header[] = { 0xaa, 0xaa, 0x03, 0x00, 0x00, 0x00 };
-static u8 SNAP_ETH_TYPE_IPX[2] = {0x81, 0x37};
-static u8 SNAP_ETH_TYPE_APPLETALK_AARP[2] = {0x80, 0xf3};
 #ifdef CONFIG_TDLS
 static u8 SNAP_ETH_TYPE_TDLS[2] = {0x89, 0x0d};
 #endif
@@ -408,7 +406,6 @@ static sint recvframe_chkmic(_adapter *adapter,  union recv_frame *precvframe)
 	struct	link_security_priv	*lsecuritypriv;
 	struct	sta_info		*stainfo;
 	struct	rx_pkt_attrib	*prxattrib = &precvframe->u.hdr.attrib;
-	struct	security_priv	*psecuritypriv = &adapter->securitypriv;
 	struct	mlme_ext_priv	*pmlmeext = &(adapter->mlmeextpriv);
 	struct	mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
@@ -806,7 +803,6 @@ sint recv_decache(union recv_frame *precv_frame)
 {
 	struct sta_info *psta = precv_frame->u.hdr.psta;
 	struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
-	_adapter *adapter = psta->padapter;
 	sint tid = pattrib->priority;
 	u16 seq_ctrl = ((precv_frame->u.hdr.attrib.seq_num & 0xffff) << 4) |
 		       (precv_frame->u.hdr.attrib.frag_num & 0xf);
@@ -825,14 +821,14 @@ sint recv_decache(union recv_frame *precv_frame)
 			prxseq = &psta->sta_recvpriv.nonqos_bmc_rxseq;
 			#ifdef DBG_RX_SEQ
 			RTW_INFO("DBG_RX_SEQ "FUNC_ADPT_FMT" nonqos bmc seq_num:%d\n"
-				, FUNC_ADPT_ARG(adapter), pattrib->seq_num);
+				, FUNC_ADPT_ARG(psta->padapter), pattrib->seq_num);
 			#endif
 
 		} else {
 			prxseq = &psta->sta_recvpriv.nonqos_rxseq;
 			#ifdef DBG_RX_SEQ
 			RTW_INFO("DBG_RX_SEQ "FUNC_ADPT_FMT" nonqos seq_num:%d\n"
-				, FUNC_ADPT_ARG(adapter), pattrib->seq_num);
+				, FUNC_ADPT_ARG(psta->padapter), pattrib->seq_num);
 			#endif
 		}
 	}
@@ -848,7 +844,7 @@ sint recv_decache(union recv_frame *precv_frame)
 
 		#ifdef DBG_RX_DROP_FRAME
 		RTW_INFO("DBG_RX_DROP_FRAME "FUNC_ADPT_FMT" recv_decache _FAIL for sta="MAC_FMT"\n"
-			, FUNC_ADPT_ARG(adapter), MAC_ARG(psta->phl_sta->mac_addr));
+			, FUNC_ADPT_ARG(psta->padapter), MAC_ARG(psta->phl_sta->mac_addr));
 		#endif
 		return _FAIL;
 	}
@@ -1211,10 +1207,8 @@ static sint sta2sta_data_frame(
 	u8 *ptr = precv_frame->u.hdr.rx_data;
 	sint ret = _SUCCESS;
 	struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
-	struct	sta_priv		*pstapriv = &adapter->stapriv;
 	struct	mlme_priv	*pmlmepriv = &adapter->mlmepriv;
 	u8 *mybssid  = get_bssid(pmlmepriv);
-	u8 *myhwaddr = adapter_mac_addr(adapter);
 	u8 *sta_addr = pattrib->ta;
 	sint bmcast = IS_MCAST(pattrib->dst);
 
@@ -1280,9 +1274,7 @@ static sint ap2sta_data_frame(
 	u8 *ptr = precv_frame->u.hdr.rx_data;
 	struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
 	sint ret = _SUCCESS;
-	struct	sta_priv		*pstapriv = &adapter->stapriv;
 	struct	mlme_priv	*pmlmepriv = &adapter->mlmepriv;
-	u8 *myhwaddr = adapter_mac_addr(adapter);
 	sint bmcast = IS_MCAST(pattrib->dst);
 
 	if ((check_fwstate(pmlmepriv, WIFI_MP_STATE) == _TRUE) &&
@@ -1344,7 +1336,6 @@ static sint sta2ap_data_frame(
 {
 	u8 *ptr = precv_frame->u.hdr.rx_data;
 	struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
-	struct	sta_priv		*pstapriv = &adapter->stapriv;
 	struct	mlme_priv	*pmlmepriv = &adapter->mlmepriv;
 	sint ret = _SUCCESS;
 
@@ -1369,7 +1360,6 @@ static sint sta2ap_data_frame(
 		}
 
 	} else {
-		u8 *myhwaddr = adapter_mac_addr(adapter);
 		if (!rtw_match_self_addr(adapter, pattrib->ra))
 		{
 			ret = RTW_RX_HANDLED;
@@ -1393,7 +1383,6 @@ exit:
 static int rtw_sta_rx_data_validate_hdr(_adapter *adapter, union recv_frame *rframe, struct sta_info **sta)
 {
 	struct sta_priv *stapriv = &adapter->stapriv;
-	u8 *myhwaddr = adapter_mac_addr(adapter);
 	struct rx_pkt_attrib *rattrib = &rframe->u.hdr.attrib;
 	u8 *whdr = get_recvframe_data(rframe);
 	u8 is_ra_bmc = IS_MCAST(GetAddr1Ptr(whdr)) ? 1 : 0;
@@ -1470,7 +1459,7 @@ static int rtw_sta_rx_data_validate_hdr(_adapter *adapter, union recv_frame *rfr
 	{
 		#ifdef DBG_RX_DROP_FRAME
 		RTW_INFO("DBG_RX_DROP_FRAME "FUNC_ADPT_FMT" SA="MAC_FMT", myhwaddr="MAC_FMT"\n"
-			, FUNC_ADPT_ARG(adapter), MAC_ARG(rattrib->src), MAC_ARG(myhwaddr));
+			, FUNC_ADPT_ARG(adapter), MAC_ARG(rattrib->src), MAC_ARG(adapter_mac_addr(adapter)));
 		#endif
 		goto exit;
 	}
@@ -2047,9 +2036,9 @@ static sint validate_recv_data_frame(_adapter *adapter, union recv_frame *precv_
 	u8 *ptr = precv_frame->u.hdr.rx_data;
 	struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
 	struct security_priv *psecuritypriv = &adapter->securitypriv;
-	struct recv_info *precvinfo = &adapter->recvinfo;
 	sint ret = _SUCCESS;
 #ifdef PRIVATE_R
+	struct recv_info *precvinfo = &adapter->recvinfo;
 	struct stainfo_stats *pstats = NULL;
 #endif
 #ifdef CONFIG_TDLS
@@ -2622,10 +2611,6 @@ static int validate_mp_recv_frame(_adapter *adapter, union recv_frame *precv_fra
 	struct mp_priv *pmppriv = &adapter->mppriv;
 	struct mp_tx		*pmptx;
 	unsigned char	*sa , *da, *bs;
-	struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
-	u32 i = 0;
-	u8 rtk_prefix[]={0x52, 0x65, 0x61, 0x6C, 0x4C, 0x6F, 0x76, 0x65, 0x54, 0x65, 0x6B};
-	u8 *prx_data;
 	pmptx = &pmppriv->tx;
 
 	if (pmppriv->bloopback) {
@@ -2666,16 +2651,8 @@ static sint mp_recv_frame(_adapter *adapter, union recv_frame *precv_frame)
 {
 	sint ret = _SUCCESS;
 	struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
-	struct recv_info *precvinfo = &adapter->recvinfo;
-	u8 *ptr = precv_frame->u.hdr.rx_data;
-	u8  ver = (unsigned char)(*ptr) & 0x3 ;
 
 	struct mp_priv *pmppriv = &adapter->mppriv;
-
-	u8 type;
-	u8 subtype;
-	u8 *psa, *pda, *pbssid;
-	struct sta_info *psta = NULL;
 
 	if (pattrib->crc_err == 1)
 		pmppriv->rx_crcerrpktcount++;
@@ -2998,7 +2975,6 @@ s32 recvframe_chk_defrag(_adapter *padapter, union recv_frame **pprecv_frame)
 	struct sta_info *psta;
 	struct sta_priv *pstapriv;
 	_list *phead;
-	union recv_frame *prtnframe = NULL;
 	_queue *pdefrag_q = NULL;
 	union recv_frame *precv_frame = *pprecv_frame;
 	s32 ret = CORE_RX_CONTINUE;
@@ -3186,8 +3162,6 @@ exit:
 #if defined(CONFIG_AP_MODE) || defined(CONFIG_RTW_MESH)
 static void recv_free_fwd_resource(_adapter *adapter, struct xmit_frame *fwd_frame, _list *f_list)
 {
-	struct xmit_priv *xmitpriv = &adapter->xmitpriv;
-
 	if (fwd_frame)
 		core_tx_free_xmitframe(adapter, fwd_frame);
 
@@ -5663,7 +5637,6 @@ enum rtw_phl_status rtw_core_rx_process(void *drv_priv)
 	struct dvobj_priv *dvobj = (struct dvobj_priv *)drv_priv;
 	_adapter *adapter = NULL;
 	struct rtw_recv_pkt *rx_req = NULL;
-	struct rtw_pkt_buf_list *pkt = NULL;
 	union recv_frame *prframe = NULL;
 	struct rx_pkt_attrib *prxattrib = NULL;
 	u16 rx_pkt_num = 0;
