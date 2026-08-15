@@ -143,7 +143,6 @@ int cckratesonly_included(unsigned char *rate, int ratelen)
 s8 rtw_get_sta_rx_nss(_adapter *adapter, struct sta_info *psta)
 {
 	s8 nss = 1;
-	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct _ADAPTER_LINK *padapter_link = psta->padapter_link;
 
 	if (!psta)
@@ -1016,7 +1015,6 @@ void HT_caps_handler(_adapter *padapter, struct _ADAPTER_LINK *padapter_link,
 	unsigned int i;
 	u8 max_AMPDU_len, min_MPDU_spacing;
 	u8 cur_ldpc_cap = 0, cur_stbc_cap = 0, cur_beamform_cap = 0, rx_nss = 0;
-	struct rtw_wifi_role_t *wrole = padapter->phl_role;
 	struct link_mlme_ext_priv *pmlmeext = &padapter_link->mlmeextpriv;
 	struct link_mlme_priv *pmlmepriv = &padapter_link->mlmepriv;
 	struct protocol_cap_t *protocol_cap = &padapter_link->wrlink->protocol_cap;
@@ -1851,7 +1849,6 @@ exit:
 int rtw_check_bcn_info(_adapter *adapter, struct _ADAPTER_LINK *adapter_link,
 		u8 *pframe, u32 packet_len)
 {
-	u8 *pbssid = GetAddr3Ptr(pframe);
 	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
 	struct beacon_keys *cur_beacon = &adapter_link->mlmepriv.cur_beacon_keys;
 	struct beacon_keys recv_beacon;
@@ -2771,7 +2768,6 @@ void update_capinfo(_adapter *adapter, struct _ADAPTER_LINK *adapter_link, u16 u
 void update_wireless_mode(_adapter *padapter, struct _ADAPTER_LINK *padapter_link)
 {
 	int ratelen, network_type = 0;
-	u32 SIFS_Timer;
 	struct link_mlme_ext_priv	*pmlmeext = &padapter_link->mlmeextpriv;
 	struct link_mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	WLAN_BSSID_EX		*cur_network = &(pmlmeinfo->network);

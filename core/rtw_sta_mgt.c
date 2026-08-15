@@ -892,7 +892,7 @@ static u32 _rtw_free_core_stainfo(_adapter *padapter , struct sta_info *psta, u8
 	/* CVE-2020-24586, clear defrag queue */
 	{
 		_list	*phead, *plist;
-		_queue *pfree_sta_queue, *pdefrag_q = &psta->sta_recvpriv.defrag_q;
+		_queue *pdefrag_q = &psta->sta_recvpriv.defrag_q;
 		union recv_frame *prframe;
 
 		_rtw_spinlock_bh(&pdefrag_q->lock);
@@ -1307,7 +1307,6 @@ u32 rtw_init_self_stainfo(_adapter *padapter, enum phl_cmd_type cmd_type)
 {
 
 	struct sta_info *psta;
-	struct tx_servq *ptxservq;
 	u32 res = _SUCCESS;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	void *phl = GET_PHL_INFO(adapter_to_dvobj(padapter));
@@ -1349,7 +1348,6 @@ struct sta_info *rtw_get_bcmc_stainfo(_adapter *padapter, struct _ADAPTER_LINK *
 {
 	struct sta_info	*psta;
 	struct sta_priv	*pstapriv = &padapter->stapriv;
-	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 	/* return self sta */
 	_list	*plist, *phead;
 	struct rtw_phl_stainfo_t *phl_sta_self = NULL;
@@ -1510,7 +1508,6 @@ struct sta_info *rtw_alloc_stainfo_sw(struct sta_priv *stapriv, enum rtw_device_
 				u16 main_id, u8 link_idx, const u8 *hwaddr)
 {
 	struct sta_info *sta;
-	struct rtw_phl_com_t *phl_com = GET_PHL_COM(adapter_to_dvobj(stapriv->padapter));
 	struct rtw_wifi_role_link_t *rlink = NULL;
 
 	/* can use in interrupt context */

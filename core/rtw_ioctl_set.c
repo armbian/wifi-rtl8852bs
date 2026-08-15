@@ -792,9 +792,7 @@ int rtw_set_scan_mode(_adapter *adapter, enum rtw_phl_scan_type scan_mode)
 */
 int rtw_set_channel_plan(_adapter *adapter, u8 channel_plan, u8 chplan_6g, enum rtw_regd_inr inr)
 {
-	struct registry_priv *regsty = adapter_to_regsty(adapter);
-
-	if (!REGSTY_REGD_SRC_FROM_OS(regsty))
+	if (!REGSTY_REGD_SRC_FROM_OS(adapter_to_regsty(adapter)))
 		return rtw_set_chplan_cmd(adapter, RTW_CMDF_WAIT_ACK, channel_plan, chplan_6g, inr);
 	RTW_WARN("%s(): not applied\n", __func__);
 	return _SUCCESS;

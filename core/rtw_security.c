@@ -2453,7 +2453,6 @@ u32 rtw_gcmp_encrypt(_adapter *padapter, u8 *pxmitframe)
 	u32 prwskeylen;
 	u8 *pframe = NULL;
 	u8 *prwskey = NULL;
-	u8 hw_hdr_offset = 0;
 	struct _ADAPTER_LINK *padapter_link = pattrib->adapter_link;
 	struct link_security_priv *lsecuritypriv = &padapter_link->securitypriv;
 
@@ -2486,7 +2485,6 @@ u32 rtw_gcmp_encrypt(_adapter *padapter, u8 *pxmitframe)
 
 u32 rtw_gcmp_decrypt(_adapter *padapter, u8 *precvframe)
 {
-	u32 prwskeylen;
 	u8 * pframe,*prwskey;
 	struct sta_info *stainfo;
 	struct rx_pkt_attrib *prxattrib = &((union recv_frame *)precvframe)->u.hdr.attrib;
@@ -2621,7 +2619,7 @@ u32 rtw_bip_verify(enum security_type gmcs, u16 pkt_len,
 {
 	u8 * BIP_AAD,*mme;
 	u32 res = _FAIL;
-	uint len, ori_len;
+	uint ori_len;
 	u16 pkt_keyid = 0;
 	u64 pkt_ipn = 0;
 	struct rtw_ieee80211_hdr *pwlanhdr;

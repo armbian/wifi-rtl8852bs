@@ -564,7 +564,6 @@ static u8 _rtw_mi_disconnect(_adapter *adapter, void *data)
 	struct mlme_priv *mlme = &adapter->mlmepriv;
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *adapter_link = GET_PRIMARY_LINK(adapter);
-	struct link_mlme_ext_priv *lmlmeext = &adapter_link->mlmeextpriv;
 	struct mlme_ext_priv *mlmeext = &adapter->mlmeextpriv;
 	struct mlme_ext_info *mlmeinfo = &(mlmeext->mlmext_info);
 
@@ -1567,9 +1566,11 @@ bool rtw_iface_is_operate_at_hwband(_adapter *adapter, u8 band_idx)
 bool rtw_iface_at_same_hwband(_adapter *adapter, _adapter *iface)
 {
 	bool rst = _TRUE;
+	#ifdef CONFIG_DBCC_SUPPORT
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
 	struct _ADAPTER_LINK *adapter_link = GET_PRIMARY_LINK(adapter);
 	struct _ADAPTER_LINK *iface_link = GET_PRIMARY_LINK(iface);
+	#endif
 
 	#ifdef CONFIG_DBCC_SUPPORT
 	if (rtw_is_adapter_up(adapter) && rtw_is_adapter_up(iface))

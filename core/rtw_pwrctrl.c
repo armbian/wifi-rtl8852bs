@@ -57,7 +57,9 @@ void rtw_init_pwrctrl_priv(_adapter *padapter)
 
 void rtw_free_pwrctrl_priv(_adapter *adapter)
 {
+#ifdef CONFIG_RESUME_IN_WORKQUEUE
 	struct pwrctrl_priv *pwrctrlpriv = adapter_to_pwrctl(adapter);
+#endif
 
 #if defined(CONFIG_CONCURRENT_MODE)
 	if (!is_primary_adapter(adapter))
@@ -230,7 +232,6 @@ void rtw_unregister_early_suspend(struct pwrctrl_priv *pwrpriv)
 static void _rtw_ssmps(_adapter *adapter, struct sta_info *sta)
 {
 	struct mlme_ext_priv *pmlmeext = &(adapter->mlmeextpriv);
-	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 
 	issue_action_SM_PS_wait_ack(adapter , sta->phl_sta->mac_addr,
 			sta->phl_sta->asoc_cap.sm_ps, 3, 1);

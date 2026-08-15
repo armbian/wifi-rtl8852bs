@@ -1618,7 +1618,6 @@ u8 rtw_get_bw_offset_by_op_class_ch(u8 gid, u8 ch, u8 *bw, u8 *offset)
 {
 	const struct op_class_t *opc;
 	u8 valid = 0;
-	int i;
 
 	opc = get_global_op_class_by_id(gid);
 	if (!opc)
@@ -1941,7 +1940,6 @@ void op_class_pref_apply_regulatory(struct rf_ctl_t *rfctl, u8 reason)
 static void dump_opc_pref_single(void *sel, struct op_class_pref_t *opc_pref, bool show_snon_ocp, bool show_no_ir, bool detail)
 {
 	u8 i;
-	u8 ch_num = 0;
 
 	if (!show_snon_ocp && !opc_pref->op_ch_num)
 		return;

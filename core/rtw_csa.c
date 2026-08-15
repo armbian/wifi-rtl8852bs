@@ -39,7 +39,6 @@ bool rtw_mr_is_ecsa_running(struct _ADAPTER *a)
 {
 	struct dvobj_priv *d = adapter_to_dvobj(a);
 	struct _ADAPTER *iface;
-	struct core_ecsa_info *ecsa_info = &(a->ecsa_info);
 	u8 i;
 
 	for (i = 0; i < d->iface_nums; i++) {
@@ -420,7 +419,6 @@ bool rtw_ap_check_ecsa_allow(
 	struct _ADAPTER_LINK *alink = GET_PRIMARY_LINK(a);
 	struct rtw_chan_def ap_chdef = alink->wrlink->chandef;
 	bool ecsa_allow = _TRUE;
-	u8 i;
 
 #ifdef CONFIG_MCC_MODE
 	if (rtw_hw_mcc_chk_inprogress(a, alink)) {
@@ -501,9 +499,8 @@ bool rtw_ecsa_check_tx_resume_allow(void *priv, struct rtw_wifi_role_t *role)
 	/* Is DFS slave still monitoring channel ?
 	If Yes, return False to PHL; If no, return True to PHL */
 	struct dvobj_priv *d = (struct dvobj_priv *)priv;
-	struct _ADAPTER *a = d->padapters[role->id];
 
-	RTW_INFO("CSA : "FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(a));
+	RTW_INFO("CSA : "FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(d->padapters[role->id]));
 	return 1;
 }
 
@@ -661,12 +658,9 @@ exit:
 
 static void rtw_sta_ecsa_invalid_hdl(struct _ADAPTER *a, s16 req_ch, u8 req_bw, u8 req_offset)
 {
-	struct dvobj_priv *d = adapter_to_dvobj(a);
-	struct rf_ctl_t *rfctl = dvobj_to_rfctl(d);
 	struct mlme_ext_priv *pmlmeext = &a->mlmeextpriv;
 	struct mlme_ext_info *pmlmeinfo = &pmlmeext->mlmext_info;
 	u8 ifbmp_s = rtw_mi_get_ld_sta_ifbmp(a);
-	struct rtw_chan_def mr_chdef = {0};
 
 	if (!ifbmp_s)
 		return;
