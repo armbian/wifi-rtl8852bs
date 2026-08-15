@@ -39,7 +39,6 @@ void halbb_dfs(struct bb_info *bb)
 void halbb_dfs_init(struct bb_info *bb)
 {
 	struct bb_dfs_info *bb_dfs = &bb->bb_dfs_i;
-	struct bb_dfs_cr_info* cr = &bb_dfs->bb_dfs_cr_i;
 
 	BB_DBG(bb, DBG_DFS, "[%s]===>\n", __func__);
 
@@ -411,7 +410,6 @@ void halbb_dfs_rgn_dmn_cnfg_by_ch(struct bb_info *bb, bool w53_band,
 void halbb_radar_chrp_mntr(struct bb_info *bb, bool chrp_flag, bool is_sg1)
 {
 	struct bb_dfs_info *bb_dfs = &bb->bb_dfs_i;
-	u8 i = 0;
 
 	if (is_sg1) {// Seg1 of TW DFS
 		if (bb->bb_sys_up_time - bb_dfs->chrp_srt_t_sg1 >= DFS_FCC_LP_LNGTH) {
@@ -662,9 +660,8 @@ void halbb_radar_info_processing(struct bb_info *bb,
 {
 	struct bb_dfs_info *bb_dfs = &bb->bb_dfs_i;
 	struct bb_rdr_info *dfs_rdr_info = (struct bb_rdr_info *)rpt->dfs_ptr;
-	struct bb_dfs_cr_info* cr = &bb_dfs->bb_dfs_cr_i;
 
-	u8 i, pri = 0, cur_seq_num = 0, pre_seq_num = 0;
+	u8 pri = 0, cur_seq_num = 0, pre_seq_num = 0;
 	u8 cur_seg_idx = 0, pre_seg_idx = 0;// For TW DFS
 	u16 pw = 0;
 	bool chrp_flag = false;
@@ -1282,18 +1279,17 @@ void halbb_dfs_dyn_setting(struct bb_info *bb)
 	struct bb_dfs_info *bb_dfs = &bb->bb_dfs_i;
 	struct bb_link_info *link = &bb->bb_link_i;
 	struct bb_env_mntr_info *env_mntr = &bb->bb_env_mntr_i;
-	struct bb_dfs_cr_info* cr = &bb_dfs->bb_dfs_cr_i;
 	u8 bw = bb->hal_com->band[bb->bb_phy_idx].cur_chandef.bw;
 	u8 chan = bb->hal_com->band[bb->bb_phy_idx].cur_chandef.chan;
-	u8 i;
+#ifdef HALBB_TW_DFS_SERIES
+	struct bb_dfs_cr_info* cr = &bb_dfs->bb_dfs_cr_i;
+#endif
 #ifdef HALBB_STATISTICS_SUPPORT
 	struct bb_stat_info *stat = &bb->bb_stat_i;
 	struct bb_fa_info *fa = &stat->bb_fa_i;
 #endif
 
 #ifdef HALBB_PHYSTS_PARSING_SUPPORT
-	struct bb_physts_info	*physts = &bb->bb_physts_i;
-
 	if (bb->phl_com->dev_state & RTW_DEV_IN_DFS_CAC_PERIOD)
 		bb_dfs->In_CAC_Flag = true;
 	else

@@ -66,7 +66,6 @@ void halbb_pathdiv_reg_init(struct bb_info *bb)
 void halbb_pathdiv_init(struct bb_info *bb)
 {
 	struct bb_pathdiv_info *bb_path_div = &bb->bb_path_div_i;
-	struct bb_pathdiv_rssi_info *rssi = &bb_path_div->bb_rssi_i;
 	u8 pause_result = 0;
 	u32 i = 0, val = 0;
 
@@ -126,7 +125,6 @@ void halbb_set_tx_path_by_cmac_tbl(struct bb_info *bb, u8 macid, enum bb_path tx
 	struct bb_pathdiv_info *bb_path_div = &bb->bb_path_div_i;
 	enum bb_path tx_path_sel = tx_path_sel_1ss;
 	enum rf_path tx_rf_path;
-	enum rtw_hal_status hal_status = RTW_HAL_STATUS_FAILURE;
 	u16 cfg = 0;
 
 	/*Adv-ctrl mode*/
@@ -156,10 +154,8 @@ static void halbb_set_tx_path_by_reg(struct bb_info *bb, u8 macid, enum bb_path 
 	struct bb_pathdiv_info *bb_path_div = &bb->bb_path_div_i;
 	struct rtw_hal_com_t *hal_com = bb->hal_com;
 	enum bb_path tx_path_sel = tx_path_sel_1ss;
-	enum rtw_hal_status hal_status = RTW_HAL_STATUS_FAILURE;
 	//band = (bb->bb_phy_idx == HW_PHY_0) ? HW_BAND_0 : HW_BAND_1;
 	enum phl_band_idx band = HW_BAND_0;
-	u8 i = 0;
 	u32 user_path_addr, val = 0x0;
 	u32 offset = 4, user_base_addr = 0xDC00;
 
@@ -213,8 +209,7 @@ void halbb_set_pathdiv_pause_val(struct bb_info *bb, u32 *val_buf, u8 val_len)
 	struct bb_pathdiv_info *bb_path_div = &bb->bb_path_div_i;
 	struct bb_link_info *bb_link = &bb->bb_link_i;
 	struct rtw_phl_stainfo_t *sta;
-	u8 i = 0, pause_result = 0, sta_cnt = 0;
-	u32 val = 0;
+	u8 i = 0, sta_cnt = 0;
 
 	if (val_len != 1) {
 		BB_DBG(bb, DBG_PATH_DIV, "[Error][PathDiv]Need val_len=1\n");
