@@ -94,9 +94,9 @@ u32 halbb_phy0_to_phy1_ofst(struct bb_info *bb, u32 addr, enum phl_phy_idx phy_i
 
 void halbb_delay_us(struct bb_info *bb, u32 us)
 {
+	#ifdef HALBB_FW_OFLD_SUPPORT
 	bool ret = true;
 
-	#ifdef HALBB_FW_OFLD_SUPPORT
 	if (halbb_check_fw_ofld(bb)) {
 		if (bb->bb_cmn_hooker->bbcr_fwofld_state || bb->bb_cmn_hooker->bb_fwofld_in_progress) {
 			ret = halbb_fw_delay(bb, us);
@@ -601,9 +601,7 @@ halbb_config_cmac_tbl_ax(struct bb_info *bb, struct rtw_phl_stainfo_t *phl_sta_i
 	enum rtw_hal_status ret = RTW_HAL_STATUS_FAILURE;
 	enum rf_path path_set = RF_PATH_A;
 	u16 cfg;
-	u16 macid = 0;
 	u8 rf_num = 0;
-	bool dbcc_en = false;
 	enum phl_band_idx band_idx = HW_BAND_0;
 
 	if (NULL == phl_sta_i)

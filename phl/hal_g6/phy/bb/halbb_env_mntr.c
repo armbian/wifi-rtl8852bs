@@ -962,7 +962,6 @@ CHK_NHM_UPDATE_FINISHED:
 static bool halbb_nhm_set(struct bb_info *bb, struct ccx_para_info *para)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
-	struct bb_link_info *link = &bb->bb_link_i;
 	struct bb_env_mntr_cr_info *cr = &env->bb_env_mntr_cr_i;
 	enum channel_width bw = bb->hal_com->band[bb->bb_phy_idx].cur_chandef.bw;
 	u8 nb_config = bb->phl_com->dev_cap.nb_config;
@@ -1912,7 +1911,6 @@ static bool halbb_ifs_clm_set(struct bb_info *bb, struct ccx_para_info *para)
 	u16 mntr_time = 0;
 	u32 period = 0;
 	u32 unit_idx = 0;
-	u16 ccx_mntr_time = 0;
 	u16 ifs_th_l[BE_IFS_CLM_NUM] = {0};
 	u16 ifs_th_h[BE_IFS_CLM_NUM] = {0};
 	u8 i = 0;
@@ -2568,7 +2566,6 @@ CHK_FAHM_UPDATE_FINISHED:
 static bool halbb_fahm_set(struct bb_info *bb, struct fahm_para_info *para)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
-	struct bb_link_info *link = &bb->bb_link_i;
 	struct bb_env_mntr_cr_info *cr = &env->bb_env_mntr_cr_i;
 	enum channel_width bw = bb->hal_com->band[bb->bb_phy_idx].cur_chandef.bw;
 	u8 nb_config = bb->phl_com->dev_cap.nb_config;
@@ -3170,7 +3167,6 @@ halbb_env_mntr_bg_app_chk(struct bb_info *bb)
 static void halbb_env_mntr_cmn_log(struct bb_info *bb)
 {
 	struct bb_env_mntr_info *env = &bb->bb_env_mntr_i;
-	u8 i = 0;
 
 	if (!(bb->cmn_dbg_msg_component & BB_BASIC_DBG_02_ENVMNTR)) {
 		BB_DBG(bb, DBG_CMN, "Disabled\n");

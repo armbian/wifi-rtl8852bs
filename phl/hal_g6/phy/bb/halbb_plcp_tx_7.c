@@ -1432,7 +1432,6 @@ static void halbb_plcp_usig_7(struct bb_info *bb, struct halbb_plcp_info *in,
 	u8 crc4_out = 0;
 	u8 eht_sig_mcs = 0;
 	u8 i = 0;
-	u8 n_he_ltf[8] = { 0, 1, 1, 2, 2, 3, 3, 4 };
 	struct bb_plcp_cr_info *cr = &bb->bb_plcp_i.bb_plcp_cr_i;
 
 	BB_DBG(bb, DBG_BIT14, "<====== %s ======>\n", __func__);
@@ -1534,7 +1533,6 @@ static void halbb_cfg_txinfo_7(struct bb_info *bb, struct halbb_plcp_info *in,
 	     	      enum phl_phy_idx phy_idx)
 {
 	u32 ch20_with_data = 0;
-	u8 i = 0;
 
 	struct bb_plcp_cr_info *cr = &bb->bb_plcp_i.bb_plcp_cr_i;
 
@@ -2020,7 +2018,6 @@ void halbb_show_input(struct bb_info *bb, struct halbb_plcp_info *in)
 enum plcp_sts halbb_plcp_gen_7(struct bb_info *bb, struct halbb_plcp_info *in,
 		    struct usr_plcp_gen_in *user, enum phl_phy_idx phy_idx)
 {
-	struct bb_plcp_cr_info *cr = &bb->bb_plcp_i.bb_plcp_cr_i;
 	enum plcp_sts tmp = PLCP_SUCCESS;
 	struct plcp_tx_pre_fec_padding_setting_in_t in_plcp;
 	struct plcp_tx_pre_fec_padding_setting_out_t out;
@@ -2084,8 +2081,10 @@ enum plcp_sts halbb_plcp_gen_7(struct bb_info *bb, struct halbb_plcp_info *in,
 
 void halbb_cr_cfg_plcp_init_7(struct bb_info *bb)
 {
+	#ifdef HALBB_COMPILE_BE0_SERIES
 	struct bb_plcp_info *plcp_info = &bb->bb_plcp_i;
 	struct bb_plcp_cr_info *cr = &plcp_info->bb_plcp_cr_i;
+	#endif
 
 	switch (bb->cr_type) {
 
