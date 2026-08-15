@@ -28,8 +28,6 @@
 
 static void halbb_1r_cca_cr_cfg(struct bb_info *bb, enum rf_path rx_path)
 {
-	struct bb_dyn_1r_cca_info *dyn_1r_cca = &bb->bb_dyn_1r_cca_i;
-
 	BB_DBG(bb, DBG_IC_API, "[%s]rx_path=%d\n", __func__, rx_path);
 
 	switch (bb->ic_type) {

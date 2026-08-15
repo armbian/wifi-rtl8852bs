@@ -1072,7 +1072,6 @@ u32 halbb_upd_ba_infotbl(struct bb_info *bb,
 	struct halbb_ba_tbl_info *ba_i;
 	u8 pkt_len = sizeof(struct halbb_ba_tbl_info);
 	u32 *bb_h2c = NULL;
-	u8 i = 0;
 	bool ret_v = false;
 
 	BB_DBG(bb, DBG_RUA_TBL, "halbb_upd_ba_infotbl: in_len = %d, out_len = %d\n", len, pkt_len);
@@ -1713,8 +1712,10 @@ u32 halbb_trxpath_notif(struct bb_info *bb, enum rf_path tx_path, enum rf_path r
 
 	u32 ret = RTW_HAL_STATUS_FAILURE;
 
+#if defined(BB_8852C_SUPPORT) || defined(BB_8192XB_SUPPORT)
 	u8 txpath_num = 0;
 	u8 rxpath_num = 0;
+#endif
 	//printk("[HALBB_TXPWR] tx_path_no = %d, rx_path_no = %d \n", tx_path_num, rx_path_num);
 	switch (bb->ic_type) {
 

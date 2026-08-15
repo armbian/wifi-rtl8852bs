@@ -238,7 +238,6 @@ static void halbb_edcca_log(struct bb_info *bb)
 {
 	struct bb_edcca_info *bb_edcca = &bb->bb_edcca_i;
 	struct edcca_hw_rpt *rpt = &bb_edcca->edcca_rpt;
-	struct bb_edcca_cr_info *cr = &bb->bb_edcca_i.bb_edcca_cr_i;
 	enum channel_width bw = 0;
 	struct bb_ch_info *ch = &bb->bb_ch_i;
 	u8 band = bb->hal_com->band[bb->bb_phy_idx].cur_chandef.band;
@@ -472,7 +471,6 @@ void halbb_fw_edcca(struct bb_info *bb)
 	struct rtw_phl_com_t *phl = bb->phl_com;
 	struct rtw_hal_com_t *hal = bb->hal_com;
 	struct dev_cap_t *dev = &phl->dev_cap;
-	u8 band = bb->hal_com->band[bb->bb_phy_idx].cur_chandef.band;
 	struct bb_h2c_fw_edcca *fw_edcca_i = &bb->bb_fw_edcca_i;
 	u8 cmdlen;
 #if defined(BB_8852C_SUPPORT) || defined(BB_8852B_SUPPORT)
@@ -726,7 +724,6 @@ void halbb_edcca_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 			      char *output, u32 *_out_len)
 {
 	struct bb_edcca_info *bb_edcca = &bb->bb_edcca_i;
-	struct bb_h2c_fw_edcca *fw_edcca_i = &bb->bb_fw_edcca_i;
 	struct rtw_hal_com_t *hal = bb->hal_com;
 	char help[] = "-h";
 	u32 var[10] = {0};

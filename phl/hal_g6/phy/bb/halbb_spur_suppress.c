@@ -148,7 +148,7 @@ void halbb_nbi_tone_idx(struct bb_info *bb, u8 central_ch, u8 pri_ch,
 	struct bb_spur_cr_info *cr = &bb->bb_cmn_hooker->bb_spur_i.bb_spur_cr_i;
 	u16 tone_para = 0;
 	u32 fc, intf; //Central freq. (MHz) & Spur freq. (MHz)
-	s32 f_diff, nbi_idx, nbi_idx_tmp = 0, nbi_frac_idx, nbi_frac_tmp = 0;
+	s32 f_diff, nbi_idx, nbi_frac_idx, nbi_frac_tmp = 0;
 	// CR
 	u32 notch1_nbi_idx[2] = {cr->path0_notch_nbi_idx, cr->path1_notch_nbi_idx};
 	u32 notch1_nbi_idx_m[2] = {cr->path0_notch_nbi_idx_m, cr->path1_notch_nbi_idx_m};
@@ -397,8 +397,7 @@ void halbb_spur_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 	u32 val[10] = {0};
 	u32 used = *_used;
 	u32 out_len = *_out_len;
-	u8 tmp = 0, i = 0;
-	u32 j = 0;
+	u8 tmp = 0;
 
 	if (_os_strcmp(input[1], "-h") == 0) {
 		BB_DBG_CNSL(out_len, used, output + used, out_len - used,
