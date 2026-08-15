@@ -1916,9 +1916,8 @@ s8 halrf_get_power_limit(struct rf_info *rf,
 	u8 beamforming, u8 tx_num, u8 channel)
 {
 	struct halrf_pwr_info *pwr = &rf->pwr_info;
-	struct rtw_phl_com_t *phl = rf->phl_com;
 	u32 band = rf->hal_com->band[phy].cur_chandef.band;
-	
+
 #ifdef SPF_PHL_RF_019_SAR
 	struct rtw_tpu_info *tpu = &rf->hal_com->band[phy].rtw_tpu_i;
 #endif
@@ -1979,7 +1978,6 @@ s8 halrf_get_power_limit_option(struct rf_info *rf,
 	u8 beamforming, u8 tx_num, u8 channel, u32 band, u8 reg)
 {
 	struct halrf_pwr_info *pwr = &rf->pwr_info;
-	struct rtw_phl_com_t *phl = rf->phl_com;
 
 	s8 pwr_limit = 0;
 	u8 limit_rate = PW_LMT_RS_CCK, limit_ch;
@@ -2017,7 +2015,6 @@ s8 halrf_get_power_limit_ru(struct rf_info *rf,
 	u8 tx_num, u8 channel)
 {
 	struct halrf_pwr_info *pwr = &rf->pwr_info;
-	struct rtw_phl_com_t *phl = rf->phl_com;
 	u32 band = rf->hal_com->band[phy].cur_chandef.band;
 
 #ifdef SPF_PHL_RF_019_SAR
@@ -2080,7 +2077,6 @@ s8 halrf_get_power_limit_ru_option(struct rf_info *rf,
 	u8 tx_num, u8 channel, u32 band, u8 reg)
 {
 	struct halrf_pwr_info *pwr = &rf->pwr_info;
-	struct rtw_phl_com_t *phl = rf->phl_com;
 
 	s8 pwr_limit_ru = 0;
 	u8 limit_rate = PW_LMT_RS_CCK, limit_ch;
@@ -2119,7 +2115,6 @@ s16 halrf_get_power(void *rf_void,
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct halrf_pwr_info *pwr = &rf->pwr_info;
-	struct rtw_phl_com_t *phl = rf->phl_com;
 	struct rtw_tpu_info *tpu = &rf->hal_com->band[HW_PHY_0].rtw_tpu_i;
 	u8 band, limit_rate = PW_LMT_RS_CCK, tx_num = PW_LMT_PH_1T, limit_ch;
 	u16 rate_tmp;
@@ -2171,7 +2166,6 @@ s16 halrf_get_band_power(void *rf_void, enum phl_phy_idx phy,
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct halrf_pwr_info *pwr = &rf->pwr_info;
-	struct rtw_phl_com_t *phl = rf->phl_com;
 	u32 band = rf->hal_com->band[phy].cur_chandef.band;
 	u8 limit_rate = PW_LMT_RS_CCK, tx_num = PW_LMT_PH_1T, limit_ch;
 	u16 rate_tmp;
@@ -2603,7 +2597,6 @@ static void halrf_set_tpe_default_control(struct rf_info *rf, enum phl_phy_idx p
 static void halrf_set_eirp_tpe_control(struct rf_info *rf, enum phl_phy_idx phy, s8 *power, u8 valid_tpe_cnt)
 {
 	struct rtw_tpu_pwr_imt_info *lmt = &rf->hal_com->band[phy].rtw_tpu_i.rtw_tpu_pwr_imt_i;
-	struct rtw_hal_com_t *hal = rf->hal_com;
 	u32 i, j, k;
 	s8 power_20m, power_40m, power_80m, power_160m;
 
@@ -2746,7 +2739,6 @@ static void halrf_set_eirp_tpe_control(struct rf_info *rf, enum phl_phy_idx phy,
 static void halrf_set_eirp_psd_special_tpe_control(struct rf_info *rf, enum phl_phy_idx phy, s8 power)
 {
 	struct rtw_tpu_pwr_imt_info *lmt = &rf->hal_com->band[phy].rtw_tpu_i.rtw_tpu_pwr_imt_i;
-	struct rtw_hal_com_t *hal = rf->hal_com;
 	u32 i, j, k;
 	u32 mlog20m = 1301;
 	s32 eirp_psd_pwr;
@@ -2851,7 +2843,6 @@ static void halrf_set_eirp_psd_special_tpe_control(struct rf_info *rf, enum phl_
 static void halrf_set_eirp_psd_tpe_control(struct rf_info *rf, enum phl_phy_idx phy, s8* power, u8 valid_tpe_cnt)
 {
 	struct rtw_tpu_pwr_imt_info *lmt = &rf->hal_com->band[phy].rtw_tpu_i.rtw_tpu_pwr_imt_i;
-	struct rtw_hal_com_t *hal = rf->hal_com;
 	u32 i, j, k;
 	s8 power_40m, power_80m, power_160m;
 	u32 mlog20m = 1301;
@@ -3009,10 +3000,7 @@ void halrf_set_tpe_control(struct rf_info *rf)
 
 void halrf_set_tpe_control_dbcc(struct rf_info *rf, enum phl_phy_idx phy)
 {
-	struct rtw_hal_com_t *hal = rf->hal_com;
 	struct rtw_tpe_info_t *tpe = &rf->phl_com->tpe_info;
-	struct rtw_tpu_info *tpu = &rf->hal_com->band[phy].rtw_tpu_i;
-	struct rtw_tpu_pwr_imt_info *lmt = &rf->hal_com->band[phy].rtw_tpu_i.rtw_tpu_pwr_imt_i;
 	u32 band = rf->hal_com->band[phy].cur_chandef.band;
 	u32 i, j;
 	//u32 mlog20m = 1301;
@@ -3100,7 +3088,6 @@ void halrf_set_ant_gain_offset(struct rf_info *rf,
 {
 	struct halrf_pwr_info *pwr = &rf->pwr_info;
 	u32 bw, rate, bf, ch, tx_num;
-	s8 ext_pwr = 0;
 
 	RF_DBG(rf, DBG_RF_POWER, "======>%s\n", __func__);
 	
