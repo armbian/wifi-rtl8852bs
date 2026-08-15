@@ -742,7 +742,9 @@ static void dump_requlatory_request(void *sel, struct regulatory_request *reques
 static void rtw_reg_notifier(struct wiphy *wiphy, struct regulatory_request *request)
 {
 	struct dvobj_priv *dvobj = wiphy_to_dvobj(wiphy);
+#ifdef CONFIG_REGD_SRC_FROM_OS
 	struct registry_priv *regsty = dvobj_to_regsty(dvobj);
+#endif
 	enum rtw_regd_inr inr;
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 11, 0))
