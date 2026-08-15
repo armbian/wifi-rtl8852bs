@@ -939,8 +939,6 @@ static void halrf_config_limit_default(void *rf_void)
 void halrf_config_rf_parameter(void *rf_void, enum phl_phy_idx phy)
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
-	struct rtw_hal_com_t *hal_com = rf->hal_com;
-	struct halrf_pwr_info *pwr = &rf->pwr_info;
 	u32 start_time, finish_time;
 
 	start_time = _os_get_cur_time_us();
@@ -974,8 +972,10 @@ void halrf_config_rf_parameter(void *rf_void, enum phl_phy_idx phy)
 
 void halrf_cfg_radio_b_w_bt_status(void *rf_void, bool bt_connect)
 {
+#if defined(RF_8852C_SUPPORT) || defined(RF_8852BP_SUPPORT)
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_com = rf->hal_com;
+#endif
 
 #ifdef RF_8852C_SUPPORT
 	if (hal_com->chip_id == CHIP_WIFI6_8852C) {

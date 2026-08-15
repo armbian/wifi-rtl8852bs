@@ -561,7 +561,9 @@ static void halrf_set_final_rfability(struct rf_info *rf)
 
 static void halrf_rfe_init(struct rf_info *rf)
 {
+#ifdef RF_8852A_SUPPORT
 	u8 rfe_type = rf->phl_com->dev_cap.rfe_type;
+#endif
 
 	switch (rf->ic_type) {
 #ifdef RF_8852A_SUPPORT
