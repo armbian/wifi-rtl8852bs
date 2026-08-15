@@ -556,9 +556,18 @@ static void halbb_basic_dbg_07_hist_su_per_path(struct bb_info *bb)
 	}
 
 	if (print_en) {
-		BB_DBG(bb, DBG_CMN, "[SNR path[A:D] = {%d, %d, %d, %d}\n", 
+#if HALBB_MAX_PATH > 3
+		BB_DBG(bb, DBG_CMN, "[SNR path[A:D] = {%d, %d, %d, %d}\n",
 		       avg->snr_per_path_avg[0], avg->snr_per_path_avg[1],
 		       avg->snr_per_path_avg[2], avg->snr_per_path_avg[3]);
+#elif HALBB_MAX_PATH > 2
+		BB_DBG(bb, DBG_CMN, "[SNR path[A:C] = {%d, %d, %d}\n",
+		       avg->snr_per_path_avg[0], avg->snr_per_path_avg[1],
+		       avg->snr_per_path_avg[2]);
+#else
+		BB_DBG(bb, DBG_CMN, "[SNR path[A:B] = {%d, %d}\n",
+		       avg->snr_per_path_avg[0], avg->snr_per_path_avg[1]);
+#endif
 	}
 }
 
@@ -1196,15 +1205,19 @@ static void halbb_rx_pkt_su_phy_hist_per_path(struct bb_info *bb, u32 physts_bit
 		//BB_DBG(bb, BIT14, "snr_acc[1](%d) += %d\n", acc->snr_per_path_acc[1], psts_r->snr_lgy);
 	}
 
+#if HALBB_MAX_PATH > 2
 	if (physts_bitmap & BIT(IE06_CMN_EXT_PATH_C)) {
 		psts_r = &physts->bb_physts_rslt_6_i;
 		acc->snr_per_path_acc[2] += psts_r->snr_lgy;
 	}
+#endif
 
+#if HALBB_MAX_PATH > 3
 	if (physts_bitmap & BIT(IE07_CMN_EXT_PATH_D)) {
 		psts_r = &physts->bb_physts_rslt_7_i;
 		acc->snr_per_path_acc[3] += psts_r->snr_lgy;
 	}
+#endif
 }
 
 static void halbb_rx_pkt_su_phy_hist(struct bb_info *bb)
