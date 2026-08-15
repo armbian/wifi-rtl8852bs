@@ -1288,7 +1288,6 @@ static bool halbb_physts_ie_08(struct bb_info *bb,
 	struct bb_ch_info_physts_info *ch_physts = &ch_rpt->bb_ch_info_physts_i;
 	struct bb_ch_info_cr_cfg_info *cfg = &ch_rpt->bb_ch_info_cr_cfg_i;
 	#endif
-	u64 *phy_sts_tmp = NULL;
 
 	ie_8 = (struct physts_ie_8_ch_info *)addr;
 	psts_8->ie_08_addr = addr;
@@ -2176,7 +2175,6 @@ static bool halbb_physts_ie_26(struct bb_info *bb,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
 {
-	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	struct physts_ie_26_info *ie_26 = NULL;
 
 	ie_26 = (struct physts_ie_26_info *)addr;
@@ -2189,7 +2187,6 @@ static bool halbb_physts_ie_27(struct bb_info *bb,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
 {
-	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	struct physts_ie_27_info *ie_27 = NULL;
 
 	ie_27 = (struct physts_ie_27_info *)addr;
@@ -2296,7 +2293,6 @@ static bool halbb_physts_ie_30(struct bb_info *bb,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
 {
-	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	struct physts_ie_30_info *ie_30 = NULL;
 
 	ie_30 = (struct physts_ie_30_info *)addr;
@@ -2309,7 +2305,6 @@ static bool halbb_physts_ie_31(struct bb_info *bb,
 			   u16 ie_length,
 			   struct physts_rxd *desc)
 {
-	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	struct physts_ie_31_info *ie_31 = NULL;
 
 	ie_31 = (struct physts_ie_31_info *)addr;
@@ -2883,7 +2878,6 @@ void halbb_physts_watchdog(struct bb_info *bb)
 void halbb_physts_parsing_init_io_en(struct bb_info *bb)
 {
 	struct bb_physts_info *physts = &bb->bb_physts_i;
-	struct bb_physts_cr_info *cr = &physts->bb_physts_cr_i;
 	u32 u32_tmp = 0;
 	u32 mask_tmp = 0;
 	u8 i = 0;
@@ -3001,9 +2995,9 @@ void halbb_physts_parsing_init_io_en(struct bb_info *bb)
 
 void halbb_physts_parsing_init(struct bb_info *bb)
 {
+#ifdef HALBB_FW_OFLD_SUPPORT
 	struct bb_physts_info *physts = &bb->bb_physts_i;
 
-#ifdef HALBB_FW_OFLD_SUPPORT
 	BB_DBG(bb, DBG_PHY_STS, "[%s][phy=%d]skip_io_init_en = %d\n",
 	       __func__, bb->bb_phy_idx, bb->bb_cmn_hooker->skip_io_init_en);
 
@@ -3018,7 +3012,6 @@ void halbb_physts_parsing_init(struct bb_info *bb)
 
 static void halbb_physts_query_from_bbcr(struct bb_info *bb)
 {
-	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	//struct bb_physts_cr_info *cr = &physts->bb_physts_cr_i;
 	u8 i = 0;
 	u32 val = 0;

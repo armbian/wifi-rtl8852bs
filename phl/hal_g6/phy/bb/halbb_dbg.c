@@ -286,8 +286,6 @@ void halbb_dbgport_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 			 char *output, u32 *_out_len)
 {
 	u32 val[10] = {0};
-	u32 used = *_used;
-	u32 out_len = *_out_len;
 	u32 dp = 0; /*debug port value*/
 	u8 dbg[32];
 	u8 tmp = 0;
@@ -660,7 +658,6 @@ void halbb_get_tx_dbg_reg(struct bb_info *bb)
 	struct bb_tx_info *txdbg = &dbg->tx_info_i;
 	u32 sig_a[2];
 	u32 n_dbps = 0, n_dbps_last_init = 0;
-	u16 vht_n_sd[4] = {52, 108, 234, 468};
 	u16 he_n_sd[4] = {234, 468, 980, 1960};
 	u16 he_n_sd_short[4] = {60, 120, 240, 492};
 	u8 r_n_bpscs_12[12] = {6, 12, 18, 24, 36, 48, 54, 60, 72, 80, 90, 100};
@@ -1298,13 +1295,11 @@ static void halbb_basic_dbg_05_rx(struct bb_info *bb)
 
 static void halbb_basic_dbg_msg_tx_info(struct bb_info *bb)
 {
-	struct bb_ch_info *ch = &bb->bb_ch_i;
 	struct rtw_phl_stainfo_t *sta;
 	struct rtw_ra_sta_info	*ra;
 	//char dbg_buf[HALBB_SNPRINT_SIZE] = {0};
 	u16 sta_cnt = 0;
 	u8 i = 0;
-	u8 tmp = 0;
 	u16 curr_tx_rt = 0;
 	enum rtw_gi_ltf curr_gi_ltf = RTW_GILTF_LGI_4XHE32;
 	enum hal_rate_bw curr_bw = HAL_RATE_BW_20;
@@ -1369,7 +1364,6 @@ static void halbb_basic_dbg_msg_tx_info(struct bb_info *bb)
 
 static void halbb_basic_dbg_08_rssi_rate_mu(struct bb_info *bb)
 {
-	struct bb_ch_info *ch = &bb->bb_ch_i;
 	struct bb_link_info *link = &bb->bb_link_i;
 
 	if (!(bb->cmn_dbg_msg_component & BB_BASIC_DBG_08_RSSI_RATE_MU)) {
@@ -1395,7 +1389,6 @@ static void halbb_basic_dbg_08_rssi_rate_mu(struct bb_info *bb)
 
 static void halbb_basic_dbg_06_rssi_rate(struct bb_info *bb)
 {
-	struct bb_ch_info *ch = &bb->bb_ch_i;
 	struct bb_link_info *link = &bb->bb_link_i;
 	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
 	//struct rtw_phl_stainfo_t *sta;
@@ -1434,9 +1427,7 @@ static void halbb_basic_dbg_01_system(struct bb_info *bb)
 {
 	struct bb_link_info	*link = &bb->bb_link_i;
 	struct bb_ch_info	*ch = &bb->bb_ch_i;
-	struct bb_dbg_info	*dbg = &bb->bb_dbg_i;
 	struct bb_physts_info	*physts = &bb->bb_physts_i;
-	struct bb_cmn_dbg_info *cmn_dbg = &bb->bb_cmn_hooker->bb_cmn_dbg_i;
 	enum channel_width bw = bb->hal_com->band[bb->bb_phy_idx].cur_chandef.bw;
 	u8 fc = bb->hal_com->band[bb->bb_phy_idx].cur_chandef.center_ch;
 	u8 sta_cnt = 0;
@@ -1577,8 +1568,6 @@ static void halbb_basic_dbg_09_dm_summary(struct bb_info *bb)
 
 void halbb_basic_dbg_message(struct bb_info *bb)
 {
-	struct bb_cmn_dbg_info *cmn_dbg = &bb->bb_cmn_hooker->bb_cmn_dbg_i;
-
 	if (bb->bb_cmn_hooker->bb_cmn_dbg_i.cmn_log_2_cnsl_en)
 		return;
 	if (bb->bb_cmn_hooker->bb_cmn_dbg_i.cmn_log_2_drv_statistic_en)
@@ -2123,7 +2112,6 @@ void halbb_dump_reg_dbg(struct bb_info *bb, char input[][16], u32 *_used, char *
 		    u32 *_out_len)
 {
 	u32 val[10] = {0};
-	u32 addr = 0;
 	enum bb_frc_phy_dump_reg frc_phy_dump = FRC_DUMP_ALL;
 
 	if (_os_strcmp(input[1], "-h") == 0) {
