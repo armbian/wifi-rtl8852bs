@@ -339,7 +339,6 @@ void dump_adapters_status(void *sel, struct dvobj_priv *dvobj)
 	struct rf_ctl_t *rfctl = dvobj_to_rfctl(dvobj);
 	int i;
 	_adapter *iface;
-	u8 u_ch, u_bw, u_offset;
 	struct _ADAPTER_LINK *iface_link;
 
 	dump_mi_status(sel, dvobj);
@@ -910,7 +909,6 @@ int proc_get_tx_stat(struct seq_file *m, void *v)
 	uint mac_id[NUM_STA];
 	struct stainfo_stats	*pstats = NULL;
 	struct sta_priv	*pstapriv = &(adapter->stapriv);
-	struct sta_priv	*pstapriv_primary = &(GET_PRIMARY_ADAPTER(adapter))->stapriv;
 	u32 i, macid_rec_idx = 0;
 	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 	u8 null_addr[ETH_ALEN] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
@@ -1355,10 +1353,6 @@ ssize_t proc_set_scan_abort(struct file *file, const char __user *buffer, size_t
 
 int proc_get_scan_abort(struct seq_file *m, void *v)
 {
-	struct net_device *dev = m->private;
-	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
-
-
 	return 0;
 }
 
@@ -3542,7 +3536,6 @@ void rtw_dump_macaddr(void *sel, _adapter *adapter)
 	int i;
 	_adapter *iface;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
-	u8 mac_addr[ETH_ALEN];
 
 	for (i = 0; i < dvobj->iface_nums; i++) {
 		iface = dvobj->padapters[i];
@@ -5695,9 +5688,6 @@ ssize_t proc_set_tx_sa_query(struct file *file, const char __user *buffer, size_
 
 int proc_get_tx_sa_query(struct seq_file *m, void *v)
 {
-	struct net_device *dev = m->private;
-	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-
 	RTW_PRINT_SEL(m, "%s\n", __func__);
 	return 0;
 }
@@ -5807,9 +5797,6 @@ ssize_t proc_set_tx_deauth(struct file *file, const char __user *buffer, size_t 
 
 int proc_get_tx_deauth(struct seq_file *m, void *v)
 {
-	struct net_device *dev = m->private;
-	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-
 	RTW_PRINT_SEL(m, "%s\n", __func__);
 	return 0;
 }
@@ -5818,20 +5805,9 @@ ssize_t proc_set_tx_auth(struct file *file, const char __user *buffer, size_t co
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
-	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
-	struct	sta_priv *pstapriv = &padapter->stapriv;
-	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
-	/* macid_ctl move to phl */
-	/*struct macid_ctl_t *macid_ctl = dvobj_to_macidctl(dvobj); */
-	struct sta_info *psta;
-	_list	*plist, *phead;
 	char tmp[16];
-	u8	mac_addr[NUM_STA][ETH_ALEN];
-	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 	u32 tx_auth;
-	u8 index;
 
 
 	if (count > 2) {
@@ -5866,9 +5842,6 @@ ssize_t proc_set_tx_auth(struct file *file, const char __user *buffer, size_t co
 
 int proc_get_tx_auth(struct seq_file *m, void *v)
 {
-	struct net_device *dev = m->private;
-	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-
 	RTW_PRINT_SEL(m, "%s\n", __func__);
 	return 0;
 }
@@ -6384,7 +6357,6 @@ int proc_get_disconnect_info(struct seq_file *m, void *v)
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info *pmlmeinfo = &pmlmeext->mlmext_info;
 	char *disconnect_reason;
-	char *illegal_beacon_reason;
 
 	if (pmlmeinfo) {
 		switch (pmlmeinfo->disconnect_code) {
@@ -6606,9 +6578,6 @@ ssize_t proc_set_chan(struct file *file, const char __user *buffer, size_t count
 
 int proc_get_mr_test(struct seq_file *m, void *v)
 {
-	struct net_device *dev = m->private;
-	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-
 	return 0;
 }
 
@@ -6701,7 +6670,6 @@ ssize_t proc_set_mr_test(struct file *file, const char __user *buffer, size_t co
 		}
 		else if (mode == 12) {
 			struct link_mlme_priv *pmlmepriv = &padapter_link->mlmepriv;
-			struct mlme_ext_priv *pmlmeext = &(padapter->mlmeextpriv);
 			struct sta_priv *pstapriv = &padapter->stapriv;
 			struct sta_info *psta;
 
