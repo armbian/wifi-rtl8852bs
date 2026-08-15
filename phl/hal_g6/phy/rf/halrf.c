@@ -265,7 +265,9 @@ enum rtw_hal_status halrf_thermal_rx_dck_trigger(void *rf_void,
 	struct halrf_rx_dck_info *rx_dck = &rf->rx_dck;
 
 	u32 start_time, finish_time;
+#if defined(RF_8852C_SUPPORT) || defined(RF_8852BP_SUPPORT)
 	u32 i;
+#endif
 	bool lock = false;
 
 	if (!(rf->chlk_map & HAL_RF_RXDCK))
@@ -426,7 +428,6 @@ enum rtw_hal_status halrf_iqk_trigger(void *rf_void,
 		       bool force)
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
-	struct rtw_hal_com_t *hal_i = rf->hal_com;
 	struct halrf_iqk_info *iqk_info = &rf->iqk;
 	u32 start_time, finish_time;
 	bool lock = false;
@@ -640,7 +641,6 @@ enum rtw_hal_status halrf_dpk_trigger(void *rf_void,
 		       bool force)
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
-	struct rtw_hal_com_t *hal_i = rf->hal_com;
 	struct halrf_dpk_info *dpk = &rf->dpk;
 
 	u32 start_time, finish_time;
@@ -668,7 +668,7 @@ enum rtw_hal_status halrf_dpk_trigger(void *rf_void,
 #if 1
 	halrf_ops_dpk(rf, phy_idx, force);
 #else
-	switch (hal_i->chip_id) {
+	switch (rf->hal_com->chip_id) {
 #ifdef RF_8852A_SUPPORT
 	case CHIP_WIFI6_8852A:
 		halrf_dpk_8852a(rf, phy_idx, force);
@@ -914,7 +914,6 @@ static enum rtw_hal_status halrf_tssi_ant_open(void *rf_void)
 enum rtw_hal_status halrf_tssi_trigger(void *rf_void, enum phl_phy_idx phy_idx, bool hwtx_en)
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
-	struct rtw_hal_com_t *hal_i = rf->hal_com;
 	struct halrf_tssi_info *tssi_info = &rf->tssi;
 	u32 phy_tmp;
 	u32 start_time, finish_time;
@@ -947,7 +946,7 @@ enum rtw_hal_status halrf_tssi_trigger(void *rf_void, enum phl_phy_idx phy_idx, 
 #if 1		
 		halrf_ops_tssi_disable(rf, phy_idx);
 #else
-		switch (hal_i->chip_id) {
+		switch (rf->hal_com->chip_id) {
 #ifdef RF_8852A_SUPPORT
 			case CHIP_WIFI6_8852A:
 				halrf_tssi_disable_8852a(rf, phy_idx);
@@ -1003,7 +1002,7 @@ enum rtw_hal_status halrf_tssi_trigger(void *rf_void, enum phl_phy_idx phy_idx, 
 #if 1
 	halrf_ops_do_tssi(rf, phy_idx, hwtx_en);
 #else
-	switch (hal_i->chip_id) {
+	switch (rf->hal_com->chip_id) {
 #ifdef RF_8852A_SUPPORT
 		case CHIP_WIFI6_8852A:
 			halrf_do_tssi_8852a(rf, phy_idx, hwtx_en);
@@ -1556,7 +1555,6 @@ enum rtw_hal_status halrf_gapk_trigger(void *rf_void,
 			bool force)
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
-	struct rtw_hal_com_t *hal_i = rf->hal_com;
 	struct halrf_gapk_info *txgapk_info = &rf->gapk;
 
 	u32 start_time, finish_time;
@@ -1779,8 +1777,7 @@ void halrf_iqk_onoff(void *rf_void, bool is_enable)
 	/*signal go throughput iqk or not*/	
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
-	u8 path = 0x0;
-	
+
 	if (!(rf->support_ability & HAL_RF_DPK))
 			return;
 	
@@ -2534,7 +2531,6 @@ void halrf_tssi_finish_slope(void *rf_void)
 void halrf_tssi_init(void *rf_void)
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
-	struct rtw_hal_com_t *hal_i = rf->hal_com;
 	u8 i;
 
 	for (i = 0; i < MAX_RF_PATH; i++)
@@ -3025,12 +3021,11 @@ void halrf_set_regulation_init(void *rf_void, enum phl_phy_idx phy_idx)
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
-	struct halrf_pwr_info *pwr = &rf->pwr_info;
 
 	switch (hal_i->chip_id) {
 #ifdef RF_8852A_SUPPORT
 		case CHIP_WIFI6_8852A:
-			pwr->regulation_idx = 0xff;
+			rf->pwr_info.regulation_idx = 0xff;
 			break;
 #endif
 			default:
@@ -3200,9 +3195,11 @@ void halrf_do_rx_gain_k(void *rf_void, enum phl_phy_idx phy_idx)
 
 bool halrf_set_dbcc(void *rf_void, bool dbcc_en)
 {
+#if defined(RF_8852A_SUPPORT) || defined(RF_8852C_SUPPORT)
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_com = rf->hal_com;
-	
+#endif
+
 #ifdef RF_8852A_SUPPORT
 	if (hal_com->chip_id == CHIP_WIFI6_8852A)
 		return halrf_set_dbcc_8852a(rf, dbcc_en);
@@ -3333,10 +3330,10 @@ void halrf_watchdog(void *rf_void)
 
 u8 halrf_get_default_rfe_type(void *rf_void)
 {
+#ifdef RF_8852A_SUPPORT
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_com = rf->hal_com;
-	
-#ifdef RF_8852A_SUPPORT
+
 	if (hal_com->chip_id == CHIP_WIFI6_8852A)
 		return halrf_get_default_rfe_type_8852a(rf);
 #endif
@@ -3345,10 +3342,10 @@ u8 halrf_get_default_rfe_type(void *rf_void)
 
 u8 halrf_get_default_xtal(void *rf_void)
 {
+#ifdef RF_8852A_SUPPORT
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_com = rf->hal_com;
-	
-#ifdef RF_8852A_SUPPORT
+
 	if (hal_com->chip_id == CHIP_WIFI6_8852A)
 		return halrf_get_default_xtal_8852a(rf);
 #endif
@@ -3384,7 +3381,6 @@ enum rtw_hal_status halrf_iqk_tracking(void *rf_void)
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
-	struct halrf_iqk_info *iqk = &rf->iqk;
 
 	if (!(rf->support_ability & HAL_RF_IQK) || rf->rfk_is_processing ||
 		rf->is_watchdog_stop)
@@ -3949,8 +3945,10 @@ void halrf_get_tssi_trk_info(struct rf_info *rf, char input[][16], u32 *_used,
 			 char *output, u32 *_out_len)
 {
 	struct rtw_hal_com_t *hal_i = rf->hal_com;
+#ifdef RF_8852A_SUPPORT
 	u32 used = *_used;
 	u32 out_len = *_out_len;
+#endif
 
 	switch (hal_i->chip_id) {
 #ifdef RF_8852A_SUPPORT
@@ -4344,8 +4342,10 @@ bool halrf_dack_reg_check_fail(void *rf_void)
 bool halrf_rfk_chl_thermal(void *rf_void,
 			u8 chl_idx, u8 ther_idx)
 {
+#ifdef RF_8852A_SUPPORT
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_com = rf->hal_com;
+#endif
 	bool fail = false;
 
 #ifdef RF_8852A_SUPPORT
@@ -4358,10 +4358,10 @@ bool halrf_rfk_chl_thermal(void *rf_void,
 
 void halrf_rfk_recovery_chl_thermal(void *rf_void, u8 chl_idx)
 {
+#ifdef RF_8852A_SUPPORT
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_com = rf->hal_com;
 
-#ifdef RF_8852A_SUPPORT
 	if (hal_com->chip_id == CHIP_WIFI6_8852A)
 		halrf_rfk_recovery_chl_thermal_8852a(rf, chl_idx);
 #endif
@@ -4369,8 +4369,10 @@ void halrf_rfk_recovery_chl_thermal(void *rf_void, u8 chl_idx)
 
 u8 halrf_fcs_get_thermal_index(void *rf_void)
 {
+#ifdef RF_8852A_SUPPORT
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_com = rf->hal_com;
+#endif
 	u8 idx = 0;
 
 #ifdef RF_8852A_SUPPORT
@@ -4384,7 +4386,6 @@ void halrf_disconnect_notify(void *rf_void, struct rtw_chan_def *chandef )
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_com = rf->hal_com;
-	bool fail = false;
 
 #ifdef RF_8852A_SUPPORT
 	if (hal_com->chip_id == CHIP_WIFI6_8852A)
@@ -4467,8 +4468,11 @@ void  halrf_fw_ntfy(void *rf_void, enum phl_phy_idx phy_idx)
 void halrf_set_regulation_from_driver(void *rf_void,
 		u8 regulation_idx)
 {
+#if defined(RF_8852A_SUPPORT) || defined(RF_8852C_SUPPORT) || \
+	defined(RF_8832BR_SUPPORT) || defined(RF_8192XB_SUPPORT)
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_com = rf->hal_com;
+#endif
 
 #ifdef RF_8852A_SUPPORT
 	if (hal_com->chip_id == CHIP_WIFI6_8852A)
@@ -4630,9 +4634,12 @@ void halrf_config_nctl_reg(struct rf_info *rf)
 
 void halrf_set_gpio(void *rf_void, enum phl_phy_idx phy, u8 band)
 {
+#if defined(RF_8852A_SUPPORT) || defined(RF_8852C_SUPPORT) || \
+	defined(RF_8192XB_SUPPORT) || defined(RF_8851B_SUPPORT)
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_com = rf->hal_com;
-	
+#endif
+
 #ifdef RF_8852A_SUPPORT
 	if (hal_com->chip_id == CHIP_WIFI6_8852A)
 		halrf_set_gpio_8852a(rf, phy, band);
@@ -4749,10 +4756,10 @@ u32 halrf_mac_get_pwr_reg(void *rf_void, enum phl_phy_idx phy,
 
 bool halrf_check_efem(void *rf_void, enum phl_phy_idx phy_idx)
 {
+#ifdef RF_8852A_SUPPORT
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_com = rf->hal_com;
 
-#ifdef RF_8852A_SUPPORT
 	if (hal_com->chip_id == CHIP_WIFI6_8852A)
 		return halrf_check_efem_8852a(rf, phy_idx);
 #endif
@@ -4761,10 +4768,10 @@ bool halrf_check_efem(void *rf_void, enum phl_phy_idx phy_idx)
 
 void halrf_2g_rxant(void *rf_void, enum halrf_ant ant)
 {
+#ifdef RF_8852A_SUPPORT
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_com = rf->hal_com;
 
-#ifdef RF_8852A_SUPPORT
 	if (hal_com->chip_id == CHIP_WIFI6_8852A)
 		halrf_2g_rxant_8852a(rf, ant);
 #endif
@@ -5005,7 +5012,9 @@ u32 halrf_get_fem_id_from_reg(struct rf_info *rf)
 void halrf_set_pwr_lmt_main_or_aux(void *rf_void, u8 ant)
 {
 	struct rf_info *rf = (struct rf_info *)rf_void;
+#ifdef RF_8851B_SUPPORT
 	struct rtw_hal_com_t *hal_com = rf->hal_com;
+#endif
 	struct halrf_pwr_info *pwr = &rf->pwr_info;
 
 	pwr->ant_type = ant;
@@ -5019,10 +5028,10 @@ void halrf_set_pwr_lmt_main_or_aux(void *rf_void, u8 ant)
 
 void halrf_set_ext_ant12_pwr_limit_table(void *rf_void, enum phl_phy_idx phy)
 {
+#ifdef RF_8851B_SUPPORT
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_com = rf->hal_com;
 
-#ifdef RF_8851B_SUPPORT
 	if (hal_com->chip_id == CHIP_WIFI6_8851B)
 		halrf_set_ext_ant12_pwr_limit_table_8851b(rf, phy);
 #endif
@@ -5031,10 +5040,10 @@ void halrf_set_ext_ant12_pwr_limit_table(void *rf_void, enum phl_phy_idx phy)
 
 void halrf_set_ext_ant12_pwr_limit_ru_table(void *rf_void, enum phl_phy_idx phy)
 {
+#ifdef RF_8851B_SUPPORT
 	struct rf_info *rf = (struct rf_info *)rf_void;
 	struct rtw_hal_com_t *hal_com = rf->hal_com;
 
-#ifdef RF_8851B_SUPPORT
 	if (hal_com->chip_id == CHIP_WIFI6_8851B)
 		halrf_set_ext_ant12_pwr_limit_ru_table_8851b(rf, phy);
 #endif
@@ -5059,9 +5068,9 @@ void halrf_aack_trigger(void *rf_void, enum phl_phy_idx phy_idx)
 
 void halrf_set_ant_main_or_aux(void *rf_void, enum rf_path path, bool main)
 {
+#ifdef RF_8192XB_SUPPORT
 	struct rf_info *rf = (struct rf_info *)rf_void;
 
-#ifdef RF_8192XB_SUPPORT
 	if (rf->ic_type == RF_RTL8192XB) {
 		if (path == RF_PATH_A) {
 			if (main) {
