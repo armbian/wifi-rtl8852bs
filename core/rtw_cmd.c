@@ -91,7 +91,6 @@ void rtw_free_cmd_priv(struct dvobj_priv *dvobj)
 static int rtw_cmd_filter(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 {
 	u8 bAllow = _FALSE; /* set to _TRUE to allow enqueuing cmd when hw_init_completed is _FALSE */
-	struct dvobj_priv *dvobj = pcmdpriv->dvobj;
 
 
 	if (cmd_obj->cmdcode == CMD_SET_CHANPLAN)
@@ -349,7 +348,6 @@ void rtw_run_cmd(_adapter *padapter, struct cmd_obj *pcmd, bool discard)
 	u8(*cmd_hdl)(_adapter *padapter, u8 *pbuf);
 	void (*pcmd_callback)(_adapter *dev, struct cmd_obj *pcmd);
 	struct cmd_priv *pcmdpriv = &(adapter_to_dvobj(padapter)->cmdpriv);
-	struct drvextra_cmd_parm *extra_parm = NULL;
 
 	cmd_start_time = rtw_get_current_time();
 	pcmdpriv->cmd_issued_cnt++;
@@ -733,7 +731,6 @@ inline u8 rtw_change_bss_bchbw_cmd(_adapter *adapter, int flags
 u8 rtw_joinbss_cmd(_adapter *padapter, struct wlan_network *pnetwork)
 {
 	u8 res = _SUCCESS;
-	WLAN_BSSID_EX		*psecnetwork;
 	struct cmd_obj		*pcmd;
 	struct cmd_priv		*pcmdpriv = &adapter_to_dvobj(padapter)->cmdpriv;
 	struct joinbss_parm *param;
@@ -788,7 +785,6 @@ exit:
 /* for sta_mode only */
 static u8 sta_disassoc_cmd(struct _ADAPTER *a, u32 deauth_timeout_ms, int flags)
 {
-	struct cmd_priv *cmdpriv = &adapter_to_dvobj(a)->cmdpriv;
 	struct cmd_obj *cmd = NULL;
 	struct disconnect_parm *param = NULL;
 	struct submit_ctx sctx;
@@ -1061,7 +1057,6 @@ exit:
 u8 rtw_setstakey_cmd(_adapter *padapter, struct sta_info *sta, u8 key_type, bool enqueue)
 {
 	struct set_stakey_parm	setstakey_para;
-	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	struct _ADAPTER_LINK *padapter_link = sta->padapter_link;
 	struct link_security_priv *lsecuritypriv = &padapter_link->securitypriv;
@@ -1106,11 +1101,6 @@ u8 rtw_setstakey_cmd(_adapter *padapter, struct sta_info *sta, u8 key_type, bool
 
 u8 rtw_clearstakey_cmd(_adapter *padapter, struct sta_info *sta, u8 enqueue)
 {
-	struct cmd_obj *cmd;
-	struct set_stakey_parm	*psetstakey_para;
-	struct cmd_priv *pcmdpriv = &adapter_to_dvobj(padapter)->cmdpriv;
-	struct set_stakey_rsp *psetstakey_rsp = NULL;
-	s16 cam_id = 0;
 	u8 res = _SUCCESS;
 
 	if (!sta) {
@@ -2294,7 +2284,6 @@ u32 rtw_get_turbo_edca(_adapter *padapter, u8 aifs, u8 ecwmin, u8 ecwmax, u8 txo
 	u8 decide_txop = txop;
 	u8 default_txop = 0x5e;
 	u32 ac_parm = padapter->last_edca;
-	u8 ac = 0;/*BE*/
 
 	if (padapter->dis_turboedca == DIS_TURBO)
 		return ret;
@@ -5139,8 +5128,6 @@ static char *rtw_extra_name(struct drvextra_cmd_parm *pdrvextra_cmd)
 char UNKNOWN_CMD[16] = "UNKNOWN_CMD";
 char *rtw_cmd_name(struct cmd_obj *pcmd)
 {
-	struct rtw_evt_header *pev;
-
 	if (pcmd->cmdcode >= (sizeof(wlancmds) / sizeof(struct rtw_cmd)))
 		return UNKNOWN_CMD;
 

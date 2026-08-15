@@ -399,8 +399,7 @@ void rtw_vht_get_dft_setting(_adapter *padapter,
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct vht_priv *pvhtpriv = &pmlmepriv->dev_vhtpriv;
 	struct registry_priv *pregistrypriv = &padapter->registrypriv;
-	BOOLEAN bHwLDPCSupport = _FALSE, bHwSTBCSupport = _FALSE;
-	u8 stbc_rx = 0;
+	BOOLEAN bHwLDPCSupport = _FALSE;
 #ifdef CONFIG_BEAMFORMING
 	BOOLEAN	bHwSupportBeamformer = _FALSE, bHwSupportBeamformee = _FALSE;
 	u8 mu_bfer, mu_bfee;
@@ -520,16 +519,9 @@ void rtw_vht_get_dft_setting(_adapter *padapter,
 /* Initialized vhtpriv by adapter real setting */
 void rtw_vht_get_real_setting(_adapter *padapter, struct _ADAPTER_LINK *padapter_link)
 {
-#ifdef CONFIG_BEAMFORMING
-	BOOLEAN bHwSupportBeamformer = _FALSE, bHwSupportBeamformee = _FALSE;
-	u8 mu_bfer, mu_bfee;
-#endif /* CONFIG_BEAMFORMING */
 	u8 tx_nss, rx_nss;
-	u8 rf_type = 0;
-	struct rtw_wifi_role_t *wrole = padapter->phl_role;
 	struct registry_priv *pregistrypriv = &(padapter->registrypriv);
 	struct link_mlme_priv *pmlmepriv = &(padapter_link->mlmepriv);
-	struct link_mlme_ext_priv *pmlmeext = &(padapter_link->mlmeextpriv);
 	struct protocol_cap_t *proto_cap = &(padapter_link->wrlink->protocol_cap);
 	struct role_link_cap_t *cap = &(padapter_link->wrlink->cap);
 	struct vht_priv *pvhtpriv = &pmlmepriv->vhtpriv;
@@ -743,7 +735,6 @@ void update_sta_vht_info_apmode(_adapter *padapter, void *sta)
 {
 	struct sta_info	*psta = (struct sta_info *)sta;
 	struct rtw_phl_stainfo_t *phl_sta = psta->phl_sta;
-	struct rtw_wifi_role_t *wrole = padapter->phl_role;
 	struct _ADAPTER_LINK *padapter_link = psta->padapter_link;
 	struct link_mlme_ext_priv *pmlmeext = &padapter_link->mlmeextpriv;
 	struct link_mlme_priv *pmlmepriv = &(padapter_link->mlmepriv);
@@ -904,7 +895,6 @@ void VHT_caps_handler_infra_ap(_adapter *padapter, struct _ADAPTER_LINK *padapte
 void VHT_caps_handler(_adapter *padapter, struct _ADAPTER_LINK *padapter_link,
 			PNDIS_802_11_VARIABLE_IEs pIE)
 {
-	struct rtw_wifi_role_t 	*wrole = padapter->phl_role;
 	struct link_mlme_priv	*pmlmepriv = &padapter_link->mlmepriv;
 	struct link_mlme_ext_priv	*pmlmeext = &padapter_link->mlmeextpriv;
 	struct protocol_cap_t *protocol_cap = &padapter_link->wrlink->protocol_cap;
@@ -1524,7 +1514,6 @@ void rtw_vht_ies_attach(_adapter *padapter, struct _ADAPTER_LINK *padapter_link,
 {
 	struct link_mlme_priv *pmlmepriv = &(padapter_link->mlmepriv);
 	u8 cap_len, operation_len;
-	uint len = 0;
 	sint ie_len = 0;
 	u8 *p = NULL;
 
@@ -1686,7 +1675,6 @@ static u8 _issue_op_mode_notify_frame(_adapter *a, struct _ADAPTER_LINK *a_link,
 	struct xmit_priv *xmitpriv = &(a->xmitpriv);
 	struct mlme_ext_priv *mlmeext = &(a->mlmeextpriv);
 	u8 opmode = 0, op_bw, op_80_80_bw;
-	u32 ie_len;
 
 	if (alink_is_tx_blocked_by_ch_waiting(a_link)) {
 		ret = _FALSE;

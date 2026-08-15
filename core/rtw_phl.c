@@ -405,7 +405,6 @@ u8 rtw_backup_and_get_final_ss(_adapter *adapter, struct sta_info *sta, u8 chg_s
 void rtw_ctrl_and_backup_assoc_cap_rx_nss(_adapter *adapter, struct sta_info *sta, u8 rx_nss)
 {
 	struct mlme_ext_priv *pmlmeext = &(adapter->mlmeextpriv);
-	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 
 
 	pmlmeext->txss_bk = sta->phl_sta->asoc_cap.nss_rx;
@@ -1143,10 +1142,6 @@ bool rtw_hw_is_init_completed(struct dvobj_priv *dvobj)
 void rtw_hw_cap_init(struct dvobj_priv *dvobj)
 {
 	struct hal_spec_t *hal_spec = GET_HAL_SPEC(dvobj);
-	struct rtw_phl_com_t *phl_com = GET_PHL_COM(dvobj);
-	struct phy_cap_t *phy_cap = phl_com->phy_cap;
-	struct registry_priv  *regpriv =
-		&(dvobj_get_primary_adapter(dvobj)->registrypriv);
 
 #ifdef DIRTY_FOR_WORK
 	dvobj->phl_com->rf_path_num = hal_spec->rf_reg_path_num; /*GET_HAL_RFPATH_NUM*/
@@ -1280,7 +1275,6 @@ u8 rtw_hw_iface_init(_adapter *adapter)
 	u8 rst = _FAIL;
 	int chctx_num = 0;
 	struct _ADAPTER_LINK *adapter_link = NULL;
-	struct rtw_phl_stainfo_t *phl_sta = NULL;
 	struct rtw_wifi_role_link_t *rlink = NULL;
 	u8 *adapter_link_mac_addr[RTW_RLINK_MAX] = {NULL};
 	int lidx;
@@ -1766,7 +1760,6 @@ int rtw_hw_del_all_key(struct _ADAPTER *a, struct sta_info *sta,
 	u8 keyid;
 	u8 keytype;
 	struct phl_sec_param_h crypt = {0};
-	enum rtw_phl_status status;
 
 
 	d = adapter_to_dvobj(a);
@@ -2215,7 +2208,6 @@ int rtw_hw_connected(struct _ADAPTER *a)
 	struct dvobj_priv *d;
 	void *phl;
 	enum rtw_phl_status status;
-	struct security_priv *psecuritypriv = &a->securitypriv;
 	struct _ADAPTER_LINK *alink = NULL;
 	struct sta_info *sta = NULL;
 	u8 lidx;
@@ -2400,7 +2392,6 @@ int rtw_hw_connected_apmode(struct _ADAPTER *a, struct sta_info *sta)
 u8 rtw_hal_get_def_var(struct _ADAPTER *a, struct _ADAPTER_LINK *alink,
 				enum _HAL_DEF_VARIABLE def_var, void *val)
 {
-	struct rtw_wifi_role_t *wrole = a->phl_role;
 	struct protocol_cap_t *proto_cap = &(alink->wrlink->protocol_cap);
 
 	switch (def_var) {
@@ -2625,7 +2616,6 @@ int rtw_acs_get_report(struct _ADAPTER *a, enum band_type band, u8 ch, struct rt
 void rtw_dump_env_rpt(struct _ADAPTER *a, void *sel)
 {
 	struct dvobj_priv *d = adapter_to_dvobj(a);
-	struct rtw_phl_com_t *phl_com = GET_PHL_COM(d);
 	void *phl = GET_PHL_INFO(d);
 	struct rtw_env_report rpt;
 	/* ToDo CONFIG_RTW_MLD: [currently primary link only] */
@@ -2639,9 +2629,7 @@ void rtw_dump_env_rpt(struct _ADAPTER *a, void *sel)
 
 void rtw_dump_rfe_type(struct dvobj_priv *d)
 {
-	struct rtw_phl_com_t *phl_com = GET_PHL_COM(d);
-
-	RTW_INFO("RFE Type: %d\n", phl_com->dev_cap.rfe_type);
+	RTW_INFO("RFE Type: %d\n", GET_PHL_COM(d)->dev_cap.rfe_type);
 }
 
 #ifdef CONFIG_WOWLAN
@@ -3544,7 +3532,6 @@ extern enum rtw_data_rate _rate_mrate2phl(enum MGN_RATE mrate);
 void dump_txpwr_by_rate(void *sel, _adapter *adapter)
 {
 	struct dvobj_priv *devob = adapter_to_dvobj(adapter);
-	struct hal_spec_t *hal_spec = GET_HAL_SPEC(devob);
 	int band, rs, tx_num, n, i;
 	u8 rate_num, ratio, value;
 	ratio = rtw_phl_get_tx_tbl_to_tx_pwr_times(GET_PHL_INFO(devob));
@@ -3636,8 +3623,6 @@ bool rtw_dfs_hal_region_supported(struct dvobj_priv* dvobj, enum rtw_dfs_regd do
 
 void rtw_dfs_hal_update_region(struct dvobj_priv *dvobj, u8 band_idx, enum rtw_dfs_regd domain)
 {
-	struct rtw_phl_com_t *phl_com = GET_PHL_COM(dvobj);
-
 	rtw_phl_cmd_dfs_change_domain(GET_PHL_INFO(dvobj), band_idx, rtw_dfs_regd_to_phl(domain), PHL_CMD_DIRECTLY, 0);
 }
 
