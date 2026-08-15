@@ -51,18 +51,12 @@ void halbb_antdiv_reset_training_stat(struct bb_info *bb)
 
 void halbb_antdiv_reset(struct bb_info *bb)
 {
-	struct bb_antdiv_info *bb_ant_div = &bb->bb_ant_div_i;
-	struct bb_antdiv_rate_info *bb_rate_i = &bb_ant_div->bb_rate_i;
-	struct bb_antdiv_evm_info *bb_evm_i = &bb_ant_div->bb_evm_i;
-
 	/* Reset stat */
 	halbb_antdiv_reset_training_stat(bb);
 }
 
 void halbb_antdiv_reg_init(struct bb_info *bb)
 {
-	struct bb_antdiv_info *bb_ant_div = &bb->bb_ant_div_i;
-	struct bb_link_info *bb_link = &bb->bb_link_i;
 	struct bb_antdiv_cr_info *cr = &bb->bb_ant_div_i.bb_antdiv_cr_i;
 
 	/* dis r_ant_train_en */
@@ -109,7 +103,6 @@ void halbb_antdiv_reg_init(struct bb_info *bb)
 void halbb_antdiv_init(struct bb_info *bb)
 {
 	struct bb_antdiv_info *bb_ant_div = &bb->bb_ant_div_i;
-	struct bb_link_info *bb_link = &bb->bb_link_i;
 	struct rtw_phl_com_t *phl = bb->phl_com;
 	struct dev_cap_t *dev = &phl->dev_cap;
 
@@ -176,7 +169,6 @@ static u8 halbb_antdiv_sel_tx_ant_by_ext_pwr_lmt(struct bb_info *bb)
 {
 	struct rtw_tpu_info *tpu = &bb->hal_com->band[bb->bb_phy_idx].rtw_tpu_i;
 	struct rtw_phl_ext_pwr_lmt_info *ext_pwr_info = &bb->hal_com->band[bb->bb_phy_idx].rtw_tpu_i.ext_pwr_lmt_i;
-	struct rtw_tpu_pwr_imt_info *lmt = &tpu->rtw_tpu_pwr_imt_i;
 	u8 ch = bb->hal_com->band[bb->bb_phy_idx].cur_chandef.center_ch;
 	s8 ant1_pw = 0;
 	s8 ant2_pw = 0;
@@ -258,10 +250,7 @@ void halbb_antdiv_fix_ant(struct bb_info *bb, u8 ant)
 void halbb_antdiv_set_ant(struct bb_info *bb, u8 ant)
 {
 	struct bb_antdiv_info *bb_ant_div = &bb->bb_ant_div_i;
-	struct bb_link_info *bb_link = &bb->bb_link_i;
 	struct bb_antdiv_cr_info *cr = &bb->bb_ant_div_i.bb_antdiv_cr_i;
-	struct rtw_hal_com_t *hal = bb->hal_com;
-	u8 band = bb->hal_com->band[0].cur_chandef.band;
 	u8 default_ant, optional_ant;
 	u8 tx_ant = 0;
 
@@ -326,11 +315,8 @@ void halbb_antdiv_set_ant(struct bb_info *bb, u8 ant)
 
 static void halbb_antdiv_get_rssi(struct bb_info *bb)
 {
-	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
-	struct bb_pkt_cnt_su_info *pkt_cnt = &cmn_rpt->bb_pkt_cnt_su_i;
 	struct bb_antdiv_info *bb_ant_div = &bb->bb_ant_div_i;
 	struct bb_antdiv_rssi_info *rssi = &bb_ant_div->bb_rssi_i;
-	struct bb_rate_info *rate_i = &cmn_rpt->bb_rate_i;
 
 	rssi->rssi_cck_avg = (u8)HALBB_DIV(rssi->rssi_cck_avg_acc, rssi->pkt_cnt_cck);
 	rssi->rssi_ofdm_avg = (u8)HALBB_DIV(rssi->rssi_ofdm_avg_acc, rssi->pkt_cnt_ofdm);
@@ -429,9 +415,6 @@ static void halbb_antdiv_get_rssi_target_ant(struct bb_info *bb)
 void halbb_antdiv_get_highest_mcs(struct bb_info *bb)
 {
 	struct bb_antdiv_info *bb_ant_div = &bb->bb_ant_div_i;
-	struct bb_link_info *bb_link = &bb->bb_link_i;
-	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
-	struct bb_rate_info *rate_i = &cmn_rpt->bb_rate_i;
 	struct bb_antdiv_rate_info *bb_rate_i = &bb_ant_div->bb_rate_i;
 
 	u16 main_max_cnt = 1;
@@ -707,9 +690,6 @@ void halbb_antdiv_get_highest_mcs(struct bb_info *bb)
 void halbb_antdiv_get_evm_target_ant(struct bb_info *bb)
 {
 	struct bb_antdiv_info *bb_ant_div = &bb->bb_ant_div_i;
-	struct bb_link_info *bb_link = &bb->bb_link_i;
-	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
-	struct bb_rate_info *rate_i = &cmn_rpt->bb_rate_i;
 	struct bb_antdiv_evm_info *bb_evm_i = &bb_ant_div->bb_evm_i;
 	struct bb_antdiv_rate_info *bb_rate_i = &bb_ant_div->bb_rate_i;
 	u8 main_2ss_evm_min = 0;
@@ -839,7 +819,6 @@ void halbb_antdiv_get_evm_target_ant(struct bb_info *bb)
 void halbb_antdiv_training_state(struct bb_info *bb)
 {
 	struct bb_antdiv_info *bb_ant_div = &bb->bb_ant_div_i;
-	struct bb_link_info *bb_link = &bb->bb_link_i;
 	u8 next_ant;
 
 	if (bb_ant_div->antdiv_training_state_cnt == 0) {
@@ -898,9 +877,6 @@ void halbb_antdiv_training_state(struct bb_info *bb)
 void halbb_antdiv_decision_state(struct bb_info *bb)
 {
 	struct bb_antdiv_info *bb_ant_div = &bb->bb_ant_div_i;
-	struct bb_link_info *bb_link = &bb->bb_link_i;
-	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
-	struct bb_rate_info *rate_i = &cmn_rpt->bb_rate_i;
 	struct bb_antdiv_rate_info *bb_rate_i = &bb_ant_div->bb_rate_i;
 	struct bb_antdiv_evm_info *bb_evm_i = &bb_ant_div->bb_evm_i;
 
@@ -1053,10 +1029,6 @@ void halbb_antdiv_1ss_decision_state(struct bb_info * bb)
 void halbb_evm_based_antdiv(struct bb_info *bb)
 {
 	struct bb_antdiv_info *bb_ant_div = &bb->bb_ant_div_i;
-	struct bb_link_info *bb_link = &bb->bb_link_i;
-	struct bb_cmn_rpt_info	*cmn_rpt = &bb->bb_cmn_rpt_i;
-	struct bb_rssi_su_avg_info *avg = &cmn_rpt->bb_rssi_su_avg_i;
-	struct bb_rate_info *rate_i = &cmn_rpt->bb_rate_i;
 
 	/* Main function */
 	if (bb_ant_div->antdiv_training_state_cnt <= ((bb_ant_div->antdiv_train_num << 1) - 2)) {
@@ -1252,7 +1224,6 @@ static void halbb_antdiv_get_evm_stat(struct bb_info *bb)
 
 	struct bb_antdiv_info *bb_ant_div = &bb->bb_ant_div_i;
 	struct bb_antdiv_evm_info *bb_evm_i = &bb_ant_div->bb_evm_i;
-	struct bb_link_info *bb_link = &bb->bb_link_i;
 
 	/* Only get stats @ training period */
 	if (!bb_ant_div->get_stats)
@@ -1309,7 +1280,6 @@ static void halbb_antdiv_get_cn_stat(struct bb_info *bb)
 
 	struct bb_antdiv_info *bb_ant_div = &bb->bb_ant_div_i;
 	struct bb_antdiv_cn_info *bb_cn_i = &bb_ant_div->bb_cn_i;
-	struct bb_link_info *bb_link = &bb->bb_link_i;
 
 	/* Only get stats @ training period */
 	if (!bb_ant_div->get_stats)
@@ -1345,7 +1315,6 @@ static void halbb_antdiv_get_rate_stat(struct bb_info *bb)
 
 	struct bb_antdiv_info *bb_ant_div = &bb->bb_ant_div_i;
 	struct bb_antdiv_rate_info *bb_rate_i = &bb_ant_div->bb_rate_i;
-	struct bb_link_info *bb_link = &bb->bb_link_i;
 	u8 ofst = rate_i->idx;
 
 	/* Only get stats @ training period */
@@ -1467,7 +1436,6 @@ void halbb_antdiv_phy_sts(struct bb_info *bb, u32 physts_bitmap,
 	struct bb_physts_info	*physts = &bb->bb_physts_i;
 	struct dev_cap_t *dev = &bb->phl_com->dev_cap;
 	struct rtw_phl_stainfo_t *sta;
-	struct rtw_cfo_info *cfo_t = NULL;
 	u8 bb_macid;
 
 	halbb_antdiv_get_rssi_stat(bb);
