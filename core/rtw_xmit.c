@@ -5672,6 +5672,7 @@ void rtw_alloc_hwxmits(_adapter *padapter)
 
 	hwxmits = pxmitpriv->hwxmits;
 
+#if HWXMIT_ENTRY == 5
 	if (pxmitpriv->hwxmit_entry == 5) {
 		/* pxmitpriv->bmc_txqueue.head = 0; */
 		/* hwxmits[0] .phwtxqueue = &pxmitpriv->bmc_txqueue; */
@@ -5693,7 +5694,9 @@ void rtw_alloc_hwxmits(_adapter *padapter)
 		/* hwxmits[4] .phwtxqueue = &pxmitpriv->be_txqueue; */
 		hwxmits[4] .sta_queue = &pxmitpriv->be_pending;
 
-	} else if (pxmitpriv->hwxmit_entry == 4) {
+	} else
+#endif
+	if (pxmitpriv->hwxmit_entry == 4) {
 
 		/* pxmitpriv->vo_txqueue.head = 0; */
 		/* hwxmits[0] .phwtxqueue = &pxmitpriv->vo_txqueue; */
