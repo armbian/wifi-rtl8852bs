@@ -120,7 +120,6 @@ void	rtw_he_use_default_setting(_adapter *padapter, struct _ADAPTER_LINK *padapt
 
 void rtw_he_set_asoc_cap_supp_mcs(_adapter *padapter, struct rtw_phl_stainfo_t *phl_sta, u8 *ele_start, u8 supp_mcs_len)
 {
-	struct rtw_wifi_role_t *wrole = padapter->phl_role;
 	struct protocol_cap_t *role_cap = &(phl_sta->rlink->protocol_cap);
 	int nss = 0, nss_tx = 0, nss_rx = 0;
 	u8 mcs_from_role = HE_MSC_NOT_SUPP;
@@ -462,10 +461,8 @@ static void update_sta_he_mac_cap_apmode(_adapter *padapter, struct rtw_phl_stai
 
 static void update_sta_he_phy_cap_apmode(_adapter *padapter, struct rtw_phl_stainfo_t *phl_sta, u8 *ele_start, u8 *supp_mcs_len)
 {
-	struct rtw_wifi_role_t *wrole = padapter->phl_role;
 	struct rtw_wifi_role_link_t *rlink = phl_sta->rlink;
 	struct protocol_cap_t *role_cap = &(rlink->protocol_cap);
-	struct role_link_cap_t *cap = &(rlink->cap);
 
 	if (phl_sta->chandef.band == BAND_ON_24G) {
 		if (GET_HE_PHY_CAP_SUPPORT_CHAN_WIDTH_SET(ele_start) & BIT(0))
@@ -650,7 +647,6 @@ void HE_mac_caps_handler(_adapter *padapter, struct rtw_phl_stainfo_t *phl_sta, 
 
 void HE_phy_caps_handler(_adapter *padapter, struct rtw_phl_stainfo_t *phl_sta, u8 *ele_start, u8 *supp_mcs_len)
 {
-	struct rtw_wifi_role_t 	*wrole = padapter->phl_role;
 	struct rtw_wifi_role_link_t *rlink = phl_sta->rlink;
 	struct protocol_cap_t *role_cap = &(phl_sta->rlink->protocol_cap);
 
@@ -782,7 +778,6 @@ void HE_ppe_thre_handler(_adapter *padapter, struct rtw_phl_stainfo_t *phl_sta, 
 
 void HE_caps_handler(_adapter *padapter, struct _ADAPTER_LINK *padapter_link, PNDIS_802_11_VARIABLE_IEs pIE)
 {
-	struct rtw_wifi_role_t 	*wrole = padapter->phl_role;
 	struct link_mlme_priv		*pmlmepriv = &padapter_link->mlmepriv;
 	struct link_mlme_ext_priv	*pmlmeext = &padapter_link->mlmeextpriv;
 	struct sta_priv 		*pstapriv = &padapter->stapriv;
@@ -932,7 +927,6 @@ void HE_mu_edca_handler(_adapter *padapter,
 	u8 *ele_start = (&(pIE->data[0]) + 1);
 	struct dvobj_priv *d;
 	void *phl;
-	struct rtw_mu_edca_param edca = {0};
 	u8 pre_cnt = 0, cur_cnt = 0;
 	u8 i = 0;
 
@@ -1033,7 +1027,6 @@ void HE_6g_bandcap_handler(_adapter *padapter, struct _ADAPTER_LINK *padapter_li
 	struct link_mlme_ext_priv	*pmlmeext = &padapter_link->mlmeextpriv;
 	struct sta_priv			*pstapriv = &padapter->stapriv;
 	struct he_priv			*phepriv = &pmlmepriv->hepriv;
-	struct registry_priv		*pregistrypriv = &padapter->registrypriv;
 	struct link_mlme_ext_info		*pmlmeinfo = &(pmlmeext->mlmext_info);
 	WLAN_BSSID_EX			*cur_network = &(pmlmeinfo->network);
 	struct sta_info			*psta = NULL;
@@ -1364,7 +1357,6 @@ u32 rtw_build_he_cap_ie(_adapter *padapter,
 					struct _ADAPTER_LINK *padapter_link,
 					u8 *pbuf, enum band_type band)
 {
-	struct rtw_wifi_role_t *wrole = padapter->phl_role;
 	struct link_mlme_priv *pmlmepriv = &padapter_link->mlmepriv;
 	struct protocol_cap_t *proto_cap = &(padapter_link->wrlink->protocol_cap);
 	struct he_priv	*phepriv = &pmlmepriv->hepriv;
@@ -1447,7 +1439,7 @@ u32 rtw_restructure_he_ie(_adapter *padapter,
 	struct link_mlme_priv *pmlmepriv = &(padapter_link->mlmepriv);
 	struct he_priv	*phepriv = &pmlmepriv->hepriv;
 	u32	ielen;
-	u8 *out_he_op_ie, *he_cap_ie, *he_op_ie;
+	u8 *he_cap_ie, *he_op_ie;
 	u8 he_cap_eid_ext = WLAN_EID_EXTENSION_HE_CAPABILITY;
 	u8 he_op_eid_ext = WLAN_EID_EXTENSION_HE_OPERATION;
 #if CONFIG_IEEE80211_BAND_6GHZ
@@ -1502,7 +1494,6 @@ static int rtw_build_he_oper_bss_color_info(_adapter *padapter,
 {
 	/* Set BSS Color Information */
 	int info_len = HE_OPER_BSS_COLOR_INFO_LEN;
-	struct rtw_wifi_role_t *wrole = padapter->phl_role;
 	struct protocol_cap_t *proto_cap = &(padapter_link->wrlink->protocol_cap);
 
 	SET_HE_OP_BSS_COLOR_INFO_BSS_COLOR(pbuf, proto_cap->bsscolor);
@@ -1615,11 +1606,8 @@ u32	rtw_build_he_operation_ie(_adapter *padapter,
 void HEOnAssocRsp(_adapter *padapter)
 {
 	struct _ADAPTER_LINK *padapter_link = GET_PRIMARY_LINK(padapter);
-	struct link_mlme_priv		*pmlmepriv = &padapter_link->mlmepriv;
-	struct vht_priv		*pvhtpriv = &pmlmepriv->vhtpriv;
 	struct link_mlme_ext_priv	*pmlmeext = &padapter_link->mlmeextpriv;
 	struct link_mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	u8	ht_AMPDU_len;
 
 	if (!pmlmeinfo->VHT_enable)
 		return;
@@ -1637,7 +1625,6 @@ void rtw_he_ies_attach(_adapter *padapter, struct _ADAPTER_LINK *padapter_link, 
 	struct link_mlme_priv *pmlmepriv = &(padapter_link->mlmepriv);
 	u8 he_cap_eid_ext = WLAN_EID_EXTENSION_HE_CAPABILITY;
 	u8 cap_len, operation_len;
-	uint len = 0;
 	sint ie_len = 0;
 	u8 *p = NULL;
 
@@ -1749,7 +1736,6 @@ void rtw_he_set_om_info(_adapter *padapter, struct _ADAPTER_LINK *alink, u8 om_m
 
 void rtw_he_init_om_info(_adapter *padapter, struct _ADAPTER_LINK *padapter_link)
 {
-	struct rtw_wifi_role_t *wrole = padapter->phl_role;
 	struct link_mlme_priv *pmlmepriv = &(padapter_link->mlmepriv);
 	struct rtw_wifi_role_link_t *rlink = padapter_link->wrlink;
 	struct protocol_cap_t *proto_cap = &(rlink->protocol_cap);
@@ -1882,7 +1868,6 @@ void rtw_process_he_triggerframe(_adapter *padapter,
 	struct dvobj_priv *d = adapter_to_dvobj(padapter);
 	u8 *trigger_frame = precv_frame->u.hdr.rx_data;
 	u16 trigger_length = precv_frame->u.hdr.len;
-	struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct _ADAPTER_LINK *padapter_link = precv_frame->u.hdr.adapter_link;
 	struct wlan_network *cur_network = &(padapter_link->mlmepriv.cur_network);
@@ -1891,7 +1876,6 @@ void rtw_process_he_triggerframe(_adapter *padapter,
 	u8 *user_info;
 	u16 remain_length = 0;
 	u8 trigger_type = 0;
-	bool ra_is_bc = _FALSE;
 	phl = GET_PHL_INFO(d);
 
 
