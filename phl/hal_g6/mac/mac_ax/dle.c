@@ -15,12 +15,14 @@
 #include "dle.h"
 #include "mac_priv.h"
 
+#if MAC_AX_PCIE_SUPPORT
 /* PCIE 64 */
 static struct dle_size_t wde_size0 = {
 	MAC_AX_WDE_PG_64, /* pge_size */
 	4095, /* lnk_pge_num */
 	1, /* unlnk_pge_num */
 };
+#endif
 
 /* SDIO, PCIE STF, USB */
 static struct dle_size_t wde_size1 = {
@@ -29,19 +31,14 @@ static struct dle_size_t wde_size1 = {
 	0, /* unlnk_pge_num */
 };
 
-/* PCIE 128 */
-static struct dle_size_t wde_size2 = {
-	MAC_AX_WDE_PG_128, /* pge_size */
-	2016, /* lnk_pge_num */
-	32, /* unlnk_pge_num */
-};
-
+#if MAC_AX_PCIE_SUPPORT
 /* PCIE SU TP */
 static struct dle_size_t wde_size3 = {
 	MAC_AX_WDE_PG_64, /* pge_size */
 	496, /* lnk_pge_num */
 	3600, /* unlnk_pge_num */
 };
+#endif
 
 /* DLFW */
 static struct dle_size_t wde_size4 = {
@@ -50,13 +47,7 @@ static struct dle_size_t wde_size4 = {
 	4096, /* unlnk_pge_num */
 };
 
-/* PCIE BCN TEST */
-static struct dle_size_t wde_size5 = {
-	MAC_AX_WDE_PG_64, /* pge_size */
-	3904, /* lnk_pge_num */
-	64, /* unlnk_pge_num */
-};
-
+#if MAC_AX_PCIE_SUPPORT
 /* PCIE 64 */
 static struct dle_size_t wde_size6 = {
 	MAC_AX_WDE_PG_64, /* pge_size */
@@ -77,6 +68,7 @@ static struct dle_size_t wde_size8 = {
 	256, /* lnk_pge_num */
 	0, /* unlnk_pge_num */
 };
+#endif
 
 /* DLFW */
 static struct dle_size_t wde_size9 = {
@@ -85,6 +77,7 @@ static struct dle_size_t wde_size9 = {
 	1024, /* unlnk_pge_num */
 };
 
+#if MAC_AX_PCIE_SUPPORT
 /* LA-PCIE */
 static struct dle_size_t wde_size10 = {
 	MAC_AX_WDE_PG_64, /* pge_size */
@@ -98,6 +91,7 @@ static struct dle_size_t wde_size11 = {
 	256, /* lnk_pge_num */
 	0, /* unlnk_pge_num */
 };
+#endif
 
 /* LA-SDIO */
 static struct dle_size_t wde_size12 = {
@@ -120,6 +114,7 @@ static struct dle_size_t wde_size14 = {
 	4, /* unlnk_pge_num */
 };
 
+#if MAC_AX_USB_SUPPORT
 /* LA-USB 8852A*/
 static struct dle_size_t wde_size15 = {
 	MAC_AX_WDE_PG_64, /* pge_size */
@@ -140,14 +135,18 @@ static struct dle_size_t wde_size17 = {
 	354, /* lnk_pge_num */
 	30, /* unlnk_pge_num */
 };
+#endif
 
+#if MAC_AX_PCIE_SUPPORT || MAC_AX_USB_SUPPORT
 /* 8852C DLFW */
 static struct dle_size_t wde_size18 = {
 	MAC_AX_WDE_PG_64, /* pge_size */
 	0, /* lnk_pge_num */
 	2048, /* unlnk_pge_num */
 };
+#endif
 
+#if MAC_AX_PCIE_SUPPORT
 /* 8852C PCIE SCC */
 static struct dle_size_t wde_size19 = {
 	MAC_AX_WDE_PG_64, /* pge_size */
@@ -169,27 +168,15 @@ static struct dle_size_t wde_size21 = {
 	0, /* unlnk_pge_num */
 };
 
-/* 8852C PCIE LA */
-static struct dle_size_t wde_size22 = {
-	MAC_AX_WDE_PG_64, /* pge_size */
-	3224, /* lnk_pge_num */
-	104, /* unlnk_pge_num */
-};
-
 /* PCIE SCC TURBO */
 static struct dle_size_t wde_size23 = {
 	MAC_AX_WDE_PG_64, /* pge_size */
 	1022, /* lnk_pge_num */
 	2, /* unlnk_pge_num */
 };
+#endif
 
-/* 8852B USB CABV*/
-static struct dle_size_t wde_size24 = {
-	MAC_AX_WDE_PG_64, /* pge_size */
-	216, /* lnk_pge_num */
-	40, /* unlnk_pge_num */
-};
-
+#if MAC_AX_USB_SUPPORT
 /* 8852B USB2.0/USB3.0 SCC */
 static struct dle_size_t wde_size25 = {
 	MAC_AX_WDE_PG_64, /* pge_size */
@@ -210,14 +197,18 @@ static struct dle_size_t wde_size27 = {
 	374, /* lnk_pge_num */
 	10, /* unlnk_pge_num */
 };
+#endif
 
+#if MAC_AX_PCIE_SUPPORT
 /* 1115E PCIE DBCC & DLFW */
 static struct dle_size_t wde_size28 = {
 	MAC_AX_WDE_PG_64, /* pge_size */
 	0, /* lnk_pge_num */
 	3328, /* unlnk_pge_num */
 };
+#endif
 
+#if MAC_AX_USB_SUPPORT
 /* 8852B USB2.0 SCC */
 static struct dle_size_t wde_size30 = {
 	MAC_AX_WDE_PG_64, /* pge_size */
@@ -245,13 +236,16 @@ static struct dle_size_t wde_size33 = {
 	0, /* lnk_pge_num */
 	256, /* unlnk_pge_num */
 };
+#endif
 
+#if MAC_AX_PCIE_SUPPORT
 /* PCIE */
 static struct dle_size_t ple_size0 = {
 	MAC_AX_PLE_PG_128, /* pge_size */
 	1520, /* lnk_pge_num */
 	16, /* unlnk_pge_num */
 };
+#endif
 
 /* SDIO, USB */
 static struct dle_size_t ple_size1 = {
@@ -260,6 +254,7 @@ static struct dle_size_t ple_size1 = {
 	16, /* unlnk_pge_num */
 };
 
+#if MAC_AX_PCIE_SUPPORT
 /* PCIE STF */
 static struct dle_size_t ple_size2 = {
 	MAC_AX_PLE_PG_128, /* pge_size */
@@ -273,6 +268,7 @@ static struct dle_size_t ple_size3 = {
 	330, /* lnk_pge_num */
 	1206, /* unlnk_pge_num */
 };
+#endif
 
 /* DLFW */
 static struct dle_size_t ple_size4 = {
@@ -281,13 +277,7 @@ static struct dle_size_t ple_size4 = {
 	1472, /* unlnk_pge_num */
 };
 
-/* PCIE BCN TEST */
-static struct dle_size_t ple_size5 = {
-	MAC_AX_PLE_PG_128, /* pge_size */
-	1520, /* lnk_pge_num */
-	80, /* unlnk_pge_num */
-};
-
+#if MAC_AX_PCIE_SUPPORT
 /* PCIE 64 */
 static struct dle_size_t ple_size6 = {
 	MAC_AX_PLE_PG_128, /* pge_size */
@@ -301,6 +291,7 @@ static struct dle_size_t ple_size7 = {
 	1392, /* lnk_pge_num */
 	16, /* unlnk_pge_num */
 };
+#endif
 
 /* DLFW */
 static struct dle_size_t ple_size8 = {
@@ -309,13 +300,7 @@ static struct dle_size_t ple_size8 = {
 	960, /* unlnk_pge_num */
 };
 
-/* PCIE 128 */
-static struct dle_size_t ple_size9 = {
-	MAC_AX_PLE_PG_128, /* pge_size */
-	576, /* lnk_pge_num */
-	0, /* unlnk_pge_num */
-};
-
+#if MAC_AX_PCIE_SUPPORT
 /* LA-PCIE 8852A*/
 static struct dle_size_t ple_size10 = {
 	MAC_AX_PLE_PG_128, /* pge_size */
@@ -329,6 +314,7 @@ static struct dle_size_t ple_size11 = {
 	368, /* lnk_pge_num */
 	16, /* unlnk_pge_num */
 };
+#endif
 
 /* LA-SDIO 8852A*/
 static struct dle_size_t ple_size12 = {
@@ -351,6 +337,7 @@ static struct dle_size_t ple_size14 = {
 	16, /* unlnk_pge_num */
 };
 
+#if MAC_AX_USB_SUPPORT
 /* LA-USB 8852A */
 static struct dle_size_t ple_size15 = {
 	MAC_AX_PLE_PG_128, /* pge_size */
@@ -371,14 +358,18 @@ static struct dle_size_t ple_size17 = {
 	3368, /* lnk_pge_num */
 	24, /* unlnk_pge_num */
 };
+#endif
 
+#if MAC_AX_PCIE_SUPPORT || MAC_AX_USB_SUPPORT
 /* 8852C DLFW*/
 static struct dle_size_t ple_size18 = {
 	MAC_AX_PLE_PG_128, /* pge_size */
 	2544, /* lnk_pge_num */
 	16, /* unlnk_pge_num */
 };
+#endif
 
+#if MAC_AX_PCIE_SUPPORT
 #ifdef PHL_FEATURE_AP
 /* 8852C PCIE SCC PLE 256 */
 static struct dle_size_t ple_size19 = {
@@ -409,27 +400,15 @@ static struct dle_size_t ple_size21 = {
 	16, /* unlnk_pge_num */
 };
 
-/* 8852C PCIE LA */
-static struct dle_size_t ple_size22 = {
-	MAC_AX_PLE_PG_128, /* pge_size */
-	1904, /* lnk_pge_num */
-	16, /* unlnk_pge_num */
-};
-
-/* 8852B PCIE TURBO AB */
-static struct dle_size_t ple_size23 = {
-	MAC_AX_PLE_PG_128, /* pge_size */
-	496, /* lnk_pge_num */
-	16, /* unlnk_pge_num */
-};
-
 /* PCIE SCC TURBO */
 static struct dle_size_t ple_size24 = {
 	MAC_AX_PLE_PG_128, /* pge_size */
 	1008, /* lnk_pge_num */
 	16, /* unlnk_pge_num */
 };
+#endif
 
+#if MAC_AX_USB_SUPPORT
 /* 8852B USB2.0 TURBO*/
 static struct dle_size_t ple_size27 = {
 	MAC_AX_PLE_PG_128, /* pge_size */
@@ -443,6 +422,7 @@ static struct dle_size_t ple_size28 = {
 	3347, /* lnk_pge_num */
 	45, /* unlnk_pge_num */
 };
+#endif
 
 /* SDIO SCC TURBO */
 static struct dle_size_t ple_size29 = {
@@ -451,13 +431,16 @@ static struct dle_size_t ple_size29 = {
 	16, /* unlnk_pge_num */
 };
 
+#if MAC_AX_PCIE_SUPPORT
 /* 1115E PCIE DBCC & DLFW */
 static struct dle_size_t ple_size30 = {
 	MAC_AX_PLE_PG_128, /* pge_size */
 	2672, /* lnk_pge_num */
 	16, /* unlnk_pge_num */
 };
+#endif
 
+#if MAC_AX_USB_SUPPORT
 /* 8852B USB3.0 TURBO*/
 static struct dle_size_t ple_size31 = {
 	MAC_AX_PLE_PG_128, /* pge_size */
@@ -506,7 +489,9 @@ static struct dle_size_t ple_size37 = {
 	64, /* lnk_pge_num */
 	1344, /* unlnk_pge_num */
 };
+#endif
 
+#if MAC_AX_PCIE_SUPPORT
 /* PCIE 64 */
 static struct wde_quota_t wde_qt0 = {
 	3792, /* hif */
@@ -515,6 +500,7 @@ static struct wde_quota_t wde_qt0 = {
 	0, /* pkt_in */
 	107, /* cpu_io */
 };
+#endif
 
 /* SDIO, PCIE STF, USB */
 static struct wde_quota_t wde_qt1 = {
@@ -525,15 +511,7 @@ static struct wde_quota_t wde_qt1 = {
 	60, /* cpu_io */
 };
 
-/* PCIE 128 */
-static struct wde_quota_t wde_qt2 = {
-	1896, /* hif */
-	98, /* wcpu */
-	0, /* dcpu */
-	0, /* pkt_in */
-	22, /* cpu_io */
-};
-
+#if MAC_AX_PCIE_SUPPORT
 /* PCIE SU TP */
 static struct wde_quota_t wde_qt3 = {
 	256, /* hif */
@@ -542,6 +520,7 @@ static struct wde_quota_t wde_qt3 = {
 	0, /* pkt_in */
 	44, /* cpu_io */
 };
+#endif
 
 /* DLFW */
 static struct wde_quota_t wde_qt4 = {
@@ -552,15 +531,7 @@ static struct wde_quota_t wde_qt4 = {
 	0, /* cpu_io */
 };
 
-/* PCIE BCN TEST */
-static struct wde_quota_t wde_qt5 = {
-	3666, /* hif */
-	196, /* wcpu */
-	0, /* dcpu */
-	0, /* pkt_in */
-	44, /* cpu_io */
-};
-
+#if MAC_AX_PCIE_SUPPORT
 /* PCIE 64 */
 static struct wde_quota_t wde_qt6 = {
 	448, /* hif */
@@ -605,6 +576,7 @@ static struct wde_quota_t wde_qt10 = {
 	0, /* pkt_in */
 	8, /* cpu_io */
 };
+#endif
 
 /* LA-SDIO 8852A*/
 static struct wde_quota_t wde_qt11 = {
@@ -633,6 +605,7 @@ static struct wde_quota_t wde_qt13 = {
 	8, /* cpu_io */
 };
 
+#if MAC_AX_USB_SUPPORT
 /* LA USB 8852A */
 static struct wde_quota_t wde_qt14 = {
 	256, /* hif */
@@ -659,7 +632,9 @@ static struct wde_quota_t wde_qt16 = {
 	0, /* pkt_in */
 	8, /* cpu_io */
 };
+#endif
 
+#if MAC_AX_PCIE_SUPPORT || MAC_AX_USB_SUPPORT
 /*8852C & 8192XB & 1115E DLFW */
 static struct wde_quota_t wde_qt17 = {
 	0, /* hif */
@@ -668,7 +643,9 @@ static struct wde_quota_t wde_qt17 = {
 	0, /* pkt_in */
 	0, /* cpu_io */
 };
+#endif
 
+#if MAC_AX_PCIE_SUPPORT
 /* 8852C PCIE SCC */
 static struct wde_quota_t wde_qt18 = {
 	3228, /* hif */
@@ -705,15 +682,6 @@ static struct wde_quota_t wde_qt21 = {
 	40, /* cpu_io */
 };
 
-/* 8852C PCIE LA */
-static struct wde_quota_t wde_qt22 = {
-	3120, /* hif */
-	64, /* wcpu */
-	0, /* dcpu */
-	0, /* pkt_in */
-	40, /* cpu_io */
-};
-
 /* PCIE SCC TRUBO */
 static struct wde_quota_t wde_qt23 = {
 	958, /* hif */
@@ -722,16 +690,9 @@ static struct wde_quota_t wde_qt23 = {
 	0, /* pkt_in */
 	16, /* cpu_io */
 };
+#endif
 
-/* 8852B USB CABV */
-static struct wde_quota_t wde_qt24 = {
-	164, /* hif */
-	44, /* wcpu */
-	0, /* dcpu */
-	0, /* pkt_in */
-	8, /* cpu_io */
-};
-
+#if MAC_AX_USB_SUPPORT
 /* 8852B USB2.0/USB3.0 SCC*/
 static struct wde_quota_t wde_qt25 = {
 	152, /* hif */
@@ -758,7 +719,9 @@ static struct wde_quota_t wde_qt27 = {
 	0, /* pkt_in */
 	40, /* cpu_io */
 };
+#endif
 
+#if MAC_AX_PCIE_SUPPORT
 /* 1115E PCIE DBCC */
 static struct wde_quota_t wde_qt28 = {
 	3218, /* hif */
@@ -767,16 +730,9 @@ static struct wde_quota_t wde_qt28 = {
 	0, /* pkt_in */
 	50, /* cpu_io */
 };
+#endif
 
-/* 1115E PCIE SCC */
-static struct wde_quota_t wde_qt29 = {
-	3228, /* hif */
-	60, /* wcpu */
-	0, /* dcpu */
-	0, /* pkt_in */
-	40, /* cpu_io */
-};
-
+#if MAC_AX_USB_SUPPORT
 /* 8852B USB2.0/USB3.0 SCC TURBO*/
 static struct wde_quota_t wde_qt30 = {
 	210, /* hif */
@@ -803,7 +759,9 @@ static struct wde_quota_t wde_qt32 = {
 	0, /* pkt_in */
 	8, /* cpu_io */
 };
+#endif
 
+#if MAC_AX_PCIE_SUPPORT
 /* PCIE DBCC */
 static struct ple_quota_t ple_qt0 = {
 	264, /* cmac0_tx */
@@ -837,6 +795,7 @@ static struct ple_quota_t ple_qt1 = {
 	0, /* tx_rpt */
 	0, /* h2d */
 };
+#endif
 
 /* SDIO */
 static struct ple_quota_t ple_qt2 = {
@@ -872,6 +831,7 @@ static struct ple_quota_t ple_qt3 = {
 	0, /* h2d */
 };
 
+#if MAC_AX_PCIE_SUPPORT
 /* PCIE SCC */
 static struct ple_quota_t ple_qt4 = {
 	264, /* cmac0_tx */
@@ -905,6 +865,7 @@ static struct ple_quota_t ple_qt5 = {
 	0, /* tx_rpt */
 	0, /* h2d */
 };
+#endif
 
 /* SDIO */
 static struct ple_quota_t ple_qt6 = {
@@ -940,6 +901,7 @@ static struct ple_quota_t ple_qt7 = {
 	0, /* h2d */
 };
 
+#if MAC_AX_PCIE_SUPPORT
 /* PCIE STF SCC */
 static struct ple_quota_t ple_qt8 = {
 	1536, /* cmac0_tx */
@@ -1024,6 +986,7 @@ static struct ple_quota_t ple_qt12 = {
 	0, /* tx_rpt */
 	0, /* h2d */
 };
+#endif
 
 /* DLFW */
 static struct ple_quota_t ple_qt13 = {
@@ -1042,40 +1005,7 @@ static struct ple_quota_t ple_qt13 = {
 	0, /* h2d */
 };
 
-/* PCIE BCN TEST */
-static struct ple_quota_t ple_qt14 = {
-	588, /* cmac0_tx */
-	147, /* cmac1_tx */
-	16, /* c2h */
-	20, /* h2c */
-	26, /* wcpu */
-	26, /* mpdu_proc */
-	356, /* cmac0_dma */
-	89, /* cma1_dma */
-	32, /* bb_rpt */
-	40, /* wd_rel */
-	80, /* cpu_io */
-	0, /* tx_rpt */
-	0, /* h2d */
-};
-
-/* PCIE BCN TEST */
-static struct ple_quota_t ple_qt15 = {
-	688, /* cmac0_tx */
-	247, /* cmac1_tx */
-	116, /* c2h */
-	20, /* h2c */
-	64, /* wcpu */
-	126, /* mpdu_proc */
-	456, /* cmac0_dma */
-	189, /* cma1_dma */
-	64, /* bb_rpt */
-	128, /* wd_rel */
-	80, /* cpu_io */
-	0, /* tx_rpt */
-	0, /* h2d */
-};
-
+#if MAC_AX_USB_SUPPORT
 /* USB DBCC */
 static struct ple_quota_t ple_qt16 = {
 	2048, /* cmac0_tx */
@@ -1109,7 +1039,9 @@ static struct ple_quota_t ple_qt17 = {
 	0, /* tx_rpt */
 	0, /* h2d */
 };
+#endif
 
+#if MAC_AX_PCIE_SUPPORT
 /* PCIE 64 */
 static struct ple_quota_t ple_qt18 = {
 	147, /* cmac0_tx */
@@ -1178,23 +1110,6 @@ static struct ple_quota_t ple_qt21 = {
 	0, /* h2d */
 };
 
-/* PCIE 128 */
-static struct ple_quota_t ple_qt22 = {
-	269, /* cmac0_tx */
-	0, /* cmac1_tx */
-	18, /* c2h */
-	20, /* h2c */
-	15, /* wcpu */
-	28, /* mpdu_proc */
-	180, /* cmac0_dma */
-	0, /* cma1_dma */
-	34, /* bb_rpt */
-	14, /* wd_rel */
-	8, /* cpu_io */
-	0, /* tx_rpt */
-	0, /* h2d */
-};
-
 /* LA PCIE 8852A*/
 static struct ple_quota_t ple_qt23 = {
 	104, /* cmac0_tx */
@@ -1228,7 +1143,9 @@ static struct ple_quota_t ple_qt24 = {
 	0, /* tx_rpt */
 	0, /* h2d */
 };
+#endif
 
+#if MAC_AX_USB_SUPPORT
 /* USB SCC */
 static struct ple_quota_t ple_qt25 = {
 	1536, /* cmac0_tx */
@@ -1296,7 +1213,9 @@ static struct ple_quota_t ple_qt28 = {
 	0, /* tx_rpt */
 	0, /* h2d */
 };
+#endif
 
+#if MAC_AX_PCIE_SUPPORT
 /* PCIE SU TP */
 static struct ple_quota_t ple_qt29 = {
 	66, /* cmac0_tx */
@@ -1347,6 +1266,7 @@ static struct ple_quota_t ple_qt31 = {
 	0, /* tx_rpt */
 	0, /* h2d */
 };
+#endif
 
 /* LA SDIO 8852A*/
 static struct ple_quota_t ple_qt32 = {
@@ -1450,6 +1370,7 @@ static struct ple_quota_t ple_qt37 = {
 	0, /* h2d */
 };
 
+#if MAC_AX_USB_SUPPORT
 /* LA USB 8852A*/
 static struct ple_quota_t ple_qt38 = {
 	512, /* cmac0_tx */
@@ -1551,7 +1472,9 @@ static struct ple_quota_t ple_qt43 = {
 	16, /* tx_rpt */
 	0, /* h2d */
 };
+#endif
 
+#if MAC_AX_PCIE_SUPPORT || MAC_AX_USB_SUPPORT
 /* DLFW 8852C & 8192XB & 1115E */
 static struct ple_quota_t ple_qt44 = {
 	0, /* cmac0_tx */
@@ -1585,7 +1508,9 @@ static struct ple_quota_t ple_qt45 = {
 	0, /* tx_rpt */
 	0, /* h2d */
 };
+#endif
 
+#if MAC_AX_PCIE_SUPPORT
 #ifdef PHL_FEATURE_AP
 /* 8852C PCIE SCC PLE 256 */
 static struct ple_quota_t ple_qt46 = {
@@ -1758,57 +1683,6 @@ static struct ple_quota_t ple_qt53 = {
 	0, /* h2d */
 };
 
-/* 8852C PCIE LA */
-static struct ple_quota_t ple_qt54 = {
-	300, /* cmac0_tx */
-	0, /* cmac1_tx */
-	16, /* c2h */
-	20, /* h2c */
-	13, /* wcpu */
-	13, /* mpdu_proc */
-	356, /* cmac0_dma */
-	0, /* cma1_dma */
-	32, /* bb_rpt */
-	62, /* wd_rel */
-	8, /* cpu_io */
-	16, /* tx_rpt */
-	0, /* h2d */
-};
-
-/* 8852C PCIE LA */
-static struct ple_quota_t ple_qt55 = {
-	300, /* cmac0_tx */
-	0, /* cmac1_tx */
-	32, /* c2h */
-	20, /* h2c */
-	1081, /* wcpu */
-	13, /* mpdu_proc */
-	1424, /* cmac0_dma */
-	0, /* cma1_dma */
-	1100, /* bb_rpt */
-	62, /* wd_rel */
-	160, /* cpu_io */
-	1084, /* tx_rpt */
-	0, /* h2d */
-};
-
-/* 8852B PCIE AB */
-static struct ple_quota_t ple_qt56 = {
-	147, /* cmac0_tx */
-	0, /* cmac1_tx */
-	32, /* c2h */
-	20, /* h2c */
-	68, /* wcpu */
-	13, /* mpdu_proc */
-	233, /* cmac0_dma */
-	0, /* cma1_dma */
-	87, /* bb_rpt */
-	14, /* wd_rel */
-	24, /* cpu_io */
-	0, /* tx_rpt */
-	0, /* h2d */
-};
-
 /* PCIE SCC TURBO */
 static struct ple_quota_t ple_qt57 = {
 	147, /* cmac0_tx */
@@ -1841,7 +1715,9 @@ static struct ple_quota_t ple_qt58 = {
 	24, /* cpu_io */
 	0, /* tx_rpt */
 };
+#endif
 
+#if MAC_AX_USB_SUPPORT
 /* USB2.0 52B TURBO */
 static struct ple_quota_t ple_qt61 = {
 	858, /* cmac0_tx */
@@ -1926,6 +1802,7 @@ static struct ple_quota_t ple_qt65 = {
 	1956, /* tx_rpt */
 	0, /* h2d */
 };
+#endif
 
 /* SDIO SCC TURBO */
 static struct ple_quota_t ple_qt66 = {
@@ -1961,6 +1838,7 @@ static struct ple_quota_t ple_qt67 = {
 	0, /* h2d */
 };
 
+#if MAC_AX_PCIE_SUPPORT
 /* LA PCIE 8852C modified*/
 static struct ple_quota_t ple_qt68 = {
 	104, /* cmac0_tx */
@@ -2028,7 +1906,9 @@ static struct ple_quota_t ple_qt71 = {
 	193, /* tx_rpt */
 	190, /* h2d */
 };
+#endif
 
+#if MAC_AX_USB_SUPPORT
 /* USB2.0 52B SCC*/
 static struct ple_quota_t ple_qt72 = {
 	130, /* cmac0_tx */
@@ -2096,7 +1976,9 @@ static struct ple_quota_t ple_qt75 = {
 	0, /* tx_rpt */
 	0, /* h2d */
 };
+#endif
 
+#if MAC_AX_PCIE_SUPPORT
 /* LA PCIE 8192XB modified*/
 static struct ple_quota_t ple_qt76 = {
 	104, /* cmac0_tx */
@@ -2130,7 +2012,9 @@ static struct ple_quota_t ple_qt77 = {
 	16, /* tx_rpt */
 	0, /* h2d */
 };
+#endif
 
+#if MAC_AX_USB_SUPPORT
 /* USB2.0 52C */
 static struct ple_quota_t ple_qt78 = {
 	1560, /* cmac0_tx */
@@ -2249,6 +2133,7 @@ static struct ple_quota_t ple_qt84 = {
 	0, /* tx_rpt */
 	0, /* h2d */
 };
+#endif
 
 #if MAC_AX_PCIE_SUPPORT
 static struct dle_mem_t dle_mem_pcie_8852a[] = {
