@@ -96,10 +96,6 @@ void halbb_set_crc32_cnt2_rate(struct bb_info *bb, u16 rate_idx)
 void halbb_set_crc32_cnt3_format(struct bb_info *bb, u8 usr_type_sel)
 {
 	struct bb_stat_info *stat_t = &bb->bb_stat_i;
-	struct bb_fa_info *fa = &stat_t->bb_fa_i;
-	struct bb_cca_info *cca = &stat_t->bb_cca_i;
-	struct bb_crc_info *crc = &stat_t->bb_crc_i;
-	struct bb_crc2_info *crc2 = &stat_t->bb_crc2_i;
 	struct bb_usr_set_info *usr_set = &stat_t->bb_usr_set_i;
 	struct bb_stat_cr_info *cr = &bb->bb_stat_i.bb_stat_cr_i;
 	u32 reg_addr = cr->intf_r_mac_hdr_type;
@@ -185,10 +181,8 @@ void halbb_crc32_cnt_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 	struct bb_stat_info *stat_t = &bb->bb_stat_i;
 	char help[] = "-h";
 	u32 var[10] = {0};
-	u8 i = 0;
 	u16 rate = 0x0;
 	u8 usr_type_sel = 0;
-	enum phl_phy_idx bkp_phy_idx = bb->bb_phy_idx;
 
 	if ((_os_strcmp(input[1], help) == 0)) {
 		BB_DBG_CNSL(*_out_len, *_used, output + *_used, *_out_len - *_used,
@@ -308,9 +302,6 @@ void halbb_crc32_cnt_dbg(struct bb_info *bb, char input[][16], u32 *_used,
 void halbb_print_cnt3(struct bb_info *bb, enum phl_phy_idx phy_idx)
 {
 	struct bb_stat_info *stat_t = &bb->bb_stat_i;
-	struct bb_fa_info *fa = &stat_t->bb_fa_i;
-	struct bb_cca_info *cca = &stat_t->bb_cca_i;
-	struct bb_crc_info *crc = &stat_t->bb_crc_i;
 	struct bb_usr_set_info *usr_set = &stat_t->bb_usr_set_i;
 	struct bb_crc2_info *crc2 = &stat_t->bb_crc2_i;
 	//char dbg_buf[HALBB_SNPRINT_SIZE] = {0};
@@ -502,10 +493,8 @@ void halbb_print_cnt(struct bb_info *bb, bool cck_en, enum phl_phy_idx phy_idx, 
 	struct bb_legacy_fa_info *legacy_fa = &fa->bb_legacy_fa_i;
 	struct bb_ht_fa_info *ht_fa = &fa->bb_ht_fa_i;
 	struct bb_vht_fa_info *vht_fa = &fa->bb_vht_fa_i;
-	struct bb_he_fa_info *he_fa = &fa->bb_he_fa_i;
 	struct bb_cca_info *cca = &stat_t->bb_cca_i;
 	struct bb_crc_info *crc = &stat_t->bb_crc_i;
-	struct bb_crc2_info *crc2 = &stat_t->bb_crc2_i;
 	struct bb_tx_cnt_info *tx = &stat_t->bb_tx_cnt_i;
 	struct rtw_hal_com_t *hal = bb->hal_com;
 	struct rtw_hal_stat_info *stat_info = &hal->band[bb->bb_phy_idx].stat_info;
@@ -656,7 +645,6 @@ void halbb_cck_cnt_statistics(struct bb_info *bb)
 	struct bb_cck_fa_info *cck_fa = &fa->bb_cck_fa_i;
 	struct bb_cca_info *cca = &stat_t->bb_cca_i;
 	struct bb_crc_info *crc = &stat_t->bb_crc_i;
-	struct bb_crc2_info *crc2 = &stat_t->bb_crc2_i;
 	struct bb_stat_cr_info *cr = &bb->bb_stat_i.bb_stat_cr_i;
 
 	u32 ret_value = 0;
@@ -735,7 +723,6 @@ void halbb_ofdm_cnt_statistics(struct bb_info *bb, enum phl_phy_idx phy_idx)
 	struct bb_legacy_fa_info *legacy_fa = &fa->bb_legacy_fa_i;
 	struct bb_ht_fa_info *ht_fa = &fa->bb_ht_fa_i;
 	struct bb_vht_fa_info *vht_fa = &fa->bb_vht_fa_i;
-	struct bb_he_fa_info *he_fa = &fa->bb_he_fa_i;
 	struct bb_cca_info *cca = &stat_t->bb_cca_i;
 	struct bb_crc_info *crc = &stat_t->bb_crc_i;
 	struct bb_crc2_info *crc2 = &stat_t->bb_crc2_i;
@@ -899,7 +886,6 @@ void halbb_statistics(struct bb_info *bb)
 	struct bb_stat_info *stat_t = &bb->bb_stat_i;
 	struct bb_stat_cr_info *cr = &bb->bb_stat_i.bb_stat_cr_i;
 	//char dbg_buf[HALBB_SNPRINT_SIZE] = {0};
-	u32 tmp = 0;
 	u8 path_a_ch  = 0;
 	u8 path_b_ch = 0;
 	bool cck_en = 0;
@@ -1754,7 +1740,6 @@ static void halbb_pmac_cck_cnt(struct bb_info *bb)
 	struct bb_cck_fa_info *cck_fa = &fa->bb_cck_fa_i;
 	struct bb_cca_info *cca = &stat_t->bb_cca_i;
 	struct bb_crc_info *crc = &stat_t->bb_crc_i;
-	struct bb_crc2_info *crc2 = &stat_t->bb_crc2_i;
 	struct bb_stat_cr_info *cr = &bb->bb_stat_i.bb_stat_cr_i;
 	u32 ret_value = 0;
 
@@ -1860,7 +1845,6 @@ static void halbb_pmac_ofdm_cnt(struct bb_info *bb)
 	struct bb_legacy_fa_info *legacy_fa = &fa->bb_legacy_fa_i;
 	struct bb_ht_fa_info *ht_fa = &fa->bb_ht_fa_i;
 	struct bb_vht_fa_info *vht_fa = &fa->bb_vht_fa_i;
-	struct bb_he_fa_info *he_fa = &fa->bb_he_fa_i;
 	struct bb_cca_info *cca = &stat_t->bb_cca_i;
 	struct bb_crc_info *crc = &stat_t->bb_crc_i;
 	struct bb_crc2_info *crc2 = &stat_t->bb_crc2_i;
@@ -1999,10 +1983,8 @@ static void halbb_pmac_print_cnt(struct bb_info *bb, bool cck_en)
 	struct bb_legacy_fa_info *legacy_fa = &fa->bb_legacy_fa_i;
 	struct bb_ht_fa_info *ht_fa = &fa->bb_ht_fa_i;
 	struct bb_vht_fa_info *vht_fa = &fa->bb_vht_fa_i;
-	struct bb_he_fa_info *he_fa = &fa->bb_he_fa_i;
 	struct bb_cca_info *cca = &stat_t->bb_cca_i;
 	struct bb_crc_info *crc = &stat_t->bb_crc_i;
-	struct bb_crc2_info *crc2 = &stat_t->bb_crc2_i;
 	struct bb_tx_cnt_info *tx = &stat_t->bb_tx_cnt_i;
 	struct rtw_hal_stat_info *stat_info = &bb->hal_com->band[bb->bb_phy_idx].stat_info;
 
@@ -2187,9 +2169,6 @@ static void halbb_pmac_print_cnt2(struct bb_info *bb)
 static void halbb_pmac_print_cnt3(struct bb_info *bb)
 {
 	struct bb_stat_info *stat_t = &bb->bb_stat_i;
-	struct bb_fa_info *fa = &stat_t->bb_fa_i;
-	struct bb_cca_info *cca = &stat_t->bb_cca_i;
-	struct bb_crc_info *crc = &stat_t->bb_crc_i;
 	struct bb_usr_set_info *usr_set = &stat_t->bb_usr_set_i;
 	struct bb_crc2_info *crc2 = &stat_t->bb_crc2_i;
 	u32 tmp = 0;
@@ -2329,10 +2308,6 @@ void halbb_pmac_statistics_io_en(struct bb_info *bb)
 
 void halbb_pmac_statistics(struct bb_info *bb)
 {
-	enum phl_phy_idx phy_idx = bb->bb_phy_idx;
-	u8 fc = bb->hal_com->band[phy_idx].cur_chandef.center_ch;
-	bool cck_en = false;
-
 	if (!(bb->support_ability & BB_FA_CNT))
 		return;
 	
