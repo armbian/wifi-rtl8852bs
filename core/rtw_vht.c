@@ -1383,7 +1383,7 @@ u32 rtw_restructure_vht_ie(_adapter *padapter, struct _ADAPTER_LINK *padapter_li
 					u8 *in_ie, u8 *out_ie, uint in_len, uint *pout_len, u8 channel)
 {
 	u32	ielen;
-	u8 max_bw;
+	u8 max_bw = CHANNEL_WIDTH_20;
 	u8 oper_ch, oper_bw = CHANNEL_WIDTH_20, oper_offset = CHAN_OFFSET_NO_EXT;
 	u8 *out_vht_op_ie, *ht_op_ie, *vht_cap_ie, *vht_op_ie;
 	enum band_type band = rtw_is_2g_ch(channel) ? BAND_ON_24G : BAND_ON_5G;
