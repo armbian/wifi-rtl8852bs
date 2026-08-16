@@ -5637,16 +5637,15 @@ ssize_t proc_set_tx_sa_query(struct file *file, const char __user *buffer, size_
 		return -EFAULT;
 	}
 
-	if (buffer && !copy_from_user(tmp, buffer, sizeof(tmp))) {
+	if (!buffer || copy_from_user(tmp, buffer, count))
+		return -EFAULT;
+	tmp[count] = '\0';
 
-		int num = sscanf(tmp, "%x", &key_type);
-
-		if (num !=  1) {
-			RTW_INFO("invalid read_reg parameter!\n");
-			return count;
-		}
-		RTW_INFO("0: set sa query request , key_type=%d\n", key_type);
+	if (sscanf(tmp, "%x", &key_type) != 1) {
+		RTW_INFO("invalid read_reg parameter!\n");
+		return count;
 	}
+	RTW_INFO("0: set sa query request , key_type=%d\n", key_type);
 
 	if (MLME_IS_STA(padapter)
 	    && (check_fwstate(pmlmepriv, WIFI_ASOC_STATE) == _TRUE) && SEC_IS_BIP_KEY_INSTALLED(&padapter_link->securitypriv) == _TRUE) {
@@ -5721,16 +5720,15 @@ ssize_t proc_set_tx_deauth(struct file *file, const char __user *buffer, size_t 
 		return -EFAULT;
 	}
 
-	if (buffer && !copy_from_user(tmp, buffer, sizeof(tmp))) {
+	if (!buffer || copy_from_user(tmp, buffer, count))
+		return -EFAULT;
+	tmp[count] = '\0';
 
-		int num = sscanf(tmp, "%x", &key_type);
-
-		if (num !=  1) {
-			RTW_INFO("invalid read_reg parameter!\n");
-			return count;
-		}
-		RTW_INFO("key_type=%d\n", key_type);
+	if (sscanf(tmp, "%x", &key_type) != 1) {
+		RTW_INFO("invalid read_reg parameter!\n");
+		return count;
 	}
+	RTW_INFO("key_type=%d\n", key_type);
 	if (key_type > 4)
 		return count;
 
@@ -5815,16 +5813,15 @@ ssize_t proc_set_tx_auth(struct file *file, const char __user *buffer, size_t co
 		return -EFAULT;
 	}
 
-	if (buffer && !copy_from_user(tmp, buffer, sizeof(tmp))) {
+	if (!buffer || copy_from_user(tmp, buffer, count))
+		return -EFAULT;
+	tmp[count] = '\0';
 
-		int num = sscanf(tmp, "%x", &tx_auth);
-
-		if (num !=  1) {
-			RTW_INFO("invalid read_reg parameter!\n");
-			return count;
-		}
-		RTW_INFO("1: setnd auth, 2: send assoc request. tx_auth=%d\n", tx_auth);
+	if (sscanf(tmp, "%x", &tx_auth) != 1) {
+		RTW_INFO("invalid read_reg parameter!\n");
+		return count;
 	}
+	RTW_INFO("1: setnd auth, 2: send assoc request. tx_auth=%d\n", tx_auth);
 
 	if (MLME_IS_STA(padapter)
 	    && (check_fwstate(pmlmepriv, WIFI_ASOC_STATE) == _TRUE)) {
