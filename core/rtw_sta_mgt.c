@@ -1393,7 +1393,7 @@ struct sta_info *rtw_get_bcmc_stainfo(_adapter *padapter, struct _ADAPTER_LINK *
 u16 rtw_aid_alloc(_adapter *adapter, struct sta_info *sta)
 {
 	struct sta_priv *stapriv = &adapter->stapriv;
-	u16 aid, i, used_cnt = 0;
+	u16 aid = 0, i, used_cnt = 0;
 
 	for (i = 0; i < stapriv->max_aid; i++) {
 		aid = ((i + stapriv->started_aid - 1) % stapriv->max_aid) + 1;

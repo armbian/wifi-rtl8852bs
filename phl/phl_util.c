@@ -177,7 +177,7 @@ void pq_del_node(void *d, struct phl_queue *q, _os_list *obj, enum lock_type typ
 u8 pq_insert(void *d, struct phl_queue *q, enum lock_type type, void *priv, _os_list *input,
 		  u8 (*pq_predicate)(void *d, void *priv,_os_list *input, _os_list *obj))
 {
-	_os_spinlockfg sp_flags;
+	_os_spinlockfg sp_flags = 0;
 	_os_list *obj = NULL;
 
 	_os_spinlock(d, &q->lock, type, &sp_flags);
