@@ -125,7 +125,7 @@ static int proc_get_drv_cfg(struct seq_file *m, void *v)
 
 static ssize_t proc_set_log_level(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
-	char tmp[32];
+	char tmp[32] = {0};
 #ifdef CONFIG_RTW_DEBUG
 	int log_level;
 #endif
@@ -174,7 +174,7 @@ static int proc_get_country_chplan_map(struct seq_file *m, void *v)
 
 static ssize_t proc_set_country_chplan_map(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
-	char tmp[32];
+	char tmp[32] = {0};
 	int regd_info_val;
 
 	if (count < 1)
@@ -760,7 +760,7 @@ ssize_t proc_set_led_config(struct file *file, const char __user *buffer, size_t
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 strategy;
 	u8 iface_en_mask;
 
@@ -803,7 +803,7 @@ static ssize_t proc_set_aid_status(struct file *file, const char __user *buffer,
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct sta_priv *stapriv = &adapter->stapriv;
 
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 rr;
 	u16 started_aid;
 
@@ -846,7 +846,7 @@ static ssize_t proc_set_ap_b2u_flags(struct file *file, const char __user *buffe
 {
 	struct net_device *dev = data;
 	_adapter *adapter = rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 
 	if (count < 1)
 		return -EFAULT;
@@ -926,7 +926,7 @@ static ssize_t proc_set_backop_flags_sta(struct file *file, const char __user *b
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct mlme_ext_priv *mlmeext = &adapter->mlmeextpriv;
 
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 flags;
 
 	if (count < 1)
@@ -966,7 +966,7 @@ static ssize_t proc_set_backop_flags_ap(struct file *file, const char __user *bu
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct mlme_ext_priv *mlmeext = &adapter->mlmeextpriv;
 
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 flags;
 
 	if (count < 1)
@@ -1007,7 +1007,7 @@ static ssize_t proc_set_backop_flags_mesh(struct file *file, const char __user *
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct mlme_ext_priv *mlmeext = &adapter->mlmeextpriv;
 
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 flags;
 
 	if (count < 1)
@@ -1267,7 +1267,7 @@ static ssize_t proc_set_false_alarm_accumulated(struct file *file,
 	struct _ADAPTER_LINK *alink = GET_PRIMARY_LINK(padapter);
 	struct rtw_wifi_role_link_t *wrlink = alink->wrlink;
 	enum phl_band_idx hw_band = wrlink->hw_band;
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 false_clr;
 
 	if (count < 1)
@@ -1682,7 +1682,7 @@ static ssize_t proc_set_chan_plan(struct file *file, const char __user *buffer, 
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u16 chplan = RTW_CHPLAN_UNSPECIFIED;
 	u16 chplan_6g = RTW_CHPLAN_6G_UNSPECIFIED;
 
@@ -1727,7 +1727,7 @@ static ssize_t proc_set_country_code(struct file *file, const char __user *buffe
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	char alpha2[2];
 	int num;
 
@@ -1803,7 +1803,7 @@ static int proc_get_cap_spt_op_class_ch(struct seq_file *m, void *v)
 
 static ssize_t proc_set_cap_spt_op_class_ch(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
-	char tmp[32];
+	char tmp[32] = {0};
 
 	if (count < 1)
 		return -EFAULT;
@@ -1835,7 +1835,7 @@ static int proc_get_reg_spt_op_class_ch(struct seq_file *m, void *v)
 
 static ssize_t proc_set_reg_spt_op_class_ch(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
-	char tmp[32];
+	char tmp[32] = {0};
 
 	if (count < 1)
 		return -EFAULT;
@@ -1867,7 +1867,7 @@ static int proc_get_cur_spt_op_class_ch(struct seq_file *m, void *v)
 
 static ssize_t proc_set_cur_spt_op_class_ch(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
-	char tmp[32];
+	char tmp[32] = {0};
 
 	if (count < 1)
 		return -EFAULT;
@@ -2129,7 +2129,7 @@ static ssize_t proc_set_ch_sel_policy(struct file *file, const char __user *buff
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct rf_ctl_t *rfctl = adapter_to_rfctl(adapter);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 within_sb;
 	int num;
 
@@ -2186,7 +2186,7 @@ static ssize_t proc_set_dfs_test_case(struct file *file, const char __user *buff
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct rf_ctl_t *rfctl = adapter_to_rfctl(adapter);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 radar_detect_trigger_non;
 	u8 choose_dfs_ch_first;
 
@@ -2214,7 +2214,7 @@ static ssize_t proc_set_update_non_ocp(struct file *file, const char __user *buf
 {
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 band, ch, bw = CHANNEL_WIDTH_20, offset = CHAN_OFFSET_NO_EXT;
 	int ms = -1;
 
@@ -2245,7 +2245,7 @@ static ssize_t proc_set_radar_detect(struct file *file, const char __user *buffe
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct rf_ctl_t *rfctl = adapter_to_rfctl(adapter);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 fake_radar_detect_cnt = 0;
 
 	if (count < 1)
@@ -2286,7 +2286,7 @@ static ssize_t proc_set_dfs_ch_sel_e_flags(struct file *file, const char __user 
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct rf_ctl_t *rfctl = adapter_to_rfctl(adapter);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 e_flags;
 	int num;
 
@@ -2327,7 +2327,7 @@ static ssize_t proc_set_dfs_ch_sel_d_flags(struct file *file, const char __user 
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct rf_ctl_t *rfctl = adapter_to_rfctl(adapter);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 d_flags;
 	int num;
 
@@ -2369,7 +2369,7 @@ static ssize_t proc_set_dfs_slave_with_rd(struct file *file, const char __user *
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct rf_ctl_t *rfctl = adapter_to_rfctl(adapter);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 rd;
 	int num;
 
@@ -2420,7 +2420,7 @@ static ssize_t proc_set_rx_ampdu_size_limit(struct file *file, const char __user
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv *regsty = adapter_to_regsty(adapter);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 nss;
 	u8 limit_by_bw[4] = {0xFF};
 
@@ -2464,7 +2464,7 @@ static int proc_get_rx_chk_limit(struct seq_file *m, void *v)
 
 static ssize_t proc_set_rx_chk_limit(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
-	char tmp[32];
+	char tmp[32] = {0};
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	int rx_chk_limit;
@@ -2505,7 +2505,7 @@ static ssize_t proc_set_udpport(struct file *file, const char __user *buffer, si
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct recv_info *precvinfo = &(padapter->recvinfo);
 	int sink_udpport = 0;
-	char tmp[32];
+	char tmp[32] = {0};
 
 
 	if (!padapter)
@@ -2733,7 +2733,7 @@ static ssize_t proc_set_change_bss_chbw(struct file *file, const char __user *bu
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	int i;
-	char tmp[32];
+	char tmp[32] = {0};
 	s16 ch;
 	s8 bw = REQ_BW_NONE, offset = REQ_OFFSET_NONE, band = REQ_BAND_NONE;
 	u8 ifbmp = 0;
@@ -2832,7 +2832,7 @@ static ssize_t proc_set_tx_bw_mode(struct file *file, const char __user *buffer,
 {
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 bw_mode;
 
 	if (count < 1)
@@ -2880,7 +2880,7 @@ static ssize_t proc_set_ecsa_allow_reason(struct file *file,
 	struct net_device *dev = data;
 	_adapter *a = (_adapter *)rtw_netdev_priv(dev);
 	struct core_ecsa_info *ecsa_info = &(a->ecsa_info);
-	char tmp[12];
+	char tmp[12] = {0};
 	u8 reason;
 
 	if (count < 1)
@@ -3181,7 +3181,7 @@ static ssize_t proc_set_skip_band(struct file *file, const char __user *buffer, 
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[6];
+	char tmp[6] = {0};
 	u8 skip_band;
 
 	if (count < 1)
@@ -3262,7 +3262,7 @@ static ssize_t proc_set_acs(struct file *file, const char __user *buffer, size_t
 #ifdef CONFIG_RTW_ACS_DBG
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 acs_state = 0;
 	u16 scan_ch_ms= 0, acs_scan_ch_ms = 0;
 	u8 scan_type = SCAN_ACTIVE, igi= 0, bw = 0;
@@ -3359,7 +3359,7 @@ static ssize_t proc_set_rsvd_page_info(struct file *file, const char __user *buf
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 page_offset, page_num;
 
 	if (count < 2)
@@ -3394,7 +3394,7 @@ static ssize_t proc_set_fifo_info(struct file *file, const char __user *buffer, 
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 fifo_sel = 0;
 	u32 fifo_addr = 0;
 	u32 fifo_size = 0;
@@ -3535,7 +3535,7 @@ static ssize_t proc_set_dynamic_agg_enable(struct file *file, const char __user 
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	int enable = 0, i = 0;
 
 	if (count > sizeof(tmp)) {
@@ -3595,7 +3595,7 @@ static ssize_t proc_set_wds_en(struct file *file, const char __user *buffer, siz
 {
 	struct net_device *dev = data;
 	_adapter *adapter = rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 
 	if (!(MLME_STATE(adapter) & (WIFI_AP_STATE | WIFI_STATION_STATE)))
 		return -EFAULT;
@@ -3623,7 +3623,7 @@ static ssize_t proc_set_sta_wds_en(struct file *file, const char __user *buffer,
 {
 	struct net_device *dev = data;
 	_adapter *adapter = rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 
 	if (count < 1)
 		return -EFAULT;
@@ -3699,7 +3699,7 @@ static ssize_t proc_set_multi_ap_opmode(struct file *file, const char __user *bu
 {
 	struct net_device *dev = data;
 	_adapter *adapter = rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 
 	if (!(MLME_STATE(adapter) & (WIFI_AP_STATE | WIFI_STATION_STATE)))
 		return -EFAULT;
@@ -3951,7 +3951,7 @@ static ssize_t proc_set_ch_util_threshold(struct file *file, const char __user *
 {
 	struct net_device *dev = data;
 	_adapter *adapter = GET_PRIMARY_ADAPTER(rtw_netdev_priv(dev));
-	char tmp[4];
+	char tmp[4] = {0};
 
 	if (count < 1)
 		return -EFAULT;
@@ -4010,7 +4010,7 @@ static ssize_t proc_set_mesh_acnode_prevent(struct file *file, const char __user
 {
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 
 	if (count < 1)
 		return -EFAULT;
@@ -4055,7 +4055,7 @@ static ssize_t proc_set_mesh_offch_cand(struct file *file, const char __user *bu
 {
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 
 	if (count < 1)
 		return -EFAULT;
@@ -4100,7 +4100,7 @@ static ssize_t proc_set_mesh_peer_blacklist(struct file *file, const char __user
 {
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 
 	if (count < 1)
 		return -EFAULT;
@@ -4142,7 +4142,7 @@ static ssize_t proc_set_mesh_cto_mgate_require(struct file *file, const char __u
 {
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 
 	if (count < 1)
 		return -EFAULT;
@@ -4189,7 +4189,7 @@ static ssize_t proc_set_mesh_cto_mgate_blacklist(struct file *file, const char _
 {
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 
 	if (count < 1)
 		return -EFAULT;
@@ -4285,7 +4285,7 @@ static ssize_t proc_set_mesh_b2u_flags(struct file *file, const char __user *buf
 {
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 
 	if (count < 1)
 		return -EFAULT;
@@ -4337,7 +4337,7 @@ static ssize_t proc_set_mesh_gate_timeout(struct file *file, const char __user *
 {
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 
 	if (count < 1)
 		return -EFAULT;
@@ -4402,7 +4402,7 @@ proc_set_peer_alive_based_preq(struct file *file, const char __user *buffer,
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv  *rp = &adapter->registrypriv;
-	char tmp[8];
+	char tmp[8] = {0};
 	int num = 0;
 	u8 enable = 0;
 
@@ -4453,7 +4453,7 @@ static ssize_t proc_set_scan_interval_thr(struct file *file,
 	struct net_device *dev = data;
 	_adapter *adapter= (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv *rp = &adapter->registrypriv;
-	char tmp[12];
+	char tmp[12] = {0};
 	int num = 0;
 	u32 thr = 0;
 
@@ -4500,7 +4500,7 @@ static ssize_t proc_set_scan_deny(struct file *file, const char __user *buffer,
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
-	char tmp[8];
+	char tmp[8] = {0};
 	int num = 0;
 	int enable = 0;
 
@@ -4560,7 +4560,7 @@ static ssize_t proc_set_go_hidden_ssid_mode(struct file *file, const char __user
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
-	char tmp[32];
+	char tmp[32] = {0};
 	int go_hidden_ssid_mode, feature_bit;
 
 	if (!padapter)
@@ -4631,7 +4631,7 @@ static ssize_t proc_set_amsdu_mode(struct file *file, const char __user *buffer,
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 mode;
 
 	if (count < 1)
@@ -4692,7 +4692,7 @@ static ssize_t proc_set_vendor_ie_filter(struct file *file, const char __user *b
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct mlme_priv *mlmepriv = &adapter->mlmepriv;
-	char tmp[MAX_VENDOR_IE_PARAM_LEN];
+	char tmp[MAX_VENDOR_IE_PARAM_LEN] = {0};
 	u8 vendor_ie_num = 0;
 	u8 *vendor_ie;
 	u8 enable;
@@ -4755,7 +4755,7 @@ static ssize_t proc_set_enable_dfs(struct file *file, const char __user *buffer,
 	struct net_device *dev = data;
 	_adapter *adapter = rtw_netdev_priv(dev);
 	char *alpha2;
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 enable_dfs = 0;
 
 	if (count < 1) {
