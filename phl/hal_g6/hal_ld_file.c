@@ -1899,19 +1899,13 @@ _hal_dl_para_file(struct rtw_phl_com_t *phl_com,
 		}
 	} else if (para_info->para_src == RTW_PARA_SRC_EXTNAL) {
 		char para_path[MAX_PATH_LEN];
-		/* Use path in para_info if it is not empty. */
-		if (para_info->para_path[0] != 0) {
-			_os_snprintf(para_path, MAX_PATH_LEN,
-				     "%s%s", para_info->para_path,
-				     file_name);
-		} else {
-			_os_snprintf(para_path, MAX_PATH_LEN, "%s%s%s%s",
-				     hal_phy_folder, ic_name, _os_path_sep,
-				     file_name);
-		}
 
-		/* Determine parameter folder path */
-		if (para_info->hal_phy_folder != NULL) {
+		/* Determine parameter folder path: a caller-supplied
+		 * para_info->para_path takes precedence over hal_phy_folder */
+		if (para_info->para_path[0] != 0) {
+			_os_snprintf(hal_phy_folder, MAX_PATH_LEN, "%s",
+						 para_info->para_path);
+		} else if (para_info->hal_phy_folder != NULL) {
 			_os_snprintf(hal_phy_folder, MAX_PATH_LEN, "%s",
 						 para_info->hal_phy_folder);
 		} else {
@@ -1943,7 +1937,7 @@ _hal_dl_para_file(struct rtw_phl_com_t *phl_com,
 		}
 
 		/* Generate final parameter file full path */
-		_os_snprintf(para_info->para_path, MAX_PATH_LEN, "%s%s",
+		_os_snprintf(para_path, MAX_PATH_LEN, "%s%s",
 				 hal_phy_folder, para_file_name);
 
 		PHL_TRACE(COMP_PHL_DBG, _PHL_INFO_, "%s:: %s\n",__FUNCTION__,
