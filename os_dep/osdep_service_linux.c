@@ -489,8 +489,13 @@ static int writeFile(struct file *fp, char *buf, int len)
 static int isDirReadable(const char *pathname, u32 *sz)
 {
 	struct path path;
+	int ret;
 
-	return kern_path(pathname, LOOKUP_FOLLOW, &path);
+	ret = kern_path(pathname, LOOKUP_FOLLOW, &path);
+	if (ret == 0)
+		path_put(&path);
+
+	return ret;
 }
 
 /*
