@@ -812,6 +812,7 @@ line_start:
 		} else if (loadingstage == LD_STAGE_COLUMN_DEFINE) {
 			/* read "## #5# " */
 			if (sz_line[0] != '#' || sz_line[1] != '#')
+				continue;
 
 			/* skip the space */
 			i = 2;
@@ -1312,6 +1313,7 @@ line_start:
 		} else if (loadingstage == LD_STAGE_COLUMN_DEFINE) {
 			/* read "## #5# " */
 			if (sz_line[0] != '#' || sz_line[1] != '#')
+				continue;
 
 			/* skip the space */
 			i = 2;
