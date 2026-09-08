@@ -233,28 +233,34 @@ void debug_dump_mac_address(u8 *mac_addr);
 
 #else  /* CONFIG_RTW_DEBUG */
 
-#define PHL_TRACE(comp, level, fmt, ...) do {} while (0)
-#define PHL_TRACE_LMT(comp, level, fmt, ...) do {} while (0)
-#define PHL_PRINT(fmt, ...) do {} while (0)
-#define PHL_PRINT_LMT(fmt, ...) do {} while (0)
-#define PHL_ERR(fmt, ...) do {} while (0)
-#define PHL_ERR_LMT(fmt, ...) do {} while (0)
-#define PHL_WARN(fmt, ...) do {} while (0)
-#define PHL_WARN_LMT(fmt, ...) do {} while (0)
-#define PHL_INFO(fmt, ...) do {} while (0)
-#define PHL_INFO_LMT(fmt, ...) do {} while (0)
-#define PHL_DBG(fmt, ...) do {} while (0)
-#define PHL_DBG_LMT(fmt, ...) do {} while (0)
-#define PHL_DATA(fmt, ...) do {} while (0)
-#define PHL_DATA_LMT(comp, level, fmt, ...) do {} while (0)
-#define PHL_ASSERT(fmt, ...) do {} while (0)
+#define PHL_TRACE(comp, level, fmt, ...) \
+	do { if (0) no_printk(fmt, ##__VA_ARGS__); } while (0)
+#define PHL_TRACE_LMT(comp, level, fmt, ...) \
+	do { if (0) no_printk(fmt, ##__VA_ARGS__); } while (0)
+#define PHL_PRINT(fmt, ...) no_printk(fmt, ##__VA_ARGS__)
+#define PHL_PRINT_LMT(fmt, ...) no_printk(fmt, ##__VA_ARGS__)
+#define PHL_ERR(fmt, ...) no_printk(fmt, ##__VA_ARGS__)
+#define PHL_ERR_LMT(fmt, ...) no_printk(fmt, ##__VA_ARGS__)
+#define PHL_WARN(fmt, ...) no_printk(fmt, ##__VA_ARGS__)
+#define PHL_WARN_LMT(fmt, ...) no_printk(fmt, ##__VA_ARGS__)
+#define PHL_INFO(fmt, ...) no_printk(fmt, ##__VA_ARGS__)
+#define PHL_INFO_LMT(fmt, ...) no_printk(fmt, ##__VA_ARGS__)
+#define PHL_DBG(fmt, ...) no_printk(fmt, ##__VA_ARGS__)
+#define PHL_DBG_LMT(fmt, ...) no_printk(fmt, ##__VA_ARGS__)
+#define PHL_DATA(comp, level, fmt, ...) \
+	do { if (0) no_printk(fmt, ##__VA_ARGS__); } while (0)
+#define PHL_DATA_LMT(comp, level, fmt, ...) \
+	do { if (0) no_printk(fmt, ##__VA_ARGS__); } while (0)
+#define PHL_ASSERT(fmt, ...) no_printk(fmt, ##__VA_ARGS__)
 #define FUNCIN() do {} while (0)
 #define FUNCOUT() do {} while (0)
-#define FUNCIN_WSTS(_sts) do {} while (0)
-#define FUNCOUT_WSTS(_sts) do {} while (0)
-#define debug_dump_buf(_buf, _buf_len, _prefix) do {} while (0)
-#define debug_dump_data(_buf, _buf_len, _prefix) do {} while (0)
-#define debug_dump_mac_address(_mac_addr) do {} while (0)
+#define FUNCIN_WSTS(_sts) do { if (0) (void)(_sts); } while (0)
+#define FUNCOUT_WSTS(_sts) do { if (0) (void)(_sts); } while (0)
+#define debug_dump_buf(_buf, _buf_len, _prefix) \
+	do { if (0) { (void)(_buf); (void)(_buf_len); (void)(_prefix); } } while (0)
+#define debug_dump_data(_buf, _buf_len, _prefix) \
+	do { if (0) { (void)(_buf); (void)(_buf_len); (void)(_prefix); } } while (0)
+#define debug_dump_mac_address(_mac_addr) do { if (0) (void)(_mac_addr); } while (0)
 #define rt_alloc_dbg_buf(_phl, _buf, _buf_size, _file_name, _line_num, \
 			_func_name) do {} while (0)
 #define rt_free_dbg_buf(_phl, _buf, _buf_size, _file_name, _line_num, \

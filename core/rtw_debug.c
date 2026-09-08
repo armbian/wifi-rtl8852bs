@@ -6816,7 +6816,7 @@ inline void RTW_BUF_DUMP_SEL(uint _loglevel, void *sel, u8 *_titlestring,
 	if (_loglevel <= rtw_drv_log_level) {
 		if (_titlestring) {
 			if (sel == RTW_DBGDUMP)
-				RTW_PRINT("");
+				RTW_PRINT("%s", "");
 			_RTW_PRINT_SEL(sel, "%s", _titlestring);
 			if (_hexdatalen >= RTW_BUFDUMP_BSIZE)
 				_RTW_PRINT_SEL(sel, "\n");
@@ -6825,7 +6825,7 @@ inline void RTW_BUF_DUMP_SEL(uint _loglevel, void *sel, u8 *_titlestring,
 		for (__i = 0; __i < _hexdatalen; __i++) {
 			if (((__i % RTW_BUFDUMP_BSIZE) == 0) && (_hexdatalen >= RTW_BUFDUMP_BSIZE)) {
 				if (sel == RTW_DBGDUMP)
-					RTW_PRINT("");
+					RTW_PRINT("%s", "");
 				if (_idx_show)
 					_RTW_PRINT_SEL(sel, "0x%03X: ", __i);
 			}
@@ -6846,7 +6846,7 @@ inline void RTW_BUF_DUMP_SEL_ALWAYS(void *sel, u8 *_titlestring,
 
 	if (_titlestring) {
 		if (sel == RTW_DBGDUMP)
-			RTW_PRINT("");
+			RTW_PRINT("%s", "");
 		_RTW_PRINT_SEL(sel, "%s", _titlestring);
 		if (_hexdatalen >= RTW_BUFDUMP_BSIZE)
 			_RTW_PRINT_SEL(sel, "\n");
@@ -6855,7 +6855,7 @@ inline void RTW_BUF_DUMP_SEL_ALWAYS(void *sel, u8 *_titlestring,
 	for (__i = 0; __i < _hexdatalen; __i++) {
 		if (((__i % RTW_BUFDUMP_BSIZE) == 0) && (_hexdatalen >= RTW_BUFDUMP_BSIZE)) {
 			if (sel == RTW_DBGDUMP)
-				RTW_PRINT("");
+				RTW_PRINT("%s", "");
 			if (_idx_show)
 				_RTW_PRINT_SEL(sel, "0x%03X: ", __i);
 		}
