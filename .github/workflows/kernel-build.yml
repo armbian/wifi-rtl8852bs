@@ -9,9 +9,9 @@ permissions:
 
 on:
   push:
-    branches: [ master, develop ]
+    branches: [ main, workflow ]
   pull_request:
-    branches: [ master, develop ]
+    branches: [ main, workflow ]
   workflow_dispatch:
 
 jobs:
@@ -21,10 +21,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # family = kernel config family (config/kernel/linux-<family>-<branch>.config).
-        # nanopi-m5 is BOARDFAMILY rk35xx, but rk35xx only defines vendor/legacy
-        # kernel configs; its current/edge branches resolve to the rockchip64
-        # family config, so those cells build with the rockchip64 fragment.
         include:
           - board: bananapif3
             branch: current
