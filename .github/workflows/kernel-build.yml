@@ -1,0 +1,113 @@
+# RTL8852BS WiFi Driver - Armbian Kernel Build Tests
+# Uses Armbian build system to compile kernel and test driver
+
+name: Kernel Build (Armbian)
+
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ master, develop ]
+  workflow_dispatch:
+
+jobs:
+  build-armbian-kernel:
+    name: Build Armbian (${{ matrix.board }} ${{ matrix.branch }})
+    runs-on: [self-hosted, x64]
+    strategy:
+      fail-fast: false
+      matrix:
+        # family = kernel config family (config/kernel/linux-<family>-<branch>.config).
+        # nanopi-m5 is BOARDFAMILY rk35xx, but rk35xx only defines vendor/legacy
+        # kernel configs; its current/edge branches resolve to the rockchip64
+        # family config, so those cells build with the rockchip64 fragment.
+        include:
+          - board: bananapif3
+            branch: current
+            family: spacemit
+          - board: bananapif3
+            branch: edge
+            family: spacemit
+          - board: nanopi-m5
+            branch: current
+            family: rockchip64
+          - board: nanopi-m5
+            branch: edge
+            family: rockchip64
+          - board: armsom-sige5
+            branch: vendor
+            family: rk35xx
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Clone or update Armbian build repository
+        run: |
+          BUILD_DIR="/opt/armbian-build-rtl8852bs-${{ runner.name }}"
+          sudo git config --global --add safe.directory "$BUILD_DIR"
+          if [ -d "$BUILD_DIR/.git" ]; then
+            echo "Updating existing Armbian build repository..."
+            cd "$BUILD_DIR"
+            git fetch -q origin
+            sudo git reset -q --hard origin/main
+            sudo git clean -fdx -e cache
+          else
+            echo "Cloning Armbian build repository..."
+            git clone -q --depth 1 https://github.com/armbian/build "$BUILD_DIR"
+          fi
+          echo "::notice::Armbian build repository ready"
+
+      - name: Get commit hash and update Armbian driver reference
+        run: |
+          BUILD_DIR="/opt/armbian-build-rtl8852bs-${{ runner.name }}"
+          COMMIT_SHA="${{ github.event.pull_request.head.sha || github.sha }}"
+          echo "::notice::Using commit: $COMMIT_SHA"
+          sed -i "s/rtl8852bs_ver='commit:[a-f0-9]*/rtl8852bs_ver='commit:$COMMIT_SHA/" "$BUILD_DIR/lib/functions/compilation/patch/drivers_network.sh"
+          grep -q "rtl8852bs_ver='commit:$COMMIT_SHA" "$BUILD_DIR/lib/functions/compilation/patch/drivers_network.sh" \
+            || { echo "::error::Failed to pin driver commit in drivers_network.sh (upstream renamed rtl8852bs_ver?)"; exit 1; }
+
+      - name: Copy workflow files to Armbian build directory
+        run: |
+          BUILD_DIR="/opt/armbian-build-rtl8852bs-${{ runner.name }}"
+          sudo cp "workflow_files/linux-${{ matrix.family }}-${{ matrix.branch }}.config" "$BUILD_DIR/config/kernel/linux-${{ matrix.family }}-${{ matrix.branch }}.config"
+          sudo cp workflow_files/minimal-build-test.sh "$BUILD_DIR/extensions/minimal-build-test.sh"
+          echo "::notice::Copied workflow files"
+
+      - name: Build kernel
+        id: build
+        run: |
+          cd "/opt/armbian-build-rtl8852bs-${{ runner.name }}"
+          ./compile.sh BOARD=${{ matrix.board }} BRANCH=${{ matrix.branch }} kernel KERNEL_GIT=shallow ENABLE_EXTENSIONS=minimal-build-test ARTIFACT_IGNORE_CACHE=yes USE_CCACHE=yes
+
+      - name: Check required modules were built
+        run: |
+          BUILD_DIR="/opt/armbian-build-rtl8852bs-${{ runner.name }}"
+          LOG_FILE=$(ls "$BUILD_DIR/output/logs"/log-kernel-*.log | head -1)
+          echo "::notice::Checking log: $LOG_FILE"
+
+          REQUIRED_MODULES=("8852bs.ko")
+          MISSING_MODULES=()
+
+          for module in "${REQUIRED_MODULES[@]}"; do
+            if grep -q "INSTALL.*$module" "$LOG_FILE"; then
+              echo "::notice::✓ Found $module"
+            else
+              echo "::error::✗ Missing $module"
+              MISSING_MODULES+=("$module")
+            fi
+          done
+
+          if [ ${#MISSING_MODULES[@]} -gt 0 ]; then
+            echo "::error::Build failed: missing modules: ${MISSING_MODULES[*]}"
+            exit 1
+          else
+            echo "::notice::✓ All required modules built successfully"
+          fi
+
+      - name: Clean output folder
+        run: |
+          rm -rf "/opt/armbian-build-rtl8852bs-${{ runner.name }}/output"
+          echo "::notice::Cleaned build output folder"
