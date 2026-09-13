@@ -1,5 +1,16 @@
 # RTL8852BS WiFi Driver - Armbian Kernel Build Tests
 # Uses Armbian build system to compile kernel and test driver
+# This driver is also use in spacemit but only theoretical.
+# At the moment all branches skip via EXTRAWIFI=no
+# "current" includes the driver already, edge has apparently no working SDIO.
+# So the following shall be re-enabled once it makes sense:
+
+#          - board: bananapif3
+#            branch: current
+#            family: spacemit
+#          - board: bananapif3
+#            branch: edge
+#            family: spacemit
 
 name: Kernel Build (Armbian)
 
@@ -22,12 +33,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - board: bananapif3
-            branch: current
-            family: spacemit
-          - board: bananapif3
-            branch: edge
-            family: spacemit
           - board: nanopi-m5
             branch: current
             family: rockchip64
