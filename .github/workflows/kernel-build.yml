@@ -17,7 +17,7 @@ on:
 jobs:
   build-armbian-kernel:
     name: Build Armbian (${{ matrix.board }} ${{ matrix.branch }})
-    runs-on: [self-hosted, x64]
+    runs-on: wifi
     strategy:
       fail-fast: false
       matrix:
