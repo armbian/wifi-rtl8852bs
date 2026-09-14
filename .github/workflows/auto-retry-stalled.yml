@@ -51,6 +51,16 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.ACCESS_TOKEN || github.token }}
+      # Inputs and event data reach the script as environment variables, never
+      # as ${{ }} spliced into the shell source: GitHub expands those before
+      # bash parses the line, so a crafted value would run as code in a job
+      # that holds a token.
+      DISPATCH_RUN_ID: ${{ inputs.run_id }}
+      DISPATCH_IGNORE_THRESHOLD: ${{ inputs.ignore_threshold }}
+      EVENT_NAME: ${{ github.event_name }}
+      WORKFLOW_RUN_ID: ${{ github.event.workflow_run.id }}
+      WORKFLOW_RUN_NAME: ${{ github.event.workflow_run.name }}
+      WORKFLOW_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
       # Auto-retry only when the run is mostly green: more than this percentage of
       # jobs must have succeeded. At or below it, the failures look systemic rather
       # than like runner stalls, so leave it red (raise/lower to taste).
@@ -61,25 +71,37 @@ jobs:
           set -euo pipefail
 
           # Resolve the target run + whether to bypass the threshold, per trigger.
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            RUN_ID="${{ inputs.run_id }}"
-            IGNORE_THRESHOLD="${{ inputs.ignore_threshold }}"
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            RUN_ID="$DISPATCH_RUN_ID"
+            IGNORE_THRESHOLD="$DISPATCH_IGNORE_THRESHOLD"
+            # A run id goes straight into an API path; keep it to digits.
+            case "$RUN_ID" in
+              ''|*[!0-9]*)
+                echo "::error title=Invalid run_id::'${RUN_ID}' is not a numeric run id."
+                exit 1 ;;
+            esac
             echo "Manual dispatch -> run ${RUN_ID} (ignore_threshold=${IGNORE_THRESHOLD})."
           else
-            RUN_ID="${{ github.event.workflow_run.id }}"
+            RUN_ID="$WORKFLOW_RUN_ID"
             IGNORE_THRESHOLD="false"
-            echo "Auto -> run '${{ github.event.workflow_run.name }}' #${RUN_ID} (attempt ${{ github.event.workflow_run.run_attempt }})."
+            echo "Auto -> run '${WORKFLOW_RUN_NAME}' #${RUN_ID} (attempt ${WORKFLOW_RUN_ATTEMPT})."
           fi
 
-          # Count total and failed jobs in the latest attempt (paginate; 200+ jobs
-          # possible). One object per page, then slurp+sum across pages.
+          # Count total, succeeded and failed jobs in the latest attempt
+          # (paginate; 200+ jobs possible). One object per page, then
+          # slurp+sum across pages.
+          #
+          # succeeded is counted, not derived as total-failed: that treated
+          # cancelled, timed_out, skipped and neutral jobs as successes, so a
+          # run where most jobs timed out still read as "mostly green" and
+          # spent a retry.
           jobs_json="$(gh api --paginate "repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}/jobs" \
-            --jq '{total: (.jobs | length), failed: ([.jobs[] | select(.conclusion == "failure")] | length)}')"
+            --jq '{total: (.jobs | length), succeeded: ([.jobs[] | select(.conclusion == "success")] | length), failed: ([.jobs[] | select(.conclusion == "failure")] | length)}')"
           total="$(jq -s '[.[].total] | add // 0' <<<"$jobs_json")"
+          succeeded="$(jq -s '[.[].succeeded] | add // 0' <<<"$jobs_json")"
           failed="$(jq -s '[.[].failed] | add // 0' <<<"$jobs_json")"
-          succeeded=$(( total - failed ))
 
-          echo "Run ${RUN_ID} -> ${succeeded}/${total} jobs succeeded, ${failed} failed."
+          echo "Run ${RUN_ID} -> ${succeeded}/${total} jobs succeeded, ${failed} failed, $(( total - succeeded - failed )) neither."
 
           if [ "$failed" -eq 0 ]; then
             echo "No failed jobs — nothing to re-run."
