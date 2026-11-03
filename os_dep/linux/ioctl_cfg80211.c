@@ -1822,7 +1822,9 @@ static int cfg80211_rtw_add_key(struct wiphy *wiphy, RTW_CFG80211_DEV_PARAM_TYPE
 	, int link_id
 #endif
 	, u8 key_index
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) || defined(COMPAT_KERNEL_RELEASE)
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 4, 0))
+	, enum nl80211_key_type type
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) || defined(COMPAT_KERNEL_RELEASE)
 	, bool pairwise
 #endif
 	, const u8 *mac_addr, struct key_params *params)
@@ -1833,6 +1835,9 @@ static int cfg80211_rtw_add_key(struct wiphy *wiphy, RTW_CFG80211_DEV_PARAM_TYPE
 	int ret = 0;
 	_adapter *padapter = RTW_CFG80211_GET_ADAPTER(RTW_CFG80211_DEV_PARAM_NAME);
 	struct net_device *ndev = RTW_CFG80211_GET_NETDEV(RTW_CFG80211_DEV_PARAM_NAME);
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 4, 0))
+	bool pairwise = (type == NL80211_KEYTYPE_PAIRWISE);
+#endif
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 #ifdef CONFIG_TDLS
 	struct sta_info *ptdls_sta;
@@ -1991,7 +1996,9 @@ static int cfg80211_rtw_get_key(struct wiphy *wiphy, RTW_CFG80211_DEV_PARAM_TYPE
 	, int link_id
 #endif
 	, u8 keyid
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) || defined(COMPAT_KERNEL_RELEASE)
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 4, 0))
+	, enum nl80211_key_type type
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) || defined(COMPAT_KERNEL_RELEASE)
 	, bool pairwise
 #endif
 	, const u8 *mac_addr, void *cookie
@@ -2011,6 +2018,9 @@ static int cfg80211_rtw_get_key(struct wiphy *wiphy, RTW_CFG80211_DEV_PARAM_TYPE
 
 	_adapter *adapter = RTW_CFG80211_GET_ADAPTER(RTW_CFG80211_DEV_PARAM_NAME);
 	struct net_device *ndev = RTW_CFG80211_GET_NETDEV(RTW_CFG80211_DEV_PARAM_NAME);
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 4, 0))
+	bool pairwise = (type == NL80211_KEYTYPE_PAIRWISE);
+#endif
 	struct security_priv *sec = &adapter->securitypriv;
 	struct sta_priv *stapriv = &adapter->stapriv;
 	struct sta_info *sta = NULL;
@@ -2187,7 +2197,9 @@ static int cfg80211_rtw_del_key(struct wiphy *wiphy, RTW_CFG80211_DEV_PARAM_TYPE
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
 	, int link_id
 #endif
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) || defined(COMPAT_KERNEL_RELEASE)
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 4, 0))
+	, u8 key_index, enum nl80211_key_type type, const u8 *mac_addr)
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) || defined(COMPAT_KERNEL_RELEASE)
 	, u8 key_index, bool pairwise, const u8 *mac_addr)
 #else /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) */
 	, u8 key_index, const u8 *mac_addr)
